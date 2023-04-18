@@ -1,0 +1,21 @@
+@import '../../resource/styles/variables';
+
+.block{
+    background-color: $studio-text-button;
+    padding: 25px 35px;
+    border-radius: 5px;
+    &__title{
+        font-weight: 500;
+        font-size: 36px;
+        color: $studio-white-text;
+        margin-bottom: 15px;
+    }
+
+    &__descr{
+        font-weight: 300;
+        font-size: 20px;
+        line-height: 24px;
+        color: $studio-white-text;
+        text-align: justify;
+    }
+}

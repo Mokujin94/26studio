@@ -1,0 +1,23 @@
+@import "../../resource/styles/variables";
+
+.news-paper {
+  margin-top: 155px;
+  margin-bottom: 50px;
+  &__header {
+    margin-bottom: 25px;
+  }
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  &__info {
+    margin-bottom: 30px;
+  }
+  &__bottom {
+    max-width: min-content;
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}

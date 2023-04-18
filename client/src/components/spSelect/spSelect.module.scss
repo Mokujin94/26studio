@@ -1,0 +1,39 @@
+@import '../../resource/styles/variables';
+
+.spSelect {
+    width: 1620px;
+    height: 163px;
+    border: 1px solid $studio-white-text;
+    border-radius: 5px;
+    margin-bottom: 80px;
+    padding-left: 45px;
+    padding-right: 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.title {
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: 0.2em;
+}
+
+.sp__wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sp {
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+        color: $studio-base-elements;
+        
+    }
+}

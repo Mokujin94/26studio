@@ -1,0 +1,44 @@
+@import '../../resource/styles/variables';
+
+a {
+    text-decoration: none;
+}
+
+.news {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 160px;
+    margin-bottom: 100px;
+    &__title {    
+        font-weight: 500;
+        font-size: 40px;
+        line-height: 49px;
+        text-align: justify;
+        color: $studio-white-text;
+        margin-right: 50px;
+        &-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+    }
+    &__propose {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        text-align: justify;
+        color: rgba(255, 255, 255, 0.4);
+        cursor: pointer;
+    }
+    &__cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 20px;
+        row-gap: 100px;
+    }
+}
+
+
+
+

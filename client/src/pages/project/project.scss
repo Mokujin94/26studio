@@ -1,0 +1,14 @@
+@import '../../resource/styles/variables';
+
+.project {
+    margin-top: 155px;
+    margin-bottom: 50px;
+    &__header {
+      margin-bottom: 25px;
+    }
+    &__content {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+  }

@@ -1,0 +1,26 @@
+@import './reboot.scss';
+@import '../../pages/registration/registration.scss';
+@import '../../pages/auth/auth.scss';
+@import '../../pages/profile/profile.scss';
+@import '../../pages/projects/projects.scss';
+@import '../../pages/news/news.scss';
+@import '../../pages/messenger/messenger.scss';
+@import '../../pages/project/project.scss';
+@import '../../pages/newsPaper/newsPaper.scss';
+@import '../../pages/groups/groups.scss';
+@import '../../pages/group/group.scss';
+
+
+body {
+    background: $studio-background;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.container {
+    display: block;
+    max-width: 1620px;
+    width: 100%;
+    margin: 0 auto;
+}

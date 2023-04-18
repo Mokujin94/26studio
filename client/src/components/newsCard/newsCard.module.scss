@@ -1,0 +1,126 @@
+@import '../../resource/styles/variables';
+
+.card {
+    position: relative;
+    width: 390px;
+    height: 450px;
+    background-color: $studio-news-card;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 35px;
+    padding: 6px 0 20px 0;
+    color: $studio-white-text;
+    border: 2px solid #72FFF700;
+    transition: 0.3s all;
+    cursor: pointer;
+    &:hover {
+        border: 2px solid $studio-base-elements;
+        -webkit-box-shadow: 0px 0px 16px 7px rgba(114, 255, 247, 0.2);
+        -moz-box-shadow: 0px 0px 16px 7px rgba(114, 255, 247, 0.2);
+        box-shadow: 0px 0px 16px 7px rgba(114, 255, 247, 0.2);
+        transform: scale(1.02);
+    }
+    &Link {
+        text-decoration: none;
+    }
+}
+
+.preview {
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    width: 376px;
+    border-radius: 25px;
+    min-height: 185px;
+    overflow: hidden;
+    &__img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 2;
+    right: 54px;
+    top: 160px;
+    border: 5px solid $studio-news-card;
+    &__img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.info {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    max-width: 334px;
+    width: 100%;
+    margin-bottom: 34px;
+}
+
+.title {
+    display: flex;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.2em;
+    margin-bottom: 5px;
+}
+
+.line {
+    width: 334px;
+    height: 1px;
+    background: $studio-white-text;
+}
+
+.description {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: justify;
+    margin-bottom: 14px;
+    height: 130px;
+}
+
+.stats {
+    display: flex;
+    align-self: flex-start;
+    margin-left: 28px;
+    &__item {
+        display: flex;
+        margin-right: 30px;
+        align-items: center;
+        &:last-child {
+            margin: 0;
+        }
+        img {
+            width: 16px;
+        }
+    }
+    &__count {
+        margin-left: 7px;
+        font-weight: 500;
+        font-size: 13px;
+        line-height: 16px;
+    }
+}

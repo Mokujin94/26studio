@@ -1,0 +1,26 @@
+@import '../../resource/styles/variables';
+
+.groups {
+    width: 100%;
+    margin-top: 150px;
+    color: $studio-white-text;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.title {
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 49px;
+    letter-spacing: 0.2em;
+    margin-bottom: 70px;
+}
+
+.groups-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 20px;
+}
+

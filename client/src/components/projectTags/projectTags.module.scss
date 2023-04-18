@@ -1,0 +1,35 @@
+@import '../../resource/styles/variables';
+
+.projectTags {
+    width: 1620px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    background-color: $studio-text-button;
+    border-radius: 5px;
+}
+
+.title {
+    color: $studio-white-text;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: justify;
+    letter-spacing: 0.2em;
+    margin-right: 95px;
+    margin-left: 30px;
+}
+
+.tags__wrapper {
+    display: flex;
+}
+
+.tag {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: justify;
+    letter-spacing: 0.2em;
+    margin-right: 60px;
+    color: rgba(255, 255, 255, 0.55);
+}

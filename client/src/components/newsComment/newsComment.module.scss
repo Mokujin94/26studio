@@ -1,0 +1,60 @@
+@import "../../resource/styles/variables";
+
+.block {
+  display: flex;
+  flex-direction: column;
+  color: $studio-white-text;
+  width: 100%;
+  padding-left: 80px;
+  position: relative;
+  &__avatar {
+    max-width: 70px;
+    width: 100%;
+    max-height: 70px;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    &Img {
+      max-height: inherit;
+    }
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    &Name {
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      margin-bottom: 5px;
+    }
+    &Comment {
+      font-size: 16px;
+      font-weight: 300;
+    }
+    &Bottom {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      &Feedback{
+        display: flex;
+        &Item {
+          font-size: 14px;
+          font-weight: 100;
+          cursor: pointer;
+          margin-right: 30px;
+          &:last-child {
+            margin: 0;
+          }
+        }
+      }
+      &Date {
+        font-size: 16px;
+      }
+    }
+  }
+  
+}
