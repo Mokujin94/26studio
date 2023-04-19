@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { createRef, useState } from 'react'
+import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
+
 import FunctionButton from '../../components/functionButton/FunctionButton'
 import ProfileMenu from '../../components/profileMenu/ProfileMenu'
 import FriendCard from '../../components/friendCard/FriendCard'
 import AchievementCard from '../../components/achievementCard/AchievementCard'
+import ProfileProjects from '../../components/profilProjects/ProfileProjects'
+
 
 import avatar from '../../resource/graphics/images/profile/avatar.jpg'
 import addUser from '../../resource/graphics/icons/profile/add-user.svg'
@@ -12,15 +16,33 @@ import git from '../../resource/graphics/icons/profile/git.svg'
 import achievement from '../../resource/graphics/icons/profile/achievement.svg'
 
 
-import ProfileProjects from '../../components/profilProjects/ProfileProjects'
 
 
 function Profile() {
-  // const [posts, setPosts] = useState(
-  //   [
-  //     {}
-  //   ]
-  // )
+
+  const [menuItems, setMenuItems] = useState(() => [
+    {id: 0, element: <ProfileProjects/>, nodeRef: createRef(null)},
+    {id: 1, element: <AchievementCard/>, nodeRef: createRef(null)},
+    {id: 2, element: <FriendCard/>, nodeRef: createRef(null)},
+    {id: 3, element: 'test', nodeRef: createRef(null)},
+  ])
+
+  const [menuSelected, setMenuSelected] = useState(0)
+
+  const changeSelected = (i) => {
+      setMenuSelected(i)
+  }
+
+  // const menuItem = menu.map(({id, element}) => {
+  //   if (menuSelected === id) {
+  //     return (
+
+  //     )
+  //   }
+
+  // })
+
+  
 
 
   return (
@@ -67,14 +89,26 @@ function Profile() {
         </div>
         <div className="profile__content">
           <div className="profile__menu-wrapper">
-            <ProfileMenu/>
+            <ProfileMenu onSelected={changeSelected} selected={menuSelected}/>
           </div>
-          <div className="profile__content-main">
-            {/* <ProfileProjects/> */}
-            {/* <FriendCard/> */}
-            {/* <AchievementCard/> */}
-
-          </div>
+            <TransitionGroup className="transition-group">
+              {menuItems.map(({id, element, nodeRef}) => {
+                if (menuSelected === id) {
+                  return (
+                    <CSSTransition
+                      key={id}
+                      nodeRef={nodeRef}
+                      timeout={600}
+                      classNames="item"
+                    >
+                      <div className="profile__content-main" ref={nodeRef}>
+                        {element}
+                      </div>
+                    </CSSTransition>
+                  )
+                }
+              })}
+            </TransitionGroup>
         </div>
       </div>
     </div>

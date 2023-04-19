@@ -12,5 +12,8 @@
         line-height: 36px;
         color: $studio-white-text;
         cursor: pointer;
+        &__active {
+            color: $studio-base-elements;
+        }
     }
 }
