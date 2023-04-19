@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import FunctionButton from '../../components/functionButton/FunctionButton'
 import ProfileMenu from '../../components/profileMenu/ProfileMenu'
 import FriendCard from '../../components/friendCard/FriendCard'
+import AchievementCard from '../../components/achievementCard/AchievementCard'
 
 import avatar from '../../resource/graphics/images/profile/avatar.jpg'
 import addUser from '../../resource/graphics/icons/profile/add-user.svg'
@@ -70,21 +71,8 @@ function Profile() {
           </div>
           <div className="profile__content-main">
             {/* <ProfileProjects/> */}
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
-            <FriendCard/>
+            {/* <FriendCard/> */}
+            {/* <AchievementCard/> */}
 
           </div>
         </div>
