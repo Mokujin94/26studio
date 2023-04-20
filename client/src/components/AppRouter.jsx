@@ -4,7 +4,7 @@ import { authRoutes, publicRoutes } from '../routes'
 import { Context } from '..'
 
 
-function AppRouter() {
+function AppRouter({profileSelected, setProfileSelected}) {
 
     const {user} = useContext(Context)
 

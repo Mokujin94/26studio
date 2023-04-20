@@ -4,6 +4,8 @@ import App from './App';
 import UserStore from './store/UserStore';
 import ProjectStore from './store/ProjectStore';
 import NewsStore from './store/NewsStore';
+import ProfileStore from './store/ProfileStore';
+
 
 export const Context = createContext(null)
 
@@ -12,7 +14,8 @@ root.render(
     <Context.Provider value={{
         user: new UserStore(),
         project: new ProjectStore(),
-        news: new NewsStore()
+        news: new NewsStore(),
+        profile: new ProfileStore()
     }}>
         <App />
     </Context.Provider>

@@ -1,26 +1,25 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import style from './profileMenu.module.scss'
+import { Context } from '../..'
+import { observer } from 'mobx-react-lite'
 
-function ProfileMenu({onSelected, selected}) {
-  const menuElements = [
-    {id: 0, title: 'Проекты'},
-    {id: 1, title: 'Друзья'},
-    {id: 2, title: 'Награды'},
-    {id: 3, title: 'Настройки'}
-  ]
-
-  const menuElement = menuElements.map(({id, title}) => {
-    return (
-      <div onClick={() => onSelected(id)} className={selected === id ? `${style.menu__select} ${style.menu__select__active}` : style.menu__select} key={id}>{title}</div>
-    )
-  })
+const ProfileMenu = observer(() => {
+  const {profile} = useContext(Context)
 
   return (
     <div className={style.menu}>
-        {menuElement}
+        {profile.menuItems.map(item => 
+          <div
+           onClick={() => profile.setSelectedMenu(item)} 
+           className={item.id === profile.selectedMenu.id ? `${style.menu__select} ${style.menu__select__active}` : style.menu__select} 
+           key={item.id}
+          > 
+           {item.title} 
+          </div>
+        )}
     </div>
   )
-}
+})
 
 export default ProfileMenu

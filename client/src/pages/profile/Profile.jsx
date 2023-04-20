@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react'
+import React, { createRef, useContext, useState } from 'react'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
 
 import FunctionButton from '../../components/functionButton/FunctionButton'
@@ -14,35 +14,14 @@ import vk from '../../resource/graphics/icons/profile/vk.svg'
 import tg from '../../resource/graphics/icons/profile/tg.svg'
 import git from '../../resource/graphics/icons/profile/git.svg'
 import achievement from '../../resource/graphics/icons/profile/achievement.svg'
+import { observer } from 'mobx-react-lite'
+import { Context } from '../..'
 
 
 
 
-function Profile() {
-
-  const [menuItems, setMenuItems] = useState(() => [
-    {id: 0, element: <ProfileProjects/>, nodeRef: createRef(null)},
-    {id: 1, element: <AchievementCard/>, nodeRef: createRef(null)},
-    {id: 2, element: <FriendCard/>, nodeRef: createRef(null)},
-    {id: 3, element: 'test', nodeRef: createRef(null)},
-  ])
-
-  const [menuSelected, setMenuSelected] = useState(0)
-
-  const changeSelected = (i) => {
-      setMenuSelected(i)
-  }
-
-  // const menuItem = menu.map(({id, element}) => {
-  //   if (menuSelected === id) {
-  //     return (
-
-  //     )
-  //   }
-
-  // })
-
-  
+const Profile = observer(() => {
+  const {profile} = useContext(Context)
 
 
   return (
@@ -89,20 +68,20 @@ function Profile() {
         </div>
         <div className="profile__content">
           <div className="profile__menu-wrapper">
-            <ProfileMenu onSelected={changeSelected} selected={menuSelected}/>
+            <ProfileMenu/>
           </div>
             <TransitionGroup className="transition-group">
-              {menuItems.map(({id, element, nodeRef}) => {
-                if (menuSelected === id) {
+              {profile.wrapperItems.map((item) => {
+                if (profile.selectedMenu.id === item.id) {
                   return (
                     <CSSTransition
-                      key={id}
-                      nodeRef={nodeRef}
-                      timeout={600}
+                      key={item.id}
+                      nodeRef={item.nodeRef}
+                      timeout={500}
                       classNames="item"
                     >
-                      <div className="profile__content-main" ref={nodeRef}>
-                        {element}
+                      <div className="profile__content-main" ref={item.nodeRef}>
+                        {item.element}
                       </div>
                     </CSSTransition>
                   )
@@ -113,6 +92,6 @@ function Profile() {
       </div>
     </div>
   )
-}
+})
 
 export default Profile

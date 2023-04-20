@@ -16,11 +16,23 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
+
 
 .container {
     display: block;
     max-width: 1620px;
     width: 100%;
     margin: 0 auto;
+}
+
+.App {
+    // padding-right: 0;
+    // transition-delay: 0.15s;
+    // transition-duration: 0.3s;
 }

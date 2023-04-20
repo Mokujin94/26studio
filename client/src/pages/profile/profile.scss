@@ -7,27 +7,27 @@
 .item-enter {
     // position: absolute;
     opacity: 0;
-    transform: translateX(-500px);
+    transform: translateX(-2000px);
   }
   .item-enter-active {
     position: absolute;
 
     opacity: 1;
-    transition: 0.6s ease-in-out;
+    transition: 0.5s ease-in-out;
     transform: translateX(0px);
   }
   .item-exit {
-    position: absolute;
+    // position: absolute;
     opacity: 1;
     // position: absolute;
 
     transform: translateX(0px);
   }
   .item-exit-active {
-    position: absolute;
+    // position: absolute;
     opacity: 0;
-    transition: 0.6s ease-in-out;
-    transform: translateX(-500px);
+    transition: 0.5s ease-in-out;
+    transform: translateX(2000px);
   }
 
 .profile {
