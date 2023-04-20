@@ -17,28 +17,23 @@ const App = observer(() => {
 
   const {profile} = useContext(Context)
 
-  const [padding, setPadding] = useState(false)
+  // const [padding, setPadding] = useState(false)
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (document.body.clientHeight > window.innerHeight) {
-        console.log(document.body.clientWidth)
-        console.log(document.body.clientHeight - document.documentElement.scrollWidth)
-        setPadding(true)
-      } else {
-        setPadding(false)
-        console.log(document.body.clientWidth)
-        console.log(window.innerWidth)
-        console.log(document.documentElement.scrollWidth)
-        console.log(document.body.clientWidth - window.innerWidth)
-      }
-    }, 510)
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (document.body.clientHeight > window.innerHeight) {
 
-  }, [profile.selectedMenu])
+  //       setPadding(true)
+  //     } else {
+  //       setPadding(false)
+  //     }
+  //   }, 510)
+
+  // }, [profile.selectedMenu])
 
 
   return (
-    <div className='App' style={{paddingRight: padding ? '0px' : '0px'}}>
+    <div className='App'>
       <BrowserRouter>
         <BurgerMenu/>
         <Header/>

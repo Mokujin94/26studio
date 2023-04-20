@@ -11,7 +11,7 @@ export default class ProfileStore {
             {id: 0, element: <ProfileProjects/>, nodeRef: createRef(null)},
             {id: 1, element: <AchievementCard/>, nodeRef: createRef(null)},
             {id: 2, element: <FriendCard/>, nodeRef: createRef(null)},
-            {id: 3, element: 'test', nodeRef: createRef(null)},
+            {id: 3, element: <FriendCard/>, nodeRef: createRef(null)},
         ]
 
         this._menuItems = [

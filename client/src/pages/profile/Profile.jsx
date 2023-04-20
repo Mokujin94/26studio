@@ -1,5 +1,5 @@
 import React, { createRef, useContext, useState } from 'react'
-import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
+import { CSSTransition, SwitchTransition, Transition, TransitionGroup } from 'react-transition-group'
 
 import FunctionButton from '../../components/functionButton/FunctionButton'
 import ProfileMenu from '../../components/profileMenu/ProfileMenu'
@@ -23,6 +23,54 @@ import { Context } from '../..'
 const Profile = observer(() => {
   const {profile} = useContext(Context)
 
+  const [prevId, setPrevId] = useState(0)
+  const [boolPrevId, setBoolPrevId] = useState(false)
+
+  const checkPrevId = (item) => {
+    profile.setSelectedMenu(item)
+    // if(prevId == profile.selectedMenu.id){
+    //   return
+    // } else {
+      if (prevId > profile.selectedMenu.id) {
+        setBoolPrevId(false)
+        setPrevId(profile.selectedMenu.id)
+      } else if (prevId < profile.selectedMenu.id) {
+        setBoolPrevId(true)
+        setPrevId(profile.selectedMenu.id)
+      }
+    // }
+
+  }
+
+  // const defaultStyle = {
+  //   transition: `opacity 100ms ease-in-out`,
+  //   opacity: 1,
+  // }
+
+  const transitionStyles = {
+    entering: { 
+      opacity: 0,
+      transform: 'translateX(-2000px)' 
+    },
+    entered:  {
+      position: 'absolute',
+      opacity: 1,
+      transition: '0.5s ease-in-out',
+      transform: 'translateX(0px)',
+    },
+    exiting:  {
+      opacity: 1,
+      transform: 'translateX(0px)'
+    },
+    exited:  {
+      opacity: 0,
+      transition: '0.5s ease-in-out',
+      transform: 'translateX(-2000px)',
+    },
+  };
+
+  console.log(prevId);
+
 
   return (
     <div className="profile">
@@ -30,8 +78,8 @@ const Profile = observer(() => {
         <div className="profile__top-wrapper">
           <div className="profile__face">
             <div className="profile__avatar">
-              <img className='profile__avatar-img' src={avatar} alt="" />
-              <img className='profile__avatar-add' src={addUser} alt="" />
+              <img className='profile__avatar-img' src={avatar} alt="icon" />
+              <img className='profile__avatar-add' src={addUser} alt="icon" />
             </div>
 
             <div className="profile__button">
@@ -68,22 +116,30 @@ const Profile = observer(() => {
         </div>
         <div className="profile__content">
           <div className="profile__menu-wrapper">
-            <ProfileMenu/>
+            <ProfileMenu onClick={checkPrevId}/>
           </div>
             <TransitionGroup className="transition-group">
               {profile.wrapperItems.map((item) => {
                 if (profile.selectedMenu.id === item.id) {
                   return (
-                    <CSSTransition
+                    <Transition
                       key={item.id}
                       nodeRef={item.nodeRef}
                       timeout={500}
-                      classNames="item"
+                      // classNames={boolPrevId ? `itemLeft` : `itemRight`}
+
                     >
-                      <div className="profile__content-main" ref={item.nodeRef}>
+                      {state => (
+                      <div className="profile__content-main" ref={item.nodeRef}
+                                            style={{
+                                              // ...defaultStyle,
+                                              ...transitionStyles[state]
+                                            }}>
                         {item.element}
                       </div>
-                    </CSSTransition>
+                      )}
+
+                    </Transition>
                   )
                 }
               })}
