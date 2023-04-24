@@ -45,7 +45,7 @@ function BurgerMenu() {
         <h2 className={style.name}>Mokujin</h2>
         <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} />
         <ul className={style.menu}>
-          <Link className={style.menu__item__text} to={NEWS_ROUTE}>
+          <Link className={style.menu__item__text} to={NEWS_ROUTE} onClick={() => burgerTrigger()}>
             <li className={style.menu__item}>
               <img src={news} alt="icon" />
               Новости
@@ -71,7 +71,7 @@ function BurgerMenu() {
           </Link>
         </ul>
       </div>
-      <div className={!active ? style.popup : `${style.popup} ${style.popup_active}`} onClick={() => burgerTrigger()}></div>
+      <div className={!active ? style.popup : `${style.popup} ${style.popup_active}`} onClick={() => setActive(false)}></div>
     </>
   );
 }

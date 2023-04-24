@@ -101,13 +101,13 @@ const Profile = observer(() => {
 
             <div className="profile__socials">
               <div className="profile__socials-icon">
-                <img className='profile__socials-icon-img' src={git} alt="" />
+                <img className='profile__socials-icon-img' src={git} alt="icon" />
               </div>
               <div className="profile__socials-icon">
-                <img className='profile__socials-icon-img'  src={tg} alt="" />
+                <img className='profile__socials-icon-img'  src={tg} alt="icon" />
               </div>
               <div className="profile__socials-icon">
-                <img className='profile__socials-icon-img' src={vk} alt="" />
+                <img className='profile__socials-icon-img' src={vk} alt="icon" />
               </div>
 
             </div>
