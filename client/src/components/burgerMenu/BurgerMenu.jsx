@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   MESSENGER_ROUTE,
@@ -12,14 +12,14 @@ import MainButton from "../mainButton/MainButton";
 import style from "./burgerMenu.module.scss";
 
 import close from "../../resource/graphics/icons/burgerMenu/closeIcon.svg";
-import news from "../../resource/graphics/icons/burgerMenu/newsIcon.svg";
-import messeges from "../../resource/graphics/icons/burgerMenu/messegesIcon.svg";
-import project from "../../resource/graphics/icons/burgerMenu/projectIcon.svg";
-import group from "../../resource/graphics/icons/burgerMenu/groupIcon.svg";
 import avatar from "../../resource/graphics/images/burgerMenu/avatar.jpg";
 import burger from "../../resource/graphics/icons/burgerMenu/burger.svg";
+import { observer } from "mobx-react-lite";
+import { Context } from "../..";
 
-function BurgerMenu() {
+const BurgerMenu = observer(() => {
+  const { user } = useContext(Context)
+
   const [active, setActive] = useState(false);
 
   const burgerTrigger = () => {
@@ -45,35 +45,21 @@ function BurgerMenu() {
         <h2 className={style.name}>Mokujin</h2>
         <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} />
         <ul className={style.menu}>
-          <Link className={style.menu__item__text} to={NEWS_ROUTE} onClick={() => burgerTrigger()}>
-            <li className={style.menu__item}>
-              <img src={news} alt="icon" />
-              Новости
-            </li>
-          </Link>
-          <Link className={style.menu__item__text} to={MESSENGER_ROUTE}>
-            <li className={style.menu__item}>
-              <img src={messeges} alt="icon" />
-              Мессенджер
-            </li>
-          </Link>
-          <Link className={style.menu__item__text} to={PROJECTS_ROUTE}>
-            <li className={style.menu__item}>
-              <img src={project} alt="icon" />
-              Проекты
-            </li>
-          </Link>
-          <Link className={style.menu__item__text} to={GROUPS_ROUTE}>
-            <li className={style.menu__item}>
-              <img src={group} alt="icon" />
-              Группы
-            </li>
-          </Link>
+          {user.menu.map(({id, title, icon, path}) => {
+            return (
+              <Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
+                <li className={style.menu__item}>
+                  <img src={icon} alt="icon" />
+                  {title}
+                </li>
+              </Link>
+            )
+          })}
         </ul>
       </div>
       <div className={!active ? style.popup : `${style.popup} ${style.popup_active}`} onClick={() => setActive(false)}></div>
     </>
   );
-}
+})
 
 export default BurgerMenu;
