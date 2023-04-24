@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useState } from 'react'
+import React, { createRef, useContext, useEffect, useState } from 'react'
 import { CSSTransition, SwitchTransition, Transition, TransitionGroup } from 'react-transition-group'
 
 import FunctionButton from '../../components/functionButton/FunctionButton'
@@ -69,6 +69,17 @@ const Profile = observer(() => {
     },
   };
 
+
+  useEffect(() => {
+    const root = document.querySelector(':root');
+    if (!boolPrevId) {
+      root.style.setProperty('--transform', '2000px');
+    } else {
+      root.style.setProperty('--transform', '-2000px');
+    }
+  console.log(root)
+  }, [boolPrevId])
+
   console.log(prevId);
 
 
@@ -122,24 +133,17 @@ const Profile = observer(() => {
               {profile.wrapperItems.map((item) => {
                 if (profile.selectedMenu.id === item.id) {
                   return (
-                    <Transition
+                    <CSSTransition
                       key={item.id}
                       nodeRef={item.nodeRef}
                       timeout={500}
-                      // classNames={boolPrevId ? `itemLeft` : `itemRight`}
-
+                      classNames={boolPrevId ? `itemLeft` : `itemRight`}
                     >
-                      {state => (
-                      <div className="profile__content-main" ref={item.nodeRef}
-                                            style={{
-                                              // ...defaultStyle,
-                                              ...transitionStyles[state]
-                                            }}>
+                      <div className="profile__content-main" ref={item.nodeRef}>
                         {item.element}
                       </div>
-                      )}
 
-                    </Transition>
+                    </CSSTransition>
                   )
                 }
               })}

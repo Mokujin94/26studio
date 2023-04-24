@@ -71,6 +71,7 @@ function BurgerMenu() {
           </Link>
         </ul>
       </div>
+      <div className={!active ? style.popup : `${style.popup} ${style.popup_active}`} onClick={() => burgerTrigger()}></div>
     </>
   );
 }

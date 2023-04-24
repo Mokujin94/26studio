@@ -4,30 +4,12 @@
     // width: 100%;
 }
 
+:root {
+    --transform: 2000px;
+}
+
 .item {
     &Left{
-        &-enter {
-            opacity: 0;
-            transform: translateX(-2000px);
-            &-active {
-                position: absolute;
-
-                opacity: 1;
-                transition: 0.5s ease-in-out;
-                transform: translateX(0px);
-            }
-        }
-        &-exit {
-            opacity: 1;
-            transform: translateX(0px);
-            &-active {
-                opacity: 0;
-                transition: 0.5s ease-in-out ;
-                transform: translateX(2000px);
-            }
-        }
-    }
-    &Right{
         &-enter {
             opacity: 0;
             transform: translateX(2000px);
@@ -44,8 +26,30 @@
             transform: translateX(0px);
             &-active {
                 opacity: 0;
+                transition: 0.5s ease-in-out ;
+                transform: translateX(var(--transform));
+            }
+        }
+    }
+    &Right{
+        &-enter {
+            opacity: 0;
+            transform: translateX(-2000px);
+            &-active {
+                position: absolute;
+
+                opacity: 1;
                 transition: 0.5s ease-in-out;
-                transform: translateX(-2000px);
+                transform: translateX(0px);
+            }
+        }
+        &-exit {
+            opacity: 1;
+            transform: translateX(0px);
+            &-active {
+                opacity: 0;
+                transition: 0.5s ease-in-out;
+                transform: translateX(var(--transform));
             }
         }
     }
