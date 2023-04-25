@@ -1,9 +1,5 @@
 @import '../../resource/styles/variables';
 
-.transition-group {
-    // width: 100%;
-}
-
 :root {
     --transform: 2000px;
 }
@@ -55,21 +51,12 @@
     }
 }
 
-
-  .item-exit {
-    opacity: 1;
-    transform: translateX(0px) scale(1);
-  }
-  .item-exit-active {
-    // position: absolute;
-
-  }
-
 .profile {
     width: 100%;
     margin-top: 160px;
     margin-bottom: 100px;
     overflow: hidden;
+    padding-bottom: 300px;
 
 
     &__top-wrapper {
@@ -187,6 +174,10 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 20px;
+            &-settings {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 225px;
+            }
         }
     }
 

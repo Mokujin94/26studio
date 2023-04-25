@@ -43,7 +43,7 @@ const BurgerMenu = observer(() => {
           <img src={avatar} alt="img" className={style.avatar} />
         </div>
         <h2 className={style.name}>Mokujin</h2>
-        <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} />
+        <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} setMenu={setActive}/>
         <ul className={style.menu}>
           {user.menu.map(({id, title, icon, path}) => {
             return (

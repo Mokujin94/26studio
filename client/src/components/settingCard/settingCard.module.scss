@@ -1,0 +1,68 @@
+@import '../../resource/styles/variables';
+
+
+.card {
+    max-width: 390px;
+    width: 100%;
+    height: 300px;
+    background: $studio-text-button;
+    border-radius: 15px;
+    padding: 25px 30px;
+}
+
+.title {
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    text-align: center;
+    color: $studio-white-text;
+    margin-bottom: 20px;
+}
+
+.input {
+    &__full {
+        width: 100%;
+        height: 50px;
+        border-radius: 15px;
+        border: 2px solid $studio-white-text;
+        background: transparent;
+        font-weight: 100;
+        font-size: 14px;
+        line-height: 17px;
+        color: $studio-white-text;
+        outline: none;
+        padding: 0 15px;
+        margin-bottom: 20px;
+    }
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    &__2fr {
+        width: 100%;
+        height: 50px;
+        border-radius: 15px;
+        border: 2px solid $studio-white-text;
+        background: transparent;
+        font-weight: 100;
+        font-size: 14px;
+        line-height: 17px;
+        color: $studio-white-text;
+        outline: none;
+        padding: 0 10px;
+        margin-bottom: 20px;
+        &:nth-child(2) {
+            margin-left: 10px;
+        }
+    }
+}
+
+.button {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

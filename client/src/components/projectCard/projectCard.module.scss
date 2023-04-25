@@ -2,9 +2,9 @@
 
 
 .project {
-    max-width: 390px;
-    min-height: 220px; 
-    width: 100%;
+    // max-width: 390px;
+    width: 390px;
+    height: 220px;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
@@ -22,10 +22,8 @@
 
 
     &__blur{
-
         position: absolute;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(2px);
+        background: $studio-black-opacity-03;
         width: 100%;
         height: 100%;
         border-radius: 5px;
@@ -33,6 +31,9 @@
     &__photo {
         position: absolute;
         z-index: -1;
+        width: 100%;
+        height: 100%;
+        filter: blur(2px);
     }
     &__text {
         display: flex;

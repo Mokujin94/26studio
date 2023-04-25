@@ -77,8 +77,13 @@ const Profile = observer(() => {
     } else {
       root.style.setProperty('--transform', '-2000px');
     }
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
   console.log(root)
-  }, [boolPrevId])
+  }, [boolPrevId, prevId])
 
   console.log(prevId);
 
@@ -139,7 +144,7 @@ const Profile = observer(() => {
                       timeout={500}
                       classNames={boolPrevId ? `itemLeft` : `itemRight`}
                     >
-                      <div className="profile__content-main" ref={item.nodeRef}>
+                      <div className={profile.selectedMenu.id === 3 ? 'profile__content-main profile__content-main-settings' : 'profile__content-main'} ref={item.nodeRef}>
                         {item.element}
                       </div>
 
