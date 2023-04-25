@@ -3,13 +3,14 @@ import { createRef } from 'react'
 import ProfileProjects from '../components/profilProjects/ProfileProjects'
 import AchievementCard from '../components/achievementCard/AchievementCard'
 import FriendCard from '../components/friendCard/FriendCard'
+import ProgressAchievement from '../components/proggressAchievement/ProgressAchievement'
 
 export default class ProfileStore {
     constructor() {
 
         this._wrapperItems = [
             {id: 0, element: <ProfileProjects/>, nodeRef: createRef(null)},
-            {id: 1, element: <AchievementCard/>, nodeRef: createRef(null)},
+            {id: 1, element: <ProgressAchievement/>, nodeRef: createRef(null)},
             {id: 2, element: <FriendCard/>, nodeRef: createRef(null)},
             {id: 3, element: <FriendCard/>, nodeRef: createRef(null)},
         ]
