@@ -26,13 +26,18 @@
         border-radius: 15px;
         border: 2px solid $studio-white-text;
         background: transparent;
-        font-weight: 100;
+        font-weight: 300;
         font-size: 14px;
         line-height: 17px;
         color: $studio-white-text;
         outline: none;
         padding: 0 15px;
         margin-bottom: 20px;
+        transition: 0.3s ease;
+        &:focus {
+            border: 2px solid $studio-base-elements;
+            transform: scale(1.01);
+        }
     }
 
     &__wrapper {
@@ -47,7 +52,7 @@
         border-radius: 15px;
         border: 2px solid $studio-white-text;
         background: transparent;
-        font-weight: 100;
+        font-weight: 300;
         font-size: 14px;
         line-height: 17px;
         color: $studio-white-text;
@@ -56,6 +61,11 @@
         margin-bottom: 20px;
         &:nth-child(2) {
             margin-left: 10px;
+        }
+        transition: 0.3s ease;
+        &:focus {
+            border: 2px solid $studio-base-elements;
+            transform: scale(1.01);
         }
     }
 }

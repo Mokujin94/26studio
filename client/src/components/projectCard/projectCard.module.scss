@@ -23,7 +23,7 @@
 
     &__blur{
         position: absolute;
-        background: $studio-black-opacity-03;
+        background: linear-gradient(0deg, rgba(39,50,62,1) 0%, rgba(39, 50, 62, 0.467) 50%, rgba(39,50,62,0) 100%);
         width: 100%;
         height: 100%;
         border-radius: 5px;
