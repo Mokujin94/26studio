@@ -4,7 +4,7 @@
     position: relative;
     width: 390px;
     height: 450px;
-    background-color: $studio-news-card;
+    background-color: $studio-text-button;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,6 +12,7 @@
     padding: 6px 0 20px 0;
     color: $studio-white-text;
     border: 2px solid #72FFF700;
+    box-shadow: $studio-box-shadow-v1;
     transition: 0.3s all;
     cursor: pointer;
     &:hover {
