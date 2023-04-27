@@ -1,1 +1,33 @@
 @import '../../resource/styles/variables';
+
+.group {
+    margin-top: 155px;
+    &__title {
+        color: $studio-white-text;
+        font-weight: 500;
+        font-size: 40px;
+        letter-spacing: 0.2em;
+        text-align: center;
+        margin-bottom: 110px;
+    }
+    &__content {
+        &-curator {
+            margin-bottom: 25px;
+        }
+        &-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            row-gap: 35px;
+            column-gap: 50px;
+        }
+        &-title {
+            color: $studio-white-text;
+            font-weight: 300;
+            font-size: 24px;
+            margin-bottom: 25px;
+            &_color {
+                color: $studio-base-elements;
+            }
+        }
+    }
+}
