@@ -10,6 +10,8 @@ import Header from './components/header/Header';
 import './resource/styles/style.scss';
 import { observer } from 'mobx-react-lite';
 import { Context } from '.';
+import Footer from './components/footer/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 
 
@@ -35,9 +37,11 @@ const App = observer(() => {
   return (
     <div className='App'>
       <BrowserRouter>
+        <ScrollToTop/>
         <BurgerMenu/>
         <Header/>
         <AppRouter/>
+        <Footer/>
       </BrowserRouter>
     </div>
 
