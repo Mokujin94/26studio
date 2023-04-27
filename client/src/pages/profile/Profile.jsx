@@ -144,7 +144,7 @@ const Profile = observer(() => {
                       timeout={500}
                       classNames={boolPrevId ? `itemLeft` : `itemRight`}
                     >
-                      <div className={profile.selectedMenu.id === 3 ? 'profile__content-main profile__content-main-settings' : 'profile__content-main'} ref={item.nodeRef}>
+                      <div className={profile.selectedMenu.id === 3 ? 'profile__content-main profile__content-main-settings' : profile.selectedMenu.id === 2 ? 'profile__content-main profile__content-main-achievement' : 'profile__content-main' } ref={item.nodeRef}>
                         {item.element}
                       </div>
 

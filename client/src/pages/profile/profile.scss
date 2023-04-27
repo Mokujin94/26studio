@@ -178,6 +178,10 @@
                 grid-template-columns: 1fr 1fr 1fr;
                 gap: 225px;
             }
+            &-achievement {
+                grid-template-columns: 1fr;
+                column-gap: 90px;
+            }
         }
     }
 
