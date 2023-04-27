@@ -8,7 +8,7 @@ import projectPhoto from '../resource/graphics/images/projectCard/bg.jpg'
 
 import ProfileSettings from '../components/profileSettings/ProfileSettings'
 import ProjectCard from '../components/projectCard/ProjectCard'
-import ProgressAchievement from '../components/proggressAchievement/ProgressAchievement'
+import ProgressAchievement from '../components/progressAchievement/ProgressAchievement'
 import ProfileAchievements from '../components/profileAchievements/ProfileAchievements'
 
 export default class ProfileStore {

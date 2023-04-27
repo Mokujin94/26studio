@@ -2,7 +2,7 @@ import React from 'react'
 import style from './profileAchievements.module.scss'
 
 import AchievementCard from '../achievementCard/AchievementCard'
-import ProgressAchievement from '../proggressAchievement/ProgressAchievement'
+import ProgressAchievement from '../progressAchievement/ProgressAchievement'
 
 function ProfileAchievements() {
   return (
