@@ -15,6 +15,13 @@ function ProfileAchievements() {
             <AchievementCard/>
             <AchievementCard/>
             <AchievementCard/>
+            <AchievementCard/>
+            <AchievementCard/>
+            <AchievementCard/>
+            <AchievementCard/>
+            <AchievementCard/>
+            <AchievementCard/>
+            <AchievementCard/>
         </div>
         <div className={style.wrapper__2fr}>
             <ProgressAchievement/>

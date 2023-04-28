@@ -10,6 +10,7 @@ import FriendCard from '../friendCard/FriendCard'
 function ProfileProjects() {
   return (
     <>
+        {/* <FriendCard/>
         <FriendCard/>
         <FriendCard/>
         <FriendCard/>
@@ -32,9 +33,7 @@ function ProfileProjects() {
         <FriendCard/>
         <FriendCard/>
         <FriendCard/>
-        <FriendCard/>
-        <FriendCard/>
-        {/* <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
+        <FriendCard/> */}
         <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
         <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
         <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
@@ -45,7 +44,8 @@ function ProfileProjects() {
         <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
         <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
         <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
-        <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/> */}
+        <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
+        <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
     </>
   )
 }

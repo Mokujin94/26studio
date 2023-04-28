@@ -10,13 +10,14 @@ import ProfileSettings from '../components/profileSettings/ProfileSettings'
 import ProjectCard from '../components/projectCard/ProjectCard'
 import ProgressAchievement from '../components/progressAchievement/ProgressAchievement'
 import ProfileAchievements from '../components/profileAchievements/ProfileAchievements'
+import ProfileFriends from '../components/profileFriends/ProfileFriends'
 
 export default class ProfileStore {
     constructor() {
 
         this._wrapperItems = [
-            {id: 0, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>, nodeRef: createRef(null)},
-            {id: 1, element: <ProfileProjects/>, nodeRef: createRef(null)},
+            {id: 0, element: <ProfileProjects/>, nodeRef: createRef(null)},
+            {id: 1, element: <ProfileFriends/>, nodeRef: createRef(null)},
             {id: 2, element: <ProfileAchievements/>, nodeRef: createRef(null)},
             {id: 3, element: <ProfileSettings/>, nodeRef: createRef(null)},
         ]

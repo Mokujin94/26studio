@@ -2,7 +2,7 @@ import React from 'react'
 
 import style from './header.module.scss'
 
-import logo from '../../resource/graphics/icons/header/26Studio.svg'
+import logo from '../../resource/graphics/icons/footer/footer_logo.svg'
 import search from '../../resource/graphics/icons/header/search.svg'
 
 function Header() {

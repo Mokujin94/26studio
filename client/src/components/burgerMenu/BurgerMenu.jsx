@@ -6,6 +6,7 @@ import {
   PROFILE_ROUTE,
   PROJECTS_ROUTE,
   GROUPS_ROUTE,
+  REGISTRATION_ROUTE,
 } from "../../utils/consts";
 import MainButton from "../mainButton/MainButton";
 
@@ -42,8 +43,9 @@ const BurgerMenu = observer(() => {
         <div className={style.avatarBlock}>
           <img src={avatar} alt="img" className={style.avatar} />
         </div>
-        <h2 className={style.name}>Mokujin</h2>
-        <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} setMenu={setActive}/>
+        {user.isAuth && <h2 className={style.name}>Mokujin</h2>}
+        {user.isAuth ? <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} setMenu={setActive}/> : <MainButton path={PROFILE_ROUTE} title={"Войти в аккаунт"} setMenu={setActive}/>}
+        {!user.isAuth && <h2 className={style.notAuth}>Нет аккаунта? <Link to={REGISTRATION_ROUTE} className={style.notAuth__path}>Регистрация</Link></h2>}
         <ul className={style.menu}>
           {user.menu.map(({id, title, icon, path}) => {
             return (
