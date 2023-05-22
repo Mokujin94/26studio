@@ -2,8 +2,12 @@
 
 .footer {
     max-width: 1620px;
-    margin: 0 auto;
-    margin-top: 100px;
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    margin-top: 50px;
     border-top: 1px solid $studio-white-text;
     border-radius: 10px;
     padding: 25px 30px;

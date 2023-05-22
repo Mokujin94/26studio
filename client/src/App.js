@@ -12,6 +12,7 @@ import { observer } from 'mobx-react-lite';
 import { Context } from '.';
 import Footer from './components/footer/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { AuthProvider } from './store/AuthStore';
 
 
 
@@ -37,11 +38,13 @@ const App = observer(() => {
   return (
     <div className='App'>
       <BrowserRouter>
-        <ScrollToTop/>
-        <BurgerMenu/>
-        <Header/>
-        <AppRouter/>
-        <Footer/>
+        <AuthProvider>
+          <ScrollToTop/>
+          <BurgerMenu/>
+          <Header/>
+          <AppRouter/>
+          <Footer/>
+        </AuthProvider>
       </BrowserRouter>
     </div>
 

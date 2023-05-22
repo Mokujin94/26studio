@@ -19,9 +19,9 @@ function NewsCard({title, description, img, avatar, likes, comments, views}) {
             <div className={style.preview}>
                 <img src={img} alt="img" className={style.preview__img} />
             </div>
-            <div className={style.avatar}>
+            {/* <div className={style.avatar}>
                     <img src={avatar} alt="img" className={style.avatar__img} />
-                </div>
+                </div> */}
             <div className={style.info}>
                 <h2 className={style.title}>{title}</h2>
                 <div className={style.description}>{description}</div>

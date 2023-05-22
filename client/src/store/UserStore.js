@@ -15,6 +15,7 @@ export default class UserStore {
             {id: 1, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE},
             {id: 2, title: 'Проекты', icon: project, path: PROJECTS_ROUTE},
             {id: 3, title: 'Группы', icon: group, path: GROUPS_ROUTE},
+            {id: 4, title: 'О нас', icon: messeges, path: GROUPS_ROUTE},
         ]
         makeAutoObservable(this)
     }
