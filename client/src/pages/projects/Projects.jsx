@@ -3,12 +3,33 @@ import ProjectCard from '../../components/projectCard/ProjectCard'
 import projectPhoto from '../../resource/graphics/images/projectCard/bg.jpg'
 import ProjectTags from '../../components/projectTags/ProjectTags'
 import ProjectFilter from '../../components/projectFilter/ProjectFilter'
+import Slider from "react-slick";
 
-
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import './projects.scss'
+
 import ProjectSkeleton from '../../components/ProjectSkeleton'
+import SliderButton from '../../components/sliderButton/SliderButton'
 
 function Projects() {
+
+  const stylePrevArrow = {transform: "rotate(180deg)"}
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    // speed: 2000,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
+    // cssEase: "linear"
+    nextArrow: <SliderButton />,
+    prevArrow: <SliderButton styling={stylePrevArrow} />
+  };
+
   const skeletonList = [
     {id: 0},
     {id: 1},
@@ -32,7 +53,10 @@ function Projects() {
           {id: 0, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>},
           {id: 1, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>},
           {id: 2, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>},
-          {id: 3, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>}
+          {id: 3, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>},
+          {id: 4, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>},
+          {id: 5, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>},
+          {id: 6, element: <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>}
   ]
 
   const projectsList = [
@@ -70,24 +94,27 @@ function Projects() {
     setTimeout(() => {
       setProjectCollection(projectsList.map(({id, element}) => {
         return (
-          <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
+          <ProjectCard key={id} img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
         )
       }));
       setLastAddedProjectCollection(lastAddedProjects.map(({id, element}) => {
         return(
-          <ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
+          <ProjectCard key={id} img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
         )
       }));
       setIsLoaded(false);
-    }, 10000)
+    }, 100)
   }, [])
   
   return (
     <div className="container">
       <div className="projects">
         <h1 className="projects__title">Последние добавленные проекты:</h1>
-        <div className="projects__wrapper">
-          {isLoaded ? newLastAddedSkeletonList : lastAddedProjectCollection}
+        <div className="projects__wrapper" style={{display: 'block'}}>
+          <Slider {...settings}>
+            {isLoaded ? newLastAddedSkeletonList : lastAddedProjectCollection}
+            {/* {newLastAddedSkeletonList} */}
+          </Slider>
         </div>
         <ProjectTags/>
         <div className="projects__wrapper">

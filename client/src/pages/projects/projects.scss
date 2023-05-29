@@ -26,3 +26,20 @@
     }
 }
 
+.slick-list {
+    padding: 20px 10px;
+}
+
+.slick-arrow {
+    &::before {
+        content: '';
+    }
+}
+
+.slick-next {
+    right: -60px;
+}
+
+.slick-prev {
+    left: -60px;
+}
