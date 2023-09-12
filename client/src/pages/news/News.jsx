@@ -31,7 +31,7 @@ function News() {
   useEffect(() => {
     setTimeout(() => {
       setNewsCollection(news.news.map((news) => (
-        <Link to={NEWSPAPER_ROUTE + "/:id"}>
+        <Link to={NEWSPAPER_ROUTE + "/" + news.id}>
           <NewsCard
             key={news.id}
             title={news.title}

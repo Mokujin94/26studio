@@ -11,6 +11,8 @@ import './projects.scss'
 
 import ProjectSkeleton from '../../components/ProjectSkeleton'
 import SliderButton from '../../components/sliderButton/SliderButton'
+import { Link } from 'react-router-dom'
+import { PROJECTS_ROUTE, PROJECT_ROUTE } from '../../utils/consts'
 
 function Projects() {
 
@@ -94,7 +96,9 @@ function Projects() {
     setTimeout(() => {
       setProjectCollection(projectsList.map(({id, element}) => {
         return (
-          <ProjectCard key={id} img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
+          <Link to={PROJECTS_ROUTE + '/' + (id + 1)}>
+            <ProjectCard key={id} img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>
+          </Link>
         )
       }));
       setLastAddedProjectCollection(lastAddedProjects.map(({id, element}) => {
