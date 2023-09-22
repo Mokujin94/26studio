@@ -1,1 +1,9 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
+
+.registration {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 230px;
+}

@@ -7,6 +7,7 @@ import {
   PROJECTS_ROUTE,
   GROUPS_ROUTE,
   REGISTRATION_ROUTE,
+  LOGIN_ROUTE,
 } from "../../utils/consts";
 import MainButton from "../mainButton/MainButton";
 
@@ -19,7 +20,7 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 
 const BurgerMenu = observer(() => {
-  const { user } = useContext(Context)
+  const { user } = useContext(Context);
 
   const [active, setActive] = useState(false);
 
@@ -44,24 +45,53 @@ const BurgerMenu = observer(() => {
           <img src={avatar} alt="img" className={style.avatar} />
         </div>
         {user.isAuth && <h2 className={style.name}>Mokujin</h2>}
-        {user.isAuth ? <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} setMenu={setActive}/> : <MainButton path={PROFILE_ROUTE} title={"Войти в аккаунт"} setMenu={setActive}/>}
-        {!user.isAuth && <h2 className={style.notAuth}>Нет аккаунта? <Link to={REGISTRATION_ROUTE} className={style.notAuth__path}>Регистрация</Link></h2>}
+        {user.isAuth ? (
+          <MainButton
+            path={PROFILE_ROUTE}
+            title={"Перейти в профиль"}
+            setMenu={setActive}
+          />
+        ) : (
+          <MainButton
+            path={LOGIN_ROUTE}
+            title={"Войти в аккаунт"}
+            setMenu={setActive}
+          />
+        )}
+        {!user.isAuth && (
+          <h2 className={style.notAuth}>
+            Нет аккаунта?{" "}
+            <Link to={REGISTRATION_ROUTE} className={style.notAuth__path}>
+              Регистрация
+            </Link>
+          </h2>
+        )}
         <ul className={style.menu}>
-          {user.menu.map(({id, title, icon, path}) => {
+          {user.menu.map(({ id, title, icon, path }) => {
             return (
-              <Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
+              <Link
+                className={style.menu__item__text}
+                to={path}
+                onClick={() => burgerTrigger()}
+                key={id}
+              >
                 <li className={style.menu__item}>
                   <img src={icon} alt="icon" />
                   {title}
                 </li>
               </Link>
-            )
+            );
           })}
         </ul>
       </div>
-      <div className={!active ? style.popup : `${style.popup} ${style.popup_active}`} onClick={() => setActive(false)}></div>
+      <div
+        className={
+          !active ? style.popup : `${style.popup} ${style.popup_active}`
+        }
+        onClick={() => setActive(false)}
+      ></div>
     </>
   );
-})
+});
 
 export default BurgerMenu;

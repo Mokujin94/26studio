@@ -1,54 +1,54 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .auth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 330px;
+  &__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    letter-spacing: 0.2em;
+    color: $studio-white-text;
+    margin-bottom: 36px;
+  }
+  &__form {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 330px;
-    &__title {
-        font-weight: 500;
-        font-size: 24px;
-        line-height: 29px;
-        text-align: center;
-        letter-spacing: 0.2em;
-        color: $studio-white-text;
-        margin-bottom: 36px;
+  }
+  &__forget {
+    align-self: flex-end;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    letter-spacing: 0.2em;
+    color: $studio-white-text;
+    margin-bottom: 25px;
+  }
+  &__input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    &-title {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 19px;
+      text-align: center;
+      color: $studio-white-text;
+      margin-bottom: 15px;
     }
-    &__form {
-        display: flex;
-        flex-direction: column;
+    &-item {
+      width: 400px;
+      height: 40px;
+      background-color: $studio-white-text;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      font-size: 20px;
+      padding: 0 20px;
     }
-    &__forget {
-        align-self: flex-end;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 17px;
-        text-align: center;
-        letter-spacing: 0.2em;
-        color: $studio-white-text;
-        margin-bottom: 25px;
-    }
-    &__input{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        &-title {
-            font-weight: 500;
-            font-size: 16px;
-            line-height: 19px;
-            text-align: center;
-            color: $studio-white-text;
-            margin-bottom: 15px;
-        }
-        &-item {
-            width: 400px;
-            height: 40px;
-            background-color: $studio-white-text;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            font-size: 20px;
-            padding: 0 20px;
-        }
-    }
+  }
 }

@@ -1,12 +1,12 @@
-import React from 'react'
-
-
+import React from "react";
+import RegistrationStages from "../../components/registrationStages/RegistrationStages";
+import "./registration.scss";
 function Registation() {
   return (
-    <div>
-      fsdfsdfsd
+    <div className="registration">
+      <RegistrationStages />
     </div>
-  )
+  );
 }
 
-export default Registation
+export default Registation;
