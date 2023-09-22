@@ -30,11 +30,7 @@ const BurgerMenu = observer(() => {
 
   return (
     <>
-      <div
-        className={style.burgerBtn}
-        onClick={() => burgerTrigger()}
-        style={{ userSelect: "none" }}
-      >
+      <div className={style.burgerBtn} onClick={() => burgerTrigger()} style={{ userSelect: "none" }}>
         <img src={burger} alt="icon" />
       </div>
       <div className={active ? style.burgerActive : style.burger}>
@@ -46,17 +42,9 @@ const BurgerMenu = observer(() => {
         </div>
         {user.isAuth && <h2 className={style.name}>Mokujin</h2>}
         {user.isAuth ? (
-          <MainButton
-            path={PROFILE_ROUTE}
-            title={"Перейти в профиль"}
-            setMenu={setActive}
-          />
+          <MainButton path={PROFILE_ROUTE} title={"Перейти в профиль"} setMenu={setActive} />
         ) : (
-          <MainButton
-            path={LOGIN_ROUTE}
-            title={"Войти в аккаунт"}
-            setMenu={setActive}
-          />
+          <MainButton path={LOGIN_ROUTE} title={"Войти в аккаунт"} setMenu={setActive} />
         )}
         {!user.isAuth && (
           <h2 className={style.notAuth}>
@@ -67,27 +55,31 @@ const BurgerMenu = observer(() => {
           </h2>
         )}
         <ul className={style.menu}>
-          {user.menu.map(({ id, title, icon, path }) => {
-            return (
-              <Link
-                className={style.menu__item__text}
-                to={path}
-                onClick={() => burgerTrigger()}
-                key={id}
-              >
-                <li className={style.menu__item}>
-                  <img src={icon} alt="icon" />
-                  {title}
-                </li>
-              </Link>
-            );
-          })}
+          {user.isAuth
+            ? user.menuAuth.map(({ id, title, icon, path }) => {
+                return (
+                  <Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
+                    <li className={style.menu__item}>
+                      <img src={icon} alt="icon" />
+                      {title}
+                    </li>
+                  </Link>
+                );
+              })
+            : user.menu.map(({ id, title, icon, path }) => {
+                return (
+                  <Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
+                    <li className={style.menu__item}>
+                      <img src={icon} alt="icon" />
+                      {title}
+                    </li>
+                  </Link>
+                );
+              })}
         </ul>
       </div>
       <div
-        className={
-          !active ? style.popup : `${style.popup} ${style.popup_active}`
-        }
+        className={!active ? style.popup : `${style.popup} ${style.popup_active}`}
         onClick={() => setActive(false)}
       ></div>
     </>

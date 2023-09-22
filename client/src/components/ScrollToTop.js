@@ -12,7 +12,6 @@ export default function ScrollToTop() {
       behavior: "smooth",
     });
     user.setPath(pathname);
-    console.log(user.path);
   }, [pathname]);
   return null;
 }
