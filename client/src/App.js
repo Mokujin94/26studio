@@ -15,26 +15,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import { AuthProvider } from "./store/AuthStore";
 
 const App = observer(() => {
-  // let location = useLocation();
-  // console.log(location);
-
   const { user } = useContext(Context);
-
-  const { profile } = useContext(Context);
-
-  // const [padding, setPadding] = useState(false)
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (document.body.clientHeight > window.innerHeight) {
-
-  //       setPadding(true)
-  //     } else {
-  //       setPadding(false)
-  //     }
-  //   }, 510)
-
-  // }, [profile.selectedMenu])
 
   return (
     <div className="App">
@@ -42,9 +23,13 @@ const App = observer(() => {
         <AuthProvider>
           <ScrollToTop />
           <BurgerMenu />
-          {user.path === "/registration" || user.path === "/login" ? null : <Header />}
+          {user.path === "/registration" || user.path === "/login" ? null : (
+            <Header />
+          )}
           <AppRouter />
-          {user.path === "/registration" || user.path === "/login" ? null : <Footer />}
+          {user.path === "/registration" || user.path === "/login" ? null : (
+            <Footer />
+          )}
         </AuthProvider>
       </BrowserRouter>
     </div>
