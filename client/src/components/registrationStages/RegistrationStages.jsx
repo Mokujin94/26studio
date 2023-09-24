@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import style from "./registrationStages.module.scss";
+import style from './registrationStages.module.scss';
 
 function RegistrationStages({ stages }) {
   return (
@@ -10,12 +10,12 @@ function RegistrationStages({ stages }) {
         <span className={style.stages__itemText}>Основная информация</span>
       </div>
       <span
-        className={`${stages > 1 ? style.stages__line + " " + style.stages__line_active : style.stages__line}`}
+        className={`${stages > 1 ? style.stages__line + ' ' + style.stages__line_active : style.stages__line}`}
       ></span>
       <div className={style.stages__item}>
         <div
           className={`${
-            stages > 1 ? style.stages__itemNum + " " + style.stages__itemNum_active : style.stages__itemNum
+            stages > 1 ? style.stages__itemNum + ' ' + style.stages__itemNum_active : style.stages__itemNum
           }`}
         >
           2
@@ -23,12 +23,12 @@ function RegistrationStages({ stages }) {
         <span className={style.stages__itemText}>Дополнительная информация</span>
       </div>
       <span
-        className={`${stages > 2 ? style.stages__line + " " + style.stages__line_active : style.stages__line}`}
+        className={`${stages > 2 ? style.stages__line + ' ' + style.stages__line_active : style.stages__line}`}
       ></span>
       <div className={style.stages__item}>
         <div
           className={`${
-            stages > 2 ? style.stages__itemNum + " " + style.stages__itemNum_active : style.stages__itemNum
+            stages > 2 ? style.stages__itemNum + ' ' + style.stages__itemNum_active : style.stages__itemNum
           }`}
         >
           3

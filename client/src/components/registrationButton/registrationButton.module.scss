@@ -1,0 +1,13 @@
+@import '../../resource/styles/variables';
+
+.button {
+  font-size: 16px;
+  font-weight: 700;
+  color: $studio-white-text;
+  background-color: $studio-black-text;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 40px;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+}
