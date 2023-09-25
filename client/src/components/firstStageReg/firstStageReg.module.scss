@@ -1,0 +1,71 @@
+@import '../../resource/styles/variables';
+
+.first {
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 50px;
+  }
+  &__row {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__item {
+    display: block;
+    &Title {
+      color: $studio-white-text;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+    &Input {
+      width: 250px;
+      height: 30px;
+      background: $studio-white-text;
+      border: 0;
+      border-radius: 15px;
+      outline: none;
+    }
+    &Email {
+      margin: 15px 0;
+      input {
+        width: 100%;
+      }
+    }
+    &Bottom {
+      position: relative;
+      img {
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        bottom: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    &Sign {
+      display: flex;
+      &Text {
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: $studio-white-text;
+        margin-right: 7px;
+      }
+      &Link {
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: $studio-base-elements;
+      }
+    }
+  }
+}
