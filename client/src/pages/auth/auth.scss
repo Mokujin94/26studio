@@ -44,10 +44,12 @@
     &-item {
       width: 400px;
       height: 40px;
-      background-color: $studio-white-text;
+      background-color: $studio-text-button;
       border-radius: 20px;
+      border: 2px solid $studio-base-elements;
+      color: $studio-white-text;
       margin-bottom: 15px;
-      font-size: 20px;
+      font-size: 16px;
       padding: 0 20px;
       outline: none;
     }

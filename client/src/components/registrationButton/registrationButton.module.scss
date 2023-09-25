@@ -1,13 +1,17 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .button {
   font-size: 16px;
   font-weight: 700;
-  color: $studio-white-text;
-  background-color: $studio-black-text;
+  color: $studio-text-button;
+  background-color: $studio-base-elements;
   border: 0;
   border-radius: 10px;
   padding: 10px 40px;
   letter-spacing: 0.15em;
   cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    background-color: $studio-button-hover;
+  }
 }

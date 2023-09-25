@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import RegistrationStages from '../../components/registrationStages/RegistrationStages';
-import './registration.scss';
-import FirstStageReg from '../../components/firstStageReg/FirstStageReg';
+import React, { useState } from "react";
+import RegistrationStages from "../../components/registrationStages/RegistrationStages";
+import "./registration.scss";
+import FirstStageReg from "../../components/firstStageReg/FirstStageReg";
 function Registation() {
   const [stages, setStages] = useState(1);
   return (
     <div className="registration">
-      <RegistrationStages stages={stages} />
+      <div className="registration__stages">
+        <RegistrationStages stages={stages} />
+      </div>
       <div className="registration__stage">
         <FirstStageReg setStages={setStages} />
       </div>

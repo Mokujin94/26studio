@@ -20,9 +20,7 @@ function Auth() {
         <Link to="/" className="auth__forget">
           Забыли пароль?
         </Link>
-        <div className="">
-          <FunctionButton>Вход</FunctionButton>
-        </div>
+        <FunctionButton>Войти</FunctionButton>
       </form>
     </div>
   );
