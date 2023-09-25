@@ -21,6 +21,12 @@ function Auth() {
           Забыли пароль?
         </Link>
         <FunctionButton>Войти</FunctionButton>
+        <div className="auth__notAuth">
+          <p className="auth__notAuthText">Нет аккаунта?</p>
+          <Link to="/registration" className="auth__notAuthLink">
+            Зарегистрироваться
+          </Link>
+        </div>
       </form>
     </div>
   );

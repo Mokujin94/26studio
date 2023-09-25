@@ -23,7 +23,6 @@
       border: 2px solid $studio-base-elements;
       overflow: hidden;
       transition: color 0.3s 0.3s ease, border 0.3s 0.6s ease;
-      //   transition: border 0.3s 0.6s ease;
       &::before {
         content: "";
         display: block;
