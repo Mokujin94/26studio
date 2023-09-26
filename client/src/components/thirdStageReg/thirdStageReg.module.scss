@@ -1,1 +1,37 @@
 @import "../../resource/styles/variables";
+
+.third {
+  &__title {
+    color: $studio-white-text;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 50px;
+  }
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__text {
+    color: $studio-white-text;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  &__inputBox {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 50px;
+    &Item {
+      width: 50px;
+      height: 60px;
+      outline: 0;
+      background-color: transparent;
+      border: 2px solid $studio-base-elements;
+      color: $studio-white-text;
+      border-radius: 10px;
+      font-size: 20px;
+      text-align: center;
+    }
+  }
+}
