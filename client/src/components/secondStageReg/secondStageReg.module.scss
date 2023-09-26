@@ -1,1 +1,82 @@
 @import "../../resource/styles/variables";
+
+.second {
+  &__inner {
+    margin-bottom: 50px;
+  }
+  &__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__item {
+    display: block;
+  }
+
+  &__itemTitle {
+    color: $studio-white-text;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+
+  &__itemInput {
+    width: 600px;
+    height: 120px;
+    background-color: $studio-text-button;
+    border-radius: 20px;
+    border: 2px solid $studio-base-elements;
+    color: $studio-white-text;
+    font-size: 16px;
+    padding: 0 20px;
+    outline: none;
+    &Pass {
+      padding-right: 45px;
+    }
+    &Area {
+      height: 125px;
+      padding: 10px 20px;
+      resize: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  &__itemGroup {
+    width: 230px;
+    height: 40px;
+    border-radius: 15px;
+    background-color: $studio-text-button;
+    color: $studio-white-text;
+    padding: 0 20px;
+    appearance: none;
+    border: 2px solid $studio-base-elements;
+    outline: none;
+    cursor: pointer;
+  }
+
+  &__itemBtn {
+    width: 230px;
+    height: 40px;
+    border-radius: 15px;
+    background-color: $studio-text-button;
+    color: $studio-white-text;
+    padding: 0 20px;
+    border: 2px solid $studio-base-elements;
+    outline: none;
+    text-align: center;
+    transition: 0.3s;
+    cursor: pointer;
+    &:hover {
+      background-color: $studio-base-elements;
+      color: $studio-text-button;
+    }
+  }
+}

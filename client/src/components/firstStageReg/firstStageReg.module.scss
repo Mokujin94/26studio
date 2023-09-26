@@ -21,7 +21,7 @@
     }
     &Input {
       width: 250px;
-      height: 30px;
+      height: 40px;
       background-color: $studio-text-button;
       border-radius: 20px;
       border: 2px solid $studio-base-elements;
@@ -29,9 +29,6 @@
       font-size: 16px;
       padding: 0 20px;
       outline: none;
-      &Pass {
-        padding-right: 45px;
-      }
     }
     &Email {
       margin: 15px 0;
