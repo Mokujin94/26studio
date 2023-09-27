@@ -5,7 +5,7 @@ import style from "./firstStageReg.module.scss";
 
 import eye from "../../resource/graphics/icons/registration/regEye.svg";
 import RegistrationButton from "../registrationButton/RegistrationButton";
-function FirstStageReg({ setStages }) {
+function FirstStageReg({ setStages, setClick }) {
   return (
     <>
       <div className={style.first}>
@@ -28,29 +28,21 @@ function FirstStageReg({ setStages }) {
             <label className={style.first__item}>
               <h3 className={style.first__itemTitle}>Пароль</h3>
               <div className={style.first__itemBottom}>
-                <input
-                  type="text"
-                  className={`${style.first__itemInput} ${style.first__itemInputPass}`}
-                />
+                <input type="text" className={`${style.first__itemInput} ${style.first__itemInputPass}`} />
                 <img src={eye} alt="" />
               </div>
             </label>
             <label className={style.first__item}>
               <h3 className={style.first__itemTitle}>Повтор пароля</h3>
               <div className={style.first__itemBottom}>
-                <input
-                  type="text"
-                  className={`${style.first__itemInput} ${style.first__itemInputPass}`}
-                />
+                <input type="text" className={`${style.first__itemInput} ${style.first__itemInputPass}`} />
                 <img src={eye} alt="" />
               </div>
             </label>
           </div>
         </div>
         <div className={style.first__bottom}>
-          <RegistrationButton setStages={setStages}>Далее</RegistrationButton>
           <div className={style.first__bottomSign}>
-            <p className={style.first__bottomSignText}>Уже есть аккаунт?</p>
             <Link to="/login" className={style.first__bottomSignLink}>
               Войти
             </Link>

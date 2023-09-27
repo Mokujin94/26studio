@@ -4,7 +4,7 @@ import style from "./secondStageReg.module.scss";
 
 import RegistrationButton from "../registrationButton/RegistrationButton";
 
-function SecondStageReg({ setStages }) {
+function SecondStageReg({ setStages, setClick }) {
   return (
     <div className={style.second}>
       <div className={style.second__inner}>
@@ -12,6 +12,9 @@ function SecondStageReg({ setStages }) {
           <label className={style.second__item}>
             <h2 className={style.second__itemTitle}>Группа</h2>
             <select className={style.second__itemGroup}>
+              <option className={style.second__itemGroupValue} selected disabled value="Выберите группу">
+                Выберите группу
+              </option>
               <option className={style.second__itemGroupValue} value="11/9">
                 ИС 11/9
               </option>
@@ -57,16 +60,11 @@ function SecondStageReg({ setStages }) {
         </div>
         <div className={style.second__row}>
           <label>
-            <h2 className={style.second__itemTitle}>
-              Немного информации о себе
-            </h2>
-            <textarea
-              className={`${style.second__itemInput} ${style.second__itemInputArea}`}
-            />
+            <h2 className={style.second__itemTitle}>Немного информации о себе</h2>
+            <textarea className={`${style.second__itemInput} ${style.second__itemInputArea}`} />
           </label>
         </div>
       </div>
-      <RegistrationButton setStages={setStages}>Далее</RegistrationButton>
     </div>
   );
 }

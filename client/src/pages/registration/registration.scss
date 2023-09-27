@@ -18,3 +18,33 @@
     width: 100%;
   }
 }
+
+.node-enter {
+  opacity: 0;
+}
+.node-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.node-exit {
+  opacity: 1;
+}
+.node-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.buttonBye-enter-active {
+  opacity: 1;
+}
+.buttonBye-enter-done {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.buttonBye-exit-active {
+  opacity: 1;
+}
+.buttonBye-exit-done {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
