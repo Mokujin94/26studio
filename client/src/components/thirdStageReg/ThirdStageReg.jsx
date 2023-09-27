@@ -20,7 +20,7 @@ function ThirdStageReg({ setStages }) {
 
   const onChange = (e) => {
     const id = e.target.attributes.id.value;
-    if (e.target.value.length <= 1) {
+    if (e.target.value.length <= 1 && /\d+/.test(Number(e.target.value))) {
       if (id === "1") {
         setNumber1(e.target.value);
         if (!e.target.value) return input1.current.focus();
@@ -66,7 +66,11 @@ function ThirdStageReg({ setStages }) {
     }
 
     let nextId = Number(id) + 1;
-    if (e.target.value.length >= 1 && nextId <= 6 && e.keyCode !== 8) {
+    if (
+      e.target.value.length >= 1 &&
+      nextId <= 6 &&
+      /\d+/.test(Number(e.key))
+    ) {
       eval(`input${nextId}.current.focus()`);
       eval(`setNumber${nextId}(e.key)`);
     }
