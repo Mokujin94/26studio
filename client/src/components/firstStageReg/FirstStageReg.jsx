@@ -50,7 +50,7 @@ function FirstStageReg({ setStages }) {
         <div className={style.first__bottom}>
           <RegistrationButton setStages={setStages}>Далее</RegistrationButton>
           <div className={style.first__bottomSign}>
-            <p className={style.first__bottomSignText}>Уже есть аккаунт? </p>
+            <p className={style.first__bottomSignText}>Уже есть аккаунт?</p>
             <Link to="/login" className={style.first__bottomSignLink}>
               Войти
             </Link>

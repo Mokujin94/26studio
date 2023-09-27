@@ -54,4 +54,26 @@
       outline: none;
     }
   }
+  &__notAuth {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    &Text {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: $studio-white-text;
+      margin-right: 7px;
+    }
+    &Link {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: $studio-base-elements;
+      transition: all 0.3s;
+      &:hover {
+        color: $studio-button-hover;
+      }
+    }
+  }
 }

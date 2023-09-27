@@ -2,7 +2,9 @@
 
 .registration {
   position: relative;
-  height: 100vh;
+  height: calc(100vh - 100px);
+  // height: 100vh;
+  transform: translateY(50px);
   display: flex;
   flex-direction: column;
   justify-content: center;

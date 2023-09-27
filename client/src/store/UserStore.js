@@ -4,7 +4,12 @@ import news from "../resource/graphics/icons/burgerMenu/newsIcon.svg";
 import messeges from "../resource/graphics/icons/burgerMenu/messegesIcon.svg";
 import project from "../resource/graphics/icons/burgerMenu/projectIcon.svg";
 import group from "../resource/graphics/icons/burgerMenu/groupIcon.svg";
-import { GROUPS_ROUTE, MESSENGER_ROUTE, NEWS_ROUTE, PROJECTS_ROUTE } from "../utils/consts";
+import {
+  GROUPS_ROUTE,
+  MESSENGER_ROUTE,
+  NEWS_ROUTE,
+  PROJECTS_ROUTE,
+} from "../utils/consts";
 
 export default class UserStore {
   constructor() {
