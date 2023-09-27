@@ -1,44 +1,65 @@
-@import './reboot.scss';
-@import '../../pages/registration/registration.scss';
-@import '../../pages/auth/auth.scss';
-@import '../../pages/profile/profile.scss';
-@import '../../pages/projects/projects.scss';
-@import '../../pages/news/news.scss';
-@import '../../pages/messenger/messenger.scss';
-@import '../../pages/project/project.scss';
-@import '../../pages/newsPaper/newsPaper.scss';
-@import '../../pages/groups/groups.scss';
-@import '../../pages/group/group.scss';
-
+@import "./reboot.scss";
+@import "../../pages/registration/registration.scss";
+@import "../../pages/auth/auth.scss";
+@import "../../pages/profile/profile.scss";
+@import "../../pages/projects/projects.scss";
+@import "../../pages/news/news.scss";
+@import "../../pages/messenger/messenger.scss";
+@import "../../pages/project/project.scss";
+@import "../../pages/newsPaper/newsPaper.scss";
+@import "../../pages/groups/groups.scss";
+@import "../../pages/group/group.scss";
 
 body {
-    background: $studio-background;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
-    scroll-behavior: smooth;
-    min-height: 100vh;
-    &::-webkit-scrollbar {
-        
-        display: none;
-    }
+  background: $studio-background;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  min-height: 100vh;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-
 .container {
-    display: block;
-    max-width: 1620px;
-    width: 100%;
-    margin: 0 auto;
+  display: block;
+  max-width: 1620px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .App {
-    position: relative;
-    min-height: 100vh;
-    padding-bottom: 100px;
-    // padding-right: 0;
-    // transition-delay: 0.15s;
-    // transition-duration: 0.3s;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 100px;
+  // padding-right: 0;
+  // transition-delay: 0.15s;
+  // transition-duration: 0.3s;
+}
+
+@media (max-width: $xxl) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
+@media (max-width: $xl) {
+  .container {
+    max-width: 1240px;
+  }
+}
+
+@media (max-width: $lg) {
+  .container {
+    max-width: 992px;
+  }
+}
+
+@media (max-width: $md) {
+  .container {
+    max-width: 780px;
+  }
 }
