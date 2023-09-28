@@ -75,3 +75,14 @@ a {
     }
   }
 }
+
+@media (max-width: $sm) {
+  .news {
+    &__title {
+      font-size: 24px;
+      &-wrapper {
+        margin-bottom: 30px;
+      }
+    }
+  }
+}

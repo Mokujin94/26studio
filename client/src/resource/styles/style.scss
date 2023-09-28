@@ -63,3 +63,9 @@ body {
     max-width: 780px;
   }
 }
+
+@media (max-width: $sm) {
+  .container {
+    max-width: 600px;
+  }
+}
