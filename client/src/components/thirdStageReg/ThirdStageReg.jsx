@@ -3,7 +3,7 @@ import React, { createRef, useState } from "react";
 import style from "./thirdStageReg.module.scss";
 import RegistrationButton from "../registrationButton/RegistrationButton";
 
-function ThirdStageReg({ setStages }) {
+function ThirdStageReg({ stages }) {
   const [number1, setNumber1] = useState("");
   const [number2, setNumber2] = useState("");
   const [number3, setNumber3] = useState("");
@@ -101,7 +101,11 @@ function ThirdStageReg({ setStages }) {
             value={number1}
             id="1"
             ref={input1}
-            className={style.third__inputBoxItem}
+            className={
+              number1
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
+            }
           />
           <input
             type="text"
@@ -110,7 +114,11 @@ function ThirdStageReg({ setStages }) {
             value={number2}
             id="2"
             ref={input2}
-            className={style.third__inputBoxItem}
+            className={
+              number2
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
+            }
           />
           <input
             type="text"
@@ -119,7 +127,11 @@ function ThirdStageReg({ setStages }) {
             value={number3}
             id="3"
             ref={input3}
-            className={style.third__inputBoxItem}
+            className={
+              number3
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
+            }
           />
           <input
             type="text"
@@ -128,7 +140,11 @@ function ThirdStageReg({ setStages }) {
             value={number4}
             id="4"
             ref={input4}
-            className={style.third__inputBoxItem}
+            className={
+              number4
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
+            }
           />
           <input
             type="text"
@@ -137,7 +153,11 @@ function ThirdStageReg({ setStages }) {
             value={number5}
             id="5"
             ref={input5}
-            className={style.third__inputBoxItem}
+            className={
+              number5
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
+            }
           />
           <input
             type="text"
@@ -146,10 +166,13 @@ function ThirdStageReg({ setStages }) {
             value={number6}
             id="6"
             ref={input6}
-            className={style.third__inputBoxItem}
+            className={
+              number6
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
+            }
           />
         </div>
-        <RegistrationButton>Регистрация</RegistrationButton>
       </div>
     </div>
   );

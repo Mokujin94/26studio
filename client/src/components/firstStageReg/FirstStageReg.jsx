@@ -28,24 +28,23 @@ function FirstStageReg({ setStages, setClick }) {
             <label className={style.first__item}>
               <h3 className={style.first__itemTitle}>Пароль</h3>
               <div className={style.first__itemBottom}>
-                <input type="text" className={`${style.first__itemInput} ${style.first__itemInputPass}`} />
+                <input
+                  type="text"
+                  className={`${style.first__itemInput} ${style.first__itemInputPass}`}
+                />
                 <img src={eye} alt="" />
               </div>
             </label>
             <label className={style.first__item}>
               <h3 className={style.first__itemTitle}>Повтор пароля</h3>
               <div className={style.first__itemBottom}>
-                <input type="text" className={`${style.first__itemInput} ${style.first__itemInputPass}`} />
+                <input
+                  type="text"
+                  className={`${style.first__itemInput} ${style.first__itemInputPass}`}
+                />
                 <img src={eye} alt="" />
               </div>
             </label>
-          </div>
-        </div>
-        <div className={style.first__bottom}>
-          <div className={style.first__bottomSign}>
-            <Link to="/login" className={style.first__bottomSignLink}>
-              Войти
-            </Link>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import RegistrationStages from "../../components/registrationStages/RegistrationStages";
 import FirstStageReg from "../../components/firstStageReg/FirstStageReg";
 import SecondStageReg from "../../components/secondStageReg/SecondStageReg";
@@ -7,25 +8,28 @@ import RegistrationButton from "../../components/registrationButton/Registration
 
 import "./registration.scss";
 
-import { CSSTransition, SwitchTransition, TransitionGroup } from "react-transition-group";
+import {
+  CSSTransition,
+  SwitchTransition,
+  TransitionGroup,
+} from "react-transition-group";
 
 function Registation() {
   const [stages, setStages] = useState(1);
-  const [click, setClick] = useState(false);
   const nodeRef = useRef(null);
 
   return (
     <div className="registration">
       <div className="registration__stages">
-        <RegistrationStages stages={stages} />
+        <RegistrationStages stages={stages} setStages={setStages} />
       </div>
       <SwitchTransition mode="out-in">
-        <CSSTransition key={stages} in={click} timeout={300} classNames="node">
+        <CSSTransition key={stages} in={stages} timeout={300} classNames="node">
           <div className="registration__stage">
             {stages === 1 ? (
-              <FirstStageReg setStages={setStages} setClick={setClick} />
+              <FirstStageReg setStages={setStages} />
             ) : stages === 2 ? (
-              <SecondStageReg setStages={setStages} setClick={setClick} />
+              <SecondStageReg setStages={setStages} />
             ) : stages === 3 ? (
               <ThirdStageReg />
             ) : null}
@@ -33,22 +37,26 @@ function Registation() {
         </CSSTransition>
       </SwitchTransition>
 
-      <div className="registration__bottom">
-        {stages === 1 ? (
-          <>
-            <RegistrationButton setClick={setClick} setStages={setStages}>
-              Далее
-            </RegistrationButton>
-            <p className="registration__bottom-notAuth">Уже есть аккаунт?</p>
-          </>
-        ) : stages === 2 ? (
-          <RegistrationButton setClick={setClick} setStages={setStages}>
-            Далее
-          </RegistrationButton>
-        ) : null}
-      </div>
-
-      {/* <button onClick={() => setClick(!click)}>Click</button> */}
+      {/* <SwitchTransition mode="out-in"> */}
+      <CSSTransition
+        nodeRef={nodeRef}
+        // key={stages}
+        in={stages < 3 ? true : false}
+        timeout={300}
+        classNames={"buttonBye"}
+        unmountOnExit
+      >
+        <div ref={nodeRef} className="registration__bottom">
+          <RegistrationButton setStages={setStages}>Далее</RegistrationButton>
+          <div className="registration__bottom-sign">
+            <p className="registration__bottom-sign-text">Уже есть аккаунт?</p>
+            <Link to="/login" className="registration__bottom-sign-link">
+              Войти
+            </Link>
+          </div>
+        </div>
+      </CSSTransition>
+      {/* </SwitchTransition> */}
     </div>
   );
 }

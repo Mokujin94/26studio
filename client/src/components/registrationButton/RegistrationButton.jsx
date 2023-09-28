@@ -2,13 +2,12 @@ import React from "react";
 
 import style from "./registrationButton.module.scss";
 
-function RegistrationButton({ children, setStages, setClick }) {
-  const func = () => {
-    setStages((item) => item + 1);
-    setClick((item) => !item);
-  };
+function RegistrationButton({ children, setStages }) {
   return (
-    <button className={style.button} onClick={() => func()}>
+    <button
+      className={style.button}
+      onClick={() => setStages((item) => item + 1)}
+    >
       {children}
     </button>
   );

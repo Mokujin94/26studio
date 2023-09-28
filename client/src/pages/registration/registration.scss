@@ -17,6 +17,33 @@
     max-width: 600px;
     width: 100%;
   }
+  &__bottom {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &-sign {
+      display: flex;
+      gap: 7px;
+      &-text {
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: $studio-white-text;
+      }
+      &-link {
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: $studio-base-elements;
+        transition: all 0.3s;
+        &:hover {
+          color: $studio-button-hover;
+        }
+      }
+    }
+  }
 }
 
 .node-enter {
@@ -35,16 +62,23 @@
 }
 
 .buttonBye-enter-active {
-  opacity: 1;
-}
-.buttonBye-enter-done {
   opacity: 0;
-  transition: opacity 0.3s;
 }
 .buttonBye-exit-active {
-  opacity: 1;
-}
-.buttonBye-exit-done {
   opacity: 0;
   transition: opacity 0.3s;
 }
+
+.buttonBye-enter-done {
+  opacity: 1;
+  transition: 0.3s;
+}
+
+// .buttonHi-enter-active {
+//   opacity: 0;
+// }
+
+// .buttonHi-enter-done {
+//   opacity: 1;
+//   transition: opacity 0.3s;
+// }
