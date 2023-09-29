@@ -1,44 +1,105 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .news {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-top: 160px;
-    margin-bottom: 100px;
-    &__title {    
-        font-weight: 500;
-        font-size: 40px;
-        line-height: 49px;
-        text-align: justify;
-        color: $studio-white-text;
-        margin-right: 50px;
-        &-wrapper {
-            display: flex;
-            align-items: center;
-            margin-bottom: 50px;
-        }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 160px;
+  margin-bottom: 100px;
+  &__title {
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 49px;
+    text-align: justify;
+    color: $studio-white-text;
+    margin-right: 50px;
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 50px;
     }
-    &__propose {
-        font-weight: 500;
-        font-size: 20px;
-        line-height: 24px;
-        text-align: justify;
-        color: rgba(255, 255, 255, 0.4);
-        cursor: pointer;
-    }
-    &__cards {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        column-gap: 20px;
-        row-gap: 100px;
-    }
+  }
+  &__propose {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: justify;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+  }
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(auto, 390px));
+    justify-content: space-between;
+    column-gap: 20px;
+    row-gap: 100px;
+  }
 }
 
+@media (max-width: $xxl) {
+  .news {
+    &__cards {
+      row-gap: 40px;
+    }
+    &__title {
+      font-size: 34px;
+    }
+  }
+}
 
+@media (max-width: $xl) {
+  .news {
+    &__title {
+      font-size: 30px;
+    }
+  }
+}
 
+@media (max-width: $lg) {
+  .news {
+    &__cards {
+      grid-template-columns: repeat(3, minmax(auto, 340px));
+      column-gap: 24px;
+    }
+  }
+}
 
+@media (max-width: $md) {
+  .news {
+    &__cards {
+      grid-template-columns: repeat(2, minmax(auto, 378px));
+      column-gap: 24px;
+    }
+  }
+}
+
+@media (max-width: $sm) {
+  .news {
+    &__title {
+      font-size: 24px;
+      &-wrapper {
+        margin-bottom: 30px;
+      }
+    }
+  }
+}
+
+@media (max-width: $xs) {
+  .news {
+    &__cards {
+      grid-template-columns: minmax(auto, auto);
+    }
+    &__title {
+      margin-right: 0;
+
+      &-wrapper {
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
