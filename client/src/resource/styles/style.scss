@@ -52,7 +52,7 @@ body {
 
 @media (max-width: $lg) {
   .container {
-    max-width: 1022px;
+    max-width: 1070px;
   }
 }
 
@@ -70,6 +70,12 @@ body {
 
 @media (max-width: $xs) {
   .container {
-    max-width: 430px;
+    max-width: 480px;
+  }
+}
+
+@media (max-width: $xxs) {
+  .container {
+    max-width: 100%;
   }
 }
