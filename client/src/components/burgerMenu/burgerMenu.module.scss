@@ -1,7 +1,7 @@
-@import "../../resource/styles/variables";
+@import '../../resource/styles/variables';
 
 * {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .burgerBg {
@@ -9,32 +9,6 @@
   left: 0;
   top: 0;
   background-color: #ffa1a1;
-}
-
-.burgerBtn {
-  position: fixed;
-  z-index: 5;
-  left: 20px;
-  top: 10px;
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  // border: 1px solid rgba(255, 255, 255, 0.4);
-  transition: 0.3s;
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0);
-    transition: 0.1s ease;
-  }
-  &:active {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: 0.1s ease;
-  }
 }
 
 .burger {
@@ -68,6 +42,9 @@
   top: 16px;
   right: 16px;
   cursor: pointer;
+  &Icon {
+    display: block;
+  }
 }
 
 .avatarBlock {

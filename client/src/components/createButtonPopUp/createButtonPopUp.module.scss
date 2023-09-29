@@ -1,76 +1,66 @@
 @import '../../resource/styles/variables';
 
 .button {
-    width: 37px;
-    height: 37px;
-    border-radius: 10px;
-    border: 1px solid $studio-white-text;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  width: 37px;
+  height: 37px;
+  border-radius: 10px;
+  border: 1px solid $studio-white-text;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: 0.3s;
+  user-select: none;
+  &_active {
+    border: 1px solid $studio-base-elements;
+    .button__cross {
+      rotate: 45deg;
+      filter: invert(40%) sepia(30%) saturate(474%) hue-rotate(178deg) brightness(96%) contrast(88%);
+    }
+  }
+
+  &__cross {
+    width: 20px;
+    height: 20px;
     transition: 0.3s;
-    user-select:none;
-    &__wrapper {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 0;
-        
+    user-select: none;
+  }
+
+  &__content {
+    display: none;
+    cursor: default;
+    width: 225px;
+    border-radius: 15px;
+    border: 1px solid #596470;
+    position: absolute;
+    bottom: -120px;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 15px;
+    padding: 10px 0;
+    background-color: $studio-text-button;
+    &Item {
+      display: flex;
+      width: 100%;
+      padding: 10px 15px;
+      align-items: center;
+      color: $studio-base-elements;
+      cursor: pointer;
+      transition: 0.3s ease;
+      &:hover {
+        background-color: $studio-menu-color-hover;
+      }
+      &Img {
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+      }
     }
     &_active {
-        border: 1px solid $studio-base-elements;
-        .button__cross{
-            rotate: 45deg;
-            filter: invert(40%) sepia(30%) saturate(474%) hue-rotate(178deg) brightness(96%) contrast(88%);
-        }
+      display: flex;
     }
-
-    &__cross {
-        width: 20px;
-        height: 20px;
-        transition: 0.3s;
-        user-select:none
-
-    }
-
-    &__content {
-        display: none;
-        cursor: default;
-        width: 225px;
-        border-radius: 15px;
-        border: 1px solid #596470;
-        position: absolute;
-        bottom: -120px;
-        right: 0;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        font-size: 15px;
-        padding: 10px 0;
-        background-color: $studio-text-button   ;
-        &Item {
-            display: flex;
-            width: 100%;
-            padding: 10px 15px;
-            align-items: center;
-            color: $studio-base-elements;
-            cursor: pointer;
-            transition: .3s ease;
-            &:hover {
-            background-color: $studio-menu-color-hover;
-
-            }
-            &Img {
-                width: 15px;
-                height: 15px;
-                margin-right: 10px;
-            }
-        }
-        &_active {
-            display: flex;
-        }
-    }
+  }
 }
-

@@ -1,4 +1,4 @@
-@import "../../resource/styles/variables";
+@import '../../resource/styles/variables';
 
 a {
   text-decoration: none;
@@ -9,7 +9,6 @@ a {
   display: flex;
   flex-direction: column;
   margin-top: 160px;
-  margin-bottom: 100px;
   &__title {
     font-weight: 500;
     font-size: 40px;
@@ -35,7 +34,6 @@ a {
     display: grid;
     grid-template-columns: repeat(4, minmax(auto, 390px));
     justify-content: space-between;
-    column-gap: 20px;
     row-gap: 100px;
   }
 }
@@ -43,6 +41,7 @@ a {
 @media (max-width: $xxl) {
   .news {
     &__cards {
+      grid-template-columns: repeat(4, minmax(auto, 340px));
       row-gap: 40px;
     }
     &__title {
@@ -53,6 +52,9 @@ a {
 
 @media (max-width: $xl) {
   .news {
+    &__cards {
+      grid-template-columns: repeat(4, minmax(auto, 295px));
+    }
     &__title {
       font-size: 30px;
     }
@@ -62,8 +64,7 @@ a {
 @media (max-width: $lg) {
   .news {
     &__cards {
-      grid-template-columns: repeat(3, minmax(auto, 340px));
-      column-gap: 24px;
+      grid-template-columns: repeat(3, minmax(auto, 315px));
     }
   }
 }
@@ -72,13 +73,15 @@ a {
   .news {
     &__cards {
       grid-template-columns: repeat(2, minmax(auto, 378px));
-      column-gap: 24px;
     }
   }
 }
 
 @media (max-width: $sm) {
   .news {
+    &__cards {
+      grid-template-columns: repeat(2, minmax(auto, 288px));
+    }
     &__title {
       font-size: 24px;
       &-wrapper {
