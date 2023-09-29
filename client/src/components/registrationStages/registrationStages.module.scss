@@ -43,17 +43,6 @@
         &::before {
           width: 45px;
         }
-        &:hover,
-        &:active {
-          color: $studio-white-text;
-          border: 2px solid $studio-base-elements;
-          transition: 0s;
-          &::before {
-            width: 0px;
-            background-color: transparent;
-            transition: width 0s 0.3s ease, background-color 0.3s 0s ease;
-          }
-        }
       }
     }
 
