@@ -26,9 +26,10 @@ body {
 
 .container {
   display: block;
-  max-width: 1620px;
+  max-width: 1650px;
   width: 100%;
   margin: 0 auto;
+  padding: 0 15px;
 }
 
 .App {
@@ -42,30 +43,36 @@ body {
 
 @media (max-width: $xxl) {
   .container {
-    max-width: 1440px;
+    max-width: 1470px;
   }
 }
 
 @media (max-width: $xl) {
   .container {
-    max-width: 1240px;
+    max-width: 1270px;
   }
 }
 
 @media (max-width: $lg) {
   .container {
-    max-width: 992px;
+    max-width: 1022px;
   }
 }
 
 @media (max-width: $md) {
   .container {
-    max-width: 780px;
+    max-width: 810px;
   }
 }
 
 @media (max-width: $sm) {
   .container {
-    max-width: 600px;
+    max-width: 630px;
+  }
+}
+
+@media (max-width: $xs) {
+  .container {
+    max-width: 430px;
   }
 }

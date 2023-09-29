@@ -12,20 +12,9 @@ import NewsSkeleton from "../../components/newsSkeleton/NewsSkeleton";
 
 function News() {
   const { news } = useContext(Context);
-  const skeletonList = [
-    { id: 0 },
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-    { id: 6 },
-    { id: 7 },
-  ];
+  const skeletonList = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }];
 
-  const newSkeletonList = skeletonList.map(({ id }) => (
-    <NewsSkeleton key={id} />
-  ));
+  const newSkeletonList = skeletonList.map(({ id }) => <NewsSkeleton key={id} />);
   const [isLoaded, setIsLoaded] = useState(true);
   const [newsCollection, setNewsCollection] = useState();
   useEffect(() => {
@@ -54,11 +43,8 @@ function News() {
       <div className="news">
         <div className="news__title-wrapper">
           <h1 className="news__title">Популярные новости</h1>
-          <div className="news__propose">Предложить новость</div>
         </div>
-        <div className="news__cards">
-          {isLoaded ? newSkeletonList : newsCollection}
-        </div>
+        <div className="news__cards">{isLoaded ? newSkeletonList : newsCollection}</div>
       </div>
     </div>
   );
