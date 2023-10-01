@@ -1,0 +1,57 @@
+@import '../../resource/styles/variables';
+
+.spSelectMobile {
+  position: relative;
+  width: 100%;
+  color: $studio-white-text;
+  background-color: $studio-text-button;
+  border: 0px;
+  border-radius: 5px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: 0.3s ease;
+  height: 49px;
+  &_active {
+    height: 147px;
+  }
+
+  &__top {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__title {
+  }
+
+  &__img {
+    width: 18px;
+  }
+
+  &__wrapper {
+    width: 100%;
+    display: grid;
+    justify-items: center;
+    grid-template-columns: repeat(6, 1fr);
+    grid-row-gap: 20px;
+    grid-column-gap: 15px;
+    margin-top: 30px;
+  }
+
+  &__item {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: $xxs) {
+  .spSelectMobile {
+    &_active {
+      height: 191px;
+    }
+    &__wrapper {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+}

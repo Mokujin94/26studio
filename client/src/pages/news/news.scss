@@ -88,7 +88,7 @@ a {
 @media (max-width: $xs) {
   .news {
     &__cards {
-      grid-template-columns: minmax(auto, auto);
+      grid-template-columns: 1fr;
     }
     &__title {
       margin-right: 0;
