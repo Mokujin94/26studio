@@ -1,22 +1,21 @@
 @import '../../resource/styles/variables';
 
-
 .arrow {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid $studio-base-elements;
-    border-radius: 50%;
-    transition: 0.3s;
-    &:hover {
-        background: $studio-base-elements;
-        img {
-            filter:invert(100%);
-        }   
-    }
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid $studio-primary-border;
+  border-radius: 50%;
+  transition: $studio-transition-03;
+  &:hover {
+    background: $studio-primary-button;
     img {
-        transition: 0.3s;
+      filter: invert(100%);
     }
+  }
+  img {
+    transition: $studio-transition-03;
+  }
 }

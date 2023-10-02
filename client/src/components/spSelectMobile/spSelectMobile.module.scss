@@ -1,17 +1,17 @@
-@import "../../resource/styles/variables";
+@import '../../resource/styles/variables';
 
 .spSelectMobile {
   position: relative;
   width: 100%;
   color: $studio-white-text;
-  background-color: $studio-text-button;
+  background-color: $studio-dark-element;
   border: 0px;
   border-radius: 5px;
   padding: 15px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: 0.3s ease;
+  transition: $studio-transition-03 ease;
   max-height: 49px;
   &_active {
     max-height: 150px;

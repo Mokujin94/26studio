@@ -11,6 +11,12 @@ $studio-background-footer: transparent;
 
 /*------------------------------------------------------------------*/
 
+// burger
+// box-shadow
+$studio-box-shadow-burger: 0px 0px 101px -5px rgba(0, 0, 0, 0.5);
+
+/*------------------------------------------------------------------*/
+
 // element
 $studio-primary-element: #97bce6;
 $studio-white-element: #fcfcfc;
@@ -39,6 +45,11 @@ $studio-primary-element-active: #97bce6;
 @mixin studio-mixin-dark-element-active {
   background: $studio-primary-element;
   color: $studio-dark-text;
+}
+@mixin studio-mixin-white-element-active {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: 0.1s ease;
 }
 // box-shadow
 $studio-box-shadow-element: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -71,6 +82,7 @@ $studio-dark-button: #27323e;
 $studio-grey-button: #596470;
 // hover
 $studio-primary-button-hover: #acd3ff;
+$studio-primary-button-hover-v2: #97bce6;
 
 /*------------------------------------------------------------------*/
 
@@ -105,7 +117,7 @@ $studio-primary-box-shadow: 0px 0px 16px 7px rgba(151, 188, 230, 0.2);
 /*------------------------------------------------------------------*/
 
 // transition
-$studio-transition-03: 0.3s ease;
+$studio-transition-03: 0.3s;
 
 /*------------------------------------------------------------------*/
 

@@ -1,9 +1,10 @@
-@import "../../resource/styles/variables";
+@import '../../resource/styles/variables';
 
 .second {
   &__inner {
     margin-bottom: 50px;
   }
+
   &__row {
     display: flex;
     flex-direction: row;
@@ -28,9 +29,9 @@
   &__itemInput {
     width: 600px;
     height: 120px;
-    background-color: $studio-text-button;
+    background-color: $studio-dark-element;
     border-radius: 20px;
-    border: 2px solid $studio-base-elements;
+    border: 2px solid $studio-primary-border;
     color: $studio-white-text;
     font-size: 16px;
     padding: 0 20px;
@@ -54,15 +55,15 @@
     width: 280px;
     height: 40px;
     border-radius: 15px;
-    background-color: $studio-text-button;
+    background-color: $studio-dark-element;
     color: $studio-white-text;
     padding: 0 20px;
     appearance: none;
-    border: 2px solid $studio-base-elements;
+    border: 2px solid $studio-primary-border;
     outline: none;
     cursor: pointer;
     &::before {
-      content: "";
+      content: '';
       display: block;
       position: absolute; /* Абсолютное позиционирование */
       right: 5px;
@@ -76,17 +77,17 @@
     width: 280px;
     height: 40px;
     border-radius: 15px;
-    background-color: $studio-text-button;
+    background-color: $studio-dark-button;
     color: $studio-white-text;
     padding: 0 20px;
-    border: 2px solid $studio-base-elements;
+    border: 2px solid $studio-primary-border;
     outline: none;
     text-align: center;
-    transition: 0.3s;
+    transition: $studio-transition-03;
     cursor: pointer;
     &:hover {
-      background-color: $studio-base-elements;
-      color: $studio-text-button;
+      background-color: $studio-primary-button-hover-v2;
+      color: $studio-dark-text;
     }
   }
 }

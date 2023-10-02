@@ -4,7 +4,6 @@
   position: absolute;
   left: 0;
   top: 0;
-  background-color: #ffa1a1;
 }
 
 .burger {
@@ -15,9 +14,8 @@
   width: 285px;
   min-height: 100vh;
   border-radius: 0px 15px 15px 0px;
-  background: #27323e;
-  // box-shadow: 0px 0px 101px -5px rgba(0, 0, 0, 0.5);
-  transition: 0.3s;
+  background: $studio-dark-element;
+  transition: $studio-transition-03;
 }
 
 .burgerActive {
@@ -28,9 +26,9 @@
   width: 285px;
   min-height: 100vh;
   border-radius: 0px 15px 15px 0px;
-  background: #27323e;
-  box-shadow: 0px 0px 101px -5px rgba(0, 0, 0, 0.5);
-  transition: 0.3s;
+  background: $studio-dark-element;
+  box-shadow: $studio-box-shadow-burger;
+  transition: $studio-transition-03;
 }
 
 .close {
@@ -72,18 +70,6 @@
   color: $studio-white-text;
 }
 
-.btn {
-  display: inline-block;
-  margin: 0 auto;
-  margin-left: 10px;
-  padding: 7px 17px;
-  background: $studio-base-elements;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
-  color: $studio-text-button;
-}
-
 .notAuth {
   font-weight: 400;
   font-size: 14px;
@@ -92,13 +78,13 @@
   text-align: center;
   margin-top: 10px;
   a {
-    transition: all 0.3s;
+    transition: all $studio-transition-03;
     &:hover {
-      color: $studio-button-hover;
+      color: $studio-primary-text-hover;
     }
   }
   &__path {
-    color: $studio-base-elements;
+    color: $studio-primary-text;
   }
 }
 
@@ -125,7 +111,7 @@
       padding: 10px 0;
       padding-left: 30px;
       &:hover {
-        background-color: $studio-menu-color-hover;
+        background-color: $studio-dark-element-hover;
       }
     }
   }
@@ -140,7 +126,7 @@
   top: 0;
   left: 0;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity $studio-transition-03 ease;
   &_active {
     z-index: 5;
     opacity: 1;

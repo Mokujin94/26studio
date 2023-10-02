@@ -1,21 +1,21 @@
 @import '../../resource/styles/variables';
 
 .block {
-    width: 100%;
-    color: $studio-white-text;
+  width: 100%;
+  color: $studio-white-element;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &__title {
+    font-weight: 400;
+    font-size: 40px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  &__right {
     display: flex;
+    max-width: 300px;
+    width: 100%;
     justify-content: space-between;
-    align-items: center;
-    &__title{
-        font-weight: 400;
-        font-size: 40px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-    }
-    &__right{
-        display: flex;
-        max-width: 300px;
-        width: 100%;
-        justify-content: space-between;
-    }
+  }
 }

@@ -5,22 +5,16 @@ import { NEWSPAPER_ROUTE } from '../../utils/consts';
 
 import style from './newsCard.module.scss';
 
-// import preview from '../../resource/graphics/images/newsCard/preview.jpg'
-// import avatar from '../../resource/graphics/images/newsCard/avatar.jpg'
 import likesIcon from '../../resource/graphics/icons/newsCard/likes.svg';
 import viewsIcon from '../../resource/graphics/icons/newsCard/views.svg';
 import commentsIcon from '../../resource/graphics/icons/newsCard/comments.svg';
 
-function NewsCard({ title, description, img, avatar, likes, comments, views }) {
+function NewsCard({ title, description, img, likes, comments, views }) {
   return (
-    // <Link className={style.cardLink} to={NEWSPAPER_ROUTE}>
     <div className={style.card}>
       <div className={style.preview}>
         <img src={img} alt="img" className={style.preview__img} />
       </div>
-      {/* <div className={style.avatar}>
-                    <img src={avatar} alt="img" className={style.avatar__img} />
-                </div> */}
       <div className={style.info}>
         <h2 className={style.title}>{title}</h2>
         <p className={style.description}>{description}</p>
@@ -41,7 +35,6 @@ function NewsCard({ title, description, img, avatar, likes, comments, views }) {
         </div>
       </div>
     </div>
-    // </Link>
   );
 }
 
