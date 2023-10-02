@@ -8,7 +8,7 @@ import { GROUPS_ROUTE, MESSENGER_ROUTE, NEWS_ROUTE, PROJECTS_ROUTE } from '../ut
 
 export default class UserStore {
   constructor() {
-    this._isAuth = false;
+    this._isAuth = true;
     this._path = '';
     this._user = {};
     this._menuAuth = [
