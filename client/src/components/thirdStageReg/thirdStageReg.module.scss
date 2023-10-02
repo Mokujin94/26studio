@@ -30,13 +30,13 @@
       height: 60px;
       outline: 0;
       background-color: transparent;
-      border: 2px solid $studio-base-elements;
+      border: 2px solid $studio-primary-border;
       color: $studio-white-text;
       border-radius: 10px;
       font-size: 20px;
       text-align: center;
       opacity: 0.5;
-      transition: opacity 0.3s ease;
+      transition: opacity $studio-transition-03 ease;
       &_active {
         opacity: 1;
       }

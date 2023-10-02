@@ -1,10 +1,10 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .button {
   width: 37px;
   height: 37px;
   border-radius: 10px;
-  border: 1px solid $studio-white-text;
+  border: 1px solid $studio-white-border;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -34,7 +34,7 @@
     cursor: default;
     width: 225px;
     border-radius: 15px;
-    border: 1px solid #596470;
+    border: 1px solid $studio-grey-border;
     position: absolute;
     bottom: -120px;
     right: 0;
@@ -43,17 +43,17 @@
     justify-content: center;
     font-size: 15px;
     padding: 10px 0;
-    background-color: $studio-text-button;
+    background-color: $studio-dark-element;
     &Item {
       display: flex;
       width: 100%;
       padding: 10px 15px;
       align-items: center;
-      color: $studio-base-elements;
+      color: $studio-primary-text;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: $studio-transition-03;
       &:hover {
-        background-color: $studio-menu-color-hover;
+        background-color: $studio-dark-element-hover;
       }
       &Img {
         width: 15px;
