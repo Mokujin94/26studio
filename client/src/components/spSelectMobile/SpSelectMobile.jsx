@@ -1,9 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 
-import style from './spSelectMobile.module.scss';
+import style from "./spSelectMobile.module.scss";
 
-import selectIcon from '../../resource/graphics/icons/group/group_select_icon.svg';
-import { CSSTransition } from 'react-transition-group';
+import selectIcon from "../../resource/graphics/icons/group/group_select_icon.svg";
+import { CSSTransition } from "react-transition-group";
 
 function SpSelectMobile() {
   const [selectActive, setSelectActive] = useState(false);

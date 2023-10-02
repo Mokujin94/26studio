@@ -1,4 +1,4 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .spSelectMobile {
   position: relative;
@@ -12,9 +12,9 @@
   flex-direction: column;
   overflow: hidden;
   transition: 0.3s ease;
-  height: 49px;
+  max-height: 49px;
   &_active {
-    height: 147px;
+    max-height: 150px;
   }
 
   &__top {
@@ -48,10 +48,11 @@
 @media (max-width: $xxs) {
   .spSelectMobile {
     &_active {
-      height: 191px;
+      max-height: 250px;
     }
     &__wrapper {
-      grid-template-columns: repeat(5, 1fr);
+      display: flex;
+      flex-wrap: wrap;
     }
   }
 }
