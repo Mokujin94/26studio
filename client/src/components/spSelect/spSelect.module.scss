@@ -1,11 +1,11 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .spSelect {
   display: flex;
   flex-direction: column;
   gap: 30px;
   width: 100%;
-  background-color: $studio-text-button;
+  background-color: $studio-dark-element;
   border-radius: 5px;
   padding: 30px 45px;
   &__title {
@@ -26,9 +26,9 @@
     font-weight: 400;
     letter-spacing: 0.2em;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: $studio-transition-03 ease;
     &:hover {
-      color: $studio-base-elements;
+      color: $studio-primary-text-hover;
     }
   }
 }

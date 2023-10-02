@@ -1,19 +1,19 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .menu {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    &__select {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 30px;
-        line-height: 36px;
-        color: $studio-white-text;
-        cursor: pointer;
-        &__active {
-            color: $studio-base-elements;
-        }
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &__select {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    color: $studio-white-text;
+    cursor: pointer;
+    &__active {
+      color: $studio-primary-text-active;
     }
+  }
 }

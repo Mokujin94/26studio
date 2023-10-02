@@ -2,7 +2,7 @@ import React from "react";
 
 import style from "./amountComponent.module.scss";
 
-function amountComponent(props) {
+function AmountComponent(props) {
   return (
     <div className={style.block}>
       <img src={props.img} alt="" className={style.block__img} />
@@ -11,4 +11,4 @@ function amountComponent(props) {
   );
 }
 
-export default amountComponent;
+export default AmountComponent;

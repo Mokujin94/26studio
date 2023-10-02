@@ -20,9 +20,10 @@
       font-weight: 500;
       color: $studio-white-text;
       border-radius: 50%;
-      border: 2px solid $studio-base-elements;
+      border: 2px solid $studio-primary-border;
       overflow: hidden;
-      transition: color 0.3s 0.3s ease, border 0.3s 0.6s ease;
+      transition: color 0.3s $studio-transition-03,
+        border 0.3s $studio-transition-06;
       cursor: pointer;
       &::before {
         content: "";
@@ -33,13 +34,12 @@
         border-radius: 50%;
         height: 45px;
         width: 0px;
-        background: $studio-base-elements;
-        transition: width 0.3s 0.3s ease;
+        background: $studio-primary-element;
+        transition: width 0.3s $studio-transition-03;
       }
       &_active {
-        color: $studio-text-button;
-        // border: 2px solid $studio-base-elements;
-        border: 0px solid $studio-base-elements;
+        color: $studio-dark-text;
+        border: 0px solid $studio-primary-border;
         &::before {
           width: 45px;
         }
@@ -62,7 +62,7 @@
     box-sizing: content-box;
     width: 200px;
     height: 3px;
-    border: 1px solid $studio-base-elements;
+    border: 1px solid $studio-primary-border;
     border-radius: 20px;
 
     &::before {
@@ -72,7 +72,7 @@
       height: 3px;
       width: 0px;
       background: $studio-base-elements;
-      transition: all ease-in 0.3s;
+      transition: $studio-transition-03 ease-in;
     }
     &_active {
       &::before {
