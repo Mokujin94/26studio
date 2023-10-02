@@ -13,10 +13,12 @@
   transition: 0.3s;
   user-select: none;
   &_active {
-    border: 1px solid $studio-base-elements;
+    border: 1px solid $studio-primary-border-active;
     .button__cross {
-      rotate: 45deg;
-      filter: invert(40%) sepia(30%) saturate(474%) hue-rotate(178deg) brightness(96%) contrast(88%);
+      rotate: 225deg;
+      path {
+        stroke: $studio-primary-element-active;
+      }
     }
   }
 

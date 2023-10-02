@@ -1,10 +1,114 @@
 // Original theme
-$studio-white-text: #fcfcfc;
-$studio-base-text: #97bce6;
-$studio-dark-text: #27323e;
-$studio-grey-text: #666666;
 
+// header
+$studio-background-header: #1f2933;
+// box-shadow
+$studio-box-shadow-header: 0px -48px 83px #000000;
+/*------------------------------------------------------------------*/
+
+// footer
+$studio-background-footer: transparent;
+
+/*------------------------------------------------------------------*/
+
+// element
+$studio-primary-element: #97bce6;
+$studio-white-element: #fcfcfc;
+$studio-dark-element: #27323e;
+$studio-grey-element: #596470;
+// hover
+@mixin studio-mixin-primary-element-hover {
+  border: 2px solid $studio-primary-border;
+  box-shadow: $studio-primary-box-shadow;
+  transform: scale(1.02);
+}
+@mixin studio-mixin-dark-element-hover {
+  background: $studio-primary-element;
+  color: $studio-dark-text;
+}
+@mixin studio-mixin-white-element-hover {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0);
+  transition: 0.1s ease;
+}
+$studio-primary-element-hover: #97bce6;
+$studio-dark-element-hover: #252c35;
+$studio-brightness-element-hover: brightness(1.5);
+// active
+$studio-primary-element-active: #97bce6;
+@mixin studio-mixin-dark-element-active {
+  background: $studio-primary-element;
+  color: $studio-dark-text;
+}
+// box-shadow
+$studio-box-shadow-element: 0px 4px 4px rgba(0, 0, 0, 0.25);
+// blackout
+$studio-blackout-element: linear-gradient(
+  0deg,
+  rgb(39, 50, 62) 0%,
+  rgba(39, 50, 62, 0.467) 50%,
+  rgba(39, 50, 62, 0) 100%
+);
+
+/*------------------------------------------------------------------*/
+
+// text
+$studio-primary-text: #97bce6;
+$studio-white-text: #fcfcfc;
+$studio-dark-text: #27323e;
+$studio-grey-text: #596470;
+// hover
+$studio-primary-text-hover: #acd3ff;
+// active
+$studio-primary-text-active: #97bce6;
+
+/*------------------------------------------------------------------*/
+
+// button
+$studio-primary-button: #97bce6;
 $studio-white-button: #fcfcfc;
+$studio-dark-button: #27323e;
+$studio-grey-button: #596470;
+// hover
+$studio-primary-button-hover: #acd3ff;
+
+/*------------------------------------------------------------------*/
+
+// border
+$studio-primary-border: #97bce6;
+$studio-white-border: #fcfcfc;
+$studio-dark-border: #27323e;
+$studio-grey-border: #596470;
+// hover
+
+// active
+$studio-primary-border-active: #97bce6;
+
+/*------------------------------------------------------------------*/
+
+// input
+$studio-primary-input: #97bce6;
+$studio-white-input: #fcfcfc;
+$studio-dark-input: #27323e;
+$studio-grey-input: #596470;
+// focus
+@mixin studio-primary-input-focus {
+  border: 2px solid $studio-primary-border;
+  transform: scale(1.01);
+}
+
+/*------------------------------------------------------------------*/
+
+// box-shadow
+$studio-primary-box-shadow: 0px 0px 16px 7px rgba(151, 188, 230, 0.2);
+
+/*------------------------------------------------------------------*/
+
+// transition
+$studio-transition-03: 0.3s ease;
+
+/*------------------------------------------------------------------*/
+
 $studio-base-elements: #97bce6;
 $studio-text-button: #27323e;
 $studio-button-hover: #acd3ff;
@@ -30,6 +134,10 @@ $studio-border-color: #596470;
 $studio-black-opacity-05: rgba(0, 0, 0, 0.5);
 $studio-black-opacity-03: rgba(0, 0, 0, 0.3);
 
+/*------------------------------------------------------------------*/
+
+// media width
+
 $xxl: 1600px;
 $xl: 1400px;
 $lg: 1200px;
@@ -37,3 +145,5 @@ $md: 1024px;
 $sm: 768px;
 $xs: 576px;
 $xxs: 425px;
+
+/*------------------------------------------------------------------*/
