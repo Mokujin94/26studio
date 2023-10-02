@@ -32,6 +32,12 @@ body {
 
 .App {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  &__inner {
+    flex: 1 1 auto;
+  }
   // padding-right: 0;
   // transition-delay: 0.15s;
   // transition-duration: 0.3s;

@@ -24,7 +24,9 @@ const App = observer(() => {
           <ScrollToTop />
           <BurgerMenu />
           {user.path === '/registration' || user.path === '/login' ? null : <Header />}
-          <AppRouter />
+          <div className="App__inner">
+            <AppRouter />
+          </div>
           {user.path === '/registration' || user.path === '/login' ? null : <Footer />}
         </AuthProvider>
       </BrowserRouter>
