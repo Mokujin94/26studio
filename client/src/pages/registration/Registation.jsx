@@ -8,7 +8,11 @@ import RegistrationButton from "../../components/registrationButton/Registration
 
 import "./registration.scss";
 
-import { CSSTransition, SwitchTransition, TransitionGroup } from "react-transition-group";
+import {
+  CSSTransition,
+  SwitchTransition,
+  TransitionGroup,
+} from "react-transition-group";
 
 function Registation() {
   const [stages, setStages] = useState(1);
@@ -21,7 +25,12 @@ function Registation() {
           <RegistrationStages stages={stages} setStages={setStages} />
         </div>
         <SwitchTransition mode="out-in">
-          <CSSTransition key={stages} in={stages} timeout={300} classNames="node">
+          <CSSTransition
+            key={stages}
+            in={stages}
+            timeout={300}
+            classNames="node"
+          >
             <div className="registration__stage">
               {stages === 1 ? (
                 <FirstStageReg setStages={setStages} />
@@ -40,14 +49,16 @@ function Registation() {
           // key={stages}
           in={stages < 3 ? true : false}
           timeout={300}
-          classNames={"buttonBye"}
+          classNames="buttonBye"
           unmountOnExit
           // mountOnEnter
         >
           <div ref={nodeRef} className="registration__bottom">
             <RegistrationButton setStages={setStages}>Далее</RegistrationButton>
             <div className="registration__bottom-sign">
-              <p className="registration__bottom-sign-text">Уже есть аккаунт?</p>
+              <p className="registration__bottom-sign-text">
+                Уже есть аккаунт?
+              </p>
               <Link to="/login" className="registration__bottom-sign-link">
                 Войти
               </Link>

@@ -3,7 +3,6 @@
 .registration {
   position: relative;
   height: calc(100vh - 100px);
-  // height: 100vh;
   transform: translateY(50px);
   display: flex;
   align-items: center;
@@ -41,10 +40,10 @@
         display: block;
         font-size: 16px;
         font-weight: 500;
-        color: $studio-base-elements;
-        transition: all 0.3s;
+        color: $studio-primary-text;
+        transition: all $studio-transition-03;
         &:hover {
-          color: $studio-button-hover;
+          color: $studio-primary-text-hover;
         }
       }
     }

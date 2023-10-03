@@ -44,9 +44,9 @@
     &-item {
       width: 400px;
       height: 40px;
-      background-color: $studio-text-button;
+      background-color: $studio-dark-element;
       border-radius: 20px;
-      border: 2px solid $studio-base-elements;
+      border: 2px solid $studio-primary-border;
       color: $studio-white-text;
       margin-bottom: 15px;
       font-size: 16px;
@@ -69,10 +69,10 @@
       display: block;
       font-size: 16px;
       font-weight: 500;
-      color: $studio-base-elements;
-      transition: all 0.3s;
+      color: $studio-primary-text;
+      transition: all $studio-transition-03;
       &:hover {
-        color: $studio-button-hover;
+        color: $studio-primary-text-hover;
       }
     }
   }

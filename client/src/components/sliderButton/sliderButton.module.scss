@@ -1,4 +1,4 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .arrow {
   width: 40px;
@@ -11,11 +11,16 @@
   transition: $studio-transition-03;
   &:hover {
     background: $studio-primary-button;
-    img {
-      filter: invert(100%);
+    .arrow__item {
+      path {
+        stroke: $studio-dark-element-hover;
+      }
     }
   }
-  img {
-    transition: $studio-transition-03;
+  &__item {
+    path {
+      transition: $studio-transition-03;
+      stroke: $studio-primary-element;
+    }
   }
 }
