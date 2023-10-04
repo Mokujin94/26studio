@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import style from "./createButtonPopUp.module.scss";
 import "./createAnim.scss";
 
-import cross from "../../resource/graphics/icons/createButtonPopUp/createButtonCross.svg";
 import addProject from "../../resource/graphics/icons/createButtonPopUp/addProject.svg";
 import addNews from "../../resource/graphics/icons/createButtonPopUp/addNews.svg";
 import { CSSTransition } from "react-transition-group";

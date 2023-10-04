@@ -13,7 +13,7 @@ import {
 
 export default class UserStore {
   constructor() {
-    this._isAuth = true;
+    this._isAuth = false;
     this._path = "";
     this._user = {};
     this._menuAuth = [

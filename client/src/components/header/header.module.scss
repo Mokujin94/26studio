@@ -1,4 +1,4 @@
-@import '../../resource//styles/variables';
+@import "../../resource//styles/variables";
 
 .header {
   position: fixed;
@@ -74,6 +74,11 @@
       transition: $studio-transition-03 ease;
       cursor: pointer;
     }
+  }
+
+  &__createButtonPopUp {
+    display: flex;
+    gap: 20px;
   }
 }
 
