@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "./themeChangeButton.module.scss";
+import "./themeChangeAnim.scss";
+
+import { CSSTransition } from "react-transition-group";
 
 function ThemeChangeButton() {
+  const [active, setActive] = useState(false);
+
   return (
-    <div className={style.themeChangeButton}>
-      {/* <div className={style.brush}> */}
+    <div
+      onClick={() => setActive((item) => !item)}
+      className={
+        active
+          ? `${style.themeChangeButton} ${style.themeChangeButton_active}`
+          : style.themeChangeButton
+      }
+    >
       <svg
         className={style.brushIcon}
         width="20"
@@ -20,35 +31,48 @@ function ThemeChangeButton() {
           stroke-linejoin="round"
         />
       </svg>
-      {/* </div> */}
+      <CSSTransition
+        in={active}
+        timeout={300}
+        classNames="themeChange-anim"
+        mountOnEnter
+        unmountOnExit
+      >
+        <div
+          className={
+            active
+              ? `${style.themeChangeButton__popUp} ${style.themeChangeButton__popUp_active}`
+              : style.themeChangeButton__popUp
+          }
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2 className={style.themeChangeButton__title}>Тема сайта</h2>
 
-      <div className={style.themeChangeButton__popUp}>
-        <h2 className={style.themeChangeButton__title}>Тема сайта</h2>
-
-        <div className={style.themeChangeButton__popUpThemes}>
-          <div
-            className={
-              style.themeChangeButton__item +
-              " " +
-              style.themeChangeButton__item_black
-            }
-          ></div>
-          <div
-            className={
-              style.themeChangeButton__item +
-              " " +
-              style.themeChangeButton__item_blue
-            }
-          ></div>
-          <div
-            className={
-              style.themeChangeButton__item +
-              " " +
-              style.themeChangeButton__item_white
-            }
-          ></div>
+          <div className={style.themeChangeButton__popUpThemes}>
+            <div
+              className={
+                style.themeChangeButton__item +
+                " " +
+                style.themeChangeButton__item_black
+              }
+            ></div>
+            <div
+              className={
+                style.themeChangeButton__item +
+                " " +
+                style.themeChangeButton__item_blue
+              }
+            ></div>
+            <div
+              className={
+                style.themeChangeButton__item +
+                " " +
+                style.themeChangeButton__item_white
+              }
+            ></div>
+          </div>
         </div>
-      </div>
+      </CSSTransition>
     </div>
   );
 }
