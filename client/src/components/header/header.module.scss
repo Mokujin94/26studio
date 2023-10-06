@@ -6,7 +6,7 @@
   left: 0;
   z-index: 4;
   box-shadow: $studio-box-shadow-header;
-  background: $studio-background-header;
+  background: var(--black-color);
   display: flex;
   justify-content: center;
   align-items: center;

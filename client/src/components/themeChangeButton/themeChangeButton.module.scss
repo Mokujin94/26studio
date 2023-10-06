@@ -10,6 +10,7 @@
   align-items: center;
   border-radius: 10px;
   user-select: none;
+  transition: $studio-transition-03;
   &_active {
     border: 1px solid $studio-primary-border-active;
     path {
@@ -70,4 +71,7 @@
 .brushIcon {
   width: 20px;
   height: 20px;
+  path {
+    transition: $studio-transition-03;
+  }
 }

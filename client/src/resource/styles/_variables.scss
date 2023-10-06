@@ -1,3 +1,4 @@
+/*------------------------------------------------------------------------------ORIGINAL------THEME-------------------------------------------------------------------------*/
 // Original theme
 
 // header
@@ -125,7 +126,7 @@ $studio-transition-06: 0.6s;
 
 /*------------------------------------------------------------------*/
 
-$studio-base-elements: #97bce6;
+// $studio-base-elements: #97bce6;
 $studio-text-button: #27323e;
 $studio-button-hover: #acd3ff;
 $studio-background: linear-gradient(
@@ -163,3 +164,195 @@ $xs: 576px;
 $xxs: 425px;
 
 /*------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------ORIGINAL------THEME-------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------DARK----------THEME-------------------------------------------------------------------------*/
+
+// header
+$studio-background-header-DARK: #121212;
+// box-shadow
+$studio-box-shadow-header-DARK: 0px -48px 83px #000000;
+/*------------------------------------------------------------------*/
+
+// footer
+$studio-background-footer-DARK: transparent;
+
+/*------------------------------------------------------------------*/
+
+// burger
+// box-shadow
+$studio-box-shadow-burger-DARK: 0px 0px 101px -5px rgba(0, 0, 0, 0.5);
+
+/*------------------------------------------------------------------*/
+
+// element
+$studio-primary-element-DARK: #97bce6;
+$studio-white-element-DARK: #fcfcfc;
+$studio-dark-element-DARK: #27323e;
+$studio-grey-element-DARK: #596470;
+// hover
+@mixin studio-mixin-primary-element-hover-DARK {
+  border: 2px solid $studio-primary-border-DARK;
+  box-shadow: $studio-primary-box-shadow-DARK;
+  transform: scale(1.02);
+}
+@mixin studio-mixin-dark-element-hover-DARK {
+  background: $studio-primary-element-DARK;
+  color: $studio-dark-text-DARK;
+}
+@mixin studio-mixin-white-element-hover-DARK {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0);
+  transition: 0.1s ease;
+}
+$studio-primary-element-hover-DARK: #97bce6;
+$studio-dark-element-hover-DARK: #252c35;
+$studio-brightness-element-hover-DARK: brightness(1.5);
+// active
+$studio-primary-element-active-DARK: #97bce6;
+@mixin studio-mixin-dark-element-active-DARK {
+  background: $studio-primary-element-DARK;
+  color: $studio-dark-text-DARK;
+}
+@mixin studio-mixin-white-element-active-DARK {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: 0.1s ease;
+}
+// box-shadow
+$studio-box-shadow-element-DARK: 0px 4px 4px rgba(0, 0, 0, 0.25);
+// blackout
+$studio-blackout-element-DARK: linear-gradient(
+  0deg,
+  rgb(39, 50, 62) 0%,
+  rgba(39, 50, 62, 0.467) 50%,
+  rgba(39, 50, 62, 0) 100%
+);
+
+/*------------------------------------------------------------------*/
+
+// text
+$studio-primary-text-DARK: #97bce6;
+$studio-white-text-DARK: #fcfcfc;
+$studio-dark-text-DARK: #27323e;
+$studio-grey-text-DARK: #596470;
+$studio-light-grey-text-DARK: #ffffff8c;
+// hover
+$studio-primary-text-hover-DARK: #acd3ff;
+// active
+$studio-primary-text-active-DARK: #97bce6;
+
+/*------------------------------------------------------------------*/
+
+// button
+$studio-primary-button-DARK: #97bce6;
+$studio-white-button-DARK: #fcfcfc;
+$studio-dark-button-DARK: #27323e;
+$studio-grey-button-DARK: #596470;
+// hover
+$studio-primary-button-hover-DARK: #acd3ff;
+$studio-primary-button-hover-v2-DARK: #97bce6;
+
+/*------------------------------------------------------------------*/
+
+// border
+$studio-primary-border-DARK: #97bce6;
+$studio-white-border-DARK: #fcfcfc;
+$studio-dark-border-DARK: #27323e;
+$studio-grey-border-DARK: #596470;
+// hover
+
+// active
+$studio-primary-border-active-DARK: #97bce6;
+
+/*------------------------------------------------------------------*/
+
+// input
+$studio-primary-input-DARK: #97bce6;
+$studio-white-input-DARK: #fcfcfc;
+$studio-dark-input-DARK: #27323e;
+$studio-grey-input-DARK: #596470;
+// focus
+@mixin studio-primary-input-focus-DARK {
+  border: 2px solid $studio-primary-border;
+  transform: scale(1.01);
+}
+
+/*------------------------------------------------------------------*/
+
+// box-shadow
+$studio-primary-box-shadow-DARK: 0px 0px 16px 7px rgba(151, 188, 230, 0.2);
+
+/*------------------------------------------------------------------*/
+
+// transition
+$studio-transition-01-DARK: 0.1s;
+$studio-transition-03-DARK: 0.3s;
+$studio-transition-05-DARK: 0.5s;
+$studio-transition-06-DARK: 0.6s;
+
+/*------------------------------------------------------------------*/
+
+// $studio-base-elements: #97bce6;
+$studio-text-button-DARK: #27323e;
+$studio-button-hover-DARK: #acd3ff;
+$studio-background-DARK: #232323;
+$studio-header-DARK: #1f2933;
+$studio-news-card-DARK: #11161b;
+$studio-menu-color-hover-DARK: #252c35;
+$studio-comments-end-background-DARK: #596470;
+$studio-box-shadow-v1-DARK: 0px 4px 4px rgba(0, 0, 0, 0.25);
+$studio-black-text-DARK: #000;
+$studio-border-color-DARK: #596470;
+$studio-black-opacity-05-DARK: rgba(0, 0, 0, 0.5);
+$studio-black-opacity-03-DARK: rgba(0, 0, 0, 0.3);
+
+/*------------------------------------------------------------------*/
+
+// media width
+
+$xxl: 1600px;
+$xl: 1400px;
+$lg: 1200px;
+$md: 1024px;
+$sm: 768px;
+$xs: 576px;
+$xxs: 425px;
+
+/*------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------DARK----------THEME-------------------------------------------------------------------------*/
+
+/* 
+1) Первый способ
+
+   Пример: 
+
+   ///////////////////////////////////////////////////////////ПРИМЕР/////////////////////////////////////////////////////////////////////
+    .App {
+      &[data-theme="light"] {
+        --black-color: red;   // здесь вместо scss переменных используем css переменные и проверяем наличие аттрибута в компоненте App
+      }
+      &[data-theme="black"] {
+        --black-color: blue; // здесь вместо scss переменных используем css переменные и проверяем наличие аттрибута в компоненте App
+      }
+    }
+  ///////////////////////////////////////////////////////////ПРИМЕР/////////////////////////////////////////////////////////////////////
+
+2) Второй способ
+    Создать еще переменные как я сделал выше и проверять уже в каждом scss файле на наличие аттрибута, но там есть загвостка... Аттрибут придеться вставлять в каждый компонент, в первом случае только в компонент App
+
+    Пример:
+
+    ///////////////////////////////////////////////////////////ПРИМЕР/////////////////////////////////////////////////////////////////////
+      .header {
+        &[data-theme="light"] {
+          background: $header-light;
+        }
+        &[data-theme="dark"] {
+          background: $header-dark;
+        }
+      }
+    ///////////////////////////////////////////////////////////ПРИМЕР/////////////////////////////////////////////////////////////////////
+*/
