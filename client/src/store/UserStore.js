@@ -14,6 +14,7 @@ import {
 export default class UserStore {
   constructor() {
     this._isAuth = false;
+    this._theme = "original";
     this._path = "";
     this._user = {};
     this._menuAuth = [
@@ -36,6 +37,11 @@ export default class UserStore {
   setAuth(bool) {
     this._isAuth = bool;
   }
+
+  setTheme(theme) {
+    this._theme = theme;
+  }
+
   setUser(user) {
     this._user = user;
   }
@@ -59,6 +65,11 @@ export default class UserStore {
   get isAuth() {
     return this._isAuth;
   }
+
+  get theme() {
+    return this._theme;
+  }
+
   get user() {
     return this._user;
   }

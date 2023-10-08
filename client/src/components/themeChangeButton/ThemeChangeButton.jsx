@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import style from "./themeChangeButton.module.scss";
 import "./themeChangeAnim.scss";
 
 import { CSSTransition } from "react-transition-group";
+import { Context } from "../..";
 
 function ThemeChangeButton() {
+  const { user } = useContext(Context);
+
+  console.log(user.theme);
+
   const [active, setActive] = useState(false);
 
   return (
@@ -50,6 +55,7 @@ function ThemeChangeButton() {
 
           <div className={style.themeChangeButton__popUpThemes}>
             <div
+              onClick={() => user.setTheme("dark")}
               className={
                 style.themeChangeButton__item +
                 " " +
@@ -57,6 +63,7 @@ function ThemeChangeButton() {
               }
             ></div>
             <div
+              onClick={() => user.setTheme("original")}
               className={
                 style.themeChangeButton__item +
                 " " +
@@ -64,6 +71,7 @@ function ThemeChangeButton() {
               }
             ></div>
             <div
+              onClick={() => user.setTheme("light")}
               className={
                 style.themeChangeButton__item +
                 " " +

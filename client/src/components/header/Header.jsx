@@ -8,12 +8,13 @@ import CreateButtonPopUp from "../createButtonPopUp/CreateButtonPopUp";
 import burger from "../../resource/graphics/icons/burgerMenu/burger.svg";
 import { Context } from "../..";
 import ThemeChangeButton from "../themeChangeButton/ThemeChangeButton";
+import { observer } from "mobx-react-lite";
 
-function Header() {
+const Header = observer(() => {
   const { user } = useContext(Context);
 
   return (
-    <header className={style.header}>
+    <header className={style.header} data-theme={user.theme}>
       <div className="container">
         <div className={style.header__wrapper}>
           <div
@@ -47,6 +48,6 @@ function Header() {
       </div>
     </header>
   );
-}
+});
 
 export default Header;

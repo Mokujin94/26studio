@@ -5,8 +5,18 @@
   top: 0;
   left: 0;
   z-index: 4;
+  transition: $studio-transition-03;
   box-shadow: $studio-box-shadow-header;
   background: $studio-background-header;
+  &[data-theme="dark"] {
+    box-shadow: $studio-box-shadow-header-DARK;
+    background: $studio-background-header-DARK;
+  }
+  &[data-theme="light"] {
+    box-shadow: $studio-box-shadow-header;
+    background: $studio-background-header-LIGHT;
+  }
+
   display: flex;
   justify-content: center;
   align-items: center;
