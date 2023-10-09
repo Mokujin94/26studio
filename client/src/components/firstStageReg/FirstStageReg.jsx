@@ -14,7 +14,9 @@ const FirstStageReg = observer(({ stages }) => {
   const [valueFullName, setValueFullName] = useState(user.dataAuth.fullName);
   const [valueMail, setValueMail] = useState(user.dataAuth.email);
   const [valuePassword, setValuePassword] = useState(user.dataAuth.password);
-  const [valuePasswordConfirm, setValuePasswordConfirm] = useState(user.dataAuth.passwordConfirm);
+  const [valuePasswordConfirm, setValuePasswordConfirm] = useState(
+    user.dataAuth.passwordConfirm
+  );
 
   const [nameError, setNameError] = useState(false);
   const [fullNameError, setFullNameError] = useState(false);
@@ -32,8 +34,24 @@ const FirstStageReg = observer(({ stages }) => {
       password: valuePassword,
       passwordConfirm: valuePasswordConfirm,
     });
+  }, [
+    valueName,
+    valueFullName,
+    valueMail,
+    valuePassword,
+    valuePasswordConfirm,
+  ]);
+
+  useEffect(() => {
     user.setDataAuth({ ...user.dataAuth, ...newData });
-  }, [valueName, valueFullName, valueMail, valuePassword, valuePasswordConfirm, newData]);
+  }, [
+    valueName,
+    valueFullName,
+    valueMail,
+    valuePassword,
+    valuePasswordConfirm,
+    newData,
+  ]);
 
   useEffect(() => {
     if (
@@ -78,8 +96,8 @@ const FirstStageReg = observer(({ stages }) => {
     console.log(user.dataAuth);
     setValueFullName(e.target.value);
     if (
-      e.target.value.length < 10 ||
-      e.target.value[0] == " " ||
+      e.target.value.length < 5 ||
+      e.target.value[0] === " " ||
       e.target.value[e.target.value.length - 1] == " " ||
       !/[а-яё]+/i.test(e.target.value)
     ) {
@@ -173,7 +191,9 @@ const FirstStageReg = observer(({ stages }) => {
                   onChange={validationPasswordConfirm}
                   type="password"
                   className={`${style.first__itemInput} ${style.first__itemInputPass}`}
-                  style={passwordConfirmError ? { border: "2px solid red" } : null}
+                  style={
+                    passwordConfirmError ? { border: "2px solid red" } : null
+                  }
                 />
                 <img src={eye} alt="" />
               </div>

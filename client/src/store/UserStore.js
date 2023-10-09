@@ -4,11 +4,17 @@ import news from "../resource/graphics/icons/burgerMenu/newsIcon.svg";
 import messeges from "../resource/graphics/icons/burgerMenu/messegesIcon.svg";
 import project from "../resource/graphics/icons/burgerMenu/projectIcon.svg";
 import group from "../resource/graphics/icons/burgerMenu/groupIcon.svg";
-import { GROUPS_ROUTE, MESSENGER_ROUTE, NEWS_ROUTE, PROJECTS_ROUTE } from "../utils/consts";
+import {
+  GROUPS_ROUTE,
+  MESSENGER_ROUTE,
+  NEWS_ROUTE,
+  PROJECTS_ROUTE,
+} from "../utils/consts";
 
 export default class UserStore {
   constructor() {
     this._isAuth = false;
+    this._user = {};
     this._path = "";
     this._errorAuth = false;
     this._dataAuth = {
@@ -18,8 +24,9 @@ export default class UserStore {
       password: "",
       passwordConfirm: "",
       group: "Выберите группу",
+      about: "",
     };
-    this._user = {};
+    this._codeAuth = 0;
     this._menuAuth = [
       { id: 0, title: "Новости", icon: news, path: NEWS_ROUTE },
       { id: 1, title: "Мессенджер", icon: messeges, path: MESSENGER_ROUTE },
@@ -46,6 +53,10 @@ export default class UserStore {
 
   setDataAuth(dataAuth) {
     this._dataAuth = dataAuth;
+  }
+
+  setCodeAuth(code) {
+    this._codeAuth = code;
   }
 
   setMenuAuth(menuAuth) {
@@ -93,6 +104,10 @@ export default class UserStore {
 
   get dataAuth() {
     return this._dataAuth;
+  }
+
+  get codeAuth() {
+    return this._codeAuth;
   }
 
   get burgerActive() {

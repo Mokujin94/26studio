@@ -1,9 +1,13 @@
-import React, { createRef, useState } from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 
 import style from "./thirdStageReg.module.scss";
 import RegistrationButton from "../registrationButton/RegistrationButton";
+import { observer } from "mobx-react-lite";
+import { Context } from "../..";
 
-function ThirdStageReg({ stages }) {
+const ThirdStageReg = observer(() => {
+  const { user } = useContext(Context);
+
   const [number1, setNumber1] = useState("");
   const [number2, setNumber2] = useState("");
   const [number3, setNumber3] = useState("");
@@ -66,24 +70,21 @@ function ThirdStageReg({ stages }) {
     }
 
     let nextId = Number(id) + 1;
-    if (e.target.value.length >= 1 && nextId <= 6 && /\d+/.test(Number(e.key))) {
+    if (
+      e.target.value.length >= 1 &&
+      nextId <= 6 &&
+      /\d+/.test(Number(e.key))
+    ) {
       eval(`input${nextId}.current.focus()`);
       eval(`setNumber${nextId}(e.key)`);
     }
   };
 
-  // const lastChar = (e) => {
-  //   const id = e.target.attributes.id.value;
-  //   let nextId = Number(id) + 1;
-  //   if (e.target.value.length >= 1) {
-  //     eval(`input${nextId}.current.focus()`);
-  //     eval(`setNumber${nextId}(e.key)`);
-  //   }
-  // };
-
   return (
     <div className={style.third}>
-      <h3 className={style.third__title}>Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!</h3>
+      <h3 className={style.third__title}>
+        Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!
+      </h3>
       <div className={style.third__inner}>
         <span className={style.third__text}>Код с почты</span>
         <div className={style.third__inputBox}>
@@ -96,7 +97,9 @@ function ThirdStageReg({ stages }) {
             id="1"
             ref={input1}
             className={
-              number1 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
+              number1
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
             }
           />
           <input
@@ -107,7 +110,9 @@ function ThirdStageReg({ stages }) {
             id="2"
             ref={input2}
             className={
-              number2 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
+              number2
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
             }
           />
           <input
@@ -118,7 +123,9 @@ function ThirdStageReg({ stages }) {
             id="3"
             ref={input3}
             className={
-              number3 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
+              number3
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
             }
           />
           <input
@@ -129,7 +136,9 @@ function ThirdStageReg({ stages }) {
             id="4"
             ref={input4}
             className={
-              number4 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
+              number4
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
             }
           />
           <input
@@ -140,7 +149,9 @@ function ThirdStageReg({ stages }) {
             id="5"
             ref={input5}
             className={
-              number5 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
+              number5
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
             }
           />
           <input
@@ -151,13 +162,15 @@ function ThirdStageReg({ stages }) {
             id="6"
             ref={input6}
             className={
-              number6 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
+              number6
+                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
+                : style.third__inputBoxItem
             }
           />
         </div>
       </div>
     </div>
   );
-}
+});
 
 export default ThirdStageReg;
