@@ -1,17 +1,41 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import style from "./secondStageReg.module.scss";
 
 import RegistrationButton from "../registrationButton/RegistrationButton";
+import { Context } from "../..";
+import { observer } from "mobx-react-lite";
 
-function SecondStageReg({ setStages, setClick }) {
+const SecondStageReg = observer(({ setStages, setClick }) => {
+  const { user } = useContext(Context);
+  const [groupValue, setGroupValue] = useState(user.dataAuth.group);
+
+  const [newData, setNewData] = useState({});
+
+  useEffect(() => {
+    setNewData({
+      group: groupValue,
+    });
+    user.setDataAuth({ ...user.dataAuth, ...newData });
+  }, [groupValue, newData]);
+
+  const chengeSelect = (e) => {
+    setGroupValue(e.target.value);
+  };
+
+  useEffect(() => {
+    if (groupValue == "Выберите группу") {
+      user.setErrorAuth(true);
+    } else user.setErrorAuth(false);
+  }, [groupValue]);
+
   return (
     <div className={style.second}>
       <div className={style.second__inner}>
         <div className={style.second__row}>
           <label className={style.second__item}>
             <h2 className={style.second__itemTitle}>Группа</h2>
-            <select className={style.second__itemGroup}>
+            <select value={groupValue} onChange={chengeSelect} className={style.second__itemGroup}>
               <option className={style.second__itemGroupValue} selected disabled value="Выберите группу">
                 Выберите группу
               </option>
@@ -67,6 +91,6 @@ function SecondStageReg({ setStages, setClick }) {
       </div>
     </div>
   );
-}
+});
 
 export default SecondStageReg;

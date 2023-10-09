@@ -22,8 +22,7 @@
       border-radius: 50%;
       border: 2px solid $studio-primary-border;
       overflow: hidden;
-      transition: color 0.3s $studio-transition-03,
-        border 0.3s $studio-transition-06;
+      transition: color 0.3s $studio-transition-03, border 0.3s $studio-transition-06;
       cursor: pointer;
       &::before {
         content: "";
@@ -71,7 +70,7 @@
       position: absolute;
       height: 3px;
       width: 0px;
-      background: $studio-base-elements;
+      background: $studio-primary-element;
       transition: $studio-transition-03 ease-in;
     }
     &_active {

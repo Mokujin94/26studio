@@ -1,5 +1,19 @@
 // Original theme
 
+//background
+$studio-background: linear-gradient(
+  180deg,
+  #1f2933 0%,
+  #1f2933 15.1%,
+  #242f3b 36.01%,
+  #242f3b 48.7%,
+  #1f2933 57.76%,
+  #1f2933 72.27%,
+  #242f3b 81.07%,
+  #1f2933 94.87%,
+  #1f2933 100%
+);
+
 // header
 $studio-background-header: #1f2933;
 // box-shadow
@@ -125,21 +139,8 @@ $studio-transition-06: 0.6s;
 
 /*------------------------------------------------------------------*/
 
-$studio-base-elements: #97bce6;
 $studio-text-button: #27323e;
 $studio-button-hover: #acd3ff;
-$studio-background: linear-gradient(
-  180deg,
-  #1f2933 0%,
-  #1f2933 15.1%,
-  #242f3b 36.01%,
-  #242f3b 48.7%,
-  #1f2933 57.76%,
-  #1f2933 72.27%,
-  #242f3b 81.07%,
-  #1f2933 94.87%,
-  #1f2933 100%
-);
 $studio-header: #1f2933;
 $studio-news-card: #11161b;
 $studio-menu-color-hover: #252c35;

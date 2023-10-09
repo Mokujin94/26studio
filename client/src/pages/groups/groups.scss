@@ -1,4 +1,4 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .groups {
   width: 100%;
@@ -10,13 +10,12 @@
   &__title {
     font-weight: 500;
     font-size: 40px;
-    line-height: 49px;
     letter-spacing: 0.2em;
-    margin-bottom: 70px;
+    margin-bottom: 50px;
   }
 
   &__spSelect-wrapper {
-    margin-bottom: 80px;
+    margin-bottom: 50px;
   }
 
   &__spSelect {

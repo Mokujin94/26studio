@@ -1,4 +1,4 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .projects {
   margin-top: 150px;
@@ -11,7 +11,7 @@
     letter-spacing: 0.2em;
     color: $studio-white-text;
 
-    margin-bottom: 50px;
+    margin-bottom: 30px;
   }
 
   &__wrapper {
@@ -30,7 +30,7 @@
 
 .slick-arrow {
   &::before {
-    content: '';
+    content: "";
   }
 }
 
