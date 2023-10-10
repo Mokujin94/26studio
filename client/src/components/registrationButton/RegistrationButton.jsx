@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 
 import style from "./registrationButton.module.scss";
 import { Context } from "../..";
@@ -8,34 +8,32 @@ import emailjs from "@emailjs/browser";
 const RegistrationButton = observer(({ children, stages, setStages }) => {
   const { user } = useContext(Context);
 
+  const sendParams = {
+    email_to: user.dataAuth.email,
+    code: user.codeAuth,
+  };
+
   const isError = () => {
     if (user.errorAuth === true) {
       alert("Заполните все поля верно!!!!!");
+    } else if (stages === 2) {
+      emailjs.send(
+        "service_zv37r4m",
+        "template_miaq7kl",
+        sendParams,
+        "hHtBfqHv7BnJpnld_"
+      );
+
+      setStages((item) => item + 1);
     } else {
       setStages((item) => item + 1);
     }
   };
 
-  const sendData = (e) => {
-    e.preventDefault();
-
-    if (stages == 3) {
-      emailjs.sendForm(
-        "service_zv37r4m",
-        "template_miaq7kl",
-        e.target,
-        "hHtBfqHv7BnJpnld_"
-      );
-    }
-  };
   return (
-    <form onSubmit={sendData}>
-      <input type="hidden" name="code" value={user.codeAuth} />
-      <input type="hidden" name="email_to" value={user.dataAuth.email} />
-      <button type="submit" className={style.button} onClick={isError}>
-        {children}
-      </button>
-    </form>
+    <button type="submit" className={style.button} onClick={isError}>
+      {children}
+    </button>
   );
 });
 

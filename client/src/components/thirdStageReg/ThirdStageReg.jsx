@@ -4,6 +4,7 @@ import style from "./thirdStageReg.module.scss";
 import RegistrationButton from "../registrationButton/RegistrationButton";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
+import { registration } from "../../http/userAPI";
 
 const ThirdStageReg = observer(() => {
   const { user } = useContext(Context);
@@ -14,6 +15,37 @@ const ThirdStageReg = observer(() => {
   const [number4, setNumber4] = useState("");
   const [number5, setNumber5] = useState("");
   const [number6, setNumber6] = useState("");
+
+  const [code, setCode] = useState("");
+
+  useEffect(() => {
+    setCode(
+      `${number1}` +
+        `${number2}` +
+        `${number3}` +
+        `${number4}` +
+        `${number5}` +
+        `${number6}`
+    );
+  }, [number1, number2, number3, number4, number5, number6]);
+
+  const registrationAccept = async () => {
+    const response = await registration(
+      user.dataAuth.name,
+      user.dataAuth.email,
+      user.dataAuth.password
+    );
+    console.log(response);
+    return response;
+  };
+
+  useEffect(() => {
+    if (code == user.codeAuth) {
+      registrationAccept();
+    } else {
+      console.log(user.codeAuth);
+    }
+  }, [code]);
 
   const input1 = createRef();
   const input2 = createRef();
@@ -92,7 +124,6 @@ const ThirdStageReg = observer(() => {
             type="text"
             onChange={(e) => onChange(e)}
             onKeyDown={(e) => onDeleteBox(e)}
-            // onKeyUp={(e) => lastChar(e)}
             value={number1}
             id="1"
             ref={input1}
