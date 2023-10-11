@@ -7,11 +7,12 @@ let now = new Date();
 const User = sequelize.define("user", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true },
+  full_name: { type: DataTypes.STRING },
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING },
-  birthday: { type: DataTypes.DATE, defaultValue: "10.12.2005" },
+  birthday: { type: DataTypes.DATE },
   avatar: { type: DataTypes.STRING, defaultValue: "avatar.jpg" },
-  achivment_list: { type: DataTypes.JSON, defaultValue: "123" },
+  achivment_list: { type: DataTypes.JSON },
 });
 
 const Friend = sequelize.define("friend", {
@@ -190,3 +191,12 @@ module.exports = {
   Message,
   Chat,
 };
+sequelize.sync();
+// sequelize
+//   .sync()
+//   .then(() => {
+//     console.log("All models were synchronized successfully.");
+//   })
+//   .catch((error) => {
+//     console.error("Error synchronizing models:", error);
+//   });
