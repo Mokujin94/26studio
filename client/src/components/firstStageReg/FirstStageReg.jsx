@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import style from "./firstStageReg.module.scss";
 
 import eye from "../../resource/graphics/icons/registration/regEye.svg";
-import RegistrationButton from "../registrationButton/RegistrationButton";
+import RegistrationButton from "../primaryButton/PrimaryButton";
 import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 const FirstStageReg = observer(({ stages }) => {
@@ -14,9 +14,7 @@ const FirstStageReg = observer(({ stages }) => {
   const [valueFullName, setValueFullName] = useState(user.dataAuth.fullName);
   const [valueMail, setValueMail] = useState(user.dataAuth.email);
   const [valuePassword, setValuePassword] = useState(user.dataAuth.password);
-  const [valuePasswordConfirm, setValuePasswordConfirm] = useState(
-    user.dataAuth.passwordConfirm
-  );
+  const [valuePasswordConfirm, setValuePasswordConfirm] = useState(user.dataAuth.passwordConfirm);
 
   const [nameError, setNameError] = useState(false);
   const [fullNameError, setFullNameError] = useState(false);
@@ -34,24 +32,11 @@ const FirstStageReg = observer(({ stages }) => {
       password: valuePassword,
       passwordConfirm: valuePasswordConfirm,
     });
-  }, [
-    valueName,
-    valueFullName,
-    valueMail,
-    valuePassword,
-    valuePasswordConfirm,
-  ]);
+  }, [valueName, valueFullName, valueMail, valuePassword, valuePasswordConfirm]);
 
   useEffect(() => {
     user.setDataAuth({ ...user.dataAuth, ...newData });
-  }, [
-    valueName,
-    valueFullName,
-    valueMail,
-    valuePassword,
-    valuePasswordConfirm,
-    newData,
-  ]);
+  }, [valueName, valueFullName, valueMail, valuePassword, valuePasswordConfirm, newData]);
 
   useEffect(() => {
     if (
@@ -191,9 +176,7 @@ const FirstStageReg = observer(({ stages }) => {
                   onChange={validationPasswordConfirm}
                   type="password"
                   className={`${style.first__itemInput} ${style.first__itemInputPass}`}
-                  style={
-                    passwordConfirmError ? { border: "2px solid red" } : null
-                  }
+                  style={passwordConfirmError ? { border: "2px solid red" } : null}
                 />
                 <img src={eye} alt="" />
               </div>

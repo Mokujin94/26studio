@@ -1,7 +1,7 @@
 import React, { createRef, useContext, useEffect, useState } from "react";
 
 import style from "./thirdStageReg.module.scss";
-import RegistrationButton from "../registrationButton/RegistrationButton";
+import RegistrationButton from "../primaryButton/PrimaryButton";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { registration } from "../../http/userAPI";
@@ -19,22 +19,11 @@ const ThirdStageReg = observer(() => {
   const [code, setCode] = useState("");
 
   useEffect(() => {
-    setCode(
-      `${number1}` +
-        `${number2}` +
-        `${number3}` +
-        `${number4}` +
-        `${number5}` +
-        `${number6}`
-    );
+    setCode(`${number1}` + `${number2}` + `${number3}` + `${number4}` + `${number5}` + `${number6}`);
   }, [number1, number2, number3, number4, number5, number6]);
 
   const registrationAccept = async () => {
-    const response = await registration(
-      user.dataAuth.name,
-      user.dataAuth.email,
-      user.dataAuth.password
-    );
+    const response = await registration(user.dataAuth.name, user.dataAuth.email, user.dataAuth.password);
     console.log(response);
     return response;
   };
@@ -102,11 +91,7 @@ const ThirdStageReg = observer(() => {
     }
 
     let nextId = Number(id) + 1;
-    if (
-      e.target.value.length >= 1 &&
-      nextId <= 6 &&
-      /\d+/.test(Number(e.key))
-    ) {
+    if (e.target.value.length >= 1 && nextId <= 6 && /\d+/.test(Number(e.key))) {
       eval(`input${nextId}.current.focus()`);
       eval(`setNumber${nextId}(e.key)`);
     }
@@ -114,9 +99,7 @@ const ThirdStageReg = observer(() => {
 
   return (
     <div className={style.third}>
-      <h3 className={style.third__title}>
-        Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!
-      </h3>
+      <h3 className={style.third__title}>Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!</h3>
       <div className={style.third__inner}>
         <span className={style.third__text}>Код с почты</span>
         <div className={style.third__inputBox}>
@@ -128,9 +111,7 @@ const ThirdStageReg = observer(() => {
             id="1"
             ref={input1}
             className={
-              number1
-                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
-                : style.third__inputBoxItem
+              number1 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
             }
           />
           <input
@@ -141,9 +122,7 @@ const ThirdStageReg = observer(() => {
             id="2"
             ref={input2}
             className={
-              number2
-                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
-                : style.third__inputBoxItem
+              number2 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
             }
           />
           <input
@@ -154,9 +133,7 @@ const ThirdStageReg = observer(() => {
             id="3"
             ref={input3}
             className={
-              number3
-                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
-                : style.third__inputBoxItem
+              number3 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
             }
           />
           <input
@@ -167,9 +144,7 @@ const ThirdStageReg = observer(() => {
             id="4"
             ref={input4}
             className={
-              number4
-                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
-                : style.third__inputBoxItem
+              number4 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
             }
           />
           <input
@@ -180,9 +155,7 @@ const ThirdStageReg = observer(() => {
             id="5"
             ref={input5}
             className={
-              number5
-                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
-                : style.third__inputBoxItem
+              number5 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
             }
           />
           <input
@@ -193,9 +166,7 @@ const ThirdStageReg = observer(() => {
             id="6"
             ref={input6}
             className={
-              number6
-                ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}`
-                : style.third__inputBoxItem
+              number6 ? `${style.third__inputBoxItem} ${style.third__inputBoxItem_active}` : style.third__inputBoxItem
             }
           />
         </div>

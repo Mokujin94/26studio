@@ -4,7 +4,7 @@ import RegistrationStages from "../../components/registrationStages/Registration
 import FirstStageReg from "../../components/firstStageReg/FirstStageReg";
 import SecondStageReg from "../../components/secondStageReg/SecondStageReg";
 import ThirdStageReg from "../../components/thirdStageReg/ThirdStageReg";
-import RegistrationButton from "../../components/registrationButton/RegistrationButton";
+import PrimaryButton from "../../components/primaryButton/PrimaryButton";
 
 import "./registration.scss";
 
@@ -22,12 +22,7 @@ const Registation = observer(() => {
           <RegistrationStages stages={stages} setStages={setStages} />
         </div>
         <SwitchTransition mode="out-in">
-          <CSSTransition
-            key={stages}
-            in={stages}
-            timeout={300}
-            classNames="node"
-          >
+          <CSSTransition key={stages} in={stages} timeout={300} classNames="node">
             <div className="registration__stage">
               {stages === 1 ? (
                 <FirstStageReg stages={stages} />
@@ -47,13 +42,11 @@ const Registation = observer(() => {
           unmountOnExit
         >
           <div ref={nodeRef} className="registration__bottom">
-            <RegistrationButton stages={stages} setStages={setStages}>
+            <PrimaryButton stages={stages} setStages={setStages}>
               Далее
-            </RegistrationButton>
+            </PrimaryButton>
             <div className="registration__bottom-sign">
-              <p className="registration__bottom-sign-text">
-                Уже есть аккаунт?
-              </p>
+              <p className="registration__bottom-sign-text">Уже есть аккаунт?</p>
               <Link to="/login" className="registration__bottom-sign-link">
                 Войти
               </Link>

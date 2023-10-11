@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import style from "./secondStageReg.module.scss";
 
-import RegistrationButton from "../registrationButton/RegistrationButton";
+import RegistrationButton from "../primaryButton/PrimaryButton";
 import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 
@@ -14,9 +14,7 @@ const SecondStageReg = observer(() => {
   const [newData, setNewData] = useState({});
 
   useEffect(() => {
-    user.setCodeAuth(
-      Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
-    );
+    user.setCodeAuth(Math.floor(Math.random() * (999999 - 100000 + 1) + 100000));
   }, []);
 
   useEffect(() => {
@@ -47,17 +45,8 @@ const SecondStageReg = observer(() => {
         <div className={style.second__row}>
           <label className={style.second__item}>
             <h2 className={style.second__itemTitle}>Группа</h2>
-            <select
-              value={groupValue}
-              onChange={changeSelect}
-              className={style.second__itemGroup}
-            >
-              <option
-                className={style.second__itemGroupValue}
-                selected
-                disabled
-                value="Выберите группу"
-              >
+            <select value={groupValue} onChange={changeSelect} className={style.second__itemGroup}>
+              <option className={style.second__itemGroupValue} selected disabled value="Выберите группу">
                 Выберите группу
               </option>
               <option className={style.second__itemGroupValue} value="11/9">
@@ -105,9 +94,7 @@ const SecondStageReg = observer(() => {
         </div>
         <div className={style.second__row}>
           <label>
-            <h2 className={style.second__itemTitle}>
-              Немного информации о себе
-            </h2>
+            <h2 className={style.second__itemTitle}>Немного информации о себе</h2>
             <textarea
               value={aboutValue}
               onChange={changeArea}
