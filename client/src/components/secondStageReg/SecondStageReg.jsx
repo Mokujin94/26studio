@@ -60,40 +60,40 @@ const SecondStageReg = observer(() => {
               >
                 Выберите группу
               </option>
-              <option className={style.second__itemGroupValue} value="11/9">
+              <option className={style.second__itemGroupValue} value="1">
                 ИС 11/9
               </option>
-              <option className={style.second__itemGroupValue} value="12/9">
+              <option className={style.second__itemGroupValue} value="2">
                 ИС 12/9
               </option>
-              <option className={style.second__itemGroupValue} value="13/9">
+              <option className={style.second__itemGroupValue} value="3">
                 ИС 13/9
               </option>
-              <option className={style.second__itemGroupValue} value="21/9">
+              <option className={style.second__itemGroupValue} value="4">
                 ИС 21/9
               </option>
-              <option className={style.second__itemGroupValue} value="22/9">
+              <option className={style.second__itemGroupValue} value="5">
                 ИС 22/9
               </option>
-              <option className={style.second__itemGroupValue} value="23/9">
+              <option className={style.second__itemGroupValue} value="6">
                 ИС 23/9
               </option>
-              <option className={style.second__itemGroupValue} value="31/9">
+              <option className={style.second__itemGroupValue} value="7">
                 ИС 31/9
               </option>
-              <option className={style.second__itemGroupValue} value="32/9">
+              <option className={style.second__itemGroupValue} value="8">
                 ИС 32/9
               </option>
-              <option className={style.second__itemGroupValue} value="33/9">
+              <option className={style.second__itemGroupValue} value="9">
                 ИС 33/9
               </option>
-              <option className={style.second__itemGroupValue} value="41/9">
+              <option className={style.second__itemGroupValue} value="10">
                 ИС 41/9
               </option>
-              <option className={style.second__itemGroupValue} value="42/9">
+              <option className={style.second__itemGroupValue} value="11">
                 ИС 42/9
               </option>
-              <option className={style.second__itemGroupValue} value="43/9">
+              <option className={style.second__itemGroupValue} value="12">
                 ИС 43/9
               </option>
             </select>

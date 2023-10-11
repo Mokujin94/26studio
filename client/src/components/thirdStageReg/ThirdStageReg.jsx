@@ -32,10 +32,13 @@ const ThirdStageReg = observer(() => {
   const registrationAccept = async () => {
     const response = await registration(
       user.dataAuth.name,
+      user.dataAuth.fullName,
       user.dataAuth.email,
-      user.dataAuth.password
-    );
-    console.log(response);
+      user.dataAuth.password,
+      Number(user.dataAuth.group)
+    )
+      .then((data) => console.log(data))
+      .catch((e) => e.status);
     return response;
   };
 

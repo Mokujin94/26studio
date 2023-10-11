@@ -9,15 +9,19 @@ const {
   GettingAchivment,
 } = require("../models/models");
 
-const generateJwt = (id, name, email, roleId) => {
-  return jwt.sign({ id, name, email, roleId }, process.env.SECRET_KEY, {
-    expiresIn: "24h",
-  });
+const generateJwt = (id, name, full_name, email, groupId, roleId) => {
+  return jwt.sign(
+    { id, name, full_name, email, groupId, roleId },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: "24h",
+    }
+  );
 };
 
 class UserController {
   async registration(req, res, next) {
-    const { name, full_name, email, password, roleId } = req.body;
+    const { name, full_name, email, password, groupId, roleId } = req.body;
     if (!email || !password) {
       return next(ApiError.badRequest("Неверная почта или пароль"));
     }
@@ -33,6 +37,7 @@ class UserController {
       full_name,
       email,
       password: hashPassword,
+      groupId,
       roleId,
     });
     const achivment = await UserAchivment.create({ userId: user.id });
@@ -42,6 +47,7 @@ class UserController {
       user.name,
       user.full_name,
       user.email,
+      user.groupId,
       user.roleId
     );
     return res.json({ token });
