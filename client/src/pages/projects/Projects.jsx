@@ -473,6 +473,7 @@ function Projects() {
         </div>
         <div className="projects__searchSettings">
           <ProjectsSearch />
+          <ProjectFilter/>
         </div>
         <div className="projects__wrapper">{isLoaded ? newSkeletonList : projectCollection}</div>
       </div>
