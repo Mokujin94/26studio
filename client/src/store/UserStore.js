@@ -16,7 +16,7 @@ export default class UserStore {
     this._isAuth = false;
     this._user = {};
     this._path = "";
-    this._errorAuth = false;
+    this._errorAuth = [];
     this._dataAuth = {
       name: "",
       fullName: "",
@@ -29,10 +29,9 @@ export default class UserStore {
     this._codeAuth = 0;
     this._menuAuth = [
       { id: 0, title: "Новости", icon: news, path: NEWS_ROUTE },
-      { id: 1, title: "Мессенджер", icon: messeges, path: MESSENGER_ROUTE },
-      { id: 2, title: "Проекты", icon: project, path: PROJECTS_ROUTE },
-      { id: 3, title: "Группы", icon: group, path: GROUPS_ROUTE },
-      { id: 4, title: "О нас", icon: messeges, path: GROUPS_ROUTE },
+      { id: 1, title: "Проекты", icon: project, path: PROJECTS_ROUTE },
+      { id: 2, title: "Группы", icon: group, path: GROUPS_ROUTE },
+      { id: 3, title: "О нас", icon: messeges, path: GROUPS_ROUTE },
     ];
     this._menu = [
       { id: 0, title: "Новости", icon: news, path: NEWS_ROUTE },
@@ -71,8 +70,8 @@ export default class UserStore {
     this._path = path;
   }
 
-  setErrorAuth(bool) {
-    this._errorAuth = bool;
+  setErrorAuth(errorAuth) {
+    this._errorAuth = [...this._errorAuth, {name: errorAuth}];
   }
 
   setBurgerActive(bool) {

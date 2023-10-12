@@ -14,7 +14,7 @@ const RegistrationButton = observer(({ children, stages, setStages }) => {
   };
 
   const isError = () => {
-    if (user.errorAuth === true) {
+    if (user.errorAuth) {
       alert("Заполните все поля верно!!!!!");
     } else if (stages === 2) {
       emailjs.send(

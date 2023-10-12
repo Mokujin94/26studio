@@ -85,10 +85,15 @@ const FirstStageReg = observer(({ stages }) => {
 
   const validationName = (e) => {
     setValueName(e.target.value);
-    if (e.target.value.length < 2) {
-      setNameError(true);
-    } else {
-      setNameError(false);
+    if (e.target.value.length < 4) {
+          user.setErrorAuth("Никнейм должен содержать не менее 4 символов");
+      console.log(user.errorAuth);
+    } else if (/[а-яё]+/i.test(e.target.value)) {
+      user.setErrorAuth([...user.errorAuth, [{name: "Никнейм должен быть написан на латинице"}]])
+      console.log(user.errorAuth);
+    }
+     else {
+
     }
   };
 
@@ -107,9 +112,15 @@ const FirstStageReg = observer(({ stages }) => {
     }
   };
 
+  
+
   const validationMail = (e) => {
     setValueMail(e.target.value);
-    if (e.target.value.length < 5 || e.target.value.indexOf("@") == -1) {
+    let checkBeforeMail = e.target.value.slice(0, e.target.value.indexOf("@"))
+    let checkDot = e.target.value.slice(e.target.value.indexOf("@") + 2, e.target.value.length);
+    let checkDomen = checkDot.slice(checkDot.indexOf('.') + 1, checkDot.length);
+    console.log(checkBeforeMail)
+    if ( e.target.value.indexOf("@") == -1 || e.target.value.indexOf(".") == -1 || checkDot.indexOf('.') == -1 || checkDomen.length < 2 || !checkBeforeMail) {
       setMailError(true);
     } else {
       setMailError(false);
@@ -144,8 +155,8 @@ const FirstStageReg = observer(({ stages }) => {
                 value={valueName}
                 onChange={validationName}
                 type="text"
+                required
                 className={style.first__itemInput}
-                style={nameError ? { border: "2px solid red" } : null}
               />
             </label>
             <label className={style.first__item}>
@@ -155,7 +166,6 @@ const FirstStageReg = observer(({ stages }) => {
                 onChange={validationFullName}
                 type="text"
                 className={style.first__itemInput}
-                style={fullNameError ? { border: "2px solid red" } : null}
               />
             </label>
           </div>
@@ -166,7 +176,6 @@ const FirstStageReg = observer(({ stages }) => {
               onChange={validationMail}
               type="email"
               className={style.first__itemInput}
-              style={mailError ? { border: "2px solid red" } : null}
             />
           </label>
           <div className={style.first__row}>
@@ -178,7 +187,6 @@ const FirstStageReg = observer(({ stages }) => {
                   onChange={validationPassword}
                   type="password"
                   className={`${style.first__itemInput} ${style.first__itemInputPass}`}
-                  style={passwordError ? { border: "2px solid red" } : null}
                 />
                 <img src={eye} alt="" />
               </div>
@@ -191,9 +199,7 @@ const FirstStageReg = observer(({ stages }) => {
                   onChange={validationPasswordConfirm}
                   type="password"
                   className={`${style.first__itemInput} ${style.first__itemInputPass}`}
-                  style={
-                    passwordConfirmError ? { border: "2px solid red" } : null
-                  }
+
                 />
                 <img src={eye} alt="" />
               </div>
