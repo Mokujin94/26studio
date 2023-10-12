@@ -27,7 +27,6 @@ function Header() {
           <div className={style.header__search}>
             <input
               className={style.header__search__input}
-              autoComplete
               placeholder="Поиск по сайту"
               onFocus={(event) => {
                 event.target.setAttribute("autocomplete", "off");

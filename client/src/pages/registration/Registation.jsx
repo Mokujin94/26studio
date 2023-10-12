@@ -22,12 +22,7 @@ const Registation = observer(() => {
           <RegistrationStages stages={stages} setStages={setStages} />
         </div>
         <SwitchTransition mode="out-in">
-          <CSSTransition
-            key={stages}
-            in={stages}
-            timeout={300}
-            classNames="node"
-          >
+          <CSSTransition key={stages} timeout={300} classNames="node">
             <div className="registration__stage">
               {stages === 1 ? (
                 <FirstStageReg stages={stages} />
@@ -41,7 +36,7 @@ const Registation = observer(() => {
         </SwitchTransition>
         <CSSTransition
           nodeRef={nodeRef}
-          in={stages < 3 ? true : false}
+          in={stages < 3}
           timeout={300}
           classNames="buttonBye"
           unmountOnExit

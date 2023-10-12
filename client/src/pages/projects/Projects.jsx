@@ -415,19 +415,24 @@ function Projects() {
     },
   ];
 
-  const newSkeletonList = skeletonList.map(({ id }) => <ProjectSkeleton key={id} />);
-  const newLastAddedSkeletonList = lastAddedSkeletonList.map(({ id }) => <ProjectSkeleton key={id} />);
+  const newSkeletonList = skeletonList.map(({ id }) => (
+    <ProjectSkeleton key={id} />
+  ));
+  const newLastAddedSkeletonList = lastAddedSkeletonList.map(({ id }) => (
+    <ProjectSkeleton key={id} />
+  ));
   const [isLoaded, setIsLoaded] = useState(true);
   const [projectCollection, setProjectCollection] = useState([]);
-  const [lastAddedProjectCollection, setLastAddedProjectCollection] = useState([]);
+  const [lastAddedProjectCollection, setLastAddedProjectCollection] = useState(
+    []
+  );
   useEffect(() => {
     setTimeout(() => {
       setProjectCollection(
         projectsList.map(({ id, element }) => {
           return (
-            <Link to={PROJECTS_ROUTE + "/" + (id + 1)}>
+            <Link key={id} to={PROJECTS_ROUTE + "/" + (id + 1)}>
               <ProjectCard
-                key={id}
                 img={projectPhoto}
                 title={"Arkana"}
                 name={"mokujin94"}

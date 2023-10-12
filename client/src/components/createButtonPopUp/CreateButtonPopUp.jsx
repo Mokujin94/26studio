@@ -27,17 +27,17 @@ function CreateButtonPopUp() {
         <path
           d="M1 11.0901H21"
           stroke="#FCFCFC"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
         <path d="M11 21L11 1Z" fill="#27323E" />
         <path
           d="M11 21L11 1"
           stroke="#FCFCFC"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
       <CSSTransition

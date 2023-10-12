@@ -29,9 +29,6 @@ const Profile = observer(() => {
 
   const checkPrevId = (item) => {
     profile.setSelectedMenu(item);
-    // if(prevId == profile.selectedMenu.id){
-    //   return
-    // } else {
     if (prevId > profile.selectedMenu.id) {
       setBoolPrevId(false);
       setPrevId(profile.selectedMenu.id);
@@ -39,34 +36,6 @@ const Profile = observer(() => {
       setBoolPrevId(true);
       setPrevId(profile.selectedMenu.id);
     }
-    // }
-  };
-
-  // const defaultStyle = {
-  //   transition: `opacity 100ms ease-in-out`,
-  //   opacity: 1,
-  // }
-
-  const transitionStyles = {
-    entering: {
-      opacity: 0,
-      transform: "translateX(-2000px)",
-    },
-    entered: {
-      position: "absolute",
-      opacity: 1,
-      transition: "0.5s ease-in-out",
-      transform: "translateX(0px)",
-    },
-    exiting: {
-      opacity: 1,
-      transform: "translateX(0px)",
-    },
-    exited: {
-      opacity: 0,
-      transition: "0.5s ease-in-out",
-      transform: "translateX(-2000px)",
-    },
   };
 
   useEffect(() => {

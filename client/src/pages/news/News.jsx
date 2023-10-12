@@ -12,18 +12,28 @@ import NewsSkeleton from "../../components/newsSkeleton/NewsSkeleton";
 
 function News() {
   const { news } = useContext(Context);
-  const skeletonList = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }];
+  const skeletonList = [
+    { id: 0 },
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+  ];
 
-  const newSkeletonList = skeletonList.map(({ id }) => <NewsSkeleton key={id} />);
+  const newSkeletonList = skeletonList.map(({ id }) => (
+    <NewsSkeleton key={id} />
+  ));
   const [isLoaded, setIsLoaded] = useState(true);
   const [newsCollection, setNewsCollection] = useState();
   useEffect(() => {
     setTimeout(() => {
       setNewsCollection(
         news.news.map((news) => (
-          <Link to={NEWSPAPER_ROUTE + "/" + news.id}>
+          <Link key={news.id} to={NEWSPAPER_ROUTE + "/" + news.id}>
             <NewsCard
-              key={news.id}
               title={news.title}
               description={news.description}
               img={news.img}
@@ -44,7 +54,9 @@ function News() {
         <div className="news__title-wrapper">
           <h1 className="news__title">Популярные новости</h1>
         </div>
-        <div className="news__cards">{isLoaded ? newSkeletonList : newsCollection}</div>
+        <div className="news__cards">
+          {isLoaded ? newSkeletonList : newsCollection}
+        </div>
       </div>
     </div>
   );

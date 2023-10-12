@@ -20,10 +20,10 @@ function SliderButton(props) {
         <path
           d="M1 21L9.2677 12.7677C10.2441 11.7955 10.2441 10.2045 9.2677 9.23232L1 1"
           stroke="#72FFF7"
-          stroke-width="1.5"
-          stroke-miterlimit="10"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.5"
+          strokeMiterlimit="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </button>

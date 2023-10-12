@@ -24,6 +24,9 @@ const SecondStageReg = observer(() => {
       group: groupValue,
       about: aboutValue,
     });
+  }, [groupValue, aboutValue]);
+
+  useEffect(() => {
     user.setDataAuth({ ...user.dataAuth, ...newData });
   }, [groupValue, aboutValue, newData]);
 
@@ -54,7 +57,6 @@ const SecondStageReg = observer(() => {
             >
               <option
                 className={style.second__itemGroupValue}
-                selected
                 disabled
                 value="Выберите группу"
               >
