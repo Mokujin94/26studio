@@ -18,13 +18,14 @@ const FirstStageReg = observer(({ stages }) => {
     user.dataAuth.passwordConfirm
   );
 
+  const [newData, setNewData] = useState({});
+
   const [nameError, setNameError] = useState(false);
   const [fullNameError, setFullNameError] = useState(false);
-  const [mailError, setMailError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [passwordConfirmError, setPasswordConfirmError] = useState(false);
 
-  const [newData, setNewData] = useState({});
 
   useEffect(() => {
     setNewData({
@@ -44,70 +45,104 @@ const FirstStageReg = observer(({ stages }) => {
 
   useEffect(() => {
     user.setDataAuth({ ...user.dataAuth, ...newData });
-  }, [
-    valueName,
-    valueFullName,
-    valueMail,
-    valuePassword,
-    valuePasswordConfirm,
-    newData,
-  ]);
+  }, [newData]);
 
-  useEffect(() => {
-    if (
-      nameError ||
-      fullNameError ||
-      mailError ||
-      passwordError ||
-      passwordConfirmError ||
-      !valueName ||
-      !valueFullName ||
-      !valueMail ||
-      !valuePassword ||
-      !valuePasswordConfirm
-    ) {
-      user.setErrorAuth(true);
-    } else {
-      user.setErrorAuth(false);
-    }
-  }, [
-    nameError,
-    fullNameError,
-    mailError,
-    passwordError,
-    passwordConfirmError,
-    valueName,
-    valueFullName,
-    valueMail,
-    valuePassword,
-    valuePasswordConfirm,
-  ]);
+
 
   const validationName = (e) => {
     setValueName(e.target.value);
-    if (e.target.value.length < 4) {
-          user.setErrorAuth("Никнейм должен содержать не менее 4 символов");
-      console.log(user.errorAuth);
-    } else if (/[а-яё]+/i.test(e.target.value)) {
-      user.setErrorAuth([...user.errorAuth, [{name: "Никнейм должен быть написан на латинице"}]])
-      console.log(user.errorAuth);
-    }
-     else {
+    let match = /^[а-яё]*$/i.test(e.target.value)
+    if (e.target.value.length < 4 || match) {
+      const newError = {
+        id: 0,
+        name: "Никнейм",
+        errors: [
+          {id: 1, name: "Никнейм должен содержать минимум 4 символа"},
+          {id: 2, name: "Никнейм должен содержать минимум латинские буквы"}
+        ]
+      }
+      user.setErrorAuth(user.errorAuth, newError);
+      // console.log(user.errorAuth.map(item => {
+      //   item.errors.map(twoItem => {
+      //     return twoItem.name
+      //   })
+      // }))
+      // console.log(user.errorAuth.forEach(item => {
+      //   return item;
 
+      // }))
+
+      // for (let i = 0; i < user.errorAuth.length; i++) {
+      //   for (let d = 0; d < user.errorAuth[i].errors.length; d++) {
+      //    console.log(user.errorAuth[i].errors[d].name);
+
+        
+      //   }
+      //   break
+      // }
+
+      user.errorAuth.forEach(item => {
+        item.errors.forEach(twoItem => {
+          console.log( twoItem.name)
+        })
+      })
+
+      console.log(user.errorAuth)
+      setNameError(true);
+    } else {
+      const newError = {
+        id: 0,
+        name: "Никнейм",
+        errors: [
+        ]
+      }
+      user.setErrorAuth(user.errorAuth, newError);
+      setNameError(false);
     }
   };
 
   const validationFullName = (e) => {
-    console.log(user.dataAuth);
     setValueFullName(e.target.value);
-    if (
-      e.target.value.length < 5 ||
-      e.target.value[0] === " " ||
-      e.target.value[e.target.value.length - 1] == " " ||
-      !/[а-яё]+/i.test(e.target.value)
-    ) {
+    let match = /^[а-яё]*$/i.test(e.target.value.replaceAll(' ', ''))
+    let secondSpace = e.target.value.indexOf(' ', 1 + e.target.value.indexOf(' '));
+    let firstWord = e.target.value.slice(0, e.target.value.indexOf(' ') === -1 ? e.target.value.length : e.target.value.indexOf(' ') + 1);
+    let checkSpaceFristWord = firstWord.indexOf(' ');
+    let secondWord = e.target.value.slice(firstWord.length, secondSpace === -1 ? e.target.value.length : secondSpace + 1);
+    let checkSpaceSecondWord = secondWord.indexOf(' ');
+    let thirdWord = e.target.value.slice(secondSpace === -1 ? e.target.value.length + 1 : secondSpace + 1, e.target.value.length);
+    let checkSpaceThirdWord = thirdWord.indexOf(' ');
+
+    if (firstWord.length < 2 || !match|| checkSpaceFristWord === 0 || checkSpaceFristWord === -1 || checkSpaceSecondWord === 0 || !secondWord || secondSpace !== -1 && !thirdWord || checkSpaceThirdWord !== -1 || thirdWord && checkSpaceSecondWord === -1) {
+      const newError = {
+        id: 1,
+        name: "ФИО",
+        errors: [
+          {id: 0, name: "ФИО не должно содержать пробелы в начале или в конце"},
+          {id: 1, name: "ФИО должно содержать только киррилицу"},
+          {id: 2, name: "Фамилия и имя обязательны для заполнения"},
+        ]
+      }
+      user.setErrorAuth(user.errorAuth, newError);
+      // for (let i = 0; i < user.errorAuth.length; i++) {
+      //   for (let d = 0; d < user.errorAuth[i].errors.length; d++) {
+      //    console.log(user.errorAuth[i].errors[d].name);
+
+        
+      //   }
+      //   break
+      // }
+      console.log(user.errorAuth)
+
       setFullNameError(true);
     } else {
+      const newError = {
+        id: 2,
+        name: "ФИО",
+        errors: [
+        ]
+      }
+      user.setErrorAuth(user.errorAuth, newError);
+      
       setFullNameError(false);
     }
   };
@@ -116,33 +151,16 @@ const FirstStageReg = observer(({ stages }) => {
 
   const validationMail = (e) => {
     setValueMail(e.target.value);
-    let checkBeforeMail = e.target.value.slice(0, e.target.value.indexOf("@"))
-    let checkDot = e.target.value.slice(e.target.value.indexOf("@") + 2, e.target.value.length);
-    let checkDomen = checkDot.slice(checkDot.indexOf('.') + 1, checkDot.length);
-    console.log(checkBeforeMail)
-    if ( e.target.value.indexOf("@") == -1 || e.target.value.indexOf(".") == -1 || checkDot.indexOf('.') == -1 || checkDomen.length < 2 || !checkBeforeMail) {
-      setMailError(true);
-    } else {
-      setMailError(false);
-    }
+
   };
 
   const validationPassword = (e) => {
     setValuePassword(e.target.value);
-    if (e.target.value.length < 6) {
-      setPasswordError(true);
-    } else {
-      setPasswordError(false);
-    }
+
   };
 
   const validationPasswordConfirm = (e) => {
     setValuePasswordConfirm(e.target.value);
-    if (e.target.value !== valuePassword) {
-      setPasswordConfirmError(true);
-    } else {
-      setPasswordConfirmError(false);
-    }
   };
   return (
     <>
@@ -157,6 +175,7 @@ const FirstStageReg = observer(({ stages }) => {
                 type="text"
                 required
                 className={style.first__itemInput}
+                style={nameError ? {border: "2px solid red"} : null}
               />
             </label>
             <label className={style.first__item}>
@@ -166,6 +185,7 @@ const FirstStageReg = observer(({ stages }) => {
                 onChange={validationFullName}
                 type="text"
                 className={style.first__itemInput}
+                style={fullNameError ? {border: "2px solid red"} : null}
               />
             </label>
           </div>

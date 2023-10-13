@@ -16,7 +16,15 @@ export default class UserStore {
     this._isAuth = false;
     this._user = {};
     this._path = "";
-    this._errorAuth = [];
+    this._errorAuth = [
+      {
+        id: 0,
+        name: "Никнейм",
+        errors: [
+
+        ]
+      }
+    ];
     this._dataAuth = {
       name: "",
       fullName: "",
@@ -70,8 +78,12 @@ export default class UserStore {
     this._path = path;
   }
 
-  setErrorAuth(errorAuth) {
-    this._errorAuth = [...this._errorAuth, {name: errorAuth}];
+  setErrorAuth(errorAuth, newErrors) {
+    this._errorAuth = errorAuth.map(({id, name, errors}, i) => {
+      if (errorAuth[i].id == id) {
+        return newErrors;
+      }
+    });
   }
 
   setBurgerActive(bool) {
