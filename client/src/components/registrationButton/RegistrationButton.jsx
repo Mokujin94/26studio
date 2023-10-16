@@ -4,6 +4,7 @@ import style from "./registrationButton.module.scss";
 import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 import emailjs from "@emailjs/browser";
+import { checkCondidate } from "../../http/userAPI";
 
 const RegistrationButton = observer(({ children, stages, setStages }) => {
   const { user } = useContext(Context);
@@ -13,19 +14,28 @@ const RegistrationButton = observer(({ children, stages, setStages }) => {
     code: user.codeAuth,
   };
 
-  const isError = () => {
-    if (stages === 2) {
-      emailjs.send(
-        "service_zv37r4m",
-        "template_miaq7kl",
-        sendParams,
-        "hHtBfqHv7BnJpnld_"
-      );
+  const isError = async () => {
+    const response = await checkCondidate(
+      user.dataAuth.name,
+      user.dataAuth.email
+    )
+      .then(() => {
+        if (stages === 2) {
+          emailjs.send(
+            "service_zv37r4m",
+            "template_miaq7kl",
+            sendParams,
+            "hHtBfqHv7BnJpnld_"
+          );
 
-      setStages((item) => item + 1);
-    } else {
-      setStages((item) => item + 1);
-    }
+          setStages((item) => item + 1);
+        } else {
+          setStages((item) => item + 1);
+        }
+      })
+      .catch((err) => {
+        return err;
+      });
   };
 
   return (

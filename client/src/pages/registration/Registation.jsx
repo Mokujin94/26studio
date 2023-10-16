@@ -10,6 +10,7 @@ import "./registration.scss";
 
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { observer } from "mobx-react-lite";
+import ModalError from "../../components/modalError/ModalError";
 
 const Registation = observer(() => {
   const [stages, setStages] = useState(1);
@@ -17,6 +18,15 @@ const Registation = observer(() => {
 
   return (
     <div className="registration">
+      {/* <CSSTransition
+        nodeRef={nodeRef}
+        in={stages < 3}
+        timeout={300}
+        classNames="buttonBye"
+        unmountOnExit
+      > */}
+      <ModalError />
+      {/* </CSSTransition> */}
       <div className="registration__wrapper">
         <div className="registration__stages">
           <RegistrationStages stages={stages} setStages={setStages} />

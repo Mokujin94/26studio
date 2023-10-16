@@ -20,10 +20,28 @@ export default class UserStore {
       {
         id: 0,
         name: "Никнейм",
-        errors: [
-
-        ]
-      }
+        errors: [],
+      },
+      {
+        id: 1,
+        name: "ФИО",
+        errors: [],
+      },
+      {
+        id: 2,
+        name: "Почта",
+        errors: [],
+      },
+      {
+        id: 3,
+        name: "Пароль",
+        errors: [],
+      },
+      {
+        id: 4,
+        name: "Повторный пароль",
+        errors: [],
+      },
     ];
     this._dataAuth = {
       name: "",
@@ -78,11 +96,12 @@ export default class UserStore {
     this._path = path;
   }
 
-  setErrorAuth(errorAuth, newErrors) {
-    this._errorAuth = errorAuth.map(({id, name, errors}, i) => {
-      if (errorAuth[i].id == id) {
+  setErrorAuth(newErrors) {
+    this._errorAuth = this._errorAuth.map((item, i) => {
+      if (i === newErrors.id) {
         return newErrors;
       }
+      return item;
     });
   }
 

@@ -15,6 +15,11 @@
   }
   &__item {
     display: block;
+    &Wrapper {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
     &Title {
       color: $studio-white-text;
       font-size: 16px;
@@ -54,5 +59,14 @@
         }
       }
     }
+  }
+}
+
+.error {
+  &_message {
+    max-width: 280px;
+    font-size: 14px;
+    color: rgb(255, 149, 149);
+    margin-top: 10px;
   }
 }

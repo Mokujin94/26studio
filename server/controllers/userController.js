@@ -20,6 +20,27 @@ const generateJwt = (id, name, full_name, email, groupId, roleId) => {
 };
 
 class UserController {
+  async checkCondidate(req, res, next) {
+    const { name, email } = req.body;
+    const condidateName = await User.findOne({ where: { name } });
+    const condidateMail = await User.findOne({ where: { email } });
+    if (condidateName && condidateMail) {
+      return next(
+        ApiError.badRequest("Пользовательно с таким ником и почтой существуют")
+      );
+    }
+    if (condidateName) {
+      return next(
+        ApiError.badRequest("Пользовательно с таким ником существует")
+      );
+    }
+    if (condidateMail) {
+      return next(
+        ApiError.badRequest("Пользовательно с такой почтой существует")
+      );
+    }
+    return res.json();
+  }
   async registration(req, res, next) {
     const { name, full_name, email, password, groupId, roleId } = req.body;
     if (!email || !password) {
