@@ -1,0 +1,49 @@
+@import "../../resource/styles/variables";
+
+.modal {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: $studio-dark-element;
+  border: 1px solid lightgreen;
+  padding: 40px 60px;
+  &__close {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 8px;
+    right: 15px;
+    top: 10px;
+    transition: $studio-transition-03;
+    cursor: pointer;
+    &_icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 15px;
+      height: 15px;
+      path {
+        stroke: $studio-primary-element;
+        transition: $studio-transition-03;
+      }
+    }
+    &:hover {
+      background: $studio-primary-element;
+      .modal__close {
+        &_icon {
+          path {
+            stroke: $studio-dark-element;
+          }
+        }
+      }
+    }
+  }
+  &__message {
+    font-size: 16px;
+    font-weight: 500;
+    color: lightgreen;
+  }
+}

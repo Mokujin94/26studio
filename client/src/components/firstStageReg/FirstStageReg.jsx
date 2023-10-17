@@ -125,6 +125,17 @@ const FirstStageReg = observer(({ stages }) => {
         ],
       };
       user.setErrorAuth(newError);
+    } else if (firstWord.length < 3 || (secondWord && secondWord.length < 2)) {
+      const newError = {
+        id: 1,
+        errors: [
+          {
+            id: 1,
+            name: "Некорректное ФИО",
+          },
+        ],
+      };
+      user.setErrorAuth(newError);
     } else {
       const newError = {
         id: 1,
@@ -162,12 +173,6 @@ const FirstStageReg = observer(({ stages }) => {
       !checkDot ||
       afterDot.length < 2
     ) {
-      console.log(checkMail + " - checkMail");
-      console.log(beforeMailWord + " - beforeMailWord");
-      console.log(afterMailWord + " - afterMailWord");
-      console.log(checkDot + " - checkDot");
-      console.log(afterDot + " - afterDot");
-      console.log(afterMail + " - afterMail");
       const newError = {
         id: 2,
         errors: [

@@ -11,11 +11,14 @@ import "./registration.scss";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { observer } from "mobx-react-lite";
 import ModalError from "../../components/modalError/ModalError";
+import ModalComplete from "../../components/modalComplete/ModalComplete";
 
 const Registation = observer(() => {
   const [stages, setStages] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
   const [errorModal, setErrorModal] = useState(false);
+  const [completeMessage, setCompleteMessage] = useState("");
+  const [completeModal, setCompleteModal] = useState(false);
   const nodeRef = useRef(null);
 
   return (
@@ -28,6 +31,19 @@ const Registation = observer(() => {
       >
         <div className="registration__errors">
           <ModalError error={errorMessage} setErrorModal={setErrorModal} />
+        </div>
+      </CSSTransition>
+      <CSSTransition
+        in={completeModal}
+        timeout={0}
+        classNames="node"
+        unmountOnExit
+      >
+        <div className="registration__complete">
+          <ModalComplete
+            completeMessage={completeMessage}
+            setCompleteModal={setCompleteModal}
+          />
         </div>
       </CSSTransition>
       <div className="registration__wrapper">
@@ -45,12 +61,14 @@ const Registation = observer(() => {
               {stages === 1 ? (
                 <FirstStageReg stages={stages} />
               ) : stages === 2 ? (
-                <SecondStageReg setStages={setStages} />
+                <SecondStageReg setStages={setStages} errorModal={errorModal} />
               ) : stages === 3 ? (
                 <ThirdStageReg
                   stages={stages}
                   setErrorMessage={setErrorMessage}
                   setErrorModal={setErrorModal}
+                  setCompleteModal={setCompleteModal}
+                  setCompleteMessage={setCompleteMessage}
                 />
               ) : null}
             </div>

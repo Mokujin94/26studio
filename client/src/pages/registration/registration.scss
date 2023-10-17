@@ -12,6 +12,13 @@
     top: 0px;
     z-index: 99;
   }
+  &__complete {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -20px;
+    z-index: 99;
+  }
   &__wrapper {
     display: flex;
     flex-direction: column;

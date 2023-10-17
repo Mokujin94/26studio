@@ -6,7 +6,7 @@ import RegistrationButton from "../registrationButton/RegistrationButton";
 import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 
-const SecondStageReg = observer(() => {
+const SecondStageReg = observer(({ errorModal }) => {
   const { user } = useContext(Context);
   const [groupValue, setGroupValue] = useState(user.dataAuth.group);
   const [aboutValue, setAboutValue] = useState(user.dataAuth.about);
@@ -42,7 +42,6 @@ const SecondStageReg = observer(() => {
 
   const selectFile = (e) => {
     setFile(e.target.files[0]);
-    console.log(user.dataAuth);
   };
 
   useEffect(() => {
@@ -61,6 +60,11 @@ const SecondStageReg = observer(() => {
               value={groupValue}
               onChange={changeSelect}
               className={style.second__itemGroup}
+              style={
+                errorModal && user.dataAuth.group === "Выберите группу"
+                  ? { border: "2px solid rgb(255, 149, 149)" }
+                  : null
+              }
             >
               <option
                 className={style.second__itemGroupValue}
@@ -110,7 +114,13 @@ const SecondStageReg = observer(() => {
           <div className={style.second__item}>
             <h2 className={style.second__itemTitle}>Аватар</h2>
             <label className={style.second__itemBtn}>
-              {file ? file.name : "Загрузить"}
+              <p>
+                {file
+                  ? file.name.length > 20
+                    ? file.name.slice(0, 20) + "..."
+                    : file.name
+                  : "Загрузить"}
+              </p>
               <input
                 onChange={selectFile}
                 type="file"

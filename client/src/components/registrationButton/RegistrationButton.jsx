@@ -35,6 +35,9 @@ const RegistrationButton = observer(
       ) {
         setErrorMessage("Заполните все поля верно");
         setErrorModal(true);
+      } else if (stages === 2 && user.dataAuth.group === "Выберите группу") {
+        setErrorMessage("Выберите группу");
+        setErrorModal(true);
       } else {
         const response = await checkCondidate(
           user.dataAuth.name,
@@ -57,8 +60,13 @@ const RegistrationButton = observer(
             }
           })
           .catch((err) => {
-            setErrorMessage(err.response.data.message);
-            setErrorModal(true);
+            if (err.response) {
+              setErrorMessage(err.response.data.message);
+              setErrorModal(true);
+            } else {
+              setErrorMessage(err.message);
+              setErrorModal(true);
+            }
           });
       }
     };
