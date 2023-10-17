@@ -46,11 +46,6 @@ const ThirdStageReg = observer(
 
       if (Date.now() < endConfetti) {
         requestAnimationFrame(frame);
-        setCompleteModal(true);
-        setCompleteMessage("Вы успешно зарегистрировались");
-      } else {
-        setCompleteModal(false);
-        setCompleteMessage("");
       }
     }
 
@@ -73,7 +68,13 @@ const ThirdStageReg = observer(
       formData.append("password", user.dataAuth.password);
       formData.append("avatar", user.dataAuth.avatar);
       formData.append("groupId", Number(user.dataAuth.group));
-      const response = await registration(formData).then(frame()).catch();
+      const response = await registration(formData)
+        .then(() => {
+          frame();
+          setCompleteModal(true);
+          setCompleteMessage("Вы успешно зарегистрировались");
+        })
+        .catch();
       return response;
     };
 
@@ -154,9 +155,9 @@ const ThirdStageReg = observer(
 
     return (
       <div className={style.third}>
-        <h3 className={style.third__title}>
+        {/* <h3 className={style.third__title}>
           Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!
-        </h3>
+        </h3> */}
         <div className={style.third__inner}>
           <span className={style.third__text}>Код с почты</span>
           <div className={style.third__inputBox}>

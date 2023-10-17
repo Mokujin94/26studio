@@ -51,6 +51,7 @@ function RegistrationStages({
         ) {
           setErrorMessage("Заполните все поля верно");
           setErrorModal(true);
+        } else if (stages === 3) {
         } else {
           setErrorMessage("");
           setErrorModal(false);

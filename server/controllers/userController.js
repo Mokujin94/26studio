@@ -45,8 +45,8 @@ class UserController {
   }
   async registration(req, res, next) {
     const { name, full_name, email, password, groupId, roleId } = req.body;
-    const { avatar } = req.files;
-    let fileName = uuid.v4() + ".jpg";
+
+    let fileName;
 
     if (!email || !password) {
       return next(ApiError.badRequest("Неверная почта или пароль"));
@@ -57,7 +57,13 @@ class UserController {
         ApiError.badRequest("Пользовательно с такой почтой существует")
       );
     }
-    avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+    if (req.files) {
+      fileName = uuid.v4() + ".jpg";
+      const { avatar } = req.files;
+      avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+    } else {
+      fileName = "avatar.jpg";
+    }
     const hashPassword = await bcrypt.hash(password, 5);
     const user = await User.create({
       name,
