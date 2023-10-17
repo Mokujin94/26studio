@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { registration } from "../../http/userAPI";
 
-const ThirdStageReg = observer(() => {
+const ThirdStageReg = observer(({ setErrorMessage, setErrorModal }) => {
   const { user } = useContext(Context);
 
   const [number1, setNumber1] = useState("");
@@ -30,23 +30,25 @@ const ThirdStageReg = observer(() => {
   }, [number1, number2, number3, number4, number5, number6]);
 
   const registrationAccept = async () => {
-    const response = await registration(
-      user.dataAuth.name,
-      user.dataAuth.fullName,
-      user.dataAuth.email,
-      user.dataAuth.password,
-      Number(user.dataAuth.group)
-    )
+    const formData = new FormData();
+    formData.append("name", user.dataAuth.name);
+    formData.append("full_name", user.dataAuth.fullName);
+    formData.append("email", user.dataAuth.email);
+    formData.append("password", user.dataAuth.password);
+    formData.append("avatar", user.dataAuth.avatar);
+    formData.append("groupId", Number(user.dataAuth.group));
+    const response = await registration(formData)
       .then((data) => console.log(data))
-      .catch((e) => e.status);
+      .catch();
     return response;
   };
 
   useEffect(() => {
     if (code == user.codeAuth) {
       registrationAccept();
-    } else {
-      console.log(user.codeAuth);
+    } else if (code.length === 6 && code !== user.codeAuth) {
+      setErrorMessage("Не верный код");
+      setErrorModal(true);
     }
   }, [code]);
 

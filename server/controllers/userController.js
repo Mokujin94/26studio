@@ -1,4 +1,6 @@
 const ApiError = require("../error/ApiError");
+const uuid = require("uuid");
+const path = require("path");
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -9,9 +11,9 @@ const {
   GettingAchivment,
 } = require("../models/models");
 
-const generateJwt = (id, name, full_name, email, groupId, roleId) => {
+const generateJwt = (id, name, full_name, email, avatar, groupId, roleId) => {
   return jwt.sign(
-    { id, name, full_name, email, groupId, roleId },
+    { id, name, full_name, email, avatar, groupId, roleId },
     process.env.SECRET_KEY,
     {
       expiresIn: "24h",
@@ -43,6 +45,9 @@ class UserController {
   }
   async registration(req, res, next) {
     const { name, full_name, email, password, groupId, roleId } = req.body;
+    const { avatar } = req.files;
+    let fileName = uuid.v4() + ".jpg";
+
     if (!email || !password) {
       return next(ApiError.badRequest("Неверная почта или пароль"));
     }
@@ -52,12 +57,14 @@ class UserController {
         ApiError.badRequest("Пользовательно с такой почтой существует")
       );
     }
+    avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
     const hashPassword = await bcrypt.hash(password, 5);
     const user = await User.create({
       name,
       full_name,
       email,
       password: hashPassword,
+      avatar: fileName,
       groupId,
       roleId,
     });
@@ -68,6 +75,7 @@ class UserController {
       user.name,
       user.full_name,
       user.email,
+      user.avatar,
       user.groupId,
       user.roleId
     );

@@ -6,6 +6,12 @@
   transform: translateY(50px);
   display: flex;
   align-items: center;
+  &__errors {
+    position: absolute;
+    right: 100px;
+    top: 0px;
+    z-index: 99;
+  }
   &__wrapper {
     display: flex;
     flex-direction: column;

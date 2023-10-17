@@ -1,4 +1,4 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .second {
   &__inner {
@@ -63,7 +63,7 @@
     outline: none;
     cursor: pointer;
     &::before {
-      content: '';
+      content: "";
       display: block;
       position: absolute; /* Абсолютное позиционирование */
       right: 5px;
@@ -74,6 +74,9 @@
   }
 
   &__itemBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 280px;
     height: 40px;
     border-radius: 15px;

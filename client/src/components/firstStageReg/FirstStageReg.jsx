@@ -142,15 +142,16 @@ const FirstStageReg = observer(({ stages }) => {
       checkMail !== -1 ? checkMail : e.target.value.length
     );
     let afterMail = e.target.value.slice(
+      beforeMailWord.length + 1,
+      e.target.value.length
+    );
+
+    let afterMailWord = e.target.value.slice(
       checkMail !== -1 ? checkMail + 1 : e.target.value.length + 1,
       e.target.value.length
     );
-    let checkDot = e.target.value.indexOf(".");
-    let afterMailWord = e.target.value.slice(
-      checkMail !== -1 ? checkMail + 1 : e.target.value.length + 1,
-      checkDot !== -1 ? checkDot : e.target.value.length
-    );
-    let afterDot = e.target.value.slice(
+    let checkDot = afterMailWord.indexOf(".");
+    let afterDot = afterMailWord.slice(
       checkDot !== -1 ? checkDot + 1 : e.target.value.length + 1,
       e.target.value.length
     );
@@ -161,6 +162,12 @@ const FirstStageReg = observer(({ stages }) => {
       !checkDot ||
       afterDot.length < 2
     ) {
+      console.log(checkMail + " - checkMail");
+      console.log(beforeMailWord + " - beforeMailWord");
+      console.log(afterMailWord + " - afterMailWord");
+      console.log(checkDot + " - checkDot");
+      console.log(afterDot + " - afterDot");
+      console.log(afterMail + " - afterMail");
       const newError = {
         id: 2,
         errors: [

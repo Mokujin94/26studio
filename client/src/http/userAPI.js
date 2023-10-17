@@ -9,22 +9,8 @@ export const checkCondidate = async (name, email) => {
   return data;
 };
 
-export const registration = async (
-  name,
-  full_name,
-  email,
-  password,
-  groupId,
-  roleId
-) => {
-  const { data } = await $host.post("api/user/registration", {
-    name,
-    full_name,
-    email,
-    password,
-    groupId,
-    roleId,
-  });
+export const registration = async (user) => {
+  const { data } = await $host.post("api/user/registration", user);
   return jwt_decode(data.token);
 };
 

@@ -10,6 +10,7 @@ const SecondStageReg = observer(() => {
   const { user } = useContext(Context);
   const [groupValue, setGroupValue] = useState(user.dataAuth.group);
   const [aboutValue, setAboutValue] = useState(user.dataAuth.about);
+  const [file, setFile] = useState(user.dataAuth.avatar);
 
   const [newData, setNewData] = useState({});
 
@@ -23,12 +24,13 @@ const SecondStageReg = observer(() => {
     setNewData({
       group: groupValue,
       about: aboutValue,
+      avatar: file,
     });
-  }, [groupValue, aboutValue]);
+  }, [groupValue, aboutValue, file]);
 
   useEffect(() => {
     user.setDataAuth({ ...user.dataAuth, ...newData });
-  }, [groupValue, aboutValue, newData]);
+  }, [newData]);
 
   const changeSelect = (e) => {
     setGroupValue(e.target.value);
@@ -36,6 +38,11 @@ const SecondStageReg = observer(() => {
 
   const changeArea = (e) => {
     setAboutValue(e.target.value);
+  };
+
+  const selectFile = (e) => {
+    setFile(e.target.files[0]);
+    console.log(user.dataAuth);
   };
 
   useEffect(() => {
@@ -100,10 +107,17 @@ const SecondStageReg = observer(() => {
               </option>
             </select>
           </label>
-          <label className={style.second__item}>
+          <div className={style.second__item}>
             <h2 className={style.second__itemTitle}>Аватар</h2>
-            <button className={style.second__itemBtn}>Загрузить</button>
-          </label>
+            <label className={style.second__itemBtn}>
+              {file ? file.name : "Загрузить"}
+              <input
+                onChange={selectFile}
+                type="file"
+                style={{ display: "none" }}
+              />
+            </label>
+          </div>
         </div>
         <div className={style.second__row}>
           <label>

@@ -51,6 +51,7 @@ export default class UserStore {
       passwordConfirm: "",
       group: "Выберите группу",
       about: "",
+      avatar: null,
     };
     this._codeAuth = 0;
     this._menuAuth = [

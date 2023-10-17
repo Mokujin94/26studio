@@ -14,22 +14,30 @@ import ModalError from "../../components/modalError/ModalError";
 
 const Registation = observer(() => {
   const [stages, setStages] = useState(1);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
   const nodeRef = useRef(null);
 
   return (
     <div className="registration">
-      {/* <CSSTransition
-        nodeRef={nodeRef}
-        in={stages < 3}
-        timeout={300}
-        classNames="buttonBye"
+      <CSSTransition
+        in={errorModal}
+        timeout={0}
+        classNames="node"
         unmountOnExit
-      > */}
-      <ModalError />
-      {/* </CSSTransition> */}
+      >
+        <div className="registration__errors">
+          <ModalError error={errorMessage} setErrorModal={setErrorModal} />
+        </div>
+      </CSSTransition>
       <div className="registration__wrapper">
         <div className="registration__stages">
-          <RegistrationStages stages={stages} setStages={setStages} />
+          <RegistrationStages
+            stages={stages}
+            setStages={setStages}
+            setErrorMessage={setErrorMessage}
+            setErrorModal={setErrorModal}
+          />
         </div>
         <SwitchTransition mode="out-in">
           <CSSTransition key={stages} timeout={300} classNames="node">
@@ -39,7 +47,11 @@ const Registation = observer(() => {
               ) : stages === 2 ? (
                 <SecondStageReg setStages={setStages} />
               ) : stages === 3 ? (
-                <ThirdStageReg stages={stages} />
+                <ThirdStageReg
+                  stages={stages}
+                  setErrorMessage={setErrorMessage}
+                  setErrorModal={setErrorModal}
+                />
               ) : null}
             </div>
           </CSSTransition>
@@ -52,7 +64,12 @@ const Registation = observer(() => {
           unmountOnExit
         >
           <div ref={nodeRef} className="registration__bottom">
-            <RegistrationButton stages={stages} setStages={setStages}>
+            <RegistrationButton
+              stages={stages}
+              setStages={setStages}
+              setErrorMessage={setErrorMessage}
+              setErrorModal={setErrorModal}
+            >
               Далее
             </RegistrationButton>
             <div className="registration__bottom-sign">
