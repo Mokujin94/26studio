@@ -11,6 +11,7 @@ export const checkCondidate = async (name, email) => {
 
 export const registration = async (user) => {
   const { data } = await $host.post("api/user/registration", user);
+  localStorage.setItem('token', data.token)
   return jwt_decode(data.token);
 };
 
@@ -19,21 +20,25 @@ export const login = async (
   full_name,
   email,
   password,
+  avatar,
   groupId,
   roleId
 ) => {
-  const { data } = await $host.post("api/user/registration", {
+  const { data } = await $host.post("api/user/login", {
     name,
     full_name,
     email,
     password,
+    avatar,
     groupId,
     roleId,
   });
+  localStorage.setItem('token', data.token)
   return jwt_decode(data.token);
 };
 
 export const check = async () => {
-  const response = await $host.post("api/auth/registration");
-  return response;
+  const {data} = await $authHost.get("api/user/auth");
+  localStorage.setItem('token', data.token)
+  return jwt_decode(data.token);
 };

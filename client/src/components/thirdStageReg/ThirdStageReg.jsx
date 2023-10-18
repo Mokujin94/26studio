@@ -1,10 +1,12 @@
 import React, { createRef, useContext, useEffect, useState } from "react";
 import confetti from "canvas-confetti";
 import style from "./thirdStageReg.module.scss";
-import RegistrationButton from "../registrationButton/RegistrationButton";
+import './animThirdStage.scss';
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { registration } from "../../http/userAPI";
+import MainButton from "../mainButton/MainButton";
+import { CSSTransition } from "react-transition-group";
 
 const ThirdStageReg = observer(
   ({
@@ -23,12 +25,13 @@ const ThirdStageReg = observer(
     const [number6, setNumber6] = useState("");
 
     const [code, setCode] = useState("");
+    const [successReg, setSuccessReg] = useState(false);
 
-    const endConfetti = Date.now() + 15 * 1000;
+    const endConfetti = Date.now() + 15 * 200;
 
     const colorsConfetti = ["#bb0000", "#ffffff"];
 
-    function frame() {
+    function congrats() {
       confetti({
         particleCount: 2,
         angle: 60,
@@ -45,8 +48,8 @@ const ThirdStageReg = observer(
       });
 
       if (Date.now() < endConfetti) {
-        requestAnimationFrame(frame);
-      }
+        requestAnimationFrame(congrats);
+      } 
     }
 
     useEffect(() => {
@@ -69,10 +72,13 @@ const ThirdStageReg = observer(
       formData.append("avatar", user.dataAuth.avatar);
       formData.append("groupId", Number(user.dataAuth.group));
       const response = await registration(formData)
-        .then(() => {
-          frame();
+        .then((data) => {
+          congrats();
           setCompleteModal(true);
           setCompleteMessage("Вы успешно зарегистрировались");
+          setSuccessReg(true);
+          user.setUser(data);
+          user.setAuth(true);
         })
         .catch();
       return response;
@@ -240,6 +246,16 @@ const ThirdStageReg = observer(
               }
             />
           </div>
+          <CSSTransition
+            in={successReg}
+            timeout={300}
+            classNames="button"
+            unmountOnExit
+          >
+            <div className={style.third__activeAcc}>
+              <MainButton title={'Войти в аккаунт'} path="/projects"/>
+            </div>
+          </CSSTransition>
         </div>
       </div>
     );

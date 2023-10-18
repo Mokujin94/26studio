@@ -32,9 +32,9 @@ const BurgerMenu = observer(() => {
           <img src={close} alt="icon" className={style.closeIcon} />
         </div>
         <div className={style.avatarBlock}>
-          <img src={avatar} alt="img" className={style.avatar} />
+          <img src={process.env.REACT_APP_API_URL + user.user.avatar} alt="img" className={style.avatar} />
         </div>
-        {user.isAuth && <h2 className={style.name}>Mokujin</h2>}
+        {user.isAuth && <h2 className={style.name}>{user.user.name}</h2>}
         {user.isAuth ? (
           <MainButton path={PROFILE_ROUTE} title={'Перейти в профиль'} onClick={() => burgerTrigger()} />
         ) : (

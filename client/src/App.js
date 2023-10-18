@@ -13,9 +13,18 @@ import { Context } from ".";
 import Footer from "./components/footer/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { AuthProvider } from "./store/AuthStore";
+import { check } from "./http/userAPI";
+
 
 const App = observer(() => {
   const { user } = useContext(Context);
+
+  useEffect(() => {
+    check().then(data => {
+      user.setUser(data)
+      user.setAuth(true);
+    })
+  }, [])
 
   return (
     <div className="App">
