@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import GroupCard from '../../components/groupCard/GroupCard';
 import { Context } from '../../index';
 import SpSelect from '../../components/spSelect/SpSelect';
 import SpSelectMobile from '../../components/spSelectMobile/SpSelectMobile';
+import { fetchGroups } from '../../http/groupsAPI';
+import { observer } from 'mobx-react-lite';
 
-function Groups() {
+const Groups = observer(() => {
+  const { groups } = useContext(Context);
+
+  useEffect(() => {
+    fetchGroups().then((data) => {
+      groups.setGroups(data.rows);
+    });
+  }, []);
+
   return (
     <div className="container">
       <div className="groups">
@@ -18,18 +28,13 @@ function Groups() {
           </div>
         </div>
         <div className="groups__wrapper">
-          <GroupCard />
-          <GroupCard />
-          <GroupCard />
-          <GroupCard />
-          <GroupCard />
-          <GroupCard />
-          <GroupCard />
-          <GroupCard />
+          {groups.groups.map((item) => (
+            <GroupCard group={item} key={item.id} />
+          ))}
         </div>
       </div>
     </div>
   );
-}
+});
 
 export default Groups;
