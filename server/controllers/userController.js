@@ -101,8 +101,8 @@ class UserController {
   }
 
   async login(req, res, next) {
-    const { name, email, password } = req.body;
-    const user = await User.findOne({ where: { email, name } });
+    const { email, password } = req.body;
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return next(ApiError.internal("Пользователь с такой почтой не найден"));
     }
@@ -110,7 +110,16 @@ class UserController {
     if (!comparePassword) {
       return next(ApiError.internal("Неверная почта или пароль"));
     }
-    const token = generateJwt(user.id, user.name, user.email, user.roleId);
+    const token = generateJwt(
+      user.id,
+      user.name,
+      user.full_name,
+      user.email,
+      user.description,
+      user.avatar,
+      user.groupId,
+      user.roleId
+    );
     return res.json({ token });
   }
 
