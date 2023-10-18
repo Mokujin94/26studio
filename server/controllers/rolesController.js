@@ -1,6 +1,6 @@
-const ApiError = require("../error/ApiError");
-require("dotenv").config();
-const { Role } = require("../models/models");
+const ApiError = require('../error/ApiError');
+require('dotenv').config();
+const { Role } = require('../models/models');
 
 class RolesController {
   async create(req, res, next) {
