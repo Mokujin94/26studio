@@ -1,4 +1,4 @@
-@import "../../resource/styles/variables";
+@import '../../resource/styles/variables';
 
 :root {
   --transform: 2000px;
@@ -61,7 +61,6 @@
   &__top-wrapper {
     display: flex;
     margin-bottom: 100px;
-    align-items: end;
   }
 
   &__face {
@@ -128,12 +127,14 @@
   &__info {
     max-width: 730px;
     width: 100%;
+    height: auto;
     display: flex;
     flex-direction: column;
   }
   &__name {
     display: flex;
     align-items: center;
+    margin-top: 50px;
   }
 
   &__nickname {
@@ -152,7 +153,7 @@
     font-weight: 100;
     font-size: 20px;
     color: $studio-white-text;
-    margin-bottom: 48px;
+    margin-bottom: auto;
   }
 
   &__full-name {
@@ -164,6 +165,7 @@
     font-size: 20px;
     text-align: justify;
     color: $studio-white-text;
+    min-height: 170px;
   }
 
   &__content {

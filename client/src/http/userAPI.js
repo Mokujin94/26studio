@@ -1,8 +1,8 @@
-import { $authHost, $host } from "./index";
-import jwt_decode from "jwt-decode";
+import { $authHost, $host } from './index';
+import jwt_decode from 'jwt-decode';
 
 export const checkCondidate = async (name, email) => {
-  const { data } = await $host.post("api/user/registration/condidate", {
+  const { data } = await $host.post('api/user/registration/condidate', {
     name,
     email,
   });
@@ -10,35 +10,28 @@ export const checkCondidate = async (name, email) => {
 };
 
 export const registration = async (user) => {
-  const { data } = await $host.post("api/user/registration", user);
-  localStorage.setItem('token', data.token)
+  const { data } = await $host.post('api/user/registration', user);
+  localStorage.setItem('token', data.token);
   return jwt_decode(data.token);
 };
 
-export const login = async (
-  name,
-  full_name,
-  email,
-  password,
-  avatar,
-  groupId,
-  roleId
-) => {
-  const { data } = await $host.post("api/user/login", {
+export const login = async (name, full_name, email, password, description, avatar, groupId, roleId) => {
+  const { data } = await $host.post('api/user/login', {
     name,
     full_name,
     email,
     password,
+    description,
     avatar,
     groupId,
     roleId,
   });
-  localStorage.setItem('token', data.token)
+  localStorage.setItem('token', data.token);
   return jwt_decode(data.token);
 };
 
 export const check = async () => {
-  const {data} = await $authHost.get("api/user/auth");
-  localStorage.setItem('token', data.token)
+  const { data } = await $authHost.get('api/user/auth');
+  localStorage.setItem('token', data.token);
   return jwt_decode(data.token);
 };
