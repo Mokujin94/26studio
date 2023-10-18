@@ -20,11 +20,15 @@ import { Context } from "../..";
 
 const BurgerMenu = observer(() => {
   const { user } = useContext(Context);
-  console.log(user.isAuth);
   const burgerTrigger = () => {
     user.setBurgerActive(!user.burgerActive);
   };
 
+  const logout = () => {
+    user.setUser({});
+    user.setAuth(false);
+    localStorage.removeItem("token");
+  };
   return (
     <>
       <div className={user.burgerActive ? style.burgerActive : style.burger}>
@@ -101,6 +105,11 @@ const BurgerMenu = observer(() => {
                 );
               })}
         </ul>
+        {user.isAuth && (
+          <button className={style.logout} onClick={logout}>
+            Выйти
+          </button>
+        )}
       </div>
       <div
         className={
