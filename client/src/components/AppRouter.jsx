@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { authRoutes, publicRoutes } from "../routes";
 import { Context } from "..";
+import { observer } from "mobx-react-lite";
 
-function AppRouter({ profileSelected, setProfileSelected }) {
+const AppRouter = observer(() => {
   const { user } = useContext(Context);
 
   return (
@@ -18,6 +19,6 @@ function AppRouter({ profileSelected, setProfileSelected }) {
       <Route path="*" element={<Navigate to="/news" replace />} />
     </Routes>
   );
-}
+});
 
 export default AppRouter;

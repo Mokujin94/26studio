@@ -106,7 +106,10 @@ class UserController {
     const token = generateJwt(
       req.user.id,
       req.user.name,
+      req.user.full_name,
       req.user.email,
+      req.user.avatar,
+      req.user.groupId,
       req.user.roleId
     );
     return res.json({ token });
