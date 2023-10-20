@@ -1,50 +1,55 @@
 @import "../../resource/styles/variables";
 
-.filter {
-  max-width: 390px;
-  width: 100%;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
+.block {
+  position: relative;
+  z-index: 1;
   background-color: $studio-dark-element;
-  border-radius: 5px;
-  overflow: hidden;
-  &__inner {
-    margin-top: 15px;
-  }
-
-  &__item {
-    width: 100%;
-    height: 40px;
-    padding-left: 30px;
-    color: $studio-white-text;
-
-    font-size: 18px;
-    line-height: 22px;
-    letter-spacing: 0.2em;
-
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-
-    transition: $studio-transition-01;
-    &:hover {
-      @include studio-mixin-dark-element-hover;
+  &__arrow {
+    position: absolute;
+    z-index: 0;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    path {
+      stroke: $studio-white-element;
     }
-  }
-
-  &__selected {
-    @include studio-mixin-dark-element-active;
   }
 }
 
-.title {
-  margin: 15px 0 0 30px;
-
+.filter {
+  position: relative;
+  z-index: 1;
+  appearance: none;
+  outline: none;
+  border: none;
+  border-radius: 5px;
   color: $studio-white-text;
+  font-size: 18px;
+  padding: 24px 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  &:active {
+    outline: none;
+    border: none;
+  }
 
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 29px;
-  letter-spacing: 0.2em;
+  &:focus {
+    outline: none;
+    border: none;
+  }
+  &__item {
+    width: 100%;
+    background-color: $studio-dark-element;
+    &:active {
+      outline: none;
+      border: none;
+    }
+  
+    &:focus {
+      outline: none;
+      border: none;
+    }
+  }
 }

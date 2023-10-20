@@ -472,8 +472,12 @@ function Projects() {
           </Slider>
         </div>
         <div className="projects__searchSettings">
-          <ProjectsSearch />
-          <ProjectFilter/>
+          <div className="projects__searchSettings-search">
+            <ProjectsSearch />
+          </div>
+          <div className="projects__searchSettings-filter">
+            <ProjectFilter/>
+          </div>
         </div>
         <div className="projects__wrapper">{isLoaded ? newSkeletonList : projectCollection}</div>
       </div>
