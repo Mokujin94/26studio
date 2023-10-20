@@ -27,6 +27,12 @@
       @include studio-mixin-white-element-active;
     }
   }
+  &__errors {
+    position: absolute;
+    right: 100px;
+    top: 50px;
+    z-index: 99;
+  }
   &__title {
     font-weight: 500;
     font-size: 24px;

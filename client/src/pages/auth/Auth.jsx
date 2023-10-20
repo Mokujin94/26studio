@@ -6,22 +6,46 @@ import FunctionButton from "../../components/functionButton/FunctionButton";
 import { Context } from "../..";
 import { login } from "../../http/userAPI";
 import { NEWS_ROUTE } from "../../utils/consts";
+import Spinner from "../../components/spinner/Spinner";
+import ModalError from "../../components/modalError/ModalError";
+import { CSSTransition } from "react-transition-group";
 
 function Auth() {
   const { user } = useContext(Context);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorModal, setErrorModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const onLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await login(email, password).then((data) => {
+      setLoading(false);
       user.setUser(data);
       user.setAuth(true);
       navigate(NEWS_ROUTE);
+    }).catch((err) => {
+      setLoading(false);
+      setErrorModal(true);
+      setErrorMessage(err.response.data.message)
+      // setErrorMessage(err)
     });
   };
   return (
     <div className="auth">
+      <CSSTransition
+        in={errorModal}
+        timeout={0}
+        classNames="node"
+        unmountOnExit
+      >
+        <div className="auth__errors">
+          <ModalError error={errorMessage} setErrorModal={setErrorModal} />
+        </div>
+      </CSSTransition>
       <Link to="/news" className="auth__back-page">
         <svg
           width="25"
@@ -59,7 +83,7 @@ function Auth() {
         <Link to="/" className="auth__forget">
           Забыли пароль?
         </Link>
-        <FunctionButton onClick={onLogin}>Войти</FunctionButton>
+        <FunctionButton onClick={onLogin}>{loading ? <Spinner /> : 'Войти'}</FunctionButton>
         <div className="auth__notAuth">
           <p className="auth__notAuthText">Нет аккаунта?</p>
           <Link to="/registration" className="auth__notAuthLink">
