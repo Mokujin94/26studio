@@ -4,7 +4,7 @@ import RegistrationStages from "../../components/registrationStages/Registration
 import FirstStageReg from "../../components/firstStageReg/FirstStageReg";
 import SecondStageReg from "../../components/secondStageReg/SecondStageReg";
 import ThirdStageReg from "../../components/thirdStageReg/ThirdStageReg";
-import RegistrationButton from "../../components/registrationButton/RegistrationButton";
+import PrimaryButton from "../../components/primaryButton/PrimaryButton";
 
 import "./registration.scss";
 
@@ -98,18 +98,11 @@ const Registation = observer(() => {
           unmountOnExit
         >
           <div ref={nodeRef} className="registration__bottom">
-            <RegistrationButton
-              stages={stages}
-              setStages={setStages}
-              setErrorMessage={setErrorMessage}
-              setErrorModal={setErrorModal}
-            >
+            <RegistrationButton stages={stages} setStages={setStages}>
               Далее
-            </RegistrationButton>
+            </PrimaryButton>
             <div className="registration__bottom-sign">
-              <p className="registration__bottom-sign-text">
-                Уже есть аккаунт?
-              </p>
+              <p className="registration__bottom-sign-text">Уже есть аккаунт?</p>
               <Link to="/login" className="registration__bottom-sign-link">
                 Войти
               </Link>

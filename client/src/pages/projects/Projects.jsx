@@ -13,6 +13,7 @@ import ProjectSkeleton from "../../components/ProjectSkeleton";
 import SliderButton from "../../components/sliderButton/SliderButton";
 import { Link } from "react-router-dom";
 import { PROJECTS_ROUTE, PROJECT_ROUTE } from "../../utils/consts";
+import ProjectsSearch from "../../components/projectsSearch/ProjectsSearch";
 
 function Projects() {
   const stylePrevArrow = { transform: "rotate(180deg)" };
@@ -475,11 +476,15 @@ function Projects() {
             {/* {newLastAddedSkeletonList} */}
           </Slider>
         </div>
-        <ProjectTags />
-        <div className="projects__wrapper">
-          <ProjectFilter />
-          {isLoaded ? newSkeletonList : projectCollection}
+        <div className="projects__searchSettings">
+          <div className="projects__searchSettings-search">
+            <ProjectsSearch />
+          </div>
+          <div className="projects__searchSettings-filter">
+            <ProjectFilter/>
+          </div>
         </div>
+        <div className="projects__wrapper">{isLoaded ? newSkeletonList : projectCollection}</div>
       </div>
     </div>
   );

@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import style from "./firstStageReg.module.scss";
+import style from './firstStageReg.module.scss';
 
-import eye from "../../resource/graphics/icons/registration/regEye.svg";
-import RegistrationButton from "../registrationButton/RegistrationButton";
-import { Context } from "../..";
-import { observer } from "mobx-react-lite";
-import { checkCondidate } from "../../http/userAPI";
+import eye from '../../resource/graphics/icons/registration/regEye.svg';
+import RegistrationButton from '../primaryButton/PrimaryButton';
+import { Context } from '../..';
+import { observer } from 'mobx-react-lite';
+import { checkCondidate } from '../../http/userAPI';
 const FirstStageReg = observer(({ stages }) => {
   const { user } = useContext(Context);
 
@@ -15,9 +15,7 @@ const FirstStageReg = observer(({ stages }) => {
   const [valueFullName, setValueFullName] = useState(user.dataAuth.fullName);
   const [valueMail, setValueMail] = useState(user.dataAuth.email);
   const [valuePassword, setValuePassword] = useState(user.dataAuth.password);
-  const [valuePasswordConfirm, setValuePasswordConfirm] = useState(
-    user.dataAuth.passwordConfirm
-  );
+  const [valuePasswordConfirm, setValuePasswordConfirm] = useState(user.dataAuth.passwordConfirm);
 
   const [newData, setNewData] = useState({});
 
@@ -35,7 +33,35 @@ const FirstStageReg = observer(({ stages }) => {
       password: valuePassword,
       passwordConfirm: valuePasswordConfirm,
     });
+  }, [valueName, valueFullName, valueMail, valuePassword, valuePasswordConfirm]);
+
+  useEffect(() => {
+    user.setDataAuth({ ...user.dataAuth, ...newData });
+  }, [valueName, valueFullName, valueMail, valuePassword, valuePasswordConfirm, newData]);
+
+  useEffect(() => {
+    if (
+      nameError ||
+      fullNameError ||
+      mailError ||
+      passwordError ||
+      passwordConfirmError ||
+      !valueName ||
+      !valueFullName ||
+      !valueMail ||
+      !valuePassword ||
+      !valuePasswordConfirm
+    ) {
+      user.setErrorAuth(true);
+    } else {
+      user.setErrorAuth(false);
+    }
   }, [
+    nameError,
+    fullNameError,
+    mailError,
+    passwordError,
+    passwordConfirmError,
     valueName,
     valueFullName,
     valueMail,
@@ -43,23 +69,19 @@ const FirstStageReg = observer(({ stages }) => {
     valuePasswordConfirm,
   ]);
 
-  useEffect(() => {
-    user.setDataAuth({ ...user.dataAuth, ...newData });
-  }, [newData]);
-
   const validationName = (e) => {
     setValueName(e.target.value);
-    let match = /^[a-z]*$/i.test(e.target.value.replaceAll(" ", ""));
+    let match = /^[a-z]*$/i.test(e.target.value.replaceAll(' ', ''));
     if (e.target.value.length < 4) {
       const newError = {
         id: 0,
-        errors: [{ id: 0, name: "Никнейм должен содержать минимум 4 символа" }],
+        errors: [{ id: 0, name: 'Никнейм должен содержать минимум 4 символа' }],
       };
       user.setErrorAuth(newError);
     } else if (!match) {
       const newError = {
         id: 0,
-        errors: [{ id: 0, name: "Никнейм должен содержать латинские буквы" }],
+        errors: [{ id: 0, name: 'Никнейм должен содержать латинские буквы' }],
       };
       user.setErrorAuth(newError);
     } else {
@@ -73,28 +95,23 @@ const FirstStageReg = observer(({ stages }) => {
 
   const validationFullName = (e) => {
     setValueFullName(e.target.value);
-    let match = /^[а-яё]*$/i.test(e.target.value.replaceAll(" ", ""));
-    let secondSpace = e.target.value.indexOf(
-      " ",
-      1 + e.target.value.indexOf(" ")
-    );
+    let match = /^[а-яё]*$/i.test(e.target.value.replaceAll(' ', ''));
+    let secondSpace = e.target.value.indexOf(' ', 1 + e.target.value.indexOf(' '));
     let firstWord = e.target.value.slice(
       0,
-      e.target.value.indexOf(" ") === -1
-        ? e.target.value.length
-        : e.target.value.indexOf(" ") + 1
+      e.target.value.indexOf(' ') === -1 ? e.target.value.length : e.target.value.indexOf(' ') + 1
     );
-    let checkSpaceFristWord = firstWord.indexOf(" ");
+    let checkSpaceFristWord = firstWord.indexOf(' ');
     let secondWord = e.target.value.slice(
       firstWord.length,
       secondSpace === -1 ? e.target.value.length : secondSpace + 1
     );
-    let checkSpaceSecondWord = secondWord.indexOf(" ");
+    let checkSpaceSecondWord = secondWord.indexOf(' ');
     let thirdWord = e.target.value.slice(
       secondSpace === -1 ? e.target.value.length + 1 : secondSpace + 1,
       e.target.value.length
     );
-    let checkSpaceThirdWord = thirdWord.indexOf(" ");
+    let checkSpaceThirdWord = thirdWord.indexOf(' ');
     if (
       checkSpaceFristWord === 0 ||
       checkSpaceSecondWord === 0 ||
@@ -107,7 +124,7 @@ const FirstStageReg = observer(({ stages }) => {
         errors: [
           {
             id: 1,
-            name: "ФИО не должно содержать пробелы в начале или в конце",
+            name: 'ФИО не должно содержать пробелы в начале или в конце',
           },
         ],
       };
@@ -120,7 +137,7 @@ const FirstStageReg = observer(({ stages }) => {
         errors: [
           {
             id: 1,
-            name: "Фамилия и имя обязательны для заполнения (киррилица)",
+            name: 'Фамилия и имя обязательны для заполнения (киррилица)',
           },
         ],
       };
@@ -131,7 +148,7 @@ const FirstStageReg = observer(({ stages }) => {
         errors: [
           {
             id: 1,
-            name: "Некорректное ФИО",
+            name: 'Некорректное ФИО',
           },
         ],
       };
@@ -147,38 +164,26 @@ const FirstStageReg = observer(({ stages }) => {
 
   const validationMail = (e) => {
     setValueMail(e.target.value);
-    let checkMail = e.target.value.indexOf("@");
-    let beforeMailWord = e.target.value.slice(
-      0,
-      checkMail !== -1 ? checkMail : e.target.value.length
-    );
-    let afterMail = e.target.value.slice(
-      beforeMailWord.length + 1,
-      e.target.value.length
-    );
+    let checkMail = e.target.value.indexOf('@');
+    let beforeMailWord = e.target.value.slice(0, checkMail !== -1 ? checkMail : e.target.value.length);
+    let afterMail = e.target.value.slice(beforeMailWord.length + 1, e.target.value.length);
 
     let afterMailWord = e.target.value.slice(
       checkMail !== -1 ? checkMail + 1 : e.target.value.length + 1,
       e.target.value.length
     );
-    let checkDot = afterMailWord.indexOf(".");
+    let checkDot = afterMailWord.indexOf('.');
     let afterDot = afterMailWord.slice(
       checkDot !== -1 ? checkDot + 1 : e.target.value.length + 1,
       e.target.value.length
     );
-    if (
-      !checkMail ||
-      !beforeMailWord ||
-      !afterMailWord ||
-      !checkDot ||
-      afterDot.length < 2
-    ) {
+    if (!checkMail || !beforeMailWord || !afterMailWord || !checkDot || afterDot.length < 2) {
       const newError = {
         id: 2,
         errors: [
           {
             id: 1,
-            name: "Не корректная почта",
+            name: 'Не корректная почта',
           },
         ],
       };
@@ -200,7 +205,7 @@ const FirstStageReg = observer(({ stages }) => {
         errors: [
           {
             id: 1,
-            name: "Длина пароля не менее 6 символов",
+            name: 'Длина пароля не менее 6 символов',
           },
         ],
       };
@@ -222,7 +227,7 @@ const FirstStageReg = observer(({ stages }) => {
         errors: [
           {
             id: 1,
-            name: "Пароли не совпадают",
+            name: 'Пароли не совпадают',
           },
         ],
       };
@@ -250,14 +255,12 @@ const FirstStageReg = observer(({ stages }) => {
                 className={style.first__itemInput}
                 style={
                   user.errorAuth[0].errors.length && user.dataAuth.name
-                    ? { border: "2px solid rgb(255, 149, 149)" }
+                    ? { border: '2px solid rgb(255, 149, 149)' }
                     : null
                 }
               />
               <p className={style.error_message}>
-                {user.errorAuth[0].errors.length && user.dataAuth.name
-                  ? user.errorAuth[0].errors[0].name
-                  : null}
+                {user.errorAuth[0].errors.length && user.dataAuth.name ? user.errorAuth[0].errors[0].name : null}
               </p>
             </label>
             <label className={style.first__item}>
@@ -269,14 +272,12 @@ const FirstStageReg = observer(({ stages }) => {
                 className={style.first__itemInput}
                 style={
                   user.errorAuth[1].errors.length && user.dataAuth.fullName
-                    ? { border: "2px solid rgb(255, 149, 149)" }
+                    ? { border: '2px solid rgb(255, 149, 149)' }
                     : null
                 }
               />
               <p className={style.error_message}>
-                {user.errorAuth[1].errors.length && user.dataAuth.fullName
-                  ? user.errorAuth[1].errors[0].name
-                  : null}
+                {user.errorAuth[1].errors.length && user.dataAuth.fullName ? user.errorAuth[1].errors[0].name : null}
               </p>
             </label>
           </div>
@@ -289,14 +290,12 @@ const FirstStageReg = observer(({ stages }) => {
               className={style.first__itemInput}
               style={
                 user.errorAuth[2].errors.length && user.dataAuth.email
-                  ? { border: "2px solid rgb(255, 149, 149)" }
+                  ? { border: '2px solid rgb(255, 149, 149)' }
                   : null
               }
             />
             <p className={style.error_message}>
-              {user.errorAuth[2].errors.length && user.dataAuth.email
-                ? user.errorAuth[2].errors[0].name
-                : null}
+              {user.errorAuth[2].errors.length && user.dataAuth.email ? user.errorAuth[2].errors[0].name : null}
             </p>
           </label>
           <div className={style.first__row}>
@@ -311,7 +310,7 @@ const FirstStageReg = observer(({ stages }) => {
                     className={`${style.first__itemInput} ${style.first__itemInputPass}`}
                     style={
                       user.errorAuth[3].errors.length && user.dataAuth.password
-                        ? { border: "2px solid rgb(255, 149, 149)" }
+                        ? { border: '2px solid rgb(255, 149, 149)' }
                         : null
                     }
                   />
@@ -319,36 +318,21 @@ const FirstStageReg = observer(({ stages }) => {
                 </div>
 
                 <p className={style.error_message}>
-                  {user.errorAuth[3].errors.length && user.dataAuth.password
-                    ? user.errorAuth[3].errors[0].name
-                    : null}
+                  {user.errorAuth[3].errors.length && user.dataAuth.password ? user.errorAuth[3].errors[0].name : null}
                 </p>
               </div>
             </label>
             <label className={style.first__item}>
               <h3 className={style.first__itemTitle}>Повтор пароля</h3>
               <div className={style.first__itemBottom}>
-                <div className={style.first__itemWrapper}>
-                  <input
-                    value={valuePasswordConfirm}
-                    onChange={validationPasswordConfirm}
-                    type="password"
-                    className={`${style.first__itemInput} ${style.first__itemInputPass}`}
-                    style={
-                      user.errorAuth[4].errors.length &&
-                      user.dataAuth.passwordConfirm
-                        ? { border: "2px solid rgb(255, 149, 149)" }
-                        : null
-                    }
-                  />
-                  <img src={eye} alt="" />
-                </div>
-                <p className={style.error_message}>
-                  {user.errorAuth[4].errors.length &&
-                  user.dataAuth.passwordConfirm
-                    ? user.errorAuth[4].errors[0].name
-                    : null}
-                </p>
+                <input
+                  value={valuePasswordConfirm}
+                  onChange={validationPasswordConfirm}
+                  type="password"
+                  className={`${style.first__itemInput} ${style.first__itemInputPass}`}
+                  style={passwordConfirmError ? { border: '2px solid red' } : null}
+                />
+                <img src={eye} alt="" />
               </div>
             </label>
           </div>

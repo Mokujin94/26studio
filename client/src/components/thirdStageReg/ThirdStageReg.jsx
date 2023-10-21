@@ -51,24 +51,8 @@ const ThirdStageReg = observer(({ setErrorMessage, setErrorModal, setCompleteMod
   }, [number1, number2, number3, number4, number5, number6]);
 
   const registrationAccept = async () => {
-    const formData = new FormData();
-    formData.append('name', user.dataAuth.name);
-    formData.append('full_name', user.dataAuth.fullName);
-    formData.append('email', user.dataAuth.email);
-    formData.append('password', user.dataAuth.password);
-    formData.append('description', user.dataAuth.about);
-    formData.append('avatar', user.dataAuth.avatar);
-    formData.append('groupId', Number(user.dataAuth.group));
-    const response = await registration(formData)
-      .then((data) => {
-        congrats();
-        setCompleteModal(true);
-        setCompleteMessage('Вы успешно зарегистрировались');
-        setSuccessReg(true);
-        user.setUser(data);
-        user.setAuth(true);
-      })
-      .catch();
+    const response = await registration(user.dataAuth.name, user.dataAuth.email, user.dataAuth.password);
+    console.log(response);
     return response;
   };
 
@@ -145,9 +129,7 @@ const ThirdStageReg = observer(({ setErrorMessage, setErrorModal, setCompleteMod
 
   return (
     <div className={style.third}>
-      {/* <h3 className={style.third__title}>
-          Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!
-        </h3> */}
+      <h3 className={style.third__title}>Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!</h3>
       <div className={style.third__inner}>
         <span className={style.third__text}>Код с почты</span>
         <div className={style.third__inputBox}>
