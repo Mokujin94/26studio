@@ -43,7 +43,7 @@ const FirstStageReg = observer(({ stages }) => {
     if (
       nameError ||
       fullNameError ||
-      mailError ||
+      emailError ||
       passwordError ||
       passwordConfirmError ||
       !valueName ||
@@ -59,7 +59,7 @@ const FirstStageReg = observer(({ stages }) => {
   }, [
     nameError,
     fullNameError,
-    mailError,
+    emailError,
     passwordError,
     passwordConfirmError,
     valueName,
