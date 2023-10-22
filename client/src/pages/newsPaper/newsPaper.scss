@@ -1,9 +1,14 @@
-@import "../../resource/styles/variables";
+@import '../../resource/styles/variables';
 
 .news-paper {
   margin-top: 155px;
   margin-bottom: 50px;
-  &__header {
+  &__title {
+    font-weight: 400;
+    font-size: 40px;
+    color: $studio-white-text;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     margin-bottom: 25px;
   }
   &__content {

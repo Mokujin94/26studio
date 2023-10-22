@@ -1,14 +1,13 @@
-import React from 'react'
+import React from 'react';
 
-import style from './newsPaperContent.module.scss'
-import photo from '../../resource/graphics/images/profile/avatar.jpg'
+import style from './newsPaperContent.module.scss';
 
-function NewsPaperContent() {
+function NewsPaperContent({ img }) {
   return (
     <div className={style.block}>
-        <img className={style.block__img} src={photo} alt="" />
+      <img className={style.block__img} src={img} alt="" />
     </div>
-  )
+  );
 }
 
-export default NewsPaperContent
+export default NewsPaperContent;
