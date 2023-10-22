@@ -24,6 +24,7 @@ function NewsPaper() {
     fetchNewsById(id).then((data) => {
       setOneNews(data);
     });
+    console.log(oneNews);
   }, []);
   return (
     <div className="container">
@@ -37,8 +38,8 @@ function NewsPaper() {
           <Description title="Описание" descr={oneNews.description} />
         </div>
         <div className="news-paper__bottom">
-          <AmountComponent img={like} value="54" />
-          <AmountComponent img={view} value="5256" />
+          <AmountComponent img={like} value={oneNews.amount_likes} />
+          <AmountComponent img={view} value={oneNews.amount_views} />
         </div>
       </div>
     </div>
