@@ -1,15 +1,15 @@
-const { News } = require("../models/models");
-const uuid = require("uuid");
-const path = require("path");
-const ApiError = require("../error/ApiError");
+const { News } = require('../models/models');
+const uuid = require('uuid');
+const path = require('path');
+const ApiError = require('../error/ApiError');
 
 class NewsController {
   async create(req, res, next) {
     try {
       const { title, description } = req.body;
       const { img } = req.files;
-      let fileName = uuid.v4() + ".jpg";
-      img.mv(path.resolve(__dirname, "..", "static/news", fileName));
+      let fileName = uuid.v4() + '.jpg';
+      img.mv(path.resolve(__dirname, '..', 'static/news', fileName));
       const news = await News.create({ title, description, img: fileName });
       return res.json(news);
     } catch (e) {

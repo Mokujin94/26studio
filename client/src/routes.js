@@ -1,13 +1,13 @@
-import Auth from "./pages/auth/Auth";
-import Profile from "./pages/profile/Profile";
-import News from "./pages/news/News";
-import Messenger from "./pages/messenger/Messenger";
-import Projects from "./pages/projects/Projects";
-import Project from "./pages/project/Project";
-import Groups from "./pages/groups/Groups";
-import Group from "./pages/group/Group";
-import Registration from "./pages/registration/Registation";
-import NewsPaper from "./pages/newsPaper/NewsPaper";
+import Auth from './pages/auth/Auth';
+import Profile from './pages/profile/Profile';
+import News from './pages/news/News';
+import Messenger from './pages/messenger/Messenger';
+import Projects from './pages/projects/Projects';
+import Project from './pages/project/Project';
+import Groups from './pages/groups/Groups';
+import Group from './pages/group/Group';
+import Registration from './pages/registration/Registation';
+import NewsPaper from './pages/newsPaper/NewsPaper';
 
 import {
   GROUPS_ROUTE,
@@ -20,13 +20,9 @@ import {
   PROJECTS_ROUTE,
   PROJECT_ROUTE,
   REGISTRATION_ROUTE,
-} from "./utils/consts";
+} from './utils/consts';
 
 export const authRoutes = [
-  {
-    path: PROFILE_ROUTE,
-    Component: <Profile />,
-  },
   {
     path: MESSENGER_ROUTE,
     Component: <Messenger />,
@@ -35,11 +31,15 @@ export const authRoutes = [
 
 export const publicRoutes = [
   {
+    path: PROFILE_ROUTE + '/:id',
+    Component: <Profile />,
+  },
+  {
     path: NEWS_ROUTE,
     Component: <News />,
   },
   {
-    path: NEWSPAPER_ROUTE + "/:id",
+    path: NEWSPAPER_ROUTE + '/:id',
     Component: <NewsPaper />,
   },
   {
@@ -47,7 +47,7 @@ export const publicRoutes = [
     Component: <Projects />,
   },
   {
-    path: PROJECTS_ROUTE + "/:id",
+    path: PROJECTS_ROUTE + '/:id',
     Component: <Project />,
   },
   {
@@ -55,7 +55,7 @@ export const publicRoutes = [
     Component: <Groups />,
   },
   {
-    path: GROUP_ROUTE + "/:id",
+    path: GROUP_ROUTE + '/:id',
     Component: <Group />,
   },
   {

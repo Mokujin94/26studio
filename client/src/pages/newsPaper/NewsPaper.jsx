@@ -15,31 +15,30 @@ import { Context } from '../..';
 import { fetchNewsById } from '../../http/newsAPI';
 
 function NewsPaper() {
-  const [oneNews, setOneNews] = useState({});
+  const [newsData, setNewsData] = useState({});
 
   const { id } = useParams();
   console.log(id);
 
   useEffect(() => {
     fetchNewsById(id).then((data) => {
-      setOneNews(data);
+      setNewsData(data);
     });
-    console.log(oneNews);
   }, []);
   return (
     <div className="container">
       <div className="news-paper">
-        <h2 className="news-paper__title">{oneNews.title}</h2>
+        <h2 className="news-paper__title">{newsData.title}</h2>
         <div className="news-paper__content">
-          <NewsPaperContent img={process.env.REACT_APP_API_URL + oneNews.img} />
+          <NewsPaperContent img={process.env.REACT_APP_API_URL + newsData.img} />
           <Comments />
         </div>
         <div className="news-paper__info">
-          <Description title="Описание" descr={oneNews.description} />
+          <Description title="Описание" descr={newsData.description} />
         </div>
         <div className="news-paper__bottom">
-          <AmountComponent img={like} value={oneNews.amount_likes} />
-          <AmountComponent img={view} value={oneNews.amount_views} />
+          <AmountComponent img={like} value={newsData.amount_likes} />
+          <AmountComponent img={view} value={newsData.amount_views} />
         </div>
       </div>
     </div>

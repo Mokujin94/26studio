@@ -16,19 +16,35 @@ import achievement from '../../resource/graphics/icons/profile/achievement.svg';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../..';
 import { fetchGroups } from '../../http/groupsAPI';
+import { fetchUserById } from '../../http/userAPI';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PROFILE_ROUTE } from '../../utils/consts';
 
 const Profile = observer(() => {
   const { profile, user, groups } = useContext(Context);
-  const [group, setGroup] = useState();
+  const [group, setGroup] = useState('');
+  const [userId, setUserId] = useState({});
+
+  const { id } = useParams();
+
+  const nav = useNavigate();
+
   useEffect(() => {
-    fetchGroups().then((data) => {
-      groups.setGroups(data.rows);
-      groups.groups.map((item) => {
-        if (user.user.groupId == item.id) {
-          setGroup(item.name);
-        }
+    fetchUserById(id)
+      .then((dataUser) => {
+        setUserId(dataUser);
+        fetchGroups().then((dataGroup) => {
+          dataGroup.rows.map((item) => {
+            if (dataUser.groupId == item.id) {
+              setGroup(item.name);
+            }
+          });
+          console.log(1);
+        });
+      })
+      .catch((err) => {
+        nav(PROFILE_ROUTE + '/2');
       });
-    });
   }, []);
 
   const [prevId, setPrevId] = useState(0);
@@ -65,12 +81,19 @@ const Profile = observer(() => {
         <div className="profile__top-wrapper">
           <div className="profile__face">
             <div className="profile__avatar">
-              <img className="profile__avatar-img" src={process.env.REACT_APP_API_URL + user.user.avatar} alt="icon" />
-              <img className="profile__avatar-add" src={addUser} alt="icon" />
+              <img
+                className="profile__avatar-img"
+                src={
+                  id == user.user.id
+                    ? process.env.REACT_APP_API_URL + user.user.avatar
+                    : process.env.REACT_APP_API_URL + userId.avatar
+                }
+                alt="icon"
+              />
             </div>
 
             <div className="profile__button">
-              <FunctionButton>Редактировать</FunctionButton>
+              <FunctionButton>{id == user.user.id ? 'Редактировать' : 'Добавить в друзья'}</FunctionButton>
             </div>
 
             <div className="profile__socials">
@@ -88,19 +111,21 @@ const Profile = observer(() => {
 
           <div className="profile__info">
             <div className="profile__name">
-              <div className="profile__nickname">{user.user.name}</div>
+              <div className="profile__nickname">{id == user.user.id ? user.user.name : userId.name}</div>
               <img className="profile__achievement" src={achievement} alt="" />
             </div>
             <div className="profile__more-info">
-              <div className="profile__full-name">{user.user.full_name}</div>
+              <div className="profile__full-name">{id == user.user.id ? user.user.full_name : userId.full_name}</div>
               <div className="profile__group">{group}</div>
             </div>
-            <div className="profile__description">{user.user.description}</div>
+            <div className="profile__description">
+              {id == user.user.id ? user.user.description : userId.description}
+            </div>
           </div>
         </div>
         <div className="profile__content">
           <div className="profile__menu-wrapper">
-            <ProfileMenu onClick={checkPrevId} />
+            <ProfileMenu id={id} onClick={checkPrevId} />
           </div>
           <TransitionGroup className="transition-group">
             {profile.wrapperItems.map((item) => {

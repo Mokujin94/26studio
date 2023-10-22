@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import ProjectCard from "../../components/projectCard/ProjectCard";
-import projectPhoto from "../../resource/graphics/images/projectCard/bg.jpg";
-import ProjectTags from "../../components/projectTags/ProjectTags";
-import ProjectFilter from "../../components/projectFilter/ProjectFilter";
-import Slider from "react-slick";
+import React, { useEffect, useState } from 'react';
+import ProjectCard from '../../components/projectCard/ProjectCard';
+import projectPhoto from '../../resource/graphics/images/projectCard/bg.jpg';
+import ProjectTags from '../../components/projectTags/ProjectTags';
+import ProjectFilter from '../../components/projectFilter/ProjectFilter';
+import Slider from 'react-slick';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import "./projects.scss";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import './projects.scss';
 
-import ProjectSkeleton from "../../components/ProjectSkeleton";
-import SliderButton from "../../components/sliderButton/SliderButton";
-import { Link } from "react-router-dom";
-import { PROJECTS_ROUTE, PROJECT_ROUTE } from "../../utils/consts";
-import ProjectsSearch from "../../components/projectsSearch/ProjectsSearch";
+import ProjectSkeleton from '../../components/ProjectSkeleton';
+import SliderButton from '../../components/sliderButton/SliderButton';
+import { Link } from 'react-router-dom';
+import { PROJECTS_ROUTE, PROJECT_ROUTE } from '../../utils/consts';
+import ProjectsSearch from '../../components/projectsSearch/ProjectsSearch';
 
 function Projects() {
-  const stylePrevArrow = { transform: "rotate(180deg)" };
+  const stylePrevArrow = { transform: 'rotate(180deg)' };
 
   const settings = {
     dots: false,
     infinite: true,
-    slidesToShow: 1,
+    slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: true,
     // speed: 2000,
@@ -52,9 +52,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -66,9 +66,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -80,9 +80,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -94,9 +94,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -108,9 +108,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -122,9 +122,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -136,9 +136,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -153,9 +153,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -167,9 +167,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -181,9 +181,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -195,9 +195,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -209,9 +209,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -223,9 +223,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -237,9 +237,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -251,9 +251,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -265,9 +265,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -279,9 +279,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -293,9 +293,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -307,9 +307,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -321,9 +321,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -335,9 +335,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -349,9 +349,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -363,9 +363,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -377,9 +377,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -391,9 +391,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -405,9 +405,9 @@ function Projects() {
       element: (
         <ProjectCard
           img={projectPhoto}
-          title={"Arkana"}
-          name={"mokujin94"}
-          date={"03.04.23"}
+          title={'Arkana'}
+          name={'mokujin94'}
+          date={'03.04.23'}
           like={22}
           view={232}
           comment={12}
@@ -416,28 +416,22 @@ function Projects() {
     },
   ];
 
-  const newSkeletonList = skeletonList.map(({ id }) => (
-    <ProjectSkeleton key={id} />
-  ));
-  const newLastAddedSkeletonList = lastAddedSkeletonList.map(({ id }) => (
-    <ProjectSkeleton key={id} />
-  ));
+  const newSkeletonList = skeletonList.map(({ id }) => <ProjectSkeleton key={id} />);
+  const newLastAddedSkeletonList = lastAddedSkeletonList.map(({ id }) => <ProjectSkeleton key={id} />);
   const [isLoaded, setIsLoaded] = useState(true);
   const [projectCollection, setProjectCollection] = useState([]);
-  const [lastAddedProjectCollection, setLastAddedProjectCollection] = useState(
-    []
-  );
+  const [lastAddedProjectCollection, setLastAddedProjectCollection] = useState([]);
   useEffect(() => {
     setTimeout(() => {
       setProjectCollection(
         projectsList.map(({ id, element }) => {
           return (
-            <Link key={id} to={PROJECTS_ROUTE + "/" + (id + 1)}>
+            <Link key={id} to={PROJECTS_ROUTE + '/' + (id + 1)}>
               <ProjectCard
                 img={projectPhoto}
-                title={"Arkana"}
-                name={"mokujin94"}
-                date={"03.04.23"}
+                title={'Arkana'}
+                name={'mokujin94'}
+                date={'03.04.23'}
                 like={22}
                 view={232}
                 comment={12}
@@ -452,9 +446,9 @@ function Projects() {
             <ProjectCard
               key={id}
               img={projectPhoto}
-              title={"Arkana"}
-              name={"mokujin94"}
-              date={"03.04.23"}
+              title={'Arkana'}
+              name={'mokujin94'}
+              date={'03.04.23'}
               like={22}
               view={232}
               comment={12}
@@ -470,7 +464,7 @@ function Projects() {
     <div className="container">
       <div className="projects">
         <h1 className="projects__title">Последние добавленные проекты</h1>
-        <div className="projects__wrapper" style={{ display: "block" }}>
+        <div className="projects__wrapper" style={{ display: 'block' }}>
           <Slider {...settings}>
             {isLoaded ? newLastAddedSkeletonList : lastAddedProjectCollection}
             {/* {newLastAddedSkeletonList} */}
@@ -481,7 +475,7 @@ function Projects() {
             <ProjectsSearch />
           </div>
           <div className="projects__searchSettings-filter">
-            <ProjectFilter/>
+            <ProjectFilter />
           </div>
         </div>
         <div className="projects__wrapper">{isLoaded ? newSkeletonList : projectCollection}</div>
