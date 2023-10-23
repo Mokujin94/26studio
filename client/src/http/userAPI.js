@@ -34,3 +34,8 @@ export const fetchUserById = async (id) => {
   const { data } = await $authHost.get('api/user/' + id);
   return data;
 };
+
+export const generateCode = async (email, code) => {
+  const { data } = await $host.post('api/user/code', {email, code});
+  return data;
+};

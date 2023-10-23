@@ -2,6 +2,7 @@ const ApiError = require('../error/ApiError');
 const uuid = require('uuid');
 const path = require('path');
 require('dotenv').config();
+const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User, Friend, UserAchivment, GettingAchivment } = require('../models/models');
@@ -27,6 +28,26 @@ class UserController {
       return next(ApiError.badRequest('Пользовательно с такой почтой существует'));
     }
     return res.json();
+  }
+  async generateCode(req, res, next) {
+    const {email, code} = req.body;
+    
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { 
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    })
+
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Код подтверждения аккаунта 26Studio",
+      text: code
+    }
+
+    transporter.sendMail(mailOptions)
   }
   async registration(req, res, next) {
     const { name, full_name, email, password, description, groupId, roleId } = req.body;

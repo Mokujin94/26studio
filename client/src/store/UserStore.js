@@ -5,6 +5,7 @@ import messeges from "../resource/graphics/icons/burgerMenu/messegesIcon.svg";
 import project from "../resource/graphics/icons/burgerMenu/projectIcon.svg";
 import group from "../resource/graphics/icons/burgerMenu/groupIcon.svg";
 import {
+  ADMIN_ROUTE,
   GROUPS_ROUTE,
   MESSENGER_ROUTE,
   NEWS_ROUTE,
@@ -58,7 +59,7 @@ export default class UserStore {
       { id: 0, title: "Новости", icon: news, path: NEWS_ROUTE },
       { id: 1, title: "Проекты", icon: project, path: PROJECTS_ROUTE },
       { id: 2, title: "Группы", icon: group, path: GROUPS_ROUTE },
-      { id: 3, title: "О нас", icon: messeges, path: GROUPS_ROUTE },
+      { id: 3, title: "Управление", icon: messeges, path: ADMIN_ROUTE },
     ];
     this._menu = [
       { id: 0, title: "Новости", icon: news, path: NEWS_ROUTE },

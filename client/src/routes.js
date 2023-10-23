@@ -8,6 +8,7 @@ import Groups from './pages/groups/Groups';
 import Group from './pages/group/Group';
 import Registration from './pages/registration/Registation';
 import NewsPaper from './pages/newsPaper/NewsPaper';
+import Admin from './pages/admin/Admin';
 
 import {
   GROUPS_ROUTE,
@@ -20,14 +21,22 @@ import {
   PROJECTS_ROUTE,
   PROJECT_ROUTE,
   REGISTRATION_ROUTE,
+  ADMIN_ROUTE
 } from './utils/consts';
+
 
 export const authRoutes = [
   {
     path: MESSENGER_ROUTE,
     Component: <Messenger />,
   },
+  {
+    path: ADMIN_ROUTE,
+    Component: <Admin />,
+  },
 ];
+
+
 
 export const publicRoutes = [
   {
