@@ -1,40 +1,59 @@
-import React, { useContext, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import RegistrationStages from '../../components/registrationStages/RegistrationStages';
-import FirstStageReg from '../../components/firstStageReg/FirstStageReg';
-import SecondStageReg from '../../components/secondStageReg/SecondStageReg';
-import ThirdStageReg from '../../components/thirdStageReg/ThirdStageReg';
-import PrimaryButton from '../../components/primaryButton/PrimaryButton';
+import React, { useContext, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import RegistrationStages from "../../components/registrationStages/RegistrationStages";
+import FirstStageReg from "../../components/firstStageReg/FirstStageReg";
+import SecondStageReg from "../../components/secondStageReg/SecondStageReg";
+import ThirdStageReg from "../../components/thirdStageReg/ThirdStageReg";
+import PrimaryButton from "../../components/primaryButton/PrimaryButton";
 
-import './registration.scss';
+import "./registration.scss";
 
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { observer } from 'mobx-react-lite';
-import ModalError from '../../components/modalError/ModalError';
-import ModalComplete from '../../components/modalComplete/ModalComplete';
+import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { observer } from "mobx-react-lite";
+import ModalError from "../../components/modalError/ModalError";
+import ModalComplete from "../../components/modalComplete/ModalComplete";
 
 const Registation = observer(() => {
   const [stages, setStages] = useState(1);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [errorModal, setErrorModal] = useState(false);
-  const [completeMessage, setCompleteMessage] = useState('');
+  const [completeMessage, setCompleteMessage] = useState("");
   const [completeModal, setCompleteModal] = useState(false);
   const nodeRef = useRef(null);
 
   return (
     <div className="registration">
-      <CSSTransition in={errorModal} timeout={0} classNames="node" unmountOnExit>
+      <CSSTransition
+        in={errorModal}
+        timeout={0}
+        classNames="node"
+        unmountOnExit
+      >
         <div className="registration__errors">
           <ModalError error={errorMessage} setErrorModal={setErrorModal} />
         </div>
       </CSSTransition>
-      <CSSTransition in={completeModal} timeout={0} classNames="node" unmountOnExit>
+      <CSSTransition
+        in={completeModal}
+        timeout={0}
+        classNames="node"
+        unmountOnExit
+      >
         <div className="registration__complete">
-          <ModalComplete completeMessage={completeMessage} setCompleteModal={setCompleteModal} />
+          <ModalComplete
+            completeMessage={completeMessage}
+            setCompleteModal={setCompleteModal}
+          />
         </div>
       </CSSTransition>
       <Link to="/news" className="registration__back-page">
-        <svg width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          width="25"
+          height="22"
+          viewBox="0 0 25 22"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -71,13 +90,26 @@ const Registation = observer(() => {
             </div>
           </CSSTransition>
         </SwitchTransition>
-        <CSSTransition nodeRef={nodeRef} in={stages < 3} timeout={300} classNames="buttonBye" unmountOnExit>
+        <CSSTransition
+          nodeRef={nodeRef}
+          in={stages < 3}
+          timeout={300}
+          classNames="buttonBye"
+          unmountOnExit
+        >
           <div ref={nodeRef} className="registration__bottom">
-            <PrimaryButton stages={stages} setStages={setStages}>
+            <PrimaryButton
+              stages={stages}
+              setStages={setStages}
+              setErrorMessage={setErrorMessage}
+              setErrorModal={setErrorModal}
+            >
               Далее
             </PrimaryButton>
             <div className="registration__bottom-sign">
-              <p className="registration__bottom-sign-text">Уже есть аккаунт?</p>
+              <p className="registration__bottom-sign-text">
+                Уже есть аккаунт?
+              </p>
               <Link to="/login" className="registration__bottom-sign-link">
                 Войти
               </Link>
