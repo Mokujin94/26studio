@@ -30,6 +30,7 @@ const Subscriber = sequelize.define('subscriber', {
 const Group = sequelize.define('group', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING },
+  members: {type: DataTypes.JSON},
   id_curator: { type: DataTypes.INTEGER },
 });
 
