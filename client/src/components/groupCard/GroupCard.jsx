@@ -9,7 +9,7 @@ function GroupCard({ group }) {
     <Link to={GROUPS_ROUTE + '/' + group.id} className={style.groupCard}>
       <span className={style.groupCard__yourGroup}>Ваша группа</span>
       <h2 className={style.groupCard__title}>{group.name}</h2>
-      <span className={style.groupCard__studentsCount}>Участников: 21</span>
+      <span className={style.groupCard__studentsCount}>Участников: {group.members.length}</span>
     </Link>
   );
 }
