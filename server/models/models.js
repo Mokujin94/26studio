@@ -1,49 +1,49 @@
-const sequelize = require('../db');
-const { DataTypes } = require('sequelize');
-const { Sequelize } = require('../db');
+const sequelize = require("../db");
+const { DataTypes } = require("sequelize");
+const { Sequelize } = require("../db");
 
 let now = new Date();
 
-const User = sequelize.define('user', {
+const User = sequelize.define("user", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true },
   full_name: { type: DataTypes.STRING },
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING },
   description: { type: DataTypes.STRING },
-  avatar: { type: DataTypes.STRING, defaultValue: 'avatar.jpg' },
+  avatar: { type: DataTypes.STRING, defaultValue: "avatar.jpg" },
   achivment_list: { type: DataTypes.JSON },
 });
 
-const Friend = sequelize.define('friend', {
+const Friend = sequelize.define("friend", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   id_sender: { type: DataTypes.INTEGER },
   id_recipient: { type: DataTypes.INTEGER },
 });
 
-const Subscriber = sequelize.define('subscriber', {
+const Subscriber = sequelize.define("subscriber", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   id_sender: { type: DataTypes.INTEGER },
   id_recipient: { type: DataTypes.INTEGER },
 });
 
-const Group = sequelize.define('group', {
+const Group = sequelize.define("group", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING },
-  members: {type: DataTypes.JSON},
+  members: { type: DataTypes.JSON, defaultValue: [] },
   id_curator: { type: DataTypes.INTEGER },
 });
 
-const Role = sequelize.define('role', {
+const Role = sequelize.define("role", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING },
 });
 
-const Project = sequelize.define('project', {
+const Project = sequelize.define("project", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
   start_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-  description: { type: DataTypes.STRING, defaultValue: 'Нет описания' },
+  description: { type: DataTypes.STRING, defaultValue: "Нет описания" },
   files: { type: DataTypes.STRING, allowNull: false },
   img: { type: DataTypes.STRING, allowNull: false },
   is_private: { type: DataTypes.BOOLEAN, defaultValue: false },
@@ -55,7 +55,7 @@ const Project = sequelize.define('project', {
   amount_comments: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
-const Team = sequelize.define('team', {
+const Team = sequelize.define("team", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   role: { type: DataTypes.STRING },
   give_privileges: { type: DataTypes.BOOLEAN },
@@ -66,27 +66,27 @@ const Team = sequelize.define('team', {
   kick_privileges: { type: DataTypes.BOOLEAN },
 });
 
-const WhiteListUser = sequelize.define('white_list_user', {
+const WhiteListUser = sequelize.define("white_list_user", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
-const Achivment = sequelize.define('achivment', {
+const Achivment = sequelize.define("achivment", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING },
   rule: { type: DataTypes.STRING },
   icon: { type: DataTypes.STRING },
 });
 
-const GettingAchivment = sequelize.define('getting_achivment', {
+const GettingAchivment = sequelize.define("getting_achivment", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
-const UserAchivment = sequelize.define('user_achivment', {
+const UserAchivment = sequelize.define("user_achivment", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   amount: { type: DataTypes.INTEGER },
 });
 
-const News = sequelize.define('news', {
+const News = sequelize.define("news", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
@@ -99,21 +99,21 @@ const News = sequelize.define('news', {
   amount_comments: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
-const ProposedNews = sequelize.define('proposed_news', {
+const ProposedNews = sequelize.define("proposed_news", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   img: { type: DataTypes.STRING },
   title: { type: DataTypes.STRING },
   description: { type: DataTypes.STRING },
 });
 
-const UnpostedNews = sequelize.define('unposted_news', {
+const UnpostedNews = sequelize.define("unposted_news", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING },
   img: { type: DataTypes.STRING },
   description: { type: DataTypes.STRING },
 });
 
-const Message = sequelize.define('message', {
+const Message = sequelize.define("message", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   files: { type: DataTypes.STRING },
   is_updated: { type: DataTypes.BOOLEAN },
@@ -123,14 +123,14 @@ const Message = sequelize.define('message', {
   resended: { type: DataTypes.JSON },
 });
 
-const Chat = sequelize.define('chat', {
+const Chat = sequelize.define("chat", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, allowNull: false },
   avatar: { type: DataTypes.STRING },
   members: { type: DataTypes.JSON },
 });
 
-const TypeOfAttachment = sequelize.define('type_of_attachment', {
+const TypeOfAttachment = sequelize.define("type_of_attachment", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING },
 });
