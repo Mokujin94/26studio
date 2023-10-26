@@ -1,9 +1,35 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import FriendCard from "../../components/friendCard/FriendCard"
 
 import './groupsManagement.scss'
+import { fetchGroupById, fetchGroups } from '../../http/groupsAPI'
+import { fetchOneUser } from '../../http/userAPI';
 
 function GroupsManagement() {
+    const [groupsData, setGroupsData] = useState([]);
+    const [oneGroupData, setOneGroupData] = useState({});
+    
+    const [groupSelect, setGroupSelect] = useState(0);
+    
+    useEffect(() => {
+        fetchGroups().then(data => {
+            setGroupsData(data.rows.sort((a, b) => a.id > b.id ? 1 : -1));
+        });
+    }, [])
+
+    useEffect(() => {
+        if (groupSelect !== 0) {
+            fetchGroupById(groupSelect).then(data => {
+                setOneGroupData(data);
+            })
+        }
+    }, [groupSelect])
+
+
+    const onChangeGroupSelect = (e) => {
+        setGroupSelect(Number(e.target.value));
+    }
+
   return (
     <div className='container'>
         <div className="groupsManagement">
@@ -21,9 +47,13 @@ function GroupsManagement() {
                     </div>
                     <div className="groupsManagement__settings-right">
                         <div className="groupsManagement__settings-right-item">
-                            <select className='groupsManagement__settings-right-item-select'>
-                                <option value="1">Выбор группы</option>
-                                <option value="1">ИС 11/9</option>
+                            <select className='groupsManagement__settings-right-item-select' onChange={onChangeGroupSelect} value={groupSelect}>
+                                <option value="0">Выбор группы</option>
+                                {groupsData.map(item => {
+                                    return (
+                                        <option value={item.id} key={item.id}>{item.name}</option>
+                                    )
+                                })}
                             </select>
                             <svg className='groupsManagement__settings-right-item-icon' xmlns="http://www.w3.org/2000/svg" width="14" height="8" viewBox="0 0 14 8" fill="none">
                                 <path d="M1 1L7 7L13 1" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
@@ -53,11 +83,7 @@ function GroupsManagement() {
                     </div>
                 </div>
                 <div className="groupsManagement__wrapper">
-                    <FriendCard/>
-                    <FriendCard/>
-                    <FriendCard/>
-                    <FriendCard/>
-                    <FriendCard/>
+                {oneGroupData.members && oneGroupData.members.map(({ id }) => <FriendCard userId={id} key={id} />)}
                 </div>
             </div>
         </div>

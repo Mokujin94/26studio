@@ -36,7 +36,6 @@ export const fetchUserById = async (id) => {
 };
 
 export const fetchOneUser = async (id) => {
-  console.log(id);
   const { data } = await $host.get("api/user/" + id);
   return data;
 };
