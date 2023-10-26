@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import AdminCard from "../../components/adminCard/AdminCard";
+import { GROUP_MANAGEMENT_ROUTE } from "../../utils/consts";
 
 
 
@@ -29,7 +31,9 @@ const Admin = () => {
             <div className="admin__wrapper">
                 {cards.map(({id, title, icon}) => {
                     return (
-                        <AdminCard key={id} title={title} icon={icon}/>
+                        <Link to={GROUP_MANAGEMENT_ROUTE}>
+                            <AdminCard key={id} title={title} icon={icon}/>
+                        </Link>
                     )
                 })}
             </div>

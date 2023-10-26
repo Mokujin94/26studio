@@ -10,6 +10,7 @@ import Registration from './pages/registration/Registation';
 import NewsPaper from './pages/newsPaper/NewsPaper';
 import Admin from './pages/admin/Admin';
 
+
 import {
   GROUPS_ROUTE,
   GROUP_ROUTE,
@@ -21,8 +22,10 @@ import {
   PROJECTS_ROUTE,
   PROJECT_ROUTE,
   REGISTRATION_ROUTE,
-  ADMIN_ROUTE
+  ADMIN_ROUTE,
+  GROUP_MANAGEMENT_ROUTE
 } from './utils/consts';
+import GroupsManagement from './pages/groupsManagement/GroupsManagement';
 
 
 export const authRoutes = [
@@ -33,6 +36,10 @@ export const authRoutes = [
   {
     path: ADMIN_ROUTE,
     Component: <Admin />,
+  },
+  {
+    path: GROUP_MANAGEMENT_ROUTE,
+    Component: <GroupsManagement />,
   },
 ];
 

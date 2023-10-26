@@ -9,3 +9,4 @@ export const NEWSPAPER_ROUTE = '/news';
 export const GROUPS_ROUTE = '/groups';
 export const GROUP_ROUTE = '/groups';
 export const ADMIN_ROUTE = '/admin';
+export const GROUP_MANAGEMENT_ROUTE = '/admin/group';
