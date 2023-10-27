@@ -4,10 +4,13 @@ import FriendCard from "../../components/friendCard/FriendCard"
 import './groupsManagement.scss'
 import { fetchGroupById, fetchGroups } from '../../http/groupsAPI'
 import { fetchOneUser } from '../../http/userAPI';
+import PrimaryButton from '../../components/primaryButton/PrimaryButton';
+import { CSSTransition } from 'react-transition-group';
 
 function GroupsManagement() {
     const [groupsData, setGroupsData] = useState([]);
     const [oneGroupData, setOneGroupData] = useState({});
+    const [modalActive, setModalActive] = useState(false);
     
     const [groupSelect, setGroupSelect] = useState(0);
     
@@ -32,6 +35,41 @@ function GroupsManagement() {
 
   return (
     <div className='container'>
+        <CSSTransition
+            in={modalActive}
+            timeout={300}
+            classNames="create-anim"
+            mountOnEnter
+            unmountOnExit
+        >
+            <div className="groupsManagement-modal" onClick={() => setModalActive(false)}>
+            <div className="groupsManagement-modal__content" onClick={(e) => e.stopPropagation()}>
+                <div className="groupsManagement-modal__close" onClick={() => setModalActive(false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.402728 0.402728C0.939699 -0.134243 1.8103 -0.134243 2.34727 0.402728L5.5 3.55546L8.65273 0.402728C9.1897 -0.134243 10.0603 -0.134243 10.5973 0.402728C11.1342 0.939699 11.1342 1.8103 10.5973 2.34727L7.44454 5.5L10.5973 8.65273C11.1342 9.1897 11.1342 10.0603 10.5973 10.5973C10.0603 11.1342 9.1897 11.1342 8.65273 10.5973L5.5 7.44454L2.34727 10.5973C1.8103 11.1342 0.939699 11.1342 0.402728 10.5973C-0.134243 10.0603 -0.134243 9.1897 0.402728 8.65273L3.55546 5.5L0.402728 2.34727C-0.134243 1.8103 -0.134243 0.939699 0.402728 0.402728Z" fill="#97BCE6"/>
+                    </svg>
+                </div>
+
+
+                <div className="groupsManagement-modal__item">
+                    <h2 className="groupsManagement-modal__item-title">Имя группы</h2>
+                    <input className="groupsManagement-modal__item-input" type="text" />
+                </div>
+
+                <div className="groupsManagement-modal__item">
+                    <h2 className="groupsManagement-modal__item-title">СП</h2>
+                    <select className="groupsManagement-modal__item-input" type="text"> 
+                    <option value="1">СП 10</option>
+                    <option value="2">СП 11</option>
+                    <option value="3">СП 12</option>
+                    </select>
+                </div>
+
+                <PrimaryButton>Создать</PrimaryButton>
+            </div>
+        </div>
+        </CSSTransition>
+        
         <div className="groupsManagement">
             <h1 className="groupsManagement__title">Управление группами</h1>
             <div className="groupsManagement__inner">
@@ -77,7 +115,7 @@ function GroupsManagement() {
                             </svg>
                         </div>
                         <div className="groupsManagement__settings-right-item">
-                            <div className="groupsManagement__settings-right-item-button">Создать</div>
+                            <div className="groupsManagement__settings-right-item-button" onClick={()=> setModalActive(true)}>Создать</div>
                         </div>
 
                     </div>
@@ -87,6 +125,7 @@ function GroupsManagement() {
                 </div>
             </div>
         </div>
+        
     </div>
   )
 }
