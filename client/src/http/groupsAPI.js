@@ -14,3 +14,8 @@ export const fetchGroupById = async (id) => {
   const { data } = await $host.get('api/group/' + id);
   return data;
 };
+
+export const fetchAddStudent = async (id, id_user) => {
+  const { data } = await $host.patch('api/group/' + id + '/add', {id_user});
+  return data;
+};
