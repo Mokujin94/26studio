@@ -12,6 +12,7 @@ const User = sequelize.define("user", {
   password: { type: DataTypes.STRING },
   description: { type: DataTypes.STRING },
   avatar: { type: DataTypes.STRING, defaultValue: "avatar.jpg" },
+  group_status: {type: DataTypes.BOOLEAN, defaultValue: false},
   achivment_list: { type: DataTypes.JSON },
 });
 

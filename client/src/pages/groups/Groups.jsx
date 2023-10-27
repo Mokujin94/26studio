@@ -11,7 +11,7 @@ const Groups = observer(() => {
 
   useEffect(() => {
     fetchGroups().then((data) => {
-      groups.setGroups(data.rows);
+      groups.setGroups(data.rows.sort((a, b) => a.id > b.id ? 1 : -1));
     });
   }, []);
 

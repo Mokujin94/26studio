@@ -1,4 +1,4 @@
-const { Group } = require("../models/models");
+const { Group, User } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class GroupController {
@@ -29,12 +29,20 @@ class GroupController {
     });
     return res.json(group);
   }
-  async addMember(req, res) {
+  async addMember(req, res, next) {
     const { id } = req.params;
     const { id_user } = req.body;
     const group = await Group.findOne({
       where: { id },
     });
+    const user = await User.findOne({
+      where: {id: id_user}
+    })
+    group.members.map(({id}) => {
+      if (id === id_user) {
+        return next(ApiError.internal("Пользователь уже существует"));
+      }
+    })
     let newMembers;
     if (group.members === null) {
       group.update({
@@ -45,6 +53,9 @@ class GroupController {
         ],
       });
     } else {
+      user.update({
+        group_status: true
+      })
       newMembers = { id: id_user };
       group.update({
         members: [...group.members, newMembers],

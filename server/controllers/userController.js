@@ -165,9 +165,14 @@ class UserController {
     const user = await User.findOne({
       where: { id },
     });
-    // if (!user) {
-    //   return next(ApiError.internal('Пользователь не найден'));
-    // }
+    return res.json(user);
+  }
+
+  async getAll(req, res, next) {
+    const {groupId} = req.query;
+    const user = await User.findAll({
+      where: {group_status: false, groupId}
+    });
     return res.json(user);
   }
 }

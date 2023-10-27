@@ -40,7 +40,18 @@ export const fetchOneUser = async (id) => {
   return data;
 };
 
+export const fetchAllUsers = async (id) => {
+  const config = {
+    params: {
+      groupId: id
+    }
+  }
+  const { data } = await $host.get("api/user/all", config);
+  return data;
+};
+
 export const generateCode = async (email, code) => {
   const { data } = await $host.post("api/user/code", { email, code });
   return data;
 };
+

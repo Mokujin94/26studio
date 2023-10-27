@@ -2,19 +2,22 @@ import React, { useEffect, useState } from 'react'
 import FriendCard from "../../components/friendCard/FriendCard"
 
 import './groupsManagement.scss'
-import { fetchGroupById, fetchGroups } from '../../http/groupsAPI'
-import { fetchOneUser } from '../../http/userAPI';
+import { fetchAddStudent, fetchGroupById, fetchGroups } from '../../http/groupsAPI'
+import { fetchAllUsers, fetchOneUser } from '../../http/userAPI';
 
 function GroupsManagement() {
     const [groupsData, setGroupsData] = useState([]);
     const [oneGroupData, setOneGroupData] = useState({});
+    const [usersData, setUsersData] = useState([]);
     
     const [groupSelect, setGroupSelect] = useState(0);
+    const [view, setView] = useState(0);
     
     useEffect(() => {
         fetchGroups().then(data => {
             setGroupsData(data.rows.sort((a, b) => a.id > b.id ? 1 : -1));
         });
+
     }, [])
 
     useEffect(() => {
@@ -22,13 +25,34 @@ function GroupsManagement() {
             fetchGroupById(groupSelect).then(data => {
                 setOneGroupData(data);
             })
+            fetchAllUsers(groupSelect).then(data => {
+                setUsersData(data);
+                console.log(data)
+            })
         }
-    }, [groupSelect])
+    }, [groupSelect, view])
 
 
     const onChangeGroupSelect = (e) => {
         setGroupSelect(Number(e.target.value));
     }
+
+    const changeView = (view) => {
+        setView(view);
+    }
+
+    const addStudent = async(id, id_user) => {
+        await fetchAddStudent(id, id_user);
+        setUsersData(data => {
+            data.filter(item => {
+                if (item.id !== id_user) {
+                    return data;
+                }
+            })
+        })
+    }
+
+    let viewAll = view === 0 ? oneGroupData.members && oneGroupData.members.map(({ id }) => <FriendCard userId={id} key={id} options={1} />) : usersData && usersData.map(({id}) => <FriendCard userId={id} key={id} options={2}  onClickOne={() => addStudent(groupSelect, id )}/>)
 
   return (
     <div className='container'>
@@ -37,10 +61,10 @@ function GroupsManagement() {
             <div className="groupsManagement__inner">
                 <div className="groupsManagement__settings">
                     <div className="groupsManagement__settings-left">
-                        <div className="groupsManagement__settings-left-item groupsManagement__settings-left-item_active">
+                        <div className={view === 0 ? 'groupsManagement__settings-left-item' + ' ' + 'groupsManagement__settings-left-item_active' : 'groupsManagement__settings-left-item'} onClick={() => changeView(0)}>
                             Все участники
                         </div>
-                        <div className="groupsManagement__settings-left-item">
+                        <div className={view === 1 ? 'groupsManagement__settings-left-item' + ' ' + 'groupsManagement__settings-left-item_active' : 'groupsManagement__settings-left-item'} onClick={() => changeView(1)}>
                             Заявки
                         </div>
 
@@ -83,7 +107,7 @@ function GroupsManagement() {
                     </div>
                 </div>
                 <div className="groupsManagement__wrapper">
-                {oneGroupData.members && oneGroupData.members.map(({ id }) => <FriendCard userId={id} key={id} />)}
+                    {viewAll}
                 </div>
             </div>
         </div>
