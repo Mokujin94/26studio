@@ -11,6 +11,7 @@ const {
   UserAchivment,
   GettingAchivment,
 } = require("../models/models");
+const { Op } = require("sequelize");
 
 const generateJwt = (
   id,
@@ -175,5 +176,41 @@ class UserController {
     });
     return res.json(user);
   }
+
+  async searchUsersByName(req, res) {
+  const {search, groupId, group_status } = req.query;
+
+
+    const user = await User.findAll({
+      where: {
+        [Op.or]: {
+          name: {
+            [Op.iLike]: '%' + search + '%'
+          },
+          full_name: {
+            [Op.iLike]: '%' + search + '%'
+          },
+        },
+        group_status,
+        groupId
+      },
+    })
+    return res.json(user)
+  }
+
+  async getUsersByGroupStatus(req, res) {
+    const { groupId, group_status } = req.query;
+  
+  
+      const user = await User.findAll({
+        where: {
+          groupId,
+          group_status
+        },
+      })
+      return res.json(user)
+    }
+
+
 }
 module.exports = new UserController();

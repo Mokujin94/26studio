@@ -50,8 +50,33 @@ export const fetchAllUsers = async (id) => {
   return data;
 };
 
+export const searchUsersOnGroup = async (search, groupId, group_status) => {
+  const config = {
+    params: {
+      search,
+      groupId,
+      group_status
+    }
+  }
+  const { data } = await $host.get("api/user/search/groups", config);
+  return data;
+};
+
+export const fetchUsersByGroupStatus = async (groupId, group_status) => {
+  const config = {
+    params: {
+      groupId,
+      group_status
+    }
+  }
+  const { data } = await $host.get("api/user/group_manage", config);
+  return data;
+};
+
 export const generateCode = async (email, code) => {
   const { data } = await $host.post("api/user/code", { email, code });
   return data;
 };
+
+
 

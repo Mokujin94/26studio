@@ -3,13 +3,12 @@ import FriendCard from "../../components/friendCard/FriendCard"
 
 import './groupsManagement.scss'
 
-import { fetchGroupById, fetchGroups } from '../../http/groupsAPI'
-import { fetchOneUser } from '../../http/userAPI';
 import PrimaryButton from '../../components/primaryButton/PrimaryButton';
 import { CSSTransition } from 'react-transition-group';
 
 import { fetchAddStudent, fetchGroupById, fetchGroups } from '../../http/groupsAPI'
-import { fetchAllUsers, fetchOneUser } from '../../http/userAPI';
+import { fetchAllUsers, fetchUsersByGroupStatus, searchUsersOnGroup} from '../../http/userAPI';
+import { useDebounce } from '../../hooks/useDebounce';
 
 
 function GroupsManagement() {
@@ -23,6 +22,9 @@ function GroupsManagement() {
     
     const [groupSelect, setGroupSelect] = useState(0);
     const [view, setView] = useState(0);
+
+    const [search, setSearch] = useState('');
+    const useDebounced = useDebounce(search)
     
     useEffect(() => {
         fetchGroups().then(data => {
@@ -32,17 +34,24 @@ function GroupsManagement() {
     }, [])
 
     useEffect(() => {
+        let group_status = view == 0 ? true : false
         if (groupSelect !== 0) {
             fetchGroupById(groupSelect).then(data => {
                 setOneGroupData(data);
             })
-            fetchAllUsers(groupSelect).then(data => {
+            fetchUsersByGroupStatus(groupSelect, group_status).then(data => {
                 setUsersData(data);
                 console.log(data)
             })
+        } else {
+            setUsersData([]);
         }
     }, [groupSelect, view])
 
+    useEffect(() => {
+        let group_status = view == 0 ? true : false
+        searchUsersOnGroup(search, groupSelect, group_status).then(data => setUsersData(data));
+    }, [useDebounced])
 
     const onChangeGroupSelect = (e) => {
         setGroupSelect(Number(e.target.value));
@@ -54,16 +63,15 @@ function GroupsManagement() {
 
     const addStudent = async(id, id_user) => {
         await fetchAddStudent(id, id_user);
-        setUsersData(data => {
-            data.filter(item => {
-                if (item.id !== id_user) {
-                    return data;
-                }
-            })
-        })
+        const newData = usersData.filter(({id}) => id !== id_user)
+        setUsersData(newData)
     }
 
-    let viewAll = view === 0 ? oneGroupData.members && oneGroupData.members.map(({ id }) => <FriendCard userId={id} key={id} options={1} />) : usersData && usersData.map(({id}) => <FriendCard userId={id} key={id} options={2}  onClickOne={() => addStudent(groupSelect, id )}/>)
+
+        
+
+
+    let viewAll = usersData && usersData.map(({id}) => <FriendCard userId={id} key={id} options={view === 0 ? 1 : 2}  onClickOne={() => addStudent(groupSelect, id )}/>)
 
   return (
     <div className='container'>
@@ -141,7 +149,7 @@ function GroupsManagement() {
                             
                         </div>
                         <div className="groupsManagement__settings-right-item">
-                            <input type="text" className='groupsManagement__settings-right-item-search' placeholder='Поиск студента'/>
+                            <input type="text" className='groupsManagement__settings-right-item-search' placeholder='Поиск студента' onChange={(e) => setSearch(e.target.value)} value={search}/>
                             <svg className='groupsManagement__settings-right-item-icon' xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M15 15L12.2779 12.2778M14.2222 7.61111C14.2222 11.2623 11.2623 14.2222 7.61111 14.2222C3.95989 14.2222 1 11.2623 1 7.61111C1 3.95989 3.95989 1 7.61111 1C11.2623 1 14.2222 3.95989 14.2222 7.61111Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
