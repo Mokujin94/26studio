@@ -8,6 +8,7 @@ import { login } from "../../http/userAPI";
 import { NEWS_ROUTE } from "../../utils/consts";
 import Spinner from "../../components/spinner/Spinner";
 import ModalError from "../../components/modalError/ModalError";
+import eye from "../../resource/graphics/icons/registration/regEye.svg";
 import { CSSTransition } from "react-transition-group";
 
 function Auth() {
@@ -17,6 +18,7 @@ function Auth() {
   const [errorMessage, setErrorMessage] = useState("");
   const [errorModal, setErrorModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [hidePass, setHidePass] = useState(true);
 
   const navigate = useNavigate();
   const onLogin = async (e) => {
@@ -76,9 +78,10 @@ function Auth() {
           <h2 className="auth__input-title">Пароль</h2>
           <input
             onChange={(e) => setPassword(e.target.value)}
-            type="password"
+            type={hidePass ? 'password' : 'text'}
             className="auth__input-item"
           />
+          <img src={eye} alt="" onMouseDown={() => setHidePass(false)} onMouseUp={() => setHidePass(true)} />
         </div>
         <Link to="/" className="auth__forget">
           Забыли пароль?

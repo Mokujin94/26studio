@@ -3,8 +3,6 @@ import FriendCard from "../../components/friendCard/FriendCard"
 
 import './groupsManagement.scss'
 
-import { fetchGroupById, fetchGroups } from '../../http/groupsAPI'
-import { fetchOneUser } from '../../http/userAPI';
 import PrimaryButton from '../../components/primaryButton/PrimaryButton';
 import { CSSTransition } from 'react-transition-group';
 

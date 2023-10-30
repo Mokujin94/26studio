@@ -17,6 +17,8 @@ const FirstStageReg = observer(() => {
   );
 
   const [newData, setNewData] = useState({});
+  const [hidePass, setHidePass] = useState({});
+  const [hidePassConfirm, setHidePassConfirm] = useState({});
 
   useEffect(() => {
     setNewData({
@@ -296,7 +298,7 @@ const FirstStageReg = observer(() => {
                   <input
                     value={valuePassword}
                     onChange={validationPassword}
-                    type="password"
+                    type={hidePass ? 'password' : 'text'}
                     className={`${style.first__itemInput} ${style.first__itemInputPass}`}
                     style={
                       user.errorAuth[3].errors.length && user.dataAuth.password
@@ -304,9 +306,8 @@ const FirstStageReg = observer(() => {
                         : null
                     }
                   />
-                  <img src={eye} alt="" />
+                  <img src={eye} alt="" onMouseDown={() => setHidePass(false)} onMouseUp={() => setHidePass(true)} />
                 </div>
-
                 <p className={style.error_message}>
                   {user.errorAuth[3].errors.length && user.dataAuth.password
                     ? user.errorAuth[3].errors[0].name
@@ -321,7 +322,7 @@ const FirstStageReg = observer(() => {
                   <input
                     value={valuePasswordConfirm}
                     onChange={validationPasswordConfirm}
-                    type="password"
+                    type={hidePassConfirm ? 'password' : 'text'}
                     className={`${style.first__itemInput} ${style.first__itemInputPass}`}
                     style={
                       user.errorAuth[4].errors.length &&
@@ -330,7 +331,7 @@ const FirstStageReg = observer(() => {
                         : null
                     }
                   />
-                  <img src={eye} alt="" />
+                  <img src={eye} alt="" onMouseDown={() => setHidePassConfirm(false)} onMouseUp={() => setHidePassConfirm(true)}/>
                 </div>
                 <p className={style.error_message}>
                   {user.errorAuth[4].errors.length &&
