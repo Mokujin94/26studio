@@ -15,6 +15,7 @@ import ScrollToTop from './components/ScrollToTop';
 import { AuthProvider } from './store/AuthStore';
 import { check } from './http/userAPI';
 import { fetchGroups } from './http/groupsAPI';
+import AddProjectModal from './components/addProjectModal/AddProjectModal';
 
 const App = observer(() => {
   const { user } = useContext(Context);
@@ -31,6 +32,7 @@ const App = observer(() => {
       <BrowserRouter>
         <AuthProvider>
           <ScrollToTop />
+          <AddProjectModal/>
           {user.path === '/registration' || user.path === '/login' ? null : <BurgerMenu />}
           {user.path === '/registration' || user.path === '/login' ? null : <Header />}
           <div className="App__inner">

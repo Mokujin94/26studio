@@ -1,0 +1,61 @@
+@import "../../resource/styles/variables";
+
+.block {
+    position: absolute;
+    z-index: 6;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 700px;
+    background-color: $studio-dark-element;
+    border-radius: 15px;
+    padding: 20px 0 60px 0;
+    display: flex;
+    flex-direction: column;
+    &__header {
+        position: relative;
+        &Title {
+            color: $studio-white-text;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        &Close {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            top: 0;
+            right: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: $studio-transition-03;
+            &:hover {
+                background-color: $studio-white-element;
+                path {
+                    stroke: $studio-dark-element;
+                }
+            }
+
+            svg {
+                transform: rotate(45deg);
+                width: 18px;
+                height: 18px;
+                path {
+                    transition: $studio-transition-03;
+                }
+            }
+        }
+    }
+
+    &__content {
+        position: relative;
+        display: flex;
+        flex: 1 1 auto;
+        padding: 0 60px;
+    }
+}

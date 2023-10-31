@@ -1,0 +1,67 @@
+@import "../../resource/styles/variables";
+
+.block {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 65px;
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 300px;
+        width: 100%;
+        &Item {
+            &Title {
+                color: $studio-white-text;
+                font-size: 18px;
+                font-weight: 500;
+                margin-bottom: 10px;
+            }
+            &Input {
+                width: 100%;
+                outline: none;
+                background-color: $studio-dark-input;
+                border: 2px solid $studio-primary-border;
+                border-radius: 10px;
+                padding: 10px 15px;
+                color: $studio-white-text;
+                font-size: 14px;
+                font-weight: 400;
+                &::placeholder {
+                    color: $studio-placholder-color;
+                }
+                &_area {
+                    resize: none;
+                    height: 140px;
+                }
+                &_preview {
+                    display: block;
+                    cursor: pointer;
+                }
+            }
+
+        }
+
+    }
+
+    &__preview {
+        &Content {
+
+        }
+
+        &Text {
+            &Title {
+
+            }
+
+            &Descr {
+
+            }
+        }    
+    }
+
+    &__button {
+
+    }
+}

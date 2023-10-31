@@ -1,0 +1,39 @@
+@import "../../resource/styles/variables";
+
+.block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    max-width: 270px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 65px;
+    &__item {
+        position: relative;
+        &Circle {   
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 1px solid $studio-primary-border;
+        }
+
+        &Title {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 10px);
+            font-size: 18px;
+            font-weight: 500;
+            color: $studio-white-text;
+        }
+    }
+
+    &__line {
+        width: 100%;
+        box-sizing: content-box;
+        height: 3px;
+        border: 1px solid $studio-primary-border;
+        border-radius: 20px;
+    }
+
+}
