@@ -25,10 +25,12 @@ function AddProjectModalSecond() {
             </div>
         </div>
         <div className={style.block__preview}>
-            <div className={style.block__previewContent}></div>
-            <div className={style.block__previewText}>
-                <h2 className={style.block__previewTextTitle}></h2>
-                <p className={style.block__previewTextDescr}></p>
+            <h2 className={style.block__previewTitle}>Предпросмотр</h2>
+            <div className={style.block__previewContent}>
+                <div className={style.block__previewText}>
+                    <h2 className={style.block__previewTextTitle}></h2>
+                    <p className={style.block__previewTextDescr}></p>
+                </div>
             </div>
         </div>
         <button className={style.block__button}>Далее</button>

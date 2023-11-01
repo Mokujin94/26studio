@@ -73,6 +73,13 @@ export const fetchUsersByGroupStatus = async (groupId, group_status) => {
   return data;
 };
 
+export const fetchAllTutors = async () => {
+
+  const { data } = await $host.get("api/user/tutors");
+  return data;
+};
+
+
 export const generateCode = async (email, code) => {
   const { data } = await $host.post("api/user/code", { email, code });
   return data;

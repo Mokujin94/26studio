@@ -9,6 +9,7 @@ router.post('/login', userController.login);
 router.post('/code', userController.generateCode);
 router.get('/auth', authMiddleware, userController.check);
 router.get('/all', userController.getAll);
+router.get('/tutors', userController.getAllTutors);
 router.get('/group_manage', userController.getUsersByGroupStatus);
 router.get('/search/groups', userController.searchUsersByName);
 router.get('/:id', userController.getProfileUser);

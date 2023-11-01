@@ -211,6 +211,15 @@ class UserController {
       return res.json(user)
     }
 
+    async getAllTutors(req, res) {
+        const user = await User.findAll({
+          where: {
+            roleId: 2
+          },
+        })
+        return res.json(user)
+      }
+
 
 }
 module.exports = new UserController();

@@ -153,6 +153,7 @@
     &__wrapper {
         display: grid;
         grid-template-columns: repeat(4, minmax(auto, 355px));
+        justify-content: space-between;
         gap: 20px;
     }
 

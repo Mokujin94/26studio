@@ -7,8 +7,9 @@ import PrimaryButton from '../../components/primaryButton/PrimaryButton';
 import { CSSTransition } from 'react-transition-group';
 
 import { fetchAddStudent, fetchGroupById, fetchGroups } from '../../http/groupsAPI'
-import { fetchAllUsers, fetchUsersByGroupStatus, searchUsersOnGroup} from '../../http/userAPI';
+import { fetchAllTutors, fetchAllUsers, fetchUsersByGroupStatus, searchUsersOnGroup} from '../../http/userAPI';
 import { useDebounce } from '../../hooks/useDebounce';
+import FriendSkeleton from '../../components/friendSkeleton/FriendSkeleton';
 
 
 function GroupsManagement() {
@@ -18,6 +19,7 @@ function GroupsManagement() {
     const [modalActive, setModalActive] = useState(false);
 
     const [usersData, setUsersData] = useState([]);
+    const [tutorsData, setTutorsData] = useState([]);
 
     
     const [groupSelect, setGroupSelect] = useState(0);
@@ -25,15 +27,22 @@ function GroupsManagement() {
 
     const [search, setSearch] = useState('');
     const useDebounced = useDebounce(search)
+
+    const [loading, setLoading] = useState(true);
     
     useEffect(() => {
+        setLoading(true)
         fetchGroups().then(data => {
             setGroupsData(data.rows.sort((a, b) => a.id > b.id ? 1 : -1));
         });
 
+        fetchAllTutors().then(data => {
+            setTutorsData(data)
+        })
     }, [])
 
     useEffect(() => {
+        setLoading(true);
         let group_status = view == 0 ? true : false
         if (groupSelect !== 0) {
             fetchGroupById(groupSelect).then(data => {
@@ -41,17 +50,43 @@ function GroupsManagement() {
             })
             fetchUsersByGroupStatus(groupSelect, group_status).then(data => {
                 setUsersData(data);
-                console.log(data)
+                setLoading(false);
             })
         } else {
             setUsersData([]);
+            setLoading(true);
         }
     }, [groupSelect, view])
 
     useEffect(() => {
+        setLoading(true);
         let group_status = view == 0 ? true : false
-        searchUsersOnGroup(search, groupSelect, group_status).then(data => setUsersData(data));
+        searchUsersOnGroup(search, groupSelect, group_status).then(data => {
+            setUsersData(data);
+            if (groupSelect === 0) {
+                return setLoading(true);
+            } 
+            setLoading(false);
+        });
+
+
     }, [useDebounced])
+
+
+    const friendSkeletons = [
+        {id: 1},
+        {id: 2},
+        {id: 3},
+        {id: 4},
+        {id: 5},
+        {id: 6},
+        {id: 7},
+        {id: 8},
+        {id: 9},
+        {id: 10},
+        {id: 11},
+        {id: 12},
+    ]
 
     const onChangeGroupSelect = (e) => {
         setGroupSelect(Number(e.target.value));
@@ -71,7 +106,7 @@ function GroupsManagement() {
         
 
 
-    let viewAll = usersData && usersData.map(({id}) => <FriendCard userId={id} key={id} options={view === 0 ? 1 : 2}  onClickOne={() => addStudent(groupSelect, id )}/>)
+    let viewAll = !loading ? usersData.map(({id}) => <FriendCard userId={id} key={id} options={view === 0 ? 1 : 2}  onClickOne={() => addStudent(groupSelect, id )}/>)  : friendSkeletons.map(({id}) => <FriendSkeleton/>)
 
   return (
     <div className='container'>
@@ -140,8 +175,12 @@ function GroupsManagement() {
                         </div>
                         <div className="groupsManagement__settings-right-item">
                             <select className='groupsManagement__settings-right-item-select'> 
-                                <option value="1">Определить куратора</option>
-                                <option value="1">Ксения Эдуардовна</option>
+                                <option value="0">Определить куратора</option>
+                                {tutorsData.map(item => {
+                                    return (
+                                        <option key={item.id} value={item.id}>{item.full_name}</option>
+                                    )
+                                })}
                             </select>
                             <svg className='groupsManagement__settings-right-item-icon' xmlns="http://www.w3.org/2000/svg" width="14" height="8" viewBox="0 0 14 8" fill="none">
                                 <path d="M1 1L7 7L13 1" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
@@ -149,7 +188,7 @@ function GroupsManagement() {
                             
                         </div>
                         <div className="groupsManagement__settings-right-item">
-                            <input type="text" className='groupsManagement__settings-right-item-search' placeholder='Поиск студента' onChange={(e) => setSearch(e.target.value)} value={search}/>
+                            <input type="text" className='groupsManagement__settings-right-item-search' placeholder='Поиск студента' onChange={(e) => {setLoading(true); setSearch(e.target.value)}} value={search}/>
                             <svg className='groupsManagement__settings-right-item-icon' xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                 <path d="M15 15L12.2779 12.2778M14.2222 7.61111C14.2222 11.2623 11.2623 14.2222 7.61111 14.2222C3.95989 14.2222 1 11.2623 1 7.61111C1 3.95989 3.95989 1 7.61111 1C11.2623 1 14.2222 3.95989 14.2222 7.61111Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
