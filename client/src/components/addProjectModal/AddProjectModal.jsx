@@ -4,6 +4,7 @@ import style from './addProjectModal.module.scss'
 import AddProjectStages from '../addProjectStages/AddProjectStages'
 import AddProjectModalFirst from '../addProjectModalFirst/AddProjectModalFirst'
 import AddProjectModalSecond from '../addProjectModalSecond/AddProjectModalSecond'
+import AddProjectModalThird from '../addProjectModalThird/AddProjectModalThird'
 
 function AddProjectModal() {
     const [stages, setStages] = useState(2)
@@ -40,7 +41,8 @@ function AddProjectModal() {
         {stages > 1 && <AddProjectStages/>}
         <div className={style.block__content}>
             {/* <AddProjectModalFirst/> */}
-            <AddProjectModalSecond/>
+            {/* <AddProjectModalSecond/> */}
+            <AddProjectModalThird/>
         </div>
     </div>
   )

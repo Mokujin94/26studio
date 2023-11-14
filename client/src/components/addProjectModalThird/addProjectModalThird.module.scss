@@ -1,0 +1,68 @@
+@import "../../resource/styles/variables";
+
+.AddProjectModalThird {
+    margin-top: 70px;
+    display: flex;
+    font-size: 18px;
+    color: $studio-white-text;
+    width: 100%;
+    justify-content: space-between;
+    &__settings {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 40px;
+        &__title {
+            margin-bottom: 15px;
+        }
+        &__select {
+            margin-top: 10px;
+            font-weight: 200;
+            display: flex;
+            gap: 10px;
+            &:nth-child(2) {
+                margin-top: 0;
+            }
+            &__box {
+        }
+        &__wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        &:last-child{
+            margin-bottom: 0;
+        }
+    }
+}
+    &__preview {
+        &__title {
+            margin-bottom: 10px;
+        }
+        &__canvas {
+            width: 300px;
+            height: 200px;
+            border: 2px solid $studio-primary-border;
+            background-color: $studio-dark-input;
+            border-radius: 15px;
+        }
+    }
+    &__button {
+        position: absolute;
+        bottom: 0;
+        right: 60px;
+        padding: 10px 40px;
+        border-radius: 10px;
+        background: $studio-primary-button;
+        color: $studio-dark-text;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 3.2px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        transition: $studio-transition-03;
+        &:hover {
+            background: $studio-primary-button-hover;
+        }
+    }
+}
