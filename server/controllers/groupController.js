@@ -64,6 +64,27 @@ class GroupController {
 
     return res.json(group);
   }
+
+  async deleteMember(req, res) {
+    const {id} = req.params;
+    const {id_user} = req.body;
+    const group = await Group.findOne({
+      where: { id },
+    });
+    const user = await User.findOne({
+      where: {id: id_user}
+    })
+    let newMembers = group.members.filter(item => {
+      return item.id !== id_user;
+    })
+    user.update({
+      group_status: false
+    })
+    group.update({
+      members: newMembers
+    })
+    return res.json(group);
+  }
 }
 
 module.exports = new GroupController();

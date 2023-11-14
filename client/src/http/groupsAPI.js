@@ -19,3 +19,8 @@ export const fetchAddStudent = async (id, id_user) => {
   const { data } = await $host.patch('api/group/' + id + '/add', {id_user});
   return data;
 };
+
+export const fetchDeleteStudent = async (id, id_user) => {
+  const { data } = await $host.patch('api/group/' + id + '/delete', {id_user});
+  return data;
+};

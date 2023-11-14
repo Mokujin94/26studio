@@ -6,7 +6,7 @@ import './groupsManagement.scss'
 import PrimaryButton from '../../components/primaryButton/PrimaryButton';
 import { CSSTransition } from 'react-transition-group';
 
-import { fetchAddStudent, fetchGroupById, fetchGroups } from '../../http/groupsAPI'
+import { fetchAddStudent, fetchDeleteStudent, fetchGroupById, fetchGroups } from '../../http/groupsAPI'
 import { fetchAllTutors, fetchAllUsers, fetchUsersByGroupStatus, searchUsersOnGroup} from '../../http/userAPI';
 import { useDebounce } from '../../hooks/useDebounce';
 import FriendSkeleton from '../../components/friendSkeleton/FriendSkeleton';
@@ -102,11 +102,17 @@ function GroupsManagement() {
         setUsersData(newData)
     }
 
+    const deleteStudent = async(id, id_user) => {
+        await fetchDeleteStudent(id, id_user);
+        const newData = usersData.filter(({id}) => id !== id_user)
+        setUsersData(newData)
+    }
+
 
         
 
 
-    let viewAll = !loading ? usersData.map(({id}) => <FriendCard userId={id} key={id} options={view === 0 ? 1 : 2}  onClickOne={() => addStudent(groupSelect, id )}/>)  : friendSkeletons.map(({id}) => <FriendSkeleton/>)
+    let viewAll = !loading ? usersData.map(({id}) => <FriendCard userId={id} key={id} options={view === 0 ? 1 : 2}  onClickOne={() => addStudent(groupSelect, id )} onClickTwo={() => deleteStudent(groupSelect, id)}/> )  : friendSkeletons.map(({id}) => <FriendSkeleton/>)
 
   return (
     <div className='container'>
