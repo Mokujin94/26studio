@@ -1,41 +1,48 @@
 @import "../../resource/styles/variables";
 
 .block {
+  width: 100%;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+  justify-content: center;
+  &__icon {
+    svg {
+      display: block;
+    }
+  }
+
+  &__file {
+    position: absolute;
     width: 100%;
-    display: flex;
-    /* flex-direction: column; */
-    align-items: center;
-    justify-content: center;
-    &__icon {
-        svg {
-            display: block;
-        }
-    }
+    height: 100%;
+    opacity: 0;
+  }
 
-    &__file {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
+  &__button {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $studio-primary-button;
+    color: $studio-dark-text;
+    padding: 10px 45px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: $studio-transition-03;
+    &:hover {
+      background-color: $studio-primary-button-hover;
     }
+  }
+}
 
-    &__button {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: $studio-primary-button;
-        color: $studio-dark-text;
-        padding: 10px 45px;
-        font-size: 16px;
-        font-weight: 500;
-        border: none;
-        border-radius: 10px;
-        letter-spacing: 0.2em;
-        cursor: pointer;
-        transition: $studio-transition-03;
-        &:hover {
-            background-color: $studio-primary-button-hover;
-        }
-    }
+.descr_file {
+  position: absolute;
+  bottom: 70px;
+  font-size: 18px;
+  color: $studio-white-text;
 }
