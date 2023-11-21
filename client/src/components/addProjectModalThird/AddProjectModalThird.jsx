@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import style from './addProjectModalThird.module.scss'
 
 function AddProjectModalThird() {
+
+    const [privacy, setPrivacy] = useState(false);
+    const [comments, setCommentsy] = useState(true);
+
   return (
     <div className={style.AddProjectModalThird}>
         <div className={style.AddProjectModalThird__settings__wpapper}>
@@ -11,20 +15,23 @@ function AddProjectModalThird() {
             <div className={style.AddProjectModalThird__settings__title}>
                 Приватность
             </div>
-            <div className={style.AddProjectModalThird__settings__select}>
-            <input type="checkbox" name="" id="" className={style.AddProjectModalThird__settings__select__box}/> <span>Открытый проект</span>
+            <div onClick={() => setPrivacy(false)} className={style.AddProjectModalThird__settings__select}>
+                <input type="radio" checked={!privacy && true}  name="" id="radio1" className={style.AddProjectModalThird__settings__select__box}/> <span>Открытый проект</span>
             </div>
-            <div className={style.AddProjectModalThird__settings__select}>
-                <input type="checkbox" name="" id="" className={style.AddProjectModalThird__settings__select__box}/> <span>Приватный проект</span>
+            <div onClick={() => setPrivacy(true)} className={style.AddProjectModalThird__settings__select}>
+                <input type="radio" checked={privacy && true} name="" id="radio2" className={style.AddProjectModalThird__settings__select__box}/> <span>Приватный проект</span>
+
             </div>
         </div>
         <div className={style.AddProjectModalThird__settings}>
             <div className={style.AddProjectModalThird__settings__title}>Комментарии</div>
-            <div className={style.AddProjectModalThird__settings__select}>
-                <input type="checkbox" name="" id="" className={style.AddProjectModalThird__settings__select__box}/> <span>Разрешить</span>
+            <div onClick={() => setCommentsy(true)} className={style.AddProjectModalThird__settings__select}>
+                <input type="radio" checked={comments && true}  name="" id="radio3" className={style.AddProjectModalThird__settings__select__box}/> <span>Разрешить</span>
+
             </div>
-            <div className={style.AddProjectModalThird__settings__select}>
-                <input type="checkbox" name="" id="" className={style.AddProjectModalThird__settings__select__box}/> <span>Запретить</span>
+            <div onClick={() => setCommentsy(false)} className={style.AddProjectModalThird__settings__select}>
+                <input type="radio" checked={!comments && true} name="" id="radio4" className={style.AddProjectModalThird__settings__select__box}/> <span>Запретить</span>
+
             </div>
         </div>
         </div>

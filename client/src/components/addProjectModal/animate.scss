@@ -12,3 +12,19 @@
   opacity: 0;
   transition: opacity 0.3s;
 }
+
+.node-stage-enter {
+  opacity: 1;
+}
+.node-stage-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.node-stage-exit {
+  opacity: 1;
+}
+.node-stage-exit-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+

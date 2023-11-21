@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import style from "./addProjectModal.module.scss";
 import "./animate.scss";
@@ -7,10 +7,18 @@ import AddProjectModalFirst from "../addProjectModalFirst/AddProjectModalFirst";
 import AddProjectModalSecond from "../addProjectModalSecond/AddProjectModalSecond";
 import AddProjectModalThird from "../addProjectModalThird/AddProjectModalThird";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import { uploadProject } from "../../http/userAPI";
 
 function AddProjectModal() {
+
   const [stages, setStages] = useState(1);
   const [file, setFile] = useState(null);
+  
+  useEffect(() => {
+    const formData = new FormData();
+    formData.append('projectFile', file);
+    uploadProject(formData).then(data => console.log(data));
+  }, [file])
   return (
     <div className={style.block}>
       <div className={style.block__header}>
@@ -41,7 +49,14 @@ function AddProjectModal() {
           </svg>
         </div>
       </div>
-      {stages > 1 && <AddProjectStages />}
+      <SwitchTransition mode="out-in">
+        <CSSTransition key={stages} timeout={300} classNames="node-stage">
+          <div className={style.block__stage}>
+          {stages > 1 && <AddProjectStages />}
+
+          </div>
+        </CSSTransition>
+      </SwitchTransition>
       <SwitchTransition mode="out-in">
         <CSSTransition key={stages} timeout={300} classNames="node">
           <div className={style.block__content}>
