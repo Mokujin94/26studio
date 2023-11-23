@@ -5,6 +5,10 @@ require("dotenv").config();
 const mailer = require("../nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const AdmZip = require('adm-zip');
+const fs = require('fs');
+const unzipper = require('unzipper');
+const { v4: uuidv4 } = require('uuid');
 const {
   User,
   Friend,
@@ -219,6 +223,86 @@ class UserController {
         })
         return res.json(user)
       }
+
+    async uploadProject(req, res) {
+
+      const uploadPath = path.join(__dirname, '..', 'uploads');
+      const extractPath = path.join(__dirname, '..', 'extracted');
+    
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath);
+      }
+    
+      if (!fs.existsSync(extractPath)) {
+        fs.mkdirSync(extractPath);
+      }
+    
+      if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+      }
+    
+      const { projectFile } = req.files;
+      const maxFileSize = 50 * 1024 * 1024; // 100 МБ в байтах
+      console.log(maxFileSize)
+      if (projectFile.size > maxFileSize) {
+        return res.status(400).send('File size exceeds the allowed limit (100 MB).');
+      }
+      const zipFile = projectFile;
+    
+      // Сохраняем zip-архив на сервере
+      zipFile.mv(path.join(uploadPath, zipFile.name), (err) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+    
+        const zipFilePath = path.join(uploadPath, zipFile.name);
+        const uniqueExtractPath = path.join(extractPath, uuidv4());
+      
+        // Создаем уникальную папку для разархивации
+        fs.mkdirSync(uniqueExtractPath);
+      
+        // Используем потоки для разархивации
+        const readStream = fs.createReadStream(zipFilePath);
+        const extractStream = readStream.pipe(unzipper.Parse());
+      
+        const filePaths = [];
+      
+        extractStream.on('entry', (entry) => {
+          const entryPath = path.join(uniqueExtractPath, entry.path);
+        
+          // Добавляем относительный путь файла в массив
+          const relativePath = path.relative(uniqueExtractPath, entryPath);
+          filePaths.push(relativePath);
+        
+          // Создаем уникальную папку для файла (включая все предшествующие директории)
+          if (entry.type === 'Directory') {
+            fs.mkdirSync(entryPath, { recursive: true });
+          } else {
+            // Создаем все предшествующие директории
+            const dirname = path.dirname(entryPath);
+            fs.mkdirSync(dirname, { recursive: true });
+            
+            // Создаем поток для записи файла
+            entry.pipe(fs.createWriteStream(entryPath));
+          }
+        
+          // Пропускаем содержимое файла
+          entry.autodrain();
+        });
+      
+        extractStream.on('finish', () => {
+          // Выводим список относительных путей файлов
+          console.log(filePaths)
+          res.json(filePaths);
+        });
+      
+        extractStream.on('error', (err) => {
+          console.error('Error during extraction:', err);
+          res.status(500).send('Error during extraction');
+        });
+      });
+
+    }
 
 
 }

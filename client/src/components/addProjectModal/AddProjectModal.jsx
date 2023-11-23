@@ -13,11 +13,14 @@ function AddProjectModal() {
 
   const [stages, setStages] = useState(1);
   const [file, setFile] = useState(null);
+
+  const [projectPathes, setProjectPathes] = useState([]);
   
   useEffect(() => {
     const formData = new FormData();
     formData.append('projectFile', file);
-    uploadProject(formData).then(data => console.log(data));
+    console.log(file)
+    uploadProject(formData).then(data => setProjectPathes(data)).catch(err => console.log(err));
   }, [file])
   return (
     <div className={style.block}>
@@ -62,7 +65,7 @@ function AddProjectModal() {
           <div className={style.block__content}>
             {file ? (
               stages === 2 ? (
-                <AddProjectModalSecond setStages={setStages} />
+                <AddProjectModalSecond projectPathes={projectPathes} setStages={setStages} />
               ) : stages === 3 ? (
                 <AddProjectModalThird />
               ) : (

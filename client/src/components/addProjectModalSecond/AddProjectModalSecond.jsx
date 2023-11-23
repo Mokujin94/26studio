@@ -2,7 +2,8 @@ import React from "react";
 
 import style from "./addProjectModalSecond.module.scss";
 
-function AddProjectModalSecond({ setStages }) {
+function AddProjectModalSecond({projectPathes, setStages }) {
+
   return (
     <div className={style.block}>
       <div className={style.block__info}>
@@ -24,13 +25,15 @@ function AddProjectModalSecond({ setStages }) {
         </div>
         <div className={style.block__infoItem}>
           <h2 className={style.block__infoItemTitle}>
-            Название основного файла
+            Путь до основного файла
           </h2>
-          <input
-            placeholder="index.html"
-            className={style.block__infoItemInput}
-            type="text"
-          />
+          <select className={style.block__infoItemInput} name="" id="">
+            {projectPathes && projectPathes.map((item, i) => {
+              return (
+                <option key={i} value="">{item}</option>
+              )
+            })}
+          </select>
         </div>
         <div className={style.block__infoItem}>
           <h2 className={style.block__infoItemTitle}>Превью</h2>
@@ -50,6 +53,7 @@ function AddProjectModalSecond({ setStages }) {
       <div className={style.block__preview}>
         <h2 className={style.block__previewTitle}>Предпросмотр</h2>
         <div className={style.block__previewContent}>
+          <iframe src="../../../../server/extracted/1054ec9b-7cc9-4e65-ac77-93086bacbc40/inex.html" frameborder="0"></iframe>
           <div className={style.block__previewText}>
             <h2 className={style.block__previewTextTitle}></h2>
             <p className={style.block__previewTextDescr}></p>
