@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import style from "./addProjectModalSecond.module.scss";
+import ProjectViewer from "../ProjectViewer/ProjectViewer";
 
-function AddProjectModalSecond({projectPathes, setStages }) {
+function AddProjectModalSecond({
+  projectPathes,
+  setStages,
+  uniqueFolder,
+  baseURL,
+}) {
+  const [selectedPath, setSelectedPath] = useState("");
+
+  useEffect(() => {
+    console.log(uniqueFolder);
+  }, uniqueFolder);
+
+  const onSelectPath = (e) => {
+    setSelectedPath(uniqueFolder + "/" + e.target.value);
+  };
 
   return (
     <div className={style.block}>
@@ -27,12 +42,20 @@ function AddProjectModalSecond({projectPathes, setStages }) {
           <h2 className={style.block__infoItemTitle}>
             Путь до основного файла
           </h2>
-          <select className={style.block__infoItemInput} name="" id="">
-            {projectPathes && projectPathes.map((item, i) => {
-              return (
-                <option key={i} value="">{item}</option>
-              )
-            })}
+          <select
+            className={style.block__infoItemInput}
+            name=""
+            id=""
+            onChange={onSelectPath}
+          >
+            {projectPathes &&
+              projectPathes.map((item, i) => {
+                return (
+                  <option key={i} value={item}>
+                    {item}
+                  </option>
+                );
+              })}
           </select>
         </div>
         <div className={style.block__infoItem}>
@@ -53,7 +76,7 @@ function AddProjectModalSecond({projectPathes, setStages }) {
       <div className={style.block__preview}>
         <h2 className={style.block__previewTitle}>Предпросмотр</h2>
         <div className={style.block__previewContent}>
-          <iframe src="../../../../server/extracted/1054ec9b-7cc9-4e65-ac77-93086bacbc40/inex.html" frameborder="0"></iframe>
+          <ProjectViewer pathFromProject={selectedPath} baseURL={baseURL} />
           <div className={style.block__previewText}>
             <h2 className={style.block__previewTextTitle}></h2>
             <p className={style.block__previewTextDescr}></p>

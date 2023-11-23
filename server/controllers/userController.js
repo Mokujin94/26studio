@@ -5,10 +5,10 @@ require("dotenv").config();
 const mailer = require("../nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const AdmZip = require('adm-zip');
-const fs = require('fs');
-const unzipper = require('unzipper');
-const { v4: uuidv4 } = require('uuid');
+const AdmZip = require("adm-zip");
+const fs = require("fs");
+const unzipper = require("unzipper");
+const { v4: uuidv4 } = require("uuid");
 const {
   User,
   Friend,
@@ -174,136 +174,164 @@ class UserController {
   }
 
   async getAll(req, res, next) {
-    const {groupId} = req.query;
+    const { groupId } = req.query;
     const user = await User.findAll({
-      where: {group_status: false, groupId}
+      where: { group_status: false, groupId },
     });
     return res.json(user);
   }
 
   async searchUsersByName(req, res) {
-  const {search, groupId, group_status } = req.query;
-
+    const { search, groupId, group_status } = req.query;
 
     const user = await User.findAll({
       where: {
         [Op.or]: {
           name: {
-            [Op.iLike]: '%' + search + '%'
+            [Op.iLike]: "%" + search + "%",
           },
           full_name: {
-            [Op.iLike]: '%' + search + '%'
+            [Op.iLike]: "%" + search + "%",
           },
         },
         group_status,
-        groupId
+        groupId,
       },
-    })
-    return res.json(user)
+    });
+    return res.json(user);
   }
 
   async getUsersByGroupStatus(req, res) {
     const { groupId, group_status } = req.query;
-  
-  
-      const user = await User.findAll({
-        where: {
-          groupId,
-          group_status
-        },
-      })
-      return res.json(user)
+
+    const user = await User.findAll({
+      where: {
+        groupId,
+        group_status,
+      },
+    });
+    return res.json(user);
+  }
+
+  async getAllTutors(req, res) {
+    const user = await User.findAll({
+      where: {
+        roleId: 2,
+      },
+    });
+    return res.json(user);
+  }
+
+  async uploadProject(req, res) {
+    const uploadPath = path.join(__dirname, "..", "uploads");
+    const extractPath = path.join(__dirname, "..", "extracted");
+
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath);
     }
 
-    async getAllTutors(req, res) {
-        const user = await User.findAll({
-          where: {
-            roleId: 2
-          },
-        })
-        return res.json(user)
+    if (!fs.existsSync(extractPath)) {
+      fs.mkdirSync(extractPath);
+    }
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded.");
+    }
+
+    const { projectFile } = req.files;
+    const maxFileSize = 100 * 1024 * 1024; // 100 МБ в байтах
+    if (projectFile.size > maxFileSize) {
+      return res
+        .status(400)
+        .send("File size exceeds the allowed limit (100 MB).");
+    }
+
+    const zipFile = projectFile;
+
+    // Сохраняем zip-архив на сервере
+    zipFile.mv(path.join(uploadPath, zipFile.name), (err) => {
+      if (err) {
+        return res.status(500).send(err);
       }
 
-    async uploadProject(req, res) {
+      const zipFilePath = path.join(uploadPath, zipFile.name);
+      const uniqueExtractPath = path.join(extractPath, uuidv4());
 
-      const uploadPath = path.join(__dirname, '..', 'uploads');
-      const extractPath = path.join(__dirname, '..', 'extracted');
-    
-      if (!fs.existsSync(uploadPath)) {
-        fs.mkdirSync(uploadPath);
-      }
-    
-      if (!fs.existsSync(extractPath)) {
-        fs.mkdirSync(extractPath);
-      }
-    
-      if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).send('No files were uploaded.');
-      }
-    
-      const { projectFile } = req.files;
-      const maxFileSize = 50 * 1024 * 1024; // 100 МБ в байтах
-      console.log(maxFileSize)
-      if (projectFile.size > maxFileSize) {
-        return res.status(400).send('File size exceeds the allowed limit (100 MB).');
-      }
-      const zipFile = projectFile;
-    
-      // Сохраняем zip-архив на сервере
-      zipFile.mv(path.join(uploadPath, zipFile.name), (err) => {
-        if (err) {
-          return res.status(500).send(err);
+      fs.mkdirSync(uniqueExtractPath);
+
+      // Используем потоки для разархивации
+      const readStream = fs.createReadStream(zipFilePath);
+      const extractStream = readStream.pipe(unzipper.Parse());
+
+      const filePaths = [];
+      let normalPath = "";
+      let baseUrl = "";
+
+      extractStream.on("entry", async (entry) => {
+        const entryPath = path.join(uniqueExtractPath, entry.path);
+        // Добавляем относительный путь файла в массив
+        const relativePath = path.relative(uniqueExtractPath, entryPath);
+        normalPath = path.relative(extractPath, uniqueExtractPath);
+        const fileNamePos = entry.path.indexOf("/");
+        baseUrl = path.join(
+          process.env.BASEURL + "/",
+          normalPath + "/",
+          entry.path.substr(0, fileNamePos) + "/"
+        );
+        console.log(baseUrl);
+        filePaths.push(relativePath);
+
+        // Создаем уникальную папку для файла (включая все предшествующие директории)
+        if (entry.type === "Directory") {
+          fs.mkdirSync(entryPath, { recursive: true });
+        } else {
+          // Создаем все предшествующие директории
+          const dirname = path.dirname(entryPath);
+          fs.mkdirSync(dirname, { recursive: true });
+
+          // Читаем буфер и преобразуем его в строку
+          const buffer = await entry.buffer();
+          const content = buffer.toString("utf-8");
+          fs.writeFileSync(entryPath, content, "utf-8");
         }
-    
-        const zipFilePath = path.join(uploadPath, zipFile.name);
-        const uniqueExtractPath = path.join(extractPath, uuidv4());
-      
-        // Создаем уникальную папку для разархивации
-        fs.mkdirSync(uniqueExtractPath);
-      
-        // Используем потоки для разархивации
-        const readStream = fs.createReadStream(zipFilePath);
-        const extractStream = readStream.pipe(unzipper.Parse());
-      
-        const filePaths = [];
-      
-        extractStream.on('entry', (entry) => {
-          const entryPath = path.join(uniqueExtractPath, entry.path);
-        
-          // Добавляем относительный путь файла в массив
-          const relativePath = path.relative(uniqueExtractPath, entryPath);
-          filePaths.push(relativePath);
-        
-          // Создаем уникальную папку для файла (включая все предшествующие директории)
-          if (entry.type === 'Directory') {
-            fs.mkdirSync(entryPath, { recursive: true });
-          } else {
-            // Создаем все предшествующие директории
-            const dirname = path.dirname(entryPath);
-            fs.mkdirSync(dirname, { recursive: true });
-            
-            // Создаем поток для записи файла
-            entry.pipe(fs.createWriteStream(entryPath));
-          }
-        
-          // Пропускаем содержимое файла
-          entry.autodrain();
-        });
-      
-        extractStream.on('finish', () => {
-          // Выводим список относительных путей файлов
-          console.log(filePaths)
-          res.json(filePaths);
-        });
-      
-        extractStream.on('error', (err) => {
-          console.error('Error during extraction:', err);
-          res.status(500).send('Error during extraction');
-        });
+
+        // Пропускаем содержимое файла
+        entry.autodrain();
       });
 
+      extractStream.on("finish", () => {
+        // Выводим список относительных путей файлов
+        console.log("Files in the archive:", filePaths);
+
+        res.json({ filePaths, normalPath, baseUrl });
+      });
+
+      extractStream.on("error", (err) => {
+        console.error("Error during extraction:", err);
+        res.status(500).send("Error during extraction");
+      });
+    });
+  }
+
+  async sendProjectViewer(req, res) {
+    try {
+      const { filePath } = req.query;
+
+      if (!filePath) {
+        return res.status(400).send("File path is missing.");
+      }
+      console.ol;
+
+      // Формируем полный путь к файлу, включая уникальную папку
+      const fullPath = path.join(__dirname, "../extracted/", filePath);
+
+      // Отправляем файл клиенту
+      console.log(fullPath);
+      res.sendFile(fullPath);
+    } catch (error) {
+      console.error("Error during project view:", error);
+      res.status(500).send("Error during project view");
     }
-
-
+  }
 }
 module.exports = new UserController();

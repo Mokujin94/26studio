@@ -10,18 +10,26 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { uploadProject } from "../../http/userAPI";
 
 function AddProjectModal() {
-
   const [stages, setStages] = useState(1);
   const [file, setFile] = useState(null);
 
   const [projectPathes, setProjectPathes] = useState([]);
-  
+  const [uniqueFolder, setUniqueFolder] = useState("");
+  const [baseURL, setBaseURL] = useState("");
+
   useEffect(() => {
     const formData = new FormData();
-    formData.append('projectFile', file);
-    console.log(file)
-    uploadProject(formData).then(data => setProjectPathes(data)).catch(err => console.log(err));
-  }, [file])
+    formData.append("projectFile", file);
+    console.log(file);
+    uploadProject(formData)
+      .then((data) => {
+        setProjectPathes(data.filePaths);
+        setUniqueFolder(data.normalPath);
+        setBaseURL(data.baseUrl);
+        console.log(uniqueFolder);
+      })
+      .catch((err) => console.log(err));
+  }, [file]);
   return (
     <div className={style.block}>
       <div className={style.block__header}>
@@ -55,8 +63,7 @@ function AddProjectModal() {
       <SwitchTransition mode="out-in">
         <CSSTransition key={stages} timeout={300} classNames="node-stage">
           <div className={style.block__stage}>
-          {stages > 1 && <AddProjectStages />}
-
+            {stages > 1 && <AddProjectStages />}
           </div>
         </CSSTransition>
       </SwitchTransition>
@@ -65,7 +72,12 @@ function AddProjectModal() {
           <div className={style.block__content}>
             {file ? (
               stages === 2 ? (
-                <AddProjectModalSecond projectPathes={projectPathes} setStages={setStages} />
+                <AddProjectModalSecond
+                  projectPathes={projectPathes}
+                  setStages={setStages}
+                  uniqueFolder={uniqueFolder}
+                  baseURL={baseURL}
+                />
               ) : stages === 3 ? (
                 <AddProjectModalThird />
               ) : (

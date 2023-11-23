@@ -1,99 +1,97 @@
 @import "../../resource/styles/variables";
 
 .block {
-    position: relative;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 65px;
+  width: 100%;
+  &__info {
     display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin-top: 65px;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 300px;
     width: 100%;
-    &__info {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        max-width: 300px;
+    &Item {
+      &Title {
+        color: $studio-white-text;
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+      &Input {
         width: 100%;
-        &Item {
-            &Title {
-                color: $studio-white-text;
-                font-size: 18px;
-                font-weight: 500;
-                margin-bottom: 10px;
-            }
-            &Input {
-                width: 100%;
-                outline: none;
-                background-color: $studio-dark-input;
-                border: 2px solid $studio-primary-border;
-                border-radius: 10px;
-                padding: 10px 15px;
-                color: $studio-white-text;
-                font-size: 14px;
-                font-weight: 400;
-                &::placeholder {
-                    color: $studio-placholder-color;
-                }
-                &_area {
-                    resize: none;
-                    height: 140px;
-                }
-                &_preview {
-                    display: block;
-                    cursor: pointer;
-                }
-            }
-
-        }
-
-    }
-
-    &__preview {
-        max-width: 300px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        &Title {
-            color: $studio-white-text;
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        &Content {
-            margin-top: 10px;
-            height: 200px;
-            border: 2px solid $studio-primary-border;
-            background: $studio-dark-element;
-            border-radius: 10px;
-        }
-
-        &Text {
-            &Title {
-
-            }
-
-            &Descr {
-
-            }
-        }    
-    }
-
-    &__button {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        padding: 10px 40px;
-        border-radius: 10px;
-        background: $studio-primary-button;
-        color: $studio-dark-text;
-        font-size: 16px;
-        font-weight: 700;
-        letter-spacing: 3.2px;
-        border: none;
         outline: none;
+        background-color: $studio-dark-input;
+        border: 2px solid $studio-primary-border;
+        border-radius: 10px;
+        padding: 10px 15px;
+        color: $studio-white-text;
+        font-size: 14px;
+        font-weight: 400;
         cursor: pointer;
-        transition: $studio-transition-03;
-        &:hover {
-            background: $studio-primary-button-hover;
+        &::placeholder {
+          color: $studio-placholder-color;
         }
+        &_area {
+          resize: none;
+          height: 140px;
+        }
+        &_preview {
+          display: block;
+          cursor: pointer;
+        }
+      }
     }
+  }
+
+  &__preview {
+    max-width: 300px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    &Title {
+      color: $studio-white-text;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    &Content {
+      overflow: hidden;
+      margin-top: 10px;
+      height: 200px;
+      border: 2px solid $studio-primary-border;
+      background: $studio-dark-element;
+      border-radius: 10px;
+    }
+
+    &Text {
+      &Title {
+      }
+
+      &Descr {
+      }
+    }
+  }
+
+  &__button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px 40px;
+    border-radius: 10px;
+    background: $studio-primary-button;
+    color: $studio-dark-text;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 3.2px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: $studio-transition-03;
+    &:hover {
+      background: $studio-primary-button-hover;
+    }
+  }
 }
