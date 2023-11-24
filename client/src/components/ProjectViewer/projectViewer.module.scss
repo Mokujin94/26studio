@@ -1,12 +1,13 @@
 .wrap {
   width: 100%;
-  height: 200px;
+  height: 215px;
   padding: 0;
   overflow: hidden;
+  border-radius: 0 0 15px 15px;
 }
 .iframe {
-  width: 334%;
-  height: 450px;
+  width: 333%;
+  height: 720px;
   -ms-zoom: 0.75;
   -moz-transform: scale(0.55);
   -moz-transform-origin: 0 0;
@@ -15,3 +16,6 @@
   -webkit-transform: scale(0.3);
   -webkit-transform-origin: 0 0;
 }
+
+
+

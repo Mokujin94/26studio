@@ -320,7 +320,7 @@ class UserController {
       if (!filePath) {
         return res.status(400).send("File path is missing.");
       }
-      console.ol;
+      
 
       // Формируем полный путь к файлу, включая уникальную папку
       const fullPath = path.join(__dirname, "../extracted/", filePath);

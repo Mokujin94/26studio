@@ -47,7 +47,7 @@
   }
 
   &__preview {
-    max-width: 300px;
+    max-width: 350px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -60,17 +60,28 @@
     &Content {
       overflow: hidden;
       margin-top: 10px;
-      height: 200px;
+      // height: 300px;
+      height: auto;
       border: 2px solid $studio-primary-border;
       background: $studio-dark-element;
       border-radius: 10px;
     }
 
     &Text {
+      padding: 16px;
       &Title {
+        color: $studio-white-text;
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 10px;
       }
 
       &Descr {
+        color: $studio-white-text;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 18px;
+        word-wrap: break-word;
       }
     }
   }

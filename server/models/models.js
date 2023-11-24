@@ -48,6 +48,7 @@ const Project = sequelize.define("project", {
   files: { type: DataTypes.STRING, allowNull: false },
   img: { type: DataTypes.STRING, allowNull: false },
   is_private: { type: DataTypes.BOOLEAN, defaultValue: false },
+  is_private_comments: { type: DataTypes.BOOLEAN, defaultValue: false },
   views: { type: DataTypes.JSON },
   amount_views: { type: DataTypes.INTEGER, defaultValue: 0 },
   likes: { type: DataTypes.JSON },

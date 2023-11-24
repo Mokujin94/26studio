@@ -10,6 +10,8 @@ function AddProjectModalSecond({
   baseURL,
 }) {
   const [selectedPath, setSelectedPath] = useState("");
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     console.log(uniqueFolder);
@@ -24,7 +26,7 @@ function AddProjectModalSecond({
       <div className={style.block__info}>
         <div className={style.block__infoItem}>
           <h2 className={style.block__infoItemTitle}>Название</h2>
-          <input className={style.block__infoItemInput} type="text" />
+          <input className={style.block__infoItemInput} type="text" value={name} onChange={(e) => setName(e.target.value)}/>
         </div>
         <div className={style.block__infoItem}>
           <h2 className={style.block__infoItemTitle}>Описание</h2>
@@ -36,6 +38,7 @@ function AddProjectModalSecond({
             id=""
             cols="30"
             rows="10"
+            value={description} onChange={(e) => setDescription(e.target.value)}
           ></textarea>
         </div>
         <div className={style.block__infoItem}>
@@ -44,8 +47,6 @@ function AddProjectModalSecond({
           </h2>
           <select
             className={style.block__infoItemInput}
-            name=""
-            id=""
             onChange={onSelectPath}
           >
             {projectPathes &&
@@ -78,8 +79,8 @@ function AddProjectModalSecond({
         <div className={style.block__previewContent}>
           <ProjectViewer pathFromProject={selectedPath} baseURL={baseURL} />
           <div className={style.block__previewText}>
-            <h2 className={style.block__previewTextTitle}></h2>
-            <p className={style.block__previewTextDescr}></p>
+            <h2 className={style.block__previewTextTitle}>{name ? name : 'Без названия'}</h2>
+            <p className={style.block__previewTextDescr}>{description ? description : 'Без описания'}</p>
           </div>
         </div>
       </div>
