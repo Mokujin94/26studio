@@ -2,52 +2,13 @@ import { makeAutoObservable } from "mobx";
 
 export default class ProjectStore {
   constructor() {
-    this._projects = [
-      {
-        id: 1,
-        name: "26Studio",
-        start_date: "30.01.2004",
-        description: "норм проект",
-        img: "https://vsegda-pomnim.com/uploads/posts/2022-03/1647070474_58-vsegda-pomnim-com-p-reka-saba-foto-65.jpg",
-        is_private: false,
-        amount_views: 0,
-        amount_likes: 0,
-        amount_comments: 0,
-      },
-      {
-        id: 2,
-        name: "26Studio",
-        start_date: "30.01.2004",
-        description: "норм проект",
-        img: "https://vsegda-pomnim.com/uploads/posts/2022-03/1647070474_58-vsegda-pomnim-com-p-reka-saba-foto-65.jpg",
-        is_private: false,
-        amount_views: 0,
-        amount_likes: 0,
-        amount_comments: 0,
-      },
-      {
-        id: 3,
-        name: "26Studio",
-        start_date: "30.01.2004",
-        description: "норм проект",
-        img: "https://vsegda-pomnim.com/uploads/posts/2022-03/1647070474_58-vsegda-pomnim-com-p-reka-saba-foto-65.jpg",
-        is_private: false,
-        amount_views: 0,
-        amount_likes: 0,
-        amount_comments: 0,
-      },
-      {
-        id: 4,
-        name: "26Studio",
-        start_date: "30.01.2004",
-        description: "норм проект",
-        img: "https://vsegda-pomnim.com/uploads/posts/2022-03/1647070474_58-vsegda-pomnim-com-p-reka-saba-foto-65.jpg",
-        is_private: false,
-        amount_views: 0,
-        amount_likes: 0,
-        amount_comments: 0,
-      },
-    ];
+    this._projects = [];
+    this._projectName = "Без названия";
+    this._projectDescr = "Без описания";
+    this._projectPath = "";
+    this._baseURL = "";
+    this._projectPreview = "";
+
     makeAutoObservable(this);
   }
 
@@ -55,7 +16,47 @@ export default class ProjectStore {
     this._projects = projects;
   }
 
+  setProjectName(projectName) {
+    this._projectName = projectName;
+  }
+
+  setProjectDescr(projectDescr) {
+    this._projectDescr = projectDescr;
+  }
+
+  setProjectPath(projectPath) {
+    this._projectPath = projectPath;
+  }
+
+  setBaseURL(baseURL) {
+    this._baseURL = baseURL;
+  }
+
+  setProjectPreview(projectPreview) {
+    this._projectPreview = projectPreview;
+  }
+
   get projects() {
     return this._projects;
+  }
+
+  get projectName() {
+    return this._projectName;
+  }
+
+  get projectDescr() {
+    return this._projectDescr;
+  }
+
+  get projectPath() {
+    return this._projectPath;
+  }
+
+  get baseURL() {
+    return this._baseURL;
+  }
+
+  get projectPreview() {
+    return this._projectPreview;
   }
 }

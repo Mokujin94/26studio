@@ -1,11 +1,7 @@
 // Original theme
 
 //background
-$studio-background: linear-gradient(
-  180deg,
-  #1f2933 0%,
-  #242f3b 100%
-);
+$studio-background: linear-gradient(180deg, #1f2933 0%, #242f3b 100%);
 
 // header
 $studio-background-header: #1f2933;
@@ -113,6 +109,7 @@ $studio-primary-input: #97bce6;
 $studio-white-input: #fcfcfc;
 $studio-dark-input: #27323e;
 $studio-grey-input: #596470;
+$studio-black-input: #1d252e;
 // focus
 @mixin studio-primary-input-focus {
   border: 2px solid $studio-primary-border;

@@ -79,7 +79,7 @@ function AddProjectModal() {
                   baseURL={baseURL}
                 />
               ) : stages === 3 ? (
-                <AddProjectModalThird />
+                <AddProjectModalThird baseURL={baseURL} />
               ) : (
                 <AddProjectModalFirst setFile={setFile} setStages={setStages} />
               )
