@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import style from "./addProjectModal.module.scss";
 import "./animate.scss";
@@ -8,8 +8,12 @@ import AddProjectModalSecond from "../addProjectModalSecond/AddProjectModalSecon
 import AddProjectModalThird from "../addProjectModalThird/AddProjectModalThird";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { uploadProject } from "../../http/userAPI";
+import { observer } from "mobx-react-lite";
+import { Context } from "../..";
 
-function AddProjectModal() {
+const AddProjectModal = observer(() => {
+  const { project } = useContext(Context);
+
   const [stages, setStages] = useState(1);
   const [file, setFile] = useState(null);
 
@@ -26,6 +30,7 @@ function AddProjectModal() {
         setProjectPathes(data.filePaths);
         setUniqueFolder(data.normalPath);
         setBaseURL(data.baseUrl);
+        project.setBaseURL(data.baseUrl);
         console.log(uniqueFolder);
       })
       .catch((err) => console.log(err));
@@ -63,7 +68,7 @@ function AddProjectModal() {
       <SwitchTransition mode="out-in">
         <CSSTransition key={stages} timeout={300} classNames="node-stage">
           <div className={style.block__stage}>
-            {stages > 1 && <AddProjectStages />}
+            {stages > 1 && <AddProjectStages setStages={setStages} />}
           </div>
         </CSSTransition>
       </SwitchTransition>
@@ -91,6 +96,6 @@ function AddProjectModal() {
       </SwitchTransition>
     </div>
   );
-}
+});
 
 export default AddProjectModal;

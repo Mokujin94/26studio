@@ -8,6 +8,7 @@ router.post("/registration/condidate", userController.checkCondidate);
 router.post("/login", userController.login);
 router.post("/code", userController.generateCode);
 router.post("/upload_project", userController.uploadProject);
+router.post("/upload_finished_project", userController.uploadFinishedProject);
 router.get("/accept_project", userController.sendProjectViewer);
 router.get("/auth", authMiddleware, userController.check);
 router.get("/all", userController.getAll);

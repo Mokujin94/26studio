@@ -42,7 +42,7 @@
 }
 
 .slick-list {
-  padding: 20px 10px;
+  padding: 20px 0px;
 }
 
 .slick-arrow {
@@ -50,6 +50,10 @@
     content: "";
   }
 }
+
+// .slick-slide {
+//   margin-right: 15px;
+// }
 
 .slick-next {
   right: -60px;
@@ -84,7 +88,7 @@
         grid-column-start: 1;
         grid-column-end: 3;
       }
-  
+
       &-filter {
         grid-column-start: 3;
         grid-column-end: 4;
@@ -106,7 +110,7 @@
         grid-column-start: 1;
         grid-column-end: 2;
       }
-  
+
       &-filter {
         grid-column-start: 2;
         grid-column-end: 3;
@@ -135,7 +139,7 @@
       &-search {
         grid-column-start: 1;
       }
-  
+
       &-filter {
         grid-column-start: 1;
       }

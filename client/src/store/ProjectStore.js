@@ -6,8 +6,11 @@ export default class ProjectStore {
     this._projectName = "Без названия";
     this._projectDescr = "Без описания";
     this._projectPath = "";
+    this._projectSelectedPath = "";
     this._baseURL = "";
     this._projectPreview = "";
+    this._projectPrivate = false;
+    this._projectPrivateComments = false;
 
     makeAutoObservable(this);
   }
@@ -28,12 +31,24 @@ export default class ProjectStore {
     this._projectPath = projectPath;
   }
 
+  setProjectSelectedPath(projectSelectedPath) {
+    this._projectSelectedPath = projectSelectedPath;
+  }
+
   setBaseURL(baseURL) {
     this._baseURL = baseURL;
   }
 
   setProjectPreview(projectPreview) {
     this._projectPreview = projectPreview;
+  }
+
+  setProjectPrivate(projectPrivate) {
+    this._projectPrivate = projectPrivate;
+  }
+
+  setProjectPrivateComments(projectPrivateComments) {
+    this._projectPrivateComments = projectPrivateComments;
   }
 
   get projects() {
@@ -52,11 +67,23 @@ export default class ProjectStore {
     return this._projectPath;
   }
 
+  get projectSelectedPath() {
+    return this._projectSelectedPath;
+  }
+
   get baseURL() {
     return this._baseURL;
   }
 
   get projectPreview() {
     return this._projectPreview;
+  }
+
+  get projectPrivate() {
+    return this._projectPrivate;
+  }
+
+  get projectPrivateComments() {
+    return this._projectPrivateComments;
   }
 }

@@ -12,7 +12,7 @@ const User = sequelize.define("user", {
   password: { type: DataTypes.STRING },
   description: { type: DataTypes.STRING },
   avatar: { type: DataTypes.STRING, defaultValue: "avatar.jpg" },
-  group_status: {type: DataTypes.BOOLEAN, defaultValue: false},
+  group_status: { type: DataTypes.BOOLEAN, defaultValue: false },
   achivment_list: { type: DataTypes.JSON },
 });
 
@@ -45,8 +45,9 @@ const Project = sequelize.define("project", {
   name: { type: DataTypes.STRING, allowNull: false },
   start_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   description: { type: DataTypes.STRING, defaultValue: "Нет описания" },
-  files: { type: DataTypes.STRING, allowNull: false },
-  img: { type: DataTypes.STRING, allowNull: false },
+  path_from_project: { type: DataTypes.STRING, allowNull: false },
+  baseURL: { type: DataTypes.STRING, allowNull: false },
+  preview: { type: DataTypes.STRING, allowNull: false },
   is_private: { type: DataTypes.BOOLEAN, defaultValue: false },
   is_private_comments: { type: DataTypes.BOOLEAN, defaultValue: false },
   views: { type: DataTypes.JSON },
@@ -57,7 +58,7 @@ const Project = sequelize.define("project", {
   amount_comments: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
-const Team = sequelize.define("team", {
+const TeamAccess = sequelize.define("team_access", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   role: { type: DataTypes.STRING },
   give_privileges: { type: DataTypes.BOOLEAN },
@@ -66,6 +67,11 @@ const Team = sequelize.define("team", {
   update_privileges: { type: DataTypes.BOOLEAN },
   invite_privileges: { type: DataTypes.BOOLEAN },
   kick_privileges: { type: DataTypes.BOOLEAN },
+});
+
+const Team = sequelize.define("team", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  name: { type: DataTypes.STRING },
 });
 
 const WhiteListUser = sequelize.define("white_list_user", {
@@ -137,14 +143,23 @@ const TypeOfAttachment = sequelize.define("type_of_attachment", {
   name: { type: DataTypes.STRING },
 });
 
-User.belongsToMany(Project, { through: WhiteListUser, Team });
-Project.belongsToMany(User, { through: Team, WhiteListUser });
+User.hasMany(Project);
+Project.belongsTo(User);
+
+TeamAccess.hasMany(User);
+User.belongsTo(TeamAccess);
 
 User.hasMany(WhiteListUser);
 WhiteListUser.belongsTo(User);
 
-User.hasMany(Team);
-Team.belongsTo(User);
+Team.hasMany(User);
+User.belongsTo(Team);
+
+Team.hasMany(Project);
+Project.belongsTo(Team);
+
+Team.hasMany(TeamAccess);
+TeamAccess.belongsTo(Team);
 
 User.hasMany(Friend);
 Friend.belongsTo(User);
@@ -184,6 +199,7 @@ module.exports = {
   Role,
   Project,
   Team,
+  TeamAccess,
   WhiteListUser,
   Achivment,
   GettingAchivment,

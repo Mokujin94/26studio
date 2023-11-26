@@ -14,6 +14,7 @@ const {
   Friend,
   UserAchivment,
   GettingAchivment,
+  Project,
 } = require("../models/models");
 const { Op } = require("sequelize");
 
@@ -278,7 +279,6 @@ class UserController {
           normalPath + "/",
           entry.path.substr(0, fileNamePos) + "/"
         );
-        console.log(baseUrl);
         filePaths.push(relativePath);
 
         // Создаем уникальную папку для файла (включая все предшествующие директории)
@@ -320,18 +320,45 @@ class UserController {
       if (!filePath) {
         return res.status(400).send("File path is missing.");
       }
-      
 
       // Формируем полный путь к файлу, включая уникальную папку
       const fullPath = path.join(__dirname, "../extracted/", filePath);
 
       // Отправляем файл клиенту
-      console.log(fullPath);
       res.sendFile(fullPath);
     } catch (error) {
       console.error("Error during project view:", error);
       res.status(500).send("Error during project view");
     }
+  }
+
+  async uploadFinishedProject(req, res) {
+    const {
+      name,
+      description,
+      path_from_project,
+      baseURL,
+      is_private,
+      is_private_comments,
+      userId,
+    } = req.body;
+
+    const previewFile = uuid.v4() + ".jpg";
+    const { preview } = req.files;
+    preview.mv(path.resolve(__dirname, "..", "static/projects", previewFile));
+
+    const project = await Project.create({
+      name,
+      description,
+      path_from_project,
+      baseURL,
+      preview: previewFile,
+      is_private,
+      is_private_comments,
+      userId,
+    });
+
+    res.json(project);
   }
 }
 module.exports = new UserController();

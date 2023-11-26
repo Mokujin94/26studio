@@ -16,6 +16,11 @@ const AddProjectModalSecond = observer(
 
     const onSelectPath = (e) => {
       project.setProjectPath(uniqueFolder + "/" + e.target.value);
+      project.setProjectSelectedPath(e.target.value);
+    };
+
+    const selectPreviewFile = (e) => {
+      project.setProjectPreview(e.target.files[0]);
     };
 
     return (
@@ -53,6 +58,7 @@ const AddProjectModalSecond = observer(
             <select
               className={style.block__infoItemInput}
               onChange={onSelectPath}
+              value={project.projectSelectedPath}
             >
               {projectPathes &&
                 projectPathes.map((item, i) => {
@@ -66,7 +72,13 @@ const AddProjectModalSecond = observer(
           </div>
           <div className={style.block__infoItem}>
             <h2 className={style.block__infoItemTitle}>Превью</h2>
-            <input style={{ display: "none" }} type="file" id="file_preview" />
+            <input
+              style={{ display: "none" }}
+              type="file"
+              id="file_preview"
+              onChange={selectPreviewFile}
+              accept="image/png, image/jpeg"
+            />
             <label
               className={
                 style.block__infoItemInput +
@@ -75,7 +87,11 @@ const AddProjectModalSecond = observer(
               }
               htmlFor="file_preview"
             >
-              Загрузите фото
+              {project.projectPreview
+                ? project.projectPreview.name.length > 20
+                  ? project.projectPreview.name.slice(0, 20) + "..."
+                  : project.projectPreview.name
+                : "Загрузите фото"}
             </label>
           </div>
         </div>

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from "react";
 
-import style from './secondStageReg.module.scss';
+import style from "./secondStageReg.module.scss";
 
-import RegistrationButton from '../primaryButton/PrimaryButton';
-import { Context } from '../..';
-import { observer } from 'mobx-react-lite';
+import RegistrationButton from "../primaryButton/PrimaryButton";
+import { Context } from "../..";
+import { observer } from "mobx-react-lite";
 
 const SecondStageReg = observer(({ errorModal }) => {
   const { user } = useContext(Context);
@@ -15,7 +15,9 @@ const SecondStageReg = observer(({ errorModal }) => {
   const [newData, setNewData] = useState({});
 
   useEffect(() => {
-    user.setCodeAuth(Math.floor(Math.random() * (999999 - 100000 + 1) + 100000));
+    user.setCodeAuth(
+      Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
+    );
   }, []);
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const SecondStageReg = observer(({ errorModal }) => {
   };
 
   useEffect(() => {
-    if (groupValue == 'Выберите группу') {
+    if (groupValue == "Выберите группу") {
       user.setErrorAuth(true);
     } else user.setErrorAuth(false);
   }, [groupValue]);
@@ -59,12 +61,16 @@ const SecondStageReg = observer(({ errorModal }) => {
               onChange={changeSelect}
               className={style.second__itemGroup}
               style={
-                errorModal && user.dataAuth.group === 'Выберите группу'
-                  ? { border: '2px solid rgb(255, 149, 149)' }
+                errorModal && user.dataAuth.group === "Выберите группу"
+                  ? { border: "2px solid rgb(255, 149, 149)" }
                   : null
               }
             >
-              <option className={style.second__itemGroupValue} disabled value="Выберите группу">
+              <option
+                className={style.second__itemGroupValue}
+                disabled
+                value="Выберите группу"
+              >
                 Выберите группу
               </option>
               <option className={style.second__itemGroupValue} value="1">
@@ -108,14 +114,27 @@ const SecondStageReg = observer(({ errorModal }) => {
           <div className={style.second__item}>
             <h2 className={style.second__itemTitle}>Аватар</h2>
             <label className={style.second__itemBtn}>
-              <p>{file ? (file.name.length > 20 ? file.name.slice(0, 20) + '...' : file.name) : 'Загрузить'}</p>
-              <input onChange={selectFile} type="file" style={{ display: 'none' }} />
+              <p>
+                {file
+                  ? file.name.length > 20
+                    ? file.name.slice(0, 20) + "..."
+                    : file.name
+                  : "Загрузить"}
+              </p>
+              <input
+                onChange={selectFile}
+                accept="image/png, image/gif, image/jpeg"
+                type="file"
+                style={{ display: "none" }}
+              />
             </label>
           </div>
         </div>
         <div className={style.second__row}>
           <label>
-            <h2 className={style.second__itemTitle}>Немного информации о себе</h2>
+            <h2 className={style.second__itemTitle}>
+              Немного информации о себе
+            </h2>
             <textarea
               value={aboutValue}
               onChange={changeArea}

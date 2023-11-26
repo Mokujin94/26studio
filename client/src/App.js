@@ -33,7 +33,7 @@ const App = observer(() => {
       <BrowserRouter>
         <AuthProvider>
           <ScrollToTop />
-          <AddProjectModal />
+          {/* <AddProjectModal /> */}
           {user.path === REGISTRATION_ROUTE ||
           user.path === LOGIN_ROUTE ? null : (
             <BurgerMenu />

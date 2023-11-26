@@ -4,12 +4,29 @@ import style from "./addProjectModalThird.module.scss";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import ProjectViewer from "../ProjectViewer/ProjectViewer";
+import { uploadFinishedProject } from "../../http/projectAPI";
 
 const AddProjectModalThird = observer(({ baseURL }) => {
   const { project } = useContext(Context);
+  const { user } = useContext(Context);
 
-  const [privacy, setPrivacy] = useState(false);
-  const [comments, setCommentsy] = useState(true);
+  const upload = async () => {
+    const formData = new FormData();
+    formData.append("name", project.projectName);
+    formData.append("description", project.projectDescr);
+    formData.append("path_from_project", project.projectPath);
+    formData.append("baseURL", project.baseURL);
+    formData.append("preview", project.projectPreview);
+    formData.append("is_private", project.projectPrivate);
+    formData.append("is_private_comments", project.projectPrivateComments);
+    formData.append("userId", user.user.id);
+    const response = await uploadFinishedProject(formData)
+      .then((data) => {
+        console.log("Успешно");
+      })
+      .catch();
+    return response;
+  };
 
   return (
     <div className={style.AddProjectModalThird}>
@@ -19,12 +36,12 @@ const AddProjectModalThird = observer(({ baseURL }) => {
             Приватность
           </div>
           <div
-            onClick={() => setPrivacy(false)}
+            onClick={() => project.setProjectPrivate(false)}
             className={style.AddProjectModalThird__settings__select}
           >
             <input
               type="radio"
-              checked={!privacy && true}
+              checked={!project.projectPrivate && true}
               name=""
               id="radio1"
               className={style.AddProjectModalThird__settings__select__box}
@@ -32,12 +49,12 @@ const AddProjectModalThird = observer(({ baseURL }) => {
             <span>Открытый проект</span>
           </div>
           <div
-            onClick={() => setPrivacy(true)}
+            onClick={() => project.setProjectPrivate(true)}
             className={style.AddProjectModalThird__settings__select}
           >
             <input
               type="radio"
-              checked={privacy && true}
+              checked={project.projectPrivate && true}
               name=""
               id="radio2"
               className={style.AddProjectModalThird__settings__select__box}
@@ -50,12 +67,12 @@ const AddProjectModalThird = observer(({ baseURL }) => {
             Комментарии
           </div>
           <div
-            onClick={() => setCommentsy(true)}
+            onClick={() => project.setProjectPrivateComments(false)}
             className={style.AddProjectModalThird__settings__select}
           >
             <input
               type="radio"
-              checked={comments && true}
+              checked={!project.projectPrivateComments && true}
               name=""
               id="radio3"
               className={style.AddProjectModalThird__settings__select__box}
@@ -63,12 +80,12 @@ const AddProjectModalThird = observer(({ baseURL }) => {
             <span>Разрешить</span>
           </div>
           <div
-            onClick={() => setCommentsy(false)}
+            onClick={() => project.setProjectPrivateComments(true)}
             className={style.AddProjectModalThird__settings__select}
           >
             <input
               type="radio"
-              checked={!comments && true}
+              checked={project.projectPrivateComments && true}
               name=""
               id="radio4"
               className={style.AddProjectModalThird__settings__select__box}
@@ -97,7 +114,7 @@ const AddProjectModalThird = observer(({ baseURL }) => {
           </div>
         </div>
       </div>
-      <button className={style.AddProjectModalThird__button}>
+      <button className={style.AddProjectModalThird__button} onClick={upload}>
         Опубликовать
       </button>
     </div>

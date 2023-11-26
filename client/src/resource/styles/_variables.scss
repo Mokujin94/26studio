@@ -30,6 +30,7 @@ $studio-grey-element: #596470;
   border: 2px solid $studio-primary-border;
   box-shadow: $studio-primary-box-shadow;
   transform: scale(1.02);
+  z-index: 2;
 }
 @mixin studio-mixin-dark-element-hover {
   background: $studio-primary-element;

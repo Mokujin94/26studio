@@ -24,3 +24,16 @@ export const fetchProject = async (pathFromProject, baseURL) => {
 
   return updatedLinks;
 };
+
+export const uploadFinishedProject = async (project) => {
+  const { data } = await $host.post(
+    "api/user/upload_finished_project",
+    project
+  );
+  return data;
+};
+
+export const getAll = async () => {
+  const { data } = await $host.get("api/project");
+  return data;
+};
