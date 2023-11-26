@@ -37,3 +37,8 @@ export const getAll = async () => {
   const { data } = await $host.get("api/project");
   return data;
 };
+
+export const fetchProjectById = async (id) => {
+  const { data } = await $host.get("api/project/" + id);
+  return data;
+};

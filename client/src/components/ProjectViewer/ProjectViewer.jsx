@@ -3,7 +3,7 @@ import { fetchProject } from "../../http/projectAPI";
 
 import style from "./projectViewer.module.scss";
 
-const ProjectViewer = ({ pathFromProject, baseURL }) => {
+const ProjectViewer = ({ pathFromProject, baseURL, styles, styleWrap }) => {
   const [htmlContent, setHtmlContent] = useState("");
 
   useEffect(() => {
@@ -20,11 +20,12 @@ const ProjectViewer = ({ pathFromProject, baseURL }) => {
     fetchData();
   }, [pathFromProject, baseURL]);
   return (
-    <div className={style.wrap}>
+    <div className={style.wrap} style={styleWrap}>
       <iframe
         title="Project Content"
         className={style.iframe}
         srcDoc={htmlContent}
+        style={styles}
       />
     </div>
   );

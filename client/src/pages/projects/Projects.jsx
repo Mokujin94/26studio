@@ -78,14 +78,16 @@ const Projects = observer(() => {
               ? newLastAddedSkeletonList
               : project.projects.map((item) => {
                   return (
-                    <ProjectCard
-                      img={item.preview}
-                      title={item.name}
-                      date={item.start_date}
-                      like={item.amount_likes}
-                      view={item.amount_views}
-                      comment={item.amount_comments}
-                    />
+                    <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
+                      <ProjectCard
+                        img={item.preview}
+                        title={item.name}
+                        date={item.start_date}
+                        like={item.amount_likes}
+                        view={item.amount_views}
+                        comment={item.amount_comments}
+                      />
+                    </Link>
                   );
                 })}
             {/* {newLastAddedSkeletonList} */}
@@ -104,7 +106,7 @@ const Projects = observer(() => {
             ? newSkeletonList
             : project.projects.map((item) => {
                 return (
-                  <Link to={PROJECTS_ROUTE + "/" + item.id}>
+                  <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
                     <ProjectCard
                       img={item.preview}
                       title={item.name}

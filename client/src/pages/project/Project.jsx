@@ -1,22 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 
-import ProjectHeader from '../../components/projectHeader/ProjectHeader'
-import ProjectContent from '../../components/projectContent/ProjectContent'
-import Comments from '../../components/comments/Comments'
-import Description from '../../components/description/Description'
+import ProjectHeader from "../../components/projectHeader/ProjectHeader";
+import ProjectContent from "../../components/projectContent/ProjectContent";
+import Comments from "../../components/comments/Comments";
+import Description from "../../components/description/Description";
 
-import "./project.scss"
-
+import "./project.scss";
+import { fetchProjectById } from "../../http/projectAPI";
+import { useParams } from "react-router";
 
 function Project() {
+  const { id } = useParams();
+
+  const [dataProject, setDataProject] = useState({});
+
+  useEffect(() => {
+    fetchProjectById(id).then((data) => setDataProject(data));
+  }, []);
   return (
     <div className="container">
       <div className="project">
         <div className="project__header">
-          <ProjectHeader title="Arkana"/>
+          <ProjectHeader title={dataProject.name} />
         </div>
         <div className="project__content">
-          <ProjectContent/>
+          <ProjectContent
+            pathFromProject={dataProject.path_from_project}
+            baseURL={dataProject.baseURL}
+          />
           <Comments />
         </div>
         <div className="project__info">
@@ -37,7 +48,7 @@ function Project() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Project
+export default Project;
