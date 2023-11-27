@@ -17,6 +17,7 @@ import { check } from "./http/userAPI";
 import { fetchGroups } from "./http/groupsAPI";
 import AddProjectModal from "./components/addProjectModal/AddProjectModal";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
+import { CSSTransition } from "react-transition-group";
 
 const App = observer(() => {
   const { user } = useContext(Context);
@@ -33,7 +34,20 @@ const App = observer(() => {
       <BrowserRouter>
         <AuthProvider>
           <ScrollToTop />
-          <AddProjectModal /> 
+          <CSSTransition
+            in={user.modalProject}
+            timeout={300}
+            classNames="create-anim"
+            mountOnEnter
+            unmountOnExit
+          >
+            <div
+              className="addProjectModal__bg"
+              onClick={() => user.setModalProject(false)}
+            >
+              <AddProjectModal />
+            </div>
+          </CSSTransition>
           {user.path === REGISTRATION_ROUTE ||
           user.path === LOGIN_ROUTE ? null : (
             <BurgerMenu />

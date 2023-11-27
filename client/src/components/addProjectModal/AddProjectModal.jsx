@@ -12,7 +12,7 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 
 const AddProjectModal = observer(() => {
-  const { project } = useContext(Context);
+  const { project, user } = useContext(Context);
 
   const [stages, setStages] = useState(1);
   const [file, setFile] = useState(null);
@@ -20,6 +20,7 @@ const AddProjectModal = observer(() => {
   const [projectPathes, setProjectPathes] = useState([]);
   const [uniqueFolder, setUniqueFolder] = useState("");
   const [baseURL, setBaseURL] = useState("");
+
 
   useEffect(() => {
     const formData = new FormData();
@@ -36,10 +37,14 @@ const AddProjectModal = observer(() => {
       .catch((err) => console.log(err));
   }, [file]);
   return (
-    <div className={style.block}>
+    <div className={style.block}
+    onClick={(e) => e.stopPropagation()}
+    >
       <div className={style.block__header}>
         <h2 className={style.block__headerTitle}>Загрузка проекта</h2>
-        <div className={style.block__headerClose}>
+        <div 
+        onClick={() => user.setModalProject(false)}
+        className={style.block__headerClose}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"

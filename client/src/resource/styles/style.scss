@@ -44,6 +44,14 @@ body {
   // transition-duration: 0.3s;
 }
 
+.addProjectModal__bg {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background-color: $studio-black-opacity-03;
+  z-index: 6;
+}
+
 @media (max-width: $xxl) {
   .container {
     max-width: 1470px;
@@ -84,4 +92,20 @@ body {
   .container {
     max-width: 100%;
   }
+}
+
+
+.create-anim-enter {
+  opacity: 0;
+}
+.create-anim-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.create-anim-exit {
+  opacity: 1;
+}
+.create-anim-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s;
 }
