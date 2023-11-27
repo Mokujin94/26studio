@@ -121,6 +121,12 @@ const UnpostedNews = sequelize.define("unposted_news", {
   description: { type: DataTypes.STRING },
 });
 
+const Comments = sequelize.define("comments_all", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  message: { type: DataTypes.STRING },
+  resendId:  {type: DataTypes.INTEGER}
+});
+
 const Message = sequelize.define("message", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   files: { type: DataTypes.STRING },
@@ -160,6 +166,12 @@ Project.belongsTo(Team);
 
 Team.hasMany(TeamAccess);
 TeamAccess.belongsTo(Team);
+
+Project.hasMany(Comments);
+Comments.belongsTo(Project);
+
+News.hasMany(Comments);
+Comments.belongsTo(News);
 
 User.hasMany(Friend);
 Friend.belongsTo(User);
