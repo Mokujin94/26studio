@@ -59,7 +59,16 @@
         padding: 0 60px;
     }
     &__stage {
+        opacity: 0;
         display: block;
         margin-top: 40px;
+        &_active {
+            animation: stageOpen .3s .3s forwards;
+        }
     }
+}
+
+@keyframes stageOpen {
+    0% {opacity: 0;}
+    100%{opacity: 1}
 }

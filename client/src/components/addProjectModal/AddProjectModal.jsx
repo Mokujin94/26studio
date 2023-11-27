@@ -65,13 +65,9 @@ const AddProjectModal = observer(() => {
           </svg>
         </div>
       </div>
-      <SwitchTransition mode="out-in">
-        <CSSTransition key={stages} timeout={300} classNames="node-stage">
-          <div className={style.block__stage}>
-            {stages > 1 && <AddProjectStages setStages={setStages} />}
+          <div className={stages > 1 ? style.block__stage + " " + style.block__stage_active : style.block__stage}>
+            {stages > 1 && <AddProjectStages stages={stages} setStages={setStages} />}
           </div>
-        </CSSTransition>
-      </SwitchTransition>
       <SwitchTransition mode="out-in">
         <CSSTransition key={stages} timeout={300} classNames="node">
           <div className={style.block__content}>
