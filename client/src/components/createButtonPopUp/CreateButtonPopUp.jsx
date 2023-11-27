@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import style from "./createButtonPopUp.module.scss";
 import "./createAnim.scss";
 
 import addProject from "../../resource/graphics/icons/createButtonPopUp/addProject.svg";
 import addNews from "../../resource/graphics/icons/createButtonPopUp/addNews.svg";
 import { CSSTransition } from "react-transition-group";
+import { Context } from "../..";
 
 function CreateButtonPopUp() {
   const [active, setActive] = useState(false);
+
+  const { user } = useContext(Context);
 
   return (
     <div
@@ -55,7 +58,10 @@ function CreateButtonPopUp() {
           }
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={style.button__contentItem}>
+          <div 
+          onClick={() => user.setModalProject(true)}
+          className={style.button__contentItem} >
+            
             <img
               className={style.button__contentItemImg}
               src={addProject}

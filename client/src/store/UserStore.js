@@ -17,6 +17,7 @@ export default class UserStore {
     this._isAuth = false;
     this._user = {};
     this._path = "";
+    this._modalProject = false;
     this._errorAuth = [
       {
         id: 0,
@@ -98,6 +99,10 @@ export default class UserStore {
     this._path = path;
   }
 
+  setModalProject(modalProject) {
+    this._modalProject = modalProject;
+  } 
+
   setErrorAuth(newErrors) {
     this._errorAuth = this._errorAuth.map((item, i) => {
       if (i === newErrors.id) {
@@ -128,6 +133,10 @@ export default class UserStore {
 
   get path() {
     return this._path;
+  }
+
+  get modalProject() {
+    return this._modalProject;
   }
 
   get errorAuth() {
