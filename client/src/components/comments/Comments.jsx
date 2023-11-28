@@ -12,7 +12,9 @@ function Comments({ comments, setComments, projectId }) {
     // Подписываемся на событие обновления комментариев
     socket.on("sendCommentsToClients", (updatedComments) => {
       console.log("Получены новые комментарии:", updatedComments);
-      setComments((item) => [...item, updatedComments]);
+      if (updatedComments.projectId == projectId) {
+        setComments((item) => [...item, updatedComments]);
+      }
     });
 
     // Закрываем соединение при размонтировании компонента
