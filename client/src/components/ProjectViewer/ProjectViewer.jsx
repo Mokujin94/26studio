@@ -7,7 +7,7 @@ const ProjectViewer = ({ pathFromProject, baseURL, styles, styleWrap }) => {
   const [htmlContent, setHtmlContent] = useState("");
 
   useEffect(() => {
-    console.log(pathFromProject);
+    // console.log(pathFromProject);
     const fetchData = async () => {
       try {
         const content = await fetchProject(pathFromProject, baseURL);

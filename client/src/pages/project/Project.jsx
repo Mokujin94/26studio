@@ -8,14 +8,20 @@ import Description from "../../components/description/Description";
 import "./project.scss";
 import { fetchProjectById } from "../../http/projectAPI";
 import { useParams } from "react-router";
+import { getAllCommentsProject } from "../../http/commentsAPI";
 
 function Project() {
   const { id } = useParams();
 
   const [dataProject, setDataProject] = useState({});
 
+  const [comments, setComments] = useState([]);
+
   useEffect(() => {
     fetchProjectById(id).then((data) => setDataProject(data));
+    getAllCommentsProject(id).then((data) =>
+      setComments(data[0].comments_alls)
+    );
   }, []);
   return (
     <div className="container">
@@ -28,7 +34,11 @@ function Project() {
             pathFromProject={dataProject.path_from_project}
             baseURL={dataProject.baseURL}
           />
-          <Comments />
+          <Comments
+            comments={comments}
+            setComments={setComments}
+            projectId={id}
+          />
         </div>
         <div className="project__info">
           <Description

@@ -124,7 +124,7 @@ const UnpostedNews = sequelize.define("unposted_news", {
 const Comments = sequelize.define("comments_all", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   message: { type: DataTypes.STRING },
-  resendId:  {type: DataTypes.INTEGER}
+  resendId: { type: DataTypes.INTEGER },
 });
 
 const Message = sequelize.define("message", {
@@ -172,6 +172,9 @@ Comments.belongsTo(Project);
 
 News.hasMany(Comments);
 Comments.belongsTo(News);
+
+User.hasMany(Comments);
+Comments.belongsTo(User);
 
 User.hasMany(Friend);
 Friend.belongsTo(User);
@@ -221,6 +224,7 @@ module.exports = {
   UnpostedNews,
   Message,
   Chat,
+  Comments,
 };
 sequelize.sync();
 // sequelize

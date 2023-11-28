@@ -1,53 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import socketIOClient from "socket.io-client";
 import CommentsEnd from "../commentsEnd/CommentsEnd";
 import NewsComment from "../newsComment/NewsComment";
 
 import style from "./comments.module.scss";
 
-function Comments() {
+function Comments({ comments, setComments, projectId }) {
+  useEffect(() => {
+    const socket = socketIOClient("http://localhost:3001");
+    // console.log(socket);
+    // Подписываемся на событие обновления комментариев
+    socket.on("sendCommentsToClients", (updatedComments) => {
+      console.log("Получены новые комментарии:", updatedComments);
+      setComments((item) => [...item, updatedComments]);
+    });
+
+    // Закрываем соединение при размонтировании компонента
+    return () => {
+      socket.disconnect();
+    };
+  }, []); // Пустой массив зависимостей гарантирует, что эффект будет вызван только при монтировании компонента
+
   return (
     <div className={style.block}>
       <div className={style.block__title}>Комментарии</div>
       <div className={style.block__underline}></div>
       <div className={style.block__comments}>
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
-        <NewsComment
-          name="Zeliboba"
-          comment="Ну и новость конечно, фу, не могу на это смотретьНу и новость конечно, фу, не могу на это смотретьНу и новость конечно, фу, не могу на это смотретьНу и новость конечно, фу, не могу на это смотреть"
-          date="12:54 02.04.23"
-        />
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
-        <NewsComment
-          name="Zeliboba"
-          comment="Ну и новость конечно, фу, не могу на это смотреть"
-          date="12:54 02.04.23"
-        />
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
-        <NewsComment
-          name="Zeliboba"
-          comment="Ну и новость конечно, фу, не могу на это смотреть"
-          date="12:54 02.04.23"
-        />
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
+        {comments.map((item) => {
+          console.log(item);
+          return (
+            <NewsComment
+              name="Mokujin94"
+              comment={item.message}
+              date="12:54 04.04.23"
+            />
+          );
+        })}
       </div>
       <div className={style.block__bottom}>
-        <CommentsEnd />
+        <CommentsEnd projectId={projectId} />
       </div>
     </div>
   );

@@ -21,6 +21,7 @@
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.29.1",
+    "socket.io": "^4.7.2",
     "unzipper": "^0.10.14"
   },
   "devDependencies": {

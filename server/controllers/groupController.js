@@ -36,13 +36,13 @@ class GroupController {
       where: { id },
     });
     const user = await User.findOne({
-      where: {id: id_user}
-    })
-    group.members.map(({id}) => {
+      where: { id: id_user },
+    });
+    group.members.map(({ id }) => {
       if (id === id_user) {
         return next(ApiError.internal("Пользователь уже существует"));
       }
-    })
+    });
     let newMembers;
     if (group.members === null) {
       group.update({
@@ -54,8 +54,8 @@ class GroupController {
       });
     } else {
       user.update({
-        group_status: true
-      })
+        group_status: true,
+      });
       newMembers = { id: id_user };
       group.update({
         members: [...group.members, newMembers],
@@ -66,23 +66,23 @@ class GroupController {
   }
 
   async deleteMember(req, res) {
-    const {id} = req.params;
-    const {id_user} = req.body;
+    const { id } = req.params;
+    const { id_user } = req.body;
     const group = await Group.findOne({
       where: { id },
     });
     const user = await User.findOne({
-      where: {id: id_user}
-    })
-    let newMembers = group.members.filter(item => {
+      where: { id: id_user },
+    });
+    let newMembers = group.members.filter((item) => {
       return item.id !== id_user;
-    })
+    });
     user.update({
-      group_status: false
-    })
+      group_status: false,
+    });
     group.update({
-      members: newMembers
-    })
+      members: newMembers,
+    });
     return res.json(group);
   }
 }
