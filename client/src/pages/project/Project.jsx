@@ -1,33 +1,104 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
+import socketIOClient from "socket.io-client";
 import ProjectHeader from "../../components/projectHeader/ProjectHeader";
 import ProjectContent from "../../components/projectContent/ProjectContent";
 import Comments from "../../components/comments/Comments";
 import Description from "../../components/description/Description";
 
 import "./project.scss";
-import { fetchProjectById } from "../../http/projectAPI";
+import {
+  condidate,
+  deleteLike,
+  fetchAllLikes,
+  fetchProjectById,
+  like,
+} from "../../http/projectAPI";
 import { useParams } from "react-router";
 import { getAllCommentsProject } from "../../http/commentsAPI";
+import { Context } from "../..";
 
 function Project() {
   const { id } = useParams();
+  const { user, error } = useContext(Context);
 
   const [dataProject, setDataProject] = useState({});
-
+  const [amountLike, setAmountLike] = useState([]);
   const [comments, setComments] = useState([]);
+  const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
-    fetchProjectById(id).then((data) => setDataProject(data));
-    getAllCommentsProject(id).then((data) =>
-      setComments(data[0].comments_alls)
-    );
+    fetchProjectById(id).then((data) => {
+      setDataProject(data);
+      setAmountLike(data.likes);
+    });
+    getAllCommentsProject(id).then((data) => setComments(data[0].comments));
+
+    const socket = socketIOClient("http://localhost:3001");
+    // console.log(socket);
+    // Подписываемся на событие обновления комментариев
+    socket.on("sendLikesToClients", (updatedLikes) => {
+      console.log("Получены новые комментарии:", updatedLikes);
+      if (updatedLikes) {
+        updatedLikes.filter((item) => {
+          if (item.id == id) {
+            setAmountLike(updatedLikes[0].likes);
+          }
+        });
+      }
+    });
+
+    // Закрываем соединение при размонтировании компонента
+    return () => {
+      socket.disconnect();
+    };
   }, []);
+
+  useEffect(() => {
+    if (amountLike) {
+      console.log("true");
+      for (let i = 0; i < amountLike.length; i++) {
+        if (amountLike[i].userId === user.user.id) {
+          setIsLike(true);
+        }
+      }
+    }
+  }, [user, amountLike]);
+
+  const setLike = async () => {
+    console.log(user.user.id);
+    await condidate(id, user.user.id)
+      .then(async (dataCondidate) => {
+        if (dataCondidate.length) {
+          await deleteLike(id, user.user.id)
+            .then(setIsLike(false))
+            .catch((data) => {
+              console.log(data.response.data.message);
+              error.setNotAuthError(true);
+            });
+        } else {
+          await like(id, user.user.id)
+            .then(setIsLike(true))
+            .catch((data) => {
+              console.log(data.response.data.message);
+              error.setNotAuthError(true);
+            });
+        }
+      })
+      .catch((data) => {
+        console.log(data.response.data.message);
+        error.setNotAuthError(true);
+      });
+  };
   return (
     <div className="container">
       <div className="project">
         <div className="project__header">
-          <ProjectHeader title={dataProject.name} />
+          <ProjectHeader
+            title={dataProject.name}
+            onClick={setLike}
+            likes={amountLike}
+            isLike={isLike}
+          />
         </div>
         <div className="project__content">
           <ProjectContent

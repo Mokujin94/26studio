@@ -5,8 +5,15 @@
   background-color: $studio-dark-element;
   padding: 15px 35px;
   border-radius: 5px;
+  align-items: center;
+  cursor: pointer;
   &__img {
     max-height: 20px;
+    &__active {
+      path {
+        fill: $studio-red-element;
+      }
+    }
   }
   &__amount {
     font-weight: 500;

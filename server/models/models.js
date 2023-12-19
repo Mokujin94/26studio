@@ -50,12 +50,6 @@ const Project = sequelize.define("project", {
   preview: { type: DataTypes.STRING, allowNull: false },
   is_private: { type: DataTypes.BOOLEAN, defaultValue: false },
   is_private_comments: { type: DataTypes.BOOLEAN, defaultValue: false },
-  views: { type: DataTypes.JSON },
-  amount_views: { type: DataTypes.INTEGER, defaultValue: 0 },
-  likes: { type: DataTypes.JSON },
-  amount_likes: { type: DataTypes.INTEGER, defaultValue: 0 },
-  comments: { type: DataTypes.JSON },
-  amount_comments: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
 const TeamAccess = sequelize.define("team_access", {
@@ -99,12 +93,6 @@ const News = sequelize.define("news", {
   title: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
   img: { type: DataTypes.STRING },
-  views: { type: DataTypes.JSON },
-  amount_views: { type: DataTypes.INTEGER, defaultValue: 0 },
-  likes: { type: DataTypes.JSON },
-  amount_likes: { type: DataTypes.INTEGER, defaultValue: 0 },
-  comments: { type: DataTypes.JSON },
-  amount_comments: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
 const ProposedNews = sequelize.define("proposed_news", {
@@ -121,10 +109,18 @@ const UnpostedNews = sequelize.define("unposted_news", {
   description: { type: DataTypes.STRING },
 });
 
-const Comments = sequelize.define("comments_all", {
+const Comments = sequelize.define("comments", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   message: { type: DataTypes.STRING },
   resendId: { type: DataTypes.INTEGER },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+});
+
+const Likes = sequelize.define("likes", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
 const Message = sequelize.define("message", {
@@ -174,7 +170,16 @@ News.hasMany(Comments);
 Comments.belongsTo(News);
 
 User.hasMany(Comments);
-Comments.belongsTo(User);
+Comments.belongsTo(User, { foreignKey: "userId" });
+
+Project.hasMany(Likes);
+Likes.belongsTo(Project);
+
+News.hasMany(Likes);
+Likes.belongsTo(News);
+
+User.hasMany(Likes);
+Likes.belongsTo(User);
 
 User.hasMany(Friend);
 Friend.belongsTo(User);
@@ -225,6 +230,7 @@ module.exports = {
   Message,
   Chat,
   Comments,
+  Likes,
 };
 sequelize.sync();
 // sequelize

@@ -1,0 +1,29 @@
+@import "../../resource/styles/variables";
+
+.achievementProgress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $studio-white-text;
+    &__progress {
+        font-weight: 400;
+        font-size: 11px;
+        line-height: 13px;
+        letter-spacing: 0.15em;
+        margin-bottom: 5px;
+    }
+    &__img {
+        margin-bottom: 10px;
+    }
+    &__title {
+        text-align: center;
+        max-width: 140px;
+        display: flex;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 18px;
+        text-align: center;
+        letter-spacing: 0.15em;
+    }
+}

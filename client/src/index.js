@@ -1,15 +1,16 @@
-import React, { createContext } from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import UserStore from './store/UserStore';
-import ProjectStore from './store/ProjectStore';
-import NewsStore from './store/NewsStore';
-import ProfileStore from './store/ProfileStore';
-import GroupsStore from './store/GroupsStore';
+import React, { createContext } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import UserStore from "./store/UserStore";
+import ProjectStore from "./store/ProjectStore";
+import NewsStore from "./store/NewsStore";
+import ProfileStore from "./store/ProfileStore";
+import GroupsStore from "./store/GroupsStore";
+import ErrorStore from "./store/ErrorStore";
 
 export const Context = createContext(null);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Context.Provider
     value={{
@@ -18,6 +19,7 @@ root.render(
       news: new NewsStore(),
       profile: new ProfileStore(),
       groups: new GroupsStore(),
+      error: new ErrorStore(),
     }}
   >
     <App />

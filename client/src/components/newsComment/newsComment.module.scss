@@ -18,28 +18,37 @@
     left: 0;
     top: 0;
     &Img {
-      max-height: inherit;
+      position: absolute;
+      width: 120%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
+  }
+  &__link {
+    display: inline-block;
   }
   &__text {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     margin-bottom: 10px;
     &Name {
+      display: inline-block;
       font-size: 16px;
-      font-weight: 400;
-      letter-spacing: 0.2em;
+      font-weight: 600;
       margin-bottom: 5px;
+      color: $studio-white-text;
     }
     &Comment {
       font-size: 16px;
-      font-weight: 300;
+      font-weight: 400;
     }
     &Bottom {
       display: flex;
       justify-content: space-between;
       width: 100%;
-      &Feedback{
+      &Feedback {
         display: flex;
         &Item {
           font-size: 14px;
@@ -56,5 +65,4 @@
       }
     }
   }
-  
 }

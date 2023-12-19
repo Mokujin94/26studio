@@ -5,15 +5,17 @@ import NewsComment from "../newsComment/NewsComment";
 
 import style from "./comments.module.scss";
 
-function Comments({ comments, setComments, projectId }) {
+const Comments = ({ comments, setComments, projectId }) => {
   useEffect(() => {
     const socket = socketIOClient("http://localhost:3001");
     // console.log(socket);
     // Подписываемся на событие обновления комментариев
     socket.on("sendCommentsToClients", (updatedComments) => {
       console.log("Получены новые комментарии:", updatedComments);
-      if (updatedComments.projectId == projectId) {
-        setComments((item) => [...item, updatedComments]);
+      if (updatedComments) {
+        if (updatedComments.projectId == projectId) {
+          setComments((item) => [...item, updatedComments]);
+        }
       }
     });
 
@@ -29,12 +31,14 @@ function Comments({ comments, setComments, projectId }) {
       <div className={style.block__underline}></div>
       <div className={style.block__comments}>
         {comments.map((item) => {
-          console.log(item);
           return (
             <NewsComment
-              name="Mokujin94"
+              id={item.userId}
+              name={item.user.name}
+              avatar={item.user.avatar}
               comment={item.message}
               date="12:54 04.04.23"
+              key={item.id}
             />
           );
         })}
@@ -44,6 +48,6 @@ function Comments({ comments, setComments, projectId }) {
       </div>
     </div>
   );
-}
+};
 
 export default Comments;

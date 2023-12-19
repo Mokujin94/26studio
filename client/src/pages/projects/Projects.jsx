@@ -14,13 +14,14 @@ import SliderButton from "../../components/sliderButton/SliderButton";
 import { Link } from "react-router-dom";
 import { PROJECTS_ROUTE, PROJECT_ROUTE } from "../../utils/consts";
 import ProjectsSearch from "../../components/projectsSearch/ProjectsSearch";
-import { getAll } from "../../http/projectAPI";
+import { fetchAllLikes, getAll } from "../../http/projectAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 
 const Projects = observer(() => {
   const { project } = useContext(Context);
   const [isLoaded, setIsLoaded] = useState(true);
+  const [likes, setLikes] = useState([]);
   const stylePrevArrow = { transform: "rotate(180deg)" };
 
   const settings = {
@@ -63,9 +64,10 @@ const Projects = observer(() => {
     setIsLoaded(true);
     getAll().then((data) => {
       project.setProjects(data.rows);
-
+      console.log(data.rows);
       setIsLoaded(false);
     });
+    // fetchAllLikes().then((data) => setLikes(data.likes));
   }, []);
 
   return (
@@ -77,15 +79,16 @@ const Projects = observer(() => {
             {isLoaded
               ? newLastAddedSkeletonList
               : project.projects.map((item) => {
+                  console.log(item);
                   return (
                     <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
                       <ProjectCard
                         img={item.preview}
                         title={item.name}
                         date={item.start_date}
-                        like={item.amount_likes}
+                        like={item.likes.length}
                         view={item.amount_views}
-                        comment={item.amount_comments}
+                        comment={item.comments.length}
                       />
                     </Link>
                   );
@@ -111,9 +114,9 @@ const Projects = observer(() => {
                       img={item.preview}
                       title={item.name}
                       date={item.start_date}
-                      like={item.amount_likes}
+                      like={item.likes.length}
                       view={item.amount_views}
-                      comment={item.amount_comments}
+                      comment={item.comments.length}
                     />
                   </Link>
                 );

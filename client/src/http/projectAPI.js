@@ -1,4 +1,4 @@
-import { $authHost, $host } from "./index";
+import { $authHost, $host, $adminHost } from "./index";
 
 export const fetchProject = async (pathFromProject, baseURL) => {
   const config = {
@@ -40,5 +40,50 @@ export const getAll = async () => {
 
 export const fetchProjectById = async (id) => {
   const { data } = await $host.get("api/project/" + id);
+  return data;
+};
+
+export const condidate = async (projectId, userId) => {
+  const config = {
+    params: {
+      projectId,
+      userId,
+    },
+  };
+  const { data } = await $host.get("api/project/condidate", config);
+  return data;
+};
+
+export const like = async (projectId, userId) => {
+  const { data } = await $authHost.post("api/project/like", {
+    projectId,
+    userId,
+  });
+  return data;
+};
+
+export const deleteLike = async (projectId, userId) => {
+  const config = {
+    params: {
+      projectId,
+      userId,
+    },
+  };
+  const { data } = await $authHost.delete("api/project/delete", config);
+  return data;
+};
+
+export const fetchAllLikes = async () => {
+  const { data } = await $host.get("api/project/likes");
+  return data;
+};
+
+export const fetchLikes = async (id) => {
+  const { data } = await $host.get("api/project/" + id + "/likes");
+  return data;
+};
+
+export const fetchProjectsUser = async (id) => {
+  const { data } = await $host.get("api/project/user/" + id);
   return data;
 };

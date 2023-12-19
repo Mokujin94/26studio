@@ -6,6 +6,7 @@ import commentIcon from "../../resource/graphics/icons/newsCard/comments.svg";
 import style from "./projectCard.module.scss";
 
 function ProjectCard({ img, title, name, date, like, view, comment }) {
+  console.log(like);
   return (
     <div className={style.project}>
       <div className={style.project__blur}></div>

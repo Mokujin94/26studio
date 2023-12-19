@@ -84,6 +84,6 @@ export const generateCode = async (email, code) => {
 };
 
 export const uploadProject = async (file) => {
-  const { data } = await $host.post("api/user/upload_project", file);
+  const { data } = await $authHost.post("api/user/upload_project", file);
   return data;
 };

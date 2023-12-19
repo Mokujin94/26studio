@@ -18,12 +18,15 @@ import { fetchGroups } from "./http/groupsAPI";
 import AddProjectModal from "./components/addProjectModal/AddProjectModal";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
 import { CSSTransition } from "react-transition-group";
+import ModalError from "./components/modalError/ModalError";
+import NotAuthPopup from "./components/notAuthPopup/NotAuthPopup";
 
 const App = observer(() => {
-  const { user } = useContext(Context);
+  const { user, error } = useContext(Context);
 
   useEffect(() => {
     check().then((data) => {
+      console.log(data);
       user.setUser(data);
       user.setAuth(true);
     });
@@ -48,6 +51,21 @@ const App = observer(() => {
               <AddProjectModal />
             </div>
           </CSSTransition>
+          <CSSTransition
+            in={error.notAuthError}
+            timeout={0}
+            classNames="create-anim"
+            mountOnEnter
+            unmountOnExit
+          >
+            <div
+              className="addProjectModal__bg"
+              onClick={() => error.setNotAuthError(false)}
+            >
+              <NotAuthPopup />
+            </div>
+          </CSSTransition>
+
           {user.path === REGISTRATION_ROUTE ||
           user.path === LOGIN_ROUTE ? null : (
             <BurgerMenu />

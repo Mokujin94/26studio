@@ -23,6 +23,11 @@ function initSocket(httpServer) {
       io.emit("receiveCommentsFromServer", comments);
     });
 
+    socket.on("sendLikesToClients", (comments) => {
+      console.log("Отправка комментариев всем клиентам");
+      io.emit("receiveCommentsFromServer", comments);
+    });
+
     socket.on("newComment", (comment) => {
       console.log("Отправка уведомления о новом комментарии : ", comment);
       io.emit("receiveNewComment", comment);

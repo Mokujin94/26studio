@@ -1,16 +1,17 @@
 import { $authHost, $host } from "./index";
 
-export const createProject = async (message, projectId, resendId) => {
-  const { data } = await $host.post("api/comment/project", {
+export const createProject = async (message, projectId, userId, resendId) => {
+  const { data } = await $authHost.post("api/comment/project", {
     message,
     projectId,
+    userId,
     resendId,
   });
   return data;
 };
 
 export const createNews = async (message, newsId, resendId) => {
-  const { data } = await $host.post("api/comment/news", {
+  const { data } = await $authHost.post("api/comment/news", {
     message,
     newsId,
     resendId,

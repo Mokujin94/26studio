@@ -1,4 +1,5 @@
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 const $host = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -8,11 +9,52 @@ const $authHost = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
+const $adminHost = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+
 const authInterceptor = (config) => {
   config.headers.authorization = `Bearer ${localStorage.getItem("token")}`;
   return config;
 };
 
-$authHost.interceptors.request.use(authInterceptor);
+const getUserRoleFromAPI = async () => {
+  try {
+    // Здесь делаете запрос к API для получения роли пользователя
+    const { data } = await $authHost.get("api/user/auth");
+    const decode = jwt_decode(data.token);
+    return decode.roleId; // Предполагается, что роль находится в свойстве 'role'
+  } catch (error) {
+    console.error("Ошибка при получении роли пользователя:", error);
+    throw error;
+  }
+};
 
-export { $host, $authHost };
+const adminInterceptor = async (config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    // Если токен есть, добавляем его в заголовки
+    config.headers.authorization = `Bearer ${token}`;
+
+    try {
+      // Получаем роль пользователя из API
+      const userRole = await getUserRoleFromAPI();
+
+      // Добавляем роль в заголовки (здесь предполагается, что API ожидает заголовок 'UserRole')
+      if (userRole === 1) {
+        config.headers["UserRole"] = userRole;
+      }
+
+      return config;
+    } catch (error) {
+      console.error("Ошибка при получении роли пользователя:", error);
+      throw error;
+    }
+  }
+};
+
+$authHost.interceptors.request.use(authInterceptor);
+$adminHost.interceptors.request.use(adminInterceptor);
+
+export { $host, $authHost, $adminHost };

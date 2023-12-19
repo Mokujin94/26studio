@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import style from './amountComponent.module.scss';
+import style from "./amountComponent.module.scss";
 
-function AmountComponent({ img, value }) {
+function AmountComponent({ img, value, onClick }) {
   return (
-    <div className={style.block}>
-      <img src={img} alt="" className={style.block__img} />
+    <div className={style.block} onClick={onClick}>
+      {img(style)}
       <div className={style.block__amount}>{value}</div>
     </div>
   );

@@ -5,13 +5,21 @@ import { Context } from "../..";
 import { createProject } from "../../http/commentsAPI";
 
 function CommentsEnd({ projectId }) {
-  const { user } = useContext(Context);
+  const { user, error } = useContext(Context);
 
   const [message, setMessage] = useState("");
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    await createProject(message, projectId);
+
+    if (message.replace(/\s/g, "")) {
+      await createProject(message, projectId, user.user.id)
+        .then(setMessage(""))
+        .catch((err) => {
+          console.log(err.response.data.message);
+          error.setNotAuthError(true);
+        });
+    }
   };
   return (
     <form className={style.block}>

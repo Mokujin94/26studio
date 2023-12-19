@@ -1,4 +1,5 @@
-const { Comments, Project, News } = require("../models/models");
+const ApiError = require("../error/ApiError");
+const { Comments, Project, News, User } = require("../models/models");
 const { getIo } = require("../socket");
 
 class CommentController {
@@ -6,7 +7,12 @@ class CommentController {
     const { id } = req.params;
 
     const comments = await Project.findAll({
-      include: Comments,
+      include: [
+        {
+          model: Comments,
+          include: User,
+        },
+      ],
       where: {
         id,
       },
@@ -23,17 +29,33 @@ class CommentController {
     return res.json(comments);
   }
 
-  async createCommentProject(req, res) {
-    const { message, projectId, resendId } = req.body;
+  async createCommentProject(req, res, next) {
+    const { message, projectId, resendId, userId } = req.body;
+
+    if (!userId) {
+      return next(ApiError.internal("Вы не авторизованы"));
+    }
 
     const comment = await Comments.create({
       message,
       projectId,
       resendId,
+      userId,
     });
+
+    const savedComment = await Comments.findOne({
+      where: { id: comment.id },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "name", "avatar"],
+        },
+      ],
+    });
+
     const io = getIo();
-    io.emit("sendCommentsToClients", comment);
-    return res.json(comment);
+    io.emit("sendCommentsToClients", savedComment);
+    return res.json(savedComment);
   }
 
   async createCommentNews(req, res) {
