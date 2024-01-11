@@ -7,6 +7,9 @@
 }
 
 .burger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 6;
   position: fixed;
   left: -285px;

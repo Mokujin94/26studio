@@ -25,7 +25,7 @@ const ProfileProjects = observer(() => {
               title={item.name}
               date={item.start_date}
               like={item.likes.length}
-              view={item.amount_views}
+              view={item.views.length}
               comment={item.comments.length}
             />
           </Link>

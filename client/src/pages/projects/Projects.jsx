@@ -14,14 +14,105 @@ import SliderButton from "../../components/sliderButton/SliderButton";
 import { Link } from "react-router-dom";
 import { PROJECTS_ROUTE, PROJECT_ROUTE } from "../../utils/consts";
 import ProjectsSearch from "../../components/projectsSearch/ProjectsSearch";
-import { fetchAllLikes, getAll } from "../../http/projectAPI";
+import { fetchAllLikes, getAll, searchProject } from "../../http/projectAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const Projects = observer(() => {
   const { project } = useContext(Context);
   const [isLoaded, setIsLoaded] = useState(true);
-  const [likes, setLikes] = useState([]);
+  const [isLoadingSlider, setIsLoadingSlider] = useState(true);
+  const [projectsData, setProjectsData] = useState([]);
+
+  const [searchValue, setSearchValue] = useState("");
+  const useDebounced = useDebounce(searchValue);
+
+  const [selectedItem, setSelectedItem] = useState("0");
+
+  useEffect(() => {
+    setIsLoaded(true);
+    setIsLoadingSlider(true);
+    getAll().then((data) => {
+      if (selectedItem === "0") {
+        project.setProjects(
+          data.rows.sort(
+            (a, b) => Number(b.likes.length) - Number(a.likes.length)
+          )
+        );
+      } else if (selectedItem === "1") {
+        project.setProjects(
+          data.rows.sort((a, b) => b.views.length - a.views.length)
+        );
+      } else {
+        project.setProjects(
+          data.rows.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() / 1000 -
+              new Date(a.createdAt).getTime() / 1000
+          )
+        );
+      }
+
+      setProjectsData(
+        data.rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      );
+      setIsLoaded(false);
+      setIsLoadingSlider(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    setIsLoaded(true);
+    getAll().then((data) => {
+      if (selectedItem === "0") {
+        project.setProjects(
+          data.rows.sort(
+            (a, b) => Number(b.likes.length) - Number(a.likes.length)
+          )
+        );
+      } else if (selectedItem === "1") {
+        project.setProjects(
+          data.rows.sort((a, b) => b.views.length - a.views.length)
+        );
+      } else {
+        project.setProjects(
+          data.rows.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() / 1000 -
+              new Date(a.createdAt).getTime() / 1000
+          )
+        );
+      }
+      setIsLoaded(false);
+    });
+  }, [selectedItem]);
+
+  useEffect(() => {
+    searchProject(useDebounced).then((data) => {
+      if (selectedItem === "0") {
+        project.setProjects(
+          data.rows.sort(
+            (a, b) => Number(b.likes.length) - Number(a.likes.length)
+          )
+        );
+      } else if (selectedItem === "1") {
+        project.setProjects(
+          data.rows.sort((a, b) => b.views.length - a.views.length)
+        );
+      } else {
+        project.setProjects(
+          data.rows.sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() / 1000 -
+              new Date(a.createdAt).getTime() / 1000
+          )
+        );
+      }
+      setIsLoaded(false);
+    });
+  }, [useDebounced]);
+
   const stylePrevArrow = { transform: "rotate(180deg)" };
 
   const settings = {
@@ -60,67 +151,78 @@ const Projects = observer(() => {
     <ProjectSkeleton key={id} />
   ));
 
-  useEffect(() => {
-    setIsLoaded(true);
-    getAll().then((data) => {
-      project.setProjects(data.rows);
-      console.log(data.rows);
-      setIsLoaded(false);
+  const sliderRenderer = isLoadingSlider
+    ? newLastAddedSkeletonList
+    : projectsData.map((item) => {
+        return (
+          <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
+            <ProjectCard
+              img={item.preview}
+              title={item.name}
+              name={item.user.name}
+              date={item.start_date}
+              like={item.likes.length}
+              view={item.views.length}
+              comment={item.comments.length}
+            />
+          </Link>
+        );
+      });
+
+  console.log(projectsData);
+  const projectLoading = isLoaded && newSkeletonList;
+  const projectLoaded =
+    !isLoaded &&
+    project.projects.map((item) => {
+      return (
+        <Link
+          className="projects__link"
+          to={PROJECTS_ROUTE + "/" + item.id}
+          key={item.id}
+        >
+          <ProjectCard
+            img={item.preview}
+            title={item.name}
+            name={item.user.name}
+            date={item.start_date}
+            like={item.likes.length}
+            view={item.views.length}
+            comment={item.comments.length}
+          />
+        </Link>
+      );
     });
-    // fetchAllLikes().then((data) => setLikes(data.likes));
-  }, []);
+
+  const projectError = !isLoaded && !project.projects.length && (
+    <p className="projects__error">Не найдено</p>
+  );
 
   return (
     <div className="container">
       <div className="projects">
-        <h1 className="projects__title">Последние добавленные проекты</h1>
+        <h1 className="projects__title">Новые проекты</h1>
         <div className="projects__wrapper" style={{ display: "block" }}>
-          <Slider {...settings}>
-            {isLoaded
-              ? newLastAddedSkeletonList
-              : project.projects.map((item) => {
-                  console.log(item);
-                  return (
-                    <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
-                      <ProjectCard
-                        img={item.preview}
-                        title={item.name}
-                        date={item.start_date}
-                        like={item.likes.length}
-                        view={item.amount_views}
-                        comment={item.comments.length}
-                      />
-                    </Link>
-                  );
-                })}
-            {/* {newLastAddedSkeletonList} */}
-          </Slider>
+          <Slider {...settings}>{sliderRenderer}</Slider>
         </div>
         <div className="projects__searchSettings">
           <div className="projects__searchSettings-search">
-            <ProjectsSearch />
+            <ProjectsSearch
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              setIsLoaded={setIsLoaded}
+            />
           </div>
           <div className="projects__searchSettings-filter">
-            <ProjectFilter />
+            <ProjectFilter
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
+            />
           </div>
         </div>
         <div className="projects__wrapper">
-          {isLoaded
-            ? newSkeletonList
-            : project.projects.map((item) => {
-                return (
-                  <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
-                    <ProjectCard
-                      img={item.preview}
-                      title={item.name}
-                      date={item.start_date}
-                      like={item.likes.length}
-                      view={item.amount_views}
-                      comment={item.comments.length}
-                    />
-                  </Link>
-                );
-              })}
+          {projectLoading}
+          {projectLoaded}
+          {projectError}
         </div>
       </div>
     </div>
@@ -128,4 +230,3 @@ const Projects = observer(() => {
 });
 
 export default Projects;
-//<ProjectCard img={projectPhoto} title={'Arkana'} name={'mokujin94'} date={'03.04.23'} like={22} view={232} comment={12}/>

@@ -4,11 +4,15 @@ import AmountComponent from "../amountComponent/AmountComponent";
 import style from "./projectHeader.module.scss";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
+import { useCountFormatter } from "../../hooks/useCountFormatter";
 
-const ProjectHeader = observer(({ title, onClick, likes, isLike }) => {
+const ProjectHeader = observer(({ title, onClick, likes, isLike, views }) => {
   const { user } = useContext(Context);
 
   const [onLike, setOnLike] = useState(false);
+
+  const formatedLikes = useCountFormatter(likes.length);
+  const formatedViews = useCountFormatter(views.length);
 
   const like = (style) => {
     return (
@@ -54,8 +58,8 @@ const ProjectHeader = observer(({ title, onClick, likes, isLike }) => {
     <div className={style.block}>
       <h2 className={style.block__title}>{title}</h2>
       <div className={style.block__right}>
-        <AmountComponent img={like} value={likes.length} onClick={onClick} />
-        <AmountComponent img={view} value="23232" />
+        <AmountComponent img={like} value={formatedLikes} onClick={onClick} />
+        <AmountComponent img={view} value={formatedViews} />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 :root {
   --transform: 2000px;
@@ -54,9 +54,6 @@
 .profile {
   width: 100%;
   margin-top: 160px;
-  margin-bottom: 100px;
-  overflow: hidden;
-  padding-bottom: 50px;
 
   &__top-wrapper {
     display: flex;
@@ -167,18 +164,22 @@
   }
 
   &__content {
+    position: relative;
     width: 100%;
     &-main {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 20px;
+      width: 100%;
       &-settings {
         grid-template-columns: 1fr 1fr 1fr;
         gap: 225px;
+        width: 100%;
       }
       &-achievement {
         grid-template-columns: 1fr;
         column-gap: 90px;
+        width: 100%;
       }
     }
   }

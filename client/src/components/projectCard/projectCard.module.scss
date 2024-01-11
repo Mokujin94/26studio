@@ -4,7 +4,6 @@
   max-width: 390px;
   width: 100%;
   height: 220px;
-  border-radius: 5px;
   position: relative;
   cursor: pointer;
   border: 2px solid transparent;
@@ -17,37 +16,40 @@
   &__blur {
     position: absolute;
     background: $studio-blackout-element;
+    background-color: $studio-black-opacity-02;
     width: 100%;
     height: 100%;
-    border-radius: 5px;
+    background-blend-mode: multiply;
   }
   &__photo {
     position: absolute;
     z-index: -1;
     width: 100%;
     height: 100%;
-    filter: blur(2px);
+    object-fit: cover;
   }
   &__text {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    padding: 0 20px;
     position: absolute;
-    top: 96px;
+    top: calc(50% + 10px);
     left: 50%;
-    transform: translate(-50%);
+    transform: translate(-50%, -50%);
     &__title {
-      font-weight: 400;
+      font-weight: 600;
       font-size: 24px;
       line-height: 29px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: $studio-white-text;
+      text-align: center;
     }
     &__name {
       font-weight: 300;
       font-size: 16px;
-      line-height: 20px;
       letter-spacing: 0.2em;
       color: $studio-white-text;
     }

@@ -23,9 +23,29 @@ function initSocket(httpServer) {
       io.emit("receiveCommentsFromServer", comments);
     });
 
+    socket.on("sendCommentsNewsToClients", (comments) => {
+      console.log("Отправка комментариев всем клиентам");
+      io.emit("receiveCommentsNewsFromServer", comments);
+    });
+
     socket.on("sendLikesToClients", (comments) => {
       console.log("Отправка комментариев всем клиентам");
       io.emit("receiveCommentsFromServer", comments);
+    });
+
+    socket.on("sendLikesNewsToClients", (comments) => {
+      console.log("Отправка комментариев всем клиентам");
+      io.emit("receiveCommentsFromServer", comments);
+    });
+
+    socket.on("sendViewsToClients", (comments) => {
+      console.log("Отправка просмотров всем клиентам");
+      io.emit("receiveViewsFromServer", comments);
+    });
+
+    socket.on("sendViewsNewsToClients", (comments) => {
+      console.log("Отправка просмотров всем клиентам");
+      io.emit("receiveViewsFromServer", comments);
     });
 
     socket.on("newComment", (comment) => {

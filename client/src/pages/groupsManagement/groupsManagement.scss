@@ -1,160 +1,152 @@
 @import "../../resource/styles/variables";
 
-
 .groupsManagement {
+  display: flex;
+  flex-direction: column;
+  margin-top: 170px;
+  align-items: center;
+  &-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
     display: flex;
-    flex-direction: column;
-    margin-top: 170px;
+    justify-content: center;
     align-items: center;
-    &-modal {
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 6;
-        width: 100%;
-        min-height: 100vh;
-        background-color: rgba(0, 0, 0, 0.3) ;
-        &__content{
-            max-width: 380px;
-            width: 100%;
-            background-color: $studio-dark-element;
-            border-radius: 20px;
-            padding: 40px 40px 20px 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-    
-        }
-        &__close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            cursor: pointer;
-
-        }
-        &__item {
-            width: 100%;
-            &-title {
-                font-size: 20px;
-                color: $studio-white-text;
-                font-weight: 500;
-                margin-bottom: 15px;
-            }
-            &-input {
-                width: 100%;
-                font-size: 20px;
-                color: $studio-white-text;
-                font-weight: 500;
-                margin-bottom: 20px;
-                background:none;
-                border-radius: 10px;
-                border: 1px solid $studio-primary-border;
-                padding: 10px 20px;
-                outline: none;
-                appearance: none;
-                option {
-                background-color: $studio-dark-element;
-                font-weight: 500;
-                }
-            }
-
-            
-        }
+    z-index: 6;
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    &__content {
+      max-width: 380px;
+      width: 100%;
+      background-color: $studio-dark-element;
+      border-radius: 20px;
+      padding: 40px 40px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
     }
-    &__title {
-        font-size: 24px;
+    &__close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      cursor: pointer;
+    }
+    &__item {
+      width: 100%;
+      &-title {
+        font-size: 20px;
         color: $studio-white-text;
         font-weight: 500;
-        margin-bottom: 50px;
-    }
-
-    &__inner {
+        margin-bottom: 15px;
+      }
+      &-input {
         width: 100%;
-    }
-    &__settings {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 40px;
-        &-left {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-            &-item {
-                padding: 10px 20px;
-                border-radius: 10px;
-                background-color: $studio-dark-element;
-                color: $studio-white-text;
-                font-size: 20px;
-                font-weight: 400;
-                cursor: pointer;
-                &_active {
-                    @include studio-mixin-dark-element-active;
-                }
-                
-            }
-        }  
-    
-        &-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            &-item {
-                position: relative;
-                &-select {
-                    padding: 10px 62px 10px 20px;
-                    border-radius: 10px;
-                    background-color: $studio-dark-element;
-                    color: $studio-white-text;
-                    font-size: 20px;
-                    font-weight: 400;
-                    border: none;
-                    appearance: none;
-                    outline: none;
-                    cursor: pointer;
-                }
-                &-search {
-                    padding: 10px 62px 10px 20px;
-                    border-radius: 10px;
-                    background-color: $studio-dark-element;
-                    color: $studio-white-text;
-                    font-size: 20px;
-                    font-weight: 400;
-                    border: none;
-                    outline: none;
-                }
-                &-button {
-                    padding: 10px 20px;
-                    border-radius: 10px;
-                    background-color: $studio-dark-element;
-                    color: $studio-white-text;
-                    font-size: 20px;
-                    font-weight: 400;
-                    cursor: pointer;
-                }
-                &-icon {
-                    position: absolute;
-                    right: 20px;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    path {
-                        stroke: $studio-white-element;
-                    }
-                }
-            }
+        font-size: 20px;
+        color: $studio-white-text;
+        font-weight: 500;
+        margin-bottom: 20px;
+        background: none;
+        border-radius: 10px;
+        border: 1px solid $studio-primary-border;
+        padding: 10px 20px;
+        outline: none;
+        appearance: none;
+        option {
+          background-color: $studio-dark-element;
+          font-weight: 500;
         }
+      }
+    }
+  }
+  &__title {
+    font-size: 24px;
+    color: $studio-white-text;
+    font-weight: 500;
+    margin-bottom: 50px;
+  }
+
+  &__inner {
+    width: 100%;
+  }
+  &__settings {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    &-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      &-item {
+        padding: 10px 20px;
+        border-radius: 10px;
+        background-color: $studio-dark-element;
+        color: $studio-white-text;
+        font-size: 20px;
+        font-weight: 400;
+        cursor: pointer;
+        &_active {
+          @include studio-mixin-dark-element-active;
+        }
+      }
     }
 
-     
-    &__wrapper {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(auto, 355px));
-        justify-content: space-between;
-        gap: 20px;
+    &-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      &-item {
+        position: relative;
+        &-select {
+          padding: 10px 62px 10px 20px;
+          border-radius: 10px;
+          background-color: $studio-dark-element;
+          color: $studio-white-text;
+          font-size: 20px;
+          font-weight: 400;
+          border: none;
+          appearance: none;
+          outline: none;
+          cursor: pointer;
+        }
+        &-search {
+          padding: 10px 62px 10px 20px;
+          border-radius: 10px;
+          background-color: $studio-dark-element;
+          color: $studio-white-text;
+          font-size: 20px;
+          font-weight: 400;
+          border: none;
+          outline: none;
+        }
+        &-button {
+          padding: 10px 20px;
+          border-radius: 10px;
+          background-color: $studio-dark-element;
+          color: $studio-white-text;
+          font-size: 20px;
+          font-weight: 400;
+          cursor: pointer;
+        }
+        &-icon {
+          position: absolute;
+          right: 20px;
+          top: 50%;
+          transform: translateY(-50%);
+          path {
+            stroke: $studio-white-element;
+          }
+        }
+      }
     }
+  }
 
+  &__wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(auto, 390px));
+    justify-content: space-between;
+    row-gap: 20px;
+  }
 }

@@ -1,8 +1,9 @@
-const { Project, Likes, User, Comments } = require("../models/models");
+const { Project, Likes, User, Comments, View } = require("../models/models");
 const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../error/ApiError");
 const { getIo } = require("../socket");
+const { Op } = require("sequelize");
 
 class ProjectController {
   async create(req, res, next) {
@@ -25,22 +26,23 @@ class ProjectController {
   }
 
   async getAll(req, res) {
-    let { limit, page } = req.query;
+    let { limit, page, filter } = req.query;
     page = page || 1;
     limit = limit || 9;
     let offset = page * limit - limit;
 
-    let projects = await Project.findAndCountAll(
-      { include: [Likes, Comments] },
-      { limit, offset }
-    );
+    let projects = await Project.findAndCountAll({
+      include: [Likes, Comments, User, View],
+      limit,
+      offset,
+    });
     return res.json(projects);
   }
 
   async getOne(req, res) {
     const { id } = req.params;
     const project = await Project.findOne({
-      include: Likes,
+      include: [Likes, View],
       where: { id },
     });
 
@@ -53,7 +55,7 @@ class ProjectController {
       include: [
         {
           model: Project,
-          include: [Likes, Comments], // Включаем связь с моделью Like внутри связи с Project
+          include: [Likes, Comments, View],
         },
       ],
       where: { id },
@@ -88,7 +90,7 @@ class ProjectController {
     });
 
     const allLikes = await Project.findAll({
-      include: [Likes, Comments],
+      include: [Likes, Comments, View],
       where: { id: projectId },
     });
     const io = getIo();
@@ -106,12 +108,36 @@ class ProjectController {
     });
 
     const allLikes = await Project.findAll({
-      include: [Likes, Comments],
+      include: [Likes, Comments, View],
       where: { id: projectId },
     });
     const io = getIo();
     io.emit("sendLikesToClients", allLikes);
     return res.json(likes);
+  }
+
+  async searchProject(req, res) {
+    let { search, limit, page } = req.query;
+    page = page || 1;
+    limit = limit || 9;
+    let offset = page * limit - limit;
+    const project = await Project.findAndCountAll({
+      include: [Likes, Comments, User, View],
+      limit,
+      offset,
+      where: {
+        [Op.or]: {
+          name: {
+            [Op.iLike]: "%" + search + "%",
+          },
+          description: {
+            [Op.iLike]: "%" + search + "%",
+          },
+        },
+        is_private: false,
+      },
+    });
+    return res.json(project);
   }
 }
 

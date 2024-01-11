@@ -9,6 +9,7 @@ const MessageRouter = require("./messageRouter");
 const RolesRouter = require("./rolesRouter");
 const FriendRouter = require("./friendRouter");
 const CommentRouter = require("./commentRouter");
+const ViewRouter = require("./viewRouter");
 
 router.use("/user", UserRouter);
 router.use("/project", ProjectRouter);
@@ -18,5 +19,6 @@ router.use("/group", GroupRouter);
 router.use("/roles", RolesRouter);
 router.use("/friend", FriendRouter);
 router.use("/comment", CommentRouter);
+router.use("/view", ViewRouter);
 
 module.exports = router;

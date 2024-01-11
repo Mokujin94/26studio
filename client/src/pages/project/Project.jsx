@@ -16,6 +16,8 @@ import {
 import { useParams } from "react-router";
 import { getAllCommentsProject } from "../../http/commentsAPI";
 import { Context } from "../..";
+import { useCountFormatter } from "../../hooks/useCountFormatter";
+import { viewProject } from "../../http/viewAPI";
 
 function Project() {
   const { id } = useParams();
@@ -24,18 +26,31 @@ function Project() {
   const [dataProject, setDataProject] = useState({});
   const [amountLike, setAmountLike] = useState([]);
   const [comments, setComments] = useState([]);
+  const [views, setViews] = useState([]);
   const [isLike, setIsLike] = useState(false);
 
   useEffect(() => {
+    viewProject(id, user.user.id).catch((e) => console.log(e));
     fetchProjectById(id).then((data) => {
       setDataProject(data);
       setAmountLike(data.likes);
+      setViews(data.views);
     });
     getAllCommentsProject(id).then((data) => setComments(data[0].comments));
 
     const socket = socketIOClient("http://localhost:3001");
-    // console.log(socket);
-    // Подписываемся на событие обновления комментариев
+
+    socket.on("sendViewsToClients", (updatedViews) => {
+      console.log("Получены новые просмотры:", updatedViews);
+      if (updatedViews) {
+        updatedViews.filter((item) => {
+          if (item.id == id) {
+            setViews(updatedViews[0].views);
+          }
+        });
+      }
+    });
+
     socket.on("sendLikesToClients", (updatedLikes) => {
       console.log("Получены новые комментарии:", updatedLikes);
       if (updatedLikes) {
@@ -55,7 +70,6 @@ function Project() {
 
   useEffect(() => {
     if (amountLike) {
-      console.log("true");
       for (let i = 0; i < amountLike.length; i++) {
         if (amountLike[i].userId === user.user.id) {
           setIsLike(true);
@@ -98,6 +112,7 @@ function Project() {
             onClick={setLike}
             likes={amountLike}
             isLike={isLike}
+            views={views}
           />
         </div>
         <div className="project__content">
@@ -112,20 +127,7 @@ function Project() {
           />
         </div>
         <div className="project__info">
-          <Description
-            title=""
-            descr='Давно выяснено, что при оценке дизайна и композиции читаемый текст
-        мешает сосредоточиться. Lorem Ipsum используют потому, что тот
-        обеспечивает более или менее стандартное заполнение шаблона, а также
-        реальное распределение букв и пробелов в абзацах, которое не получается
-        при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш
-        текст.." Многие программы электронной вёрстки и редакторы HTML
-        используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по
-        ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц
-        всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст
-        Lorem Ipsum получил много версий. Некоторые версии появились по ошибке,
-        некоторые - намеренно (например, юмористические варианты).'
-          />
+          <Description title="Описание" descr={dataProject.description} />
         </div>
       </div>
     </div>

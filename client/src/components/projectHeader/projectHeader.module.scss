@@ -1,4 +1,4 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .block {
   width: 100%;
@@ -14,8 +14,6 @@
   }
   &__right {
     display: flex;
-    max-width: 300px;
-    width: 100%;
-    justify-content: space-between;
+    gap: 20px;
   }
 }

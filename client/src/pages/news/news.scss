@@ -11,9 +11,10 @@ a {
   margin-top: 150px;
   &__title {
     font-weight: 500;
-    font-size: 40px;
-    letter-spacing: 0.2em;
+    font-size: 34px;
+    letter-spacing: 0.1em;
     color: $studio-white-text;
+    text-transform: uppercase;
     margin-right: 50px;
     &-wrapper {
       display: flex;

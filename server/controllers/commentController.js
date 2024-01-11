@@ -22,8 +22,18 @@ class CommentController {
   }
 
   async getAllCommentsNews(req, res) {
+    const { id } = req.params;
+
     const comments = await News.findAll({
-      include: Comments,
+      include: [
+        {
+          model: Comments,
+          include: User,
+        },
+      ],
+      where: {
+        id,
+      },
     });
 
     return res.json(comments);
@@ -59,14 +69,27 @@ class CommentController {
   }
 
   async createCommentNews(req, res) {
-    const { message, newsId, resendId } = req.body;
+    const { message, newsId, resendId, userId } = req.body;
 
     const comment = await Comments.create({
       message,
       newsId,
       resendId,
+      userId,
     });
 
+    const savedComment = await Comments.findOne({
+      where: { id: comment.id },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "name", "avatar"],
+        },
+      ],
+    });
+
+    const io = getIo();
+    io.emit("sendCommentsNewsToClients", savedComment);
     return res.json(comment);
   }
 }

@@ -123,6 +123,10 @@ const Likes = sequelize.define("likes", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
+const View = sequelize.define("views", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+});
+
 const Message = sequelize.define("message", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   files: { type: DataTypes.STRING },
@@ -175,11 +179,20 @@ Comments.belongsTo(User, { foreignKey: "userId" });
 Project.hasMany(Likes);
 Likes.belongsTo(Project);
 
+Project.hasMany(View, { foreignKey: "projectId" });
+View.belongsTo(Project);
+
 News.hasMany(Likes);
 Likes.belongsTo(News);
 
+News.hasMany(View, { foreignKey: "newsId" });
+View.belongsTo(News);
+
 User.hasMany(Likes);
 Likes.belongsTo(User);
+
+User.hasMany(View, { foreignKey: "userId" });
+View.belongsTo(User);
 
 User.hasMany(Friend);
 Friend.belongsTo(User);
@@ -231,6 +244,7 @@ module.exports = {
   Chat,
   Comments,
   Likes,
+  View,
 };
 sequelize.sync();
 // sequelize

@@ -7,6 +7,8 @@ router.post("/registration", userController.registration);
 router.post("/registration/condidate", userController.checkCondidate);
 router.post("/login", userController.login);
 router.post("/code", userController.generateCode);
+
+router.get("/auth", authMiddleware, userController.check);
 router.post("/upload_project", authMiddleware, userController.uploadProject);
 router.post(
   "/upload_finished_project",
@@ -14,7 +16,6 @@ router.post(
   userController.uploadFinishedProject
 );
 router.get("/accept_project", userController.sendProjectViewer);
-router.get("/auth", authMiddleware, userController.check);
 router.get("/all", userController.getAll);
 router.get("/tutors", userController.getAllTutors);
 router.get("/group_manage", userController.getUsersByGroupStatus);

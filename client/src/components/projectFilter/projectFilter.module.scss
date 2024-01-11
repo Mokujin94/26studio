@@ -30,6 +30,7 @@
   display: flex;
   flex-direction: column;
   background-color: transparent;
+  cursor: pointer;
   &:active {
     outline: none;
     border: none;
@@ -46,7 +47,7 @@
       outline: none;
       border: none;
     }
-  
+
     &:focus {
       outline: none;
       border: none;

@@ -10,10 +10,11 @@ export const createProject = async (message, projectId, userId, resendId) => {
   return data;
 };
 
-export const createNews = async (message, newsId, resendId) => {
+export const createNews = async (message, newsId, userId, resendId) => {
   const { data } = await $authHost.post("api/comment/news", {
     message,
     newsId,
+    userId,
     resendId,
   });
   return data;
@@ -24,7 +25,7 @@ export const getAllCommentsProject = async (id) => {
   return data;
 };
 
-export const getAllCommentsNews = async () => {
-  const { data } = await $host.get("api/comment/news");
+export const getAllCommentsNews = async (id) => {
+  const { data } = await $host.get("api/comment/news/" + id);
   return data;
 };

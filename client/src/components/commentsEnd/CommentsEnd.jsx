@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react";
 
 import style from "./commentsEnd.module.scss";
 import { Context } from "../..";
-import { createProject } from "../../http/commentsAPI";
+import { createNews, createProject } from "../../http/commentsAPI";
 
-function CommentsEnd({ projectId }) {
+function CommentsEnd({ projectId, newsId }) {
   const { user, error } = useContext(Context);
 
   const [message, setMessage] = useState("");
@@ -13,12 +13,22 @@ function CommentsEnd({ projectId }) {
     e.preventDefault();
 
     if (message.replace(/\s/g, "")) {
-      await createProject(message, projectId, user.user.id)
-        .then(setMessage(""))
-        .catch((err) => {
-          console.log(err.response.data.message);
-          error.setNotAuthError(true);
-        });
+      if (projectId) {
+        await createProject(message, projectId, user.user.id)
+          .then(setMessage(""))
+          .catch((err) => {
+            console.log(err.response.data.message);
+            error.setNotAuthError(true);
+          });
+      }
+      if (newsId) {
+        await createNews(message, newsId, user.user.id)
+          .then(setMessage(""))
+          .catch((err) => {
+            console.log(err.response.data.message);
+            error.setNotAuthError(true);
+          });
+      }
     }
   };
   return (

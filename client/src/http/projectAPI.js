@@ -26,15 +26,20 @@ export const fetchProject = async (pathFromProject, baseURL) => {
 };
 
 export const uploadFinishedProject = async (project) => {
-  const { data } = await $host.post(
+  const { data } = await $authHost.post(
     "api/user/upload_finished_project",
     project
   );
   return data;
 };
 
-export const getAll = async () => {
-  const { data } = await $host.get("api/project");
+export const getAll = async (filter) => {
+  const config = {
+    params: {
+      filter,
+    },
+  };
+  const { data } = await $host.get("api/project", config);
   return data;
 };
 
@@ -85,5 +90,15 @@ export const fetchLikes = async (id) => {
 
 export const fetchProjectsUser = async (id) => {
   const { data } = await $host.get("api/project/user/" + id);
+  return data;
+};
+
+export const searchProject = async (search) => {
+  const config = {
+    params: {
+      search,
+    },
+  };
+  const { data } = await $host.get("api/project/search/", config);
   return data;
 };

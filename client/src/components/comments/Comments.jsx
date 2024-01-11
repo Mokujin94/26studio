@@ -5,19 +5,31 @@ import NewsComment from "../newsComment/NewsComment";
 
 import style from "./comments.module.scss";
 
-const Comments = ({ comments, setComments, projectId }) => {
+const Comments = ({ comments, setComments, projectId, newsId }) => {
   useEffect(() => {
     const socket = socketIOClient("http://localhost:3001");
     // console.log(socket);
     // Подписываемся на событие обновления комментариев
-    socket.on("sendCommentsToClients", (updatedComments) => {
-      console.log("Получены новые комментарии:", updatedComments);
-      if (updatedComments) {
-        if (updatedComments.projectId == projectId) {
-          setComments((item) => [...item, updatedComments]);
+    if (projectId) {
+      socket.on("sendCommentsToClients", (updatedComments) => {
+        console.log("Получены новые комментарии:", updatedComments);
+        if (updatedComments) {
+          if (updatedComments.projectId == projectId) {
+            setComments((item) => [...item, updatedComments]);
+          }
         }
-      }
-    });
+      });
+    }
+    if (newsId) {
+      socket.on("sendCommentsNewsToClients", (updatedComments) => {
+        console.log("Получены новые комментарии:", updatedComments);
+        if (updatedComments) {
+          if (updatedComments.newsId == newsId) {
+            setComments((item) => [...item, updatedComments]);
+          }
+        }
+      });
+    }
 
     // Закрываем соединение при размонтировании компонента
     return () => {
@@ -44,7 +56,7 @@ const Comments = ({ comments, setComments, projectId }) => {
         })}
       </div>
       <div className={style.block__bottom}>
-        <CommentsEnd projectId={projectId} />
+        <CommentsEnd projectId={projectId} newsId={newsId} />
       </div>
     </div>
   );
