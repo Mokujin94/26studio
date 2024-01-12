@@ -1,0 +1,129 @@
+@import '../../resource/styles/variables';
+
+.modal {
+  background-color: $studio-dark-element;
+  z-index: 100;
+  position: absolute;
+  max-width: 1024px;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 25px 50px 10px 50px;
+  border-radius: 15px;
+  &__close {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    top: 25px;
+    right: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: $studio-transition-03;
+    &:hover {
+      background-color: $studio-white-element;
+      path {
+        stroke: $studio-dark-element;
+      }
+    }
+
+    svg {
+      transform: rotate(45deg);
+      width: 18px;
+      height: 18px;
+      path {
+        transition: $studio-transition-03;
+      }
+    }
+  }
+
+  &__title {
+    color: $studio-white-text;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    margin-bottom: 50px;
+    &Inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      max-width: 625px;
+      width: 100%;
+      &Item {
+        outline: none;
+        width: 100%;
+        color: $studio-white-text;
+        font-size: 16px;
+        padding: 15px;
+        background-color: $studio-dark-element;
+        border: 2px solid $studio-primary-border;
+        border-radius: 10px;
+        &::placeholder {
+          color: $studio-grey-text;
+        }
+        &:last-child {
+          resize: none;
+          height: 100%;
+          line-height: 1.5em;
+        }
+      }
+    }
+
+    &Preview {
+      position: relative;
+      max-width: 340px;
+      width: 100%;
+      height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      background-color: $studio-dark-element;
+      border: 2px solid $studio-primary-border;
+      border-radius: 10px;
+      padding-bottom: 10px;
+      cursor: pointer;
+      &Image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        svg {
+          display: block;
+        }
+      }
+      &Subtitle {
+        color: $studio-white-text;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      input {
+        position: absolute;
+        z-index: -5;
+        opacity: 0;
+        height: 0;
+        width: 0;
+      }
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    &Text {
+      color: $studio-grey-text;
+    }
+  }
+}

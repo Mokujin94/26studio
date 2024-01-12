@@ -1,17 +1,17 @@
-import { $authHost, $host } from "./index";
+import { $authHost, $host } from './index';
 
-export const createNews = async (title, descr, img) => {
-  const { data } = await $host.post("api/news", { title, descr, img });
+export const createNews = async (news) => {
+  const { data } = await $host.post('api/news', news);
   return data;
 };
 
 export const fetchNews = async () => {
-  const { data } = await $host.get("api/news");
+  const { data } = await $host.get('api/news');
   return data;
 };
 
 export const fetchNewsById = async (id) => {
-  const { data } = await $host.get("api/news/" + id);
+  const { data } = await $host.get('api/news/' + id);
   return data;
 };
 
@@ -22,12 +22,12 @@ export const condidate = async (newsId, userId) => {
       userId,
     },
   };
-  const { data } = await $host.get("api/news/condidate", config);
+  const { data } = await $host.get('api/news/condidate', config);
   return data;
 };
 
 export const like = async (newsId, userId) => {
-  const { data } = await $authHost.post("api/news/like", {
+  const { data } = await $authHost.post('api/news/like', {
     newsId,
     userId,
   });
@@ -41,6 +41,6 @@ export const deleteLike = async (newsId, userId) => {
       userId,
     },
   };
-  const { data } = await $authHost.delete("api/news/delete", config);
+  const { data } = await $authHost.delete('api/news/delete', config);
   return data;
 };

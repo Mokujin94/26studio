@@ -1,15 +1,15 @@
-@import "./reboot.scss";
-@import "../../pages/registration/registration.scss";
-@import "../../pages/auth/auth.scss";
-@import "../../pages/profile/profile.scss";
-@import "../../pages/projects/projects.scss";
-@import "../../pages/news/news.scss";
-@import "../../pages/messenger/messenger.scss";
-@import "../../pages/project/project.scss";
-@import "../../pages/newsPaper/newsPaper.scss";
-@import "../../pages/groups/groups.scss";
-@import "../../pages/group/group.scss";
-@import "../../pages/admin/admin.scss";
+@import './reboot.scss';
+@import '../../pages/registration/registration.scss';
+@import '../../pages/auth/auth.scss';
+@import '../../pages/profile/profile.scss';
+@import '../../pages/projects/projects.scss';
+@import '../../pages/news/news.scss';
+@import '../../pages/messenger/messenger.scss';
+@import '../../pages/project/project.scss';
+@import '../../pages/newsPaper/newsPaper.scss';
+@import '../../pages/groups/groups.scss';
+@import '../../pages/group/group.scss';
+@import '../../pages/admin/admin.scss';
 body {
   background: $studio-background;
   background-repeat: no-repeat;
@@ -57,6 +57,14 @@ body {
   height: 100vh;
   background-color: $studio-black-opacity-03;
   z-index: 6;
+}
+
+.modal__complete {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 20px;
+  z-index: 99;
 }
 
 @media (max-width: $xxl) {
