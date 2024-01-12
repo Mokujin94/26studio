@@ -93,6 +93,7 @@ const News = sequelize.define("news", {
   title: { type: DataTypes.STRING, allowNull: false },
   description: { type: DataTypes.STRING, allowNull: false },
   img: { type: DataTypes.STRING },
+  isProposed: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true}
 });
 
 const ProposedNews = sequelize.define("proposed_news", {

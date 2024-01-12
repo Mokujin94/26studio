@@ -13,5 +13,12 @@
         column-gap: 10px;
         row-gap: 30px;
     }
+
+    &__card {
+        &__disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+    }
 }
 
