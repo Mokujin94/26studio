@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import FriendCard from "../../components/friendCard/FriendCard"
 
 import './groupsManagement.scss'
 
 import PrimaryButton from '../../components/primaryButton/PrimaryButton';
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 import { fetchAddStudent, fetchDeleteStudent, fetchGroupById, fetchGroups } from '../../http/groupsAPI'
 import { fetchAllTutors, fetchAllUsers, fetchUsersByGroupStatus, searchUsersOnGroup} from '../../http/userAPI';
@@ -23,12 +23,15 @@ function GroupsManagement() {
 
     
     const [groupSelect, setGroupSelect] = useState(0);
+    const [tutorSelect, setTutorSelect] = useState(0);
     const [view, setView] = useState(0);
 
     const [search, setSearch] = useState('');
     const useDebounced = useDebounce(search)
 
     const [loading, setLoading] = useState(true);
+
+    const nodeRef = useRef(null);
     
     useEffect(() => {
         setLoading(true)
@@ -114,6 +117,9 @@ function GroupsManagement() {
 
     let viewAll = !loading ? usersData.map(({id}) => <FriendCard userId={id} key={id} options={view === 0 ? 1 : 2}  onClickOne={() => addStudent(groupSelect, id )} onClickTwo={() => deleteStudent(groupSelect, id)}/> )  : friendSkeletons.map(({id}) => <FriendSkeleton/>)
 
+
+    const saveButtonRenderer = tutorSelect === 0 && <div className="groupsManagement__settings-right-item-button" onClick={()=> setModalActive(true)}>Создать</div>
+    const createButtonRenderer = tutorSelect !== 0 && <div  className="groupsManagement__settings-right-item-button groupsManagement__settings-right-item-button_save">Сохранить</div>
   return (
     <div className='container'>
         <CSSTransition
@@ -180,7 +186,7 @@ function GroupsManagement() {
                             
                         </div>
                         <div className="groupsManagement__settings-right-item">
-                            <select className='groupsManagement__settings-right-item-select'> 
+                            <select value={tutorSelect} onChange={(e) => setTutorSelect(Number(e.target.value))} className='groupsManagement__settings-right-item-select'> 
                                 <option value="0">Определить куратора</option>
                                 {tutorsData.map(item => {
                                     return (
@@ -199,10 +205,14 @@ function GroupsManagement() {
                                 <path d="M15 15L12.2779 12.2778M14.2222 7.61111C14.2222 11.2623 11.2623 14.2222 7.61111 14.2222C3.95989 14.2222 1 11.2623 1 7.61111C1 3.95989 3.95989 1 7.61111 1C11.2623 1 14.2222 3.95989 14.2222 7.61111Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <div className="groupsManagement__settings-right-item">
-                            <div className="groupsManagement__settings-right-item-button" onClick={()=> setModalActive(true)}>Создать</div>
-                        </div>
-
+                        <SwitchTransition mode='out-in'>
+                            <CSSTransition nodeRef={nodeRef} key={tutorSelect} timeout={100} mountOnEnter unmountOnExit classNames="groupsManagement__anim-btn"  >
+                                <div className="groupsManagement__settings-right-item" ref={nodeRef}>
+                                        {saveButtonRenderer}
+                                        {createButtonRenderer}
+                                </div>
+                            </CSSTransition>
+                        </SwitchTransition>
                     </div>
                 </div>
                 <div className="groupsManagement__wrapper">

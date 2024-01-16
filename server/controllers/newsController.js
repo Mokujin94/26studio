@@ -28,6 +28,26 @@ class NewsController {
       include: [Comments, Likes, View],
       limit,
       offset,
+      where: {
+        isProposed: false
+      }
+    });
+    return res.json(news);
+  }
+
+  async getAllProposed(req, res) {
+    let { limit, page } = req.query;
+    page = page || 1;
+    limit = limit || 12;
+    let offset = page * limit - limit;
+
+    let news = await News.findAndCountAll({
+      include: [Comments, Likes, View],
+      limit,
+      offset,
+      where: {
+        isProposed: true
+      }
     });
     return res.json(news);
   }

@@ -79,6 +79,8 @@
       display: flex;
       align-items: center;
       gap: 40px;
+      max-width: 400px;
+      width: 100%;
       &-item {
         padding: 10px 20px;
         border-radius: 10px;
@@ -96,9 +98,15 @@
     &-right {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       gap: 20px;
+      width: 100%;
       &-item {
         position: relative;
+        &:last-child {
+          max-width: 160px;
+          width: 100%;
+        }
         &-select {
           padding: 10px 62px 10px 20px;
           border-radius: 10px;
@@ -122,13 +130,19 @@
           outline: none;
         }
         &-button {
-          padding: 10px 20px;
+          text-align: center;
+          padding: 10px 0;
           border-radius: 10px;
           background-color: $studio-dark-element;
           color: $studio-white-text;
           font-size: 20px;
           font-weight: 400;
           cursor: pointer;
+          transition: 0.3s;
+          &_save {
+            background-color: $studio-primary-element;
+            color: $studio-dark-text;
+          }
         }
         &-icon {
           position: absolute;
@@ -149,4 +163,30 @@
     justify-content: space-between;
     row-gap: 20px;
   }
+
+  &__anim {
+    &-btn {
+
+      &-enter {
+        opacity: 0;
+      }
+      &-enter-active {
+        opacity: 1;
+      }
+      &-exit {
+        opacity: 1;
+      }
+      &-exit-active {
+        opacity: 0;
+      }
+      &-enter-active,
+      &-exit-active {
+        transition: 0.3s;
+      }
+      
+    }
+  }
 }
+
+
+

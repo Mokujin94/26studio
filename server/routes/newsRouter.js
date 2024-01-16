@@ -9,6 +9,7 @@ router.post('/like', authMiddleware, NewsController.setLike);
 router.delete('/delete', authMiddleware, NewsController.deleteLike);
 router.get('/condidate', NewsController.condidateLike);
 router.get('/', NewsController.getAll);
+router.get('/proposed', NewsController.getAllProposed);
 router.get('/:id', NewsController.getOne);
 
 module.exports = router;
