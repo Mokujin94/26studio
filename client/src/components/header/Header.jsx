@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import style from "./header.module.scss";
 
 import logo from "../../resource/graphics/icons/footer/footer_logo.svg";
-import search from "../../resource/graphics/icons/header/search.svg";
+import searchIcon from "../../resource/graphics/icons/header/search.svg";
 import CreateButtonPopUp from "../createButtonPopUp/CreateButtonPopUp";
 import burger from "../../resource/graphics/icons/burgerMenu/burger.svg";
 import { Context } from "../..";
@@ -11,32 +11,36 @@ import ThemeChangeButton from "../themeChangeButton/ThemeChangeButton";
 import SearchAll from "../searchAll/SearchAll";
 import { useDebounce } from "../../hooks/useDebounce";
 import { searchAll } from "../../http/searchAPI";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 function Header() {
   const { user } = useContext(Context);
 
-  const [search, setSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [searchData, setSearchData] = useState({})
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  const useDebounced = useDebounce(search)
+  const [searchData, setSearchData] = useState({});
+
+  const useDebounced = useDebounce(search, 200);
+
+  const nodeRef = useRef(null);
+  useClickOutside(nodeRef, () => {
+    setSearchOpen(false);
+  });
+  useEffect(() => {
+    setIsLoading(true);
+    searchAll(useDebounced).then((data) => {
+      setSearchData(data);
+      console.log(data);
+      setIsLoading(false);
+    });
+  }, [useDebounced]);
 
   useEffect(() => {
-    setIsLoading(true)
-      searchAll(useDebounced).then(data => {
-
-        setSearchData(data);
-        console.log(data)
-        setIsLoading(false)
-      })
-  }, [useDebounced])
-
-  useEffect(() => {
-    setIsLoading(true)
-  }, [search])
-
-  
+    setIsLoading(true);
+  }, [search]);
 
   return (
     <header className={style.header}>
@@ -50,7 +54,7 @@ function Header() {
             <img src={burger} alt="icon" />
           </div>
           <img src={logo} alt="logo" className={style.header__logo} />
-          <div className={style.header__search}>
+          <div className={style.header__search} ref={nodeRef}>
             <input
               className={style.header__search__input}
               placeholder="Поиск по сайту"
@@ -58,15 +62,21 @@ function Header() {
               onChange={(e) => setSearch(e.target.value)}
               onFocus={(event) => {
                 event.target.setAttribute("autocomplete", "off");
+                setSearchOpen(true);
               }}
             />
             <img
-              src={search}
+              src={searchIcon}
               alt="icon"
               className={style.header__search__icon}
             />
-            {search || searchData ? <SearchAll search={search} searchData={searchData} isLoading={isLoading}/> : null}
-            
+            {searchOpen && (
+              <SearchAll
+                search={search}
+                searchData={searchData}
+                isLoading={isLoading}
+              />
+            )}
           </div>
           <div className={style.header__createButtonPopUp}>
             <CreateButtonPopUp />

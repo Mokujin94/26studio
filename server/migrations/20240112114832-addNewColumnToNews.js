@@ -1,17 +1,16 @@
-
 "use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn('news', 'isProposed', {
+    await queryInterface.addColumn("news", "isProposed", {
       type: Sequelize.BOOLEAN,
-      allowNull: false, 
-      defaultValue: true
+      allowNull: false,
+      defaultValue: true,
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('news', 'isProposed');
+    await queryInterface.removeColumn("news", "isProposed");
   },
 };

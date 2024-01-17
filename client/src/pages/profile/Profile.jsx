@@ -17,14 +17,14 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { fetchGroups } from "../../http/groupsAPI";
 import { fetchUserById } from "../../http/userAPI";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 
 const Profile = observer(() => {
   const { profile, user, groups } = useContext(Context);
   const [group, setGroup] = useState("");
   const [userId, setUserId] = useState({});
-
+  const location = useLocation();
   const { id } = useParams();
 
   const nav = useNavigate();
@@ -43,9 +43,9 @@ const Profile = observer(() => {
         });
       })
       .catch((err) => {
-        nav(PROFILE_ROUTE + "/2");
+        nav(PROFILE_ROUTE + "/" + user.user.id);
       });
-  }, []);
+  }, [location.pathname]);
 
   const [prevId, setPrevId] = useState(0);
   const [boolPrevId, setBoolPrevId] = useState(false);

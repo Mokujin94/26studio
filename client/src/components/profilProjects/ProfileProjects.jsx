@@ -5,16 +5,16 @@ import projectPhoto from "../../resource/graphics/images/projectCard/bg.jpg";
 import ProjectCard from "../projectCard/ProjectCard";
 import { observer } from "mobx-react-lite";
 import { fetchProjectsUser } from "../../http/projectAPI";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { PROJECTS_ROUTE } from "../../utils/consts";
 
 const ProfileProjects = observer(() => {
   const { id } = useParams();
-
+  const location = useLocation();
   const [dataProjects, setDataProjects] = useState([]);
   useEffect(() => {
     fetchProjectsUser(id).then((data) => setDataProjects(data.projects));
-  }, []);
+  }, [location.pathname]);
   return (
     <>
       {dataProjects.map((item) => {
