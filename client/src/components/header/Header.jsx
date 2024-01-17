@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import style from "./header.module.scss";
 
@@ -8,9 +8,35 @@ import CreateButtonPopUp from "../createButtonPopUp/CreateButtonPopUp";
 import burger from "../../resource/graphics/icons/burgerMenu/burger.svg";
 import { Context } from "../..";
 import ThemeChangeButton from "../themeChangeButton/ThemeChangeButton";
+import SearchAll from "../searchAll/SearchAll";
+import { useDebounce } from "../../hooks/useDebounce";
+import { searchAll } from "../../http/searchAPI";
 
 function Header() {
   const { user } = useContext(Context);
+
+  const [search, setSearch] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [searchData, setSearchData] = useState({})
+
+  const useDebounced = useDebounce(search)
+
+  useEffect(() => {
+    setIsLoading(true)
+      searchAll(useDebounced).then(data => {
+
+        setSearchData(data);
+        console.log(data)
+        setIsLoading(false)
+      })
+  }, [useDebounced])
+
+  useEffect(() => {
+    setIsLoading(true)
+  }, [search])
+
+  
 
   return (
     <header className={style.header}>
@@ -28,6 +54,8 @@ function Header() {
             <input
               className={style.header__search__input}
               placeholder="Поиск по сайту"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               onFocus={(event) => {
                 event.target.setAttribute("autocomplete", "off");
               }}
@@ -37,6 +65,8 @@ function Header() {
               alt="icon"
               className={style.header__search__icon}
             />
+            {search || searchData ? <SearchAll search={search} searchData={searchData} isLoading={isLoading}/> : null}
+            
           </div>
           <div className={style.header__createButtonPopUp}>
             <CreateButtonPopUp />
