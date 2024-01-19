@@ -15,6 +15,9 @@
   min-height: 50px;
   max-height: 500px;
   overflow: auto;
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
   &__content {
     width: 100%;
     &__box {
@@ -22,8 +25,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-top: 1px solid $studio-grey-border;
       padding: 20px 30px;
       cursor: pointer;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
       &:first-child {
         border-top: 0px;
       }
@@ -31,6 +41,13 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        svg {
+          width: 22px;
+          path {
+            // stroke: $studio-primary-element;
+            fill: $studio-primary-element;
+          }
+        }
         &__title {
           font-size: 16px;
           font-weight: 600;
@@ -38,9 +55,22 @@
         }
       }
     }
+    &__arrow {
+      transform: rotateX(-180deg);
+      transition: $studio-transition-03;
+      &_active {
+        transform: rotateX(0deg);
+      }
+    }
     &__list {
       display: flex;
       flex-direction: column;
+      li {
+        border-bottom: 1px solid $studio-grey-border;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
       &__item {
         display: flex;
         justify-content: space-between;
@@ -87,6 +117,10 @@
       color: $studio-primary-text;
       font-size: 14px;
       font-weight: 400;
+    }
+    &_project {
+      width: 40px;
+      border-radius: 4px;
     }
   }
 }
