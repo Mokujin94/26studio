@@ -1,13 +1,13 @@
-const Router = require('express');
+const Router = require("express");
 const router = new Router();
-const GroupController = require('../controllers/groupController');
-const authMiddleware = require('../middleware/authMiddleware');
-const checkRoleMiddleware = require('../middleware/checkRoleMiddleware');
+const GroupController = require("../controllers/groupController");
+const authMiddleware = require("../middleware/authMiddleware");
+const checkRoleMiddleware = require("../middleware/checkRoleMiddleware");
 
-router.post('/', checkRoleMiddleware(2), GroupController.create);
-router.get('/', GroupController.getAll);
-router.get('/:id', GroupController.getOne);
-router.patch('/:id/add', checkRoleMiddleware(2), GroupController.addMember);
-router.patch('/:id/delete', checkRoleMiddleware(2), GroupController.deleteMember);
+router.post("/", GroupController.create);
+router.get("/", GroupController.getAll);
+router.get("/:id", GroupController.getOne);
+router.patch("/:id/add", GroupController.addMember);
+router.patch("/:id/delete", GroupController.deleteMember);
 
 module.exports = router;
