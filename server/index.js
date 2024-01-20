@@ -20,7 +20,14 @@ const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
 app.use(cors());
-app.use((req, res, next) => {
+app.use(express.json());
+app.use(express.static(path.resolve(__dirname, "static/news")));
+app.use(express.static(path.resolve(__dirname, "static/avatars")));
+app.use(express.static(path.resolve(__dirname, "static/projects")));
+app.use(express.static(path.resolve(__dirname, "extracted")));
+app.use(fileUpload({}));
+
+app.use("/api/user/accept_project", (req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",
     "https://poetic-halva-67c56b.netlify.app"
@@ -33,12 +40,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
-app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "static/news")));
-app.use(express.static(path.resolve(__dirname, "static/avatars")));
-app.use(express.static(path.resolve(__dirname, "static/projects")));
-app.use(express.static(path.resolve(__dirname, "extracted")));
-app.use(fileUpload({}));
+
 app.use("/api", router);
 
 app.use(errorHandler);
