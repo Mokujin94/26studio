@@ -38,7 +38,7 @@ function Project() {
     });
     getAllCommentsProject(id).then((data) => setComments(data[0].comments));
 
-    const socket = socketIOClient("http://localhost:3001");
+    const socket = socketIOClient("https://poetic-halva-67c56b.netlify.app");
 
     socket.on("sendViewsToClients", (updatedViews) => {
       console.log("Получены новые просмотры:", updatedViews);
