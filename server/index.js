@@ -20,6 +20,19 @@ const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
 app.use(cors());
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://poetic-halva-67c56b.netlify.app"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static/news")));
 app.use(express.static(path.resolve(__dirname, "static/avatars")));
