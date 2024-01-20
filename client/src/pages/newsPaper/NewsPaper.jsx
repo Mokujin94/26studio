@@ -45,7 +45,7 @@ const NewsPaper = observer(() => {
     });
 
     const socket = socketIOClient(
-      "https://26studio-production.up.railway.app/"
+      "https://26studio-production.up.railway.app:3001"
     );
 
     socket.on("sendViewsNewsToClients", (updatedViews) => {

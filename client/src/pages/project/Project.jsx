@@ -39,7 +39,7 @@ function Project() {
     getAllCommentsProject(id).then((data) => setComments(data[0].comments));
 
     const socket = socketIOClient(
-      "https://26studio-production.up.railway.app/"
+      "https://26studio-production.up.railway.app:3001"
     );
 
     socket.on("sendViewsToClients", (updatedViews) => {
