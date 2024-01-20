@@ -34,7 +34,7 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync();
-    console.log(path.resolve(__dirname, "static"));
+    // console.log(path.resolve(__dirname, "static"));
     app.listen(PORT, () => console.log(`сервер стартанул на порте ${PORT}`));
     httpServer.listen(socketIoPort, () => {
       console.log(`Сервер Socket.IO стартовал на порту ${socketIoPort}`);
