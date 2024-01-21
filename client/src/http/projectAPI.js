@@ -17,12 +17,12 @@ export const fetchProject = async (pathFromProject, baseURL) => {
     (match, p1) => p1 + `<base href="${baseURL}">`
   );
 
-  const updatedLinks = transformedContent.replace(
-    /(<link\s+.*?href=")(.*?)(".*?>)/g,
-    (match, p1, p2, p3) => p1 + p2 + p3
-  );
+  // const updatedLinks = transformedContent.replace(
+  //   /(<link\s+.*?href=")(.*?)(".*?>)/g,
+  //   (match, p1, p2, p3) => p1 + p2 + p3
+  // );
 
-  return updatedLinks;
+  return transformedContent;
 };
 
 export const uploadFinishedProject = async (project) => {
