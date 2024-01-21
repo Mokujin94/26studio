@@ -9,7 +9,7 @@ const ProjectViewer = ({ pathFromProject, baseURL, styles, styleWrap }) => {
   useEffect(() => {
     fetchProject(pathFromProject, baseURL).then((data) => {
       setHtmlContent(data);
-      console.log("content: " + content);
+      console.log("content: " + data);
       console.log("pathFromProject: " + pathFromProject);
       console.log("baseUrl: " + baseURL);
     });
