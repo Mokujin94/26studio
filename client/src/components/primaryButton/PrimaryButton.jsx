@@ -49,9 +49,7 @@ const PrimaryButton = observer(
             setErrorMessage("");
             setErrorModal(false);
             if (stages === 2) {
-              generateCode(user.dataAuth.email, user.codeAuth).then(
-                console.log("Код успешно отправлен")
-              );
+              generateCode(user.dataAuth.email, user.codeAuth).then();
               setStages((item) => item + 1);
             } else {
               setStages((item) => item + 1);

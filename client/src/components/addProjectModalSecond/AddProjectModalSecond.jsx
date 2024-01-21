@@ -10,10 +10,6 @@ const AddProjectModalSecond = observer(
   ({ projectPathes, setStages, uniqueFolder, baseURL }) => {
     const { project } = useContext(Context);
 
-    useEffect(() => {
-      console.log(uniqueFolder);
-    }, uniqueFolder);
-
     const onSelectPath = (e) => {
       project.setProjectPath(uniqueFolder + "/" + e.target.value);
       project.setProjectSelectedPath(e.target.value);

@@ -92,7 +92,6 @@ const ThirdStageReg = observer(
         setErrorMessage("Не верный код");
         setErrorModal(true);
       }
-      console.log(user.codeAuth);
     }, [code]);
 
     const input1 = createRef();

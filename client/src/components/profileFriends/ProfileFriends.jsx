@@ -13,7 +13,6 @@ function ProfileFriends() {
   useEffect(() => {
     fetchFriends(id).then((data) => {
       setFriendData(data);
-      console.log(data);
     });
   }, []);
   return (

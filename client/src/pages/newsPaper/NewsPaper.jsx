@@ -34,7 +34,6 @@ const NewsPaper = observer(() => {
   useEffect(() => {
     viewNews(id, user.user.id).catch((e) => console.log(e));
     getAllCommentsNews(id).then((data) => {
-      console.log(data);
       setComments(data[0].comments);
     });
 
@@ -87,7 +86,6 @@ const NewsPaper = observer(() => {
   }, [user, amountLike]);
 
   const setLike = async () => {
-    console.log(user.user.id);
     await condidate(id, user.user.id)
       .then(async (dataCondidate) => {
         if (dataCondidate.length) {

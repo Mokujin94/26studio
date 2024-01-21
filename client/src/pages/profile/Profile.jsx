@@ -39,7 +39,6 @@ const Profile = observer(() => {
               setGroup(item.name);
             }
           });
-          console.log(1);
         });
       })
       .catch((err) => {

@@ -19,7 +19,6 @@ const News = observer(() => {
     fetchNews()
       .then((data) => {
         news.setNews(data.rows);
-        console.log(data);
         setNewsCollection(
           news.news.map((item) => (
             <Link key={item.id} to={NEWSPAPER_ROUTE + "/" + item.id}>
