@@ -14,7 +14,7 @@ export const fetchProject = async (pathFromProject, baseURL) => {
   // // Преобразуем относительные пути в абсолютные
   const transformedContent = data.replace(
     /(<head>)/,
-    (match, p1) => p1 + `<base href="${baseURL}">`
+    (match, p1) => p1 + `<base href="${baseURL}/">`
   );
 
   // const updatedLinks = transformedContent.replace(
