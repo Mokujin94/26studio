@@ -32,15 +32,14 @@ function Project() {
   useEffect(() => {
     viewProject(id, user.user.id).catch((e) => console.log(e));
     fetchProjectById(id).then((data) => {
+      console.log(data);
       setDataProject(data);
       setAmountLike(data.likes);
       setViews(data.views);
     });
     getAllCommentsProject(id).then((data) => setComments(data[0].comments));
 
-    const socket = socketIOClient(
-      "https://26studio-production.up.railway.app:3001"
-    );
+    const socket = socketIOClient("https://26studio-production.up.railway.app");
 
     socket.on("sendViewsToClients", (updatedViews) => {
       console.log("Получены новые просмотры:", updatedViews);

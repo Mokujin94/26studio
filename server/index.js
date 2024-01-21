@@ -13,7 +13,6 @@ const socketIo = require("socket.io");
 const { initSocket } = require("./socket"); // Подключаем функцию инициализации Socket.IO
 
 const PORT = process.env.PORT || 5000;
-const socketIoPort = 3001;
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -27,19 +26,19 @@ app.use(express.static(path.resolve(__dirname, "static/projects")));
 app.use(express.static(path.resolve(__dirname, "extracted")));
 app.use(fileUpload({}));
 
-app.use("/api/user/accept_project", (req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://poetic-halva-67c56b.netlify.app"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
+// app.use("/api/user/accept_project", (req, res, next) => {
+//   res.header(
+//     "Access-Control-Allow-Origin",
+//     "https://poetic-halva-67c56b.netlify.app"
+//   );
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
+//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   next();
+// });
 
 app.use("/api", router);
 
@@ -50,10 +49,9 @@ const start = async () => {
     await sequelize.authenticate();
     await sequelize.sync();
     // console.log(path.resolve(__dirname, "static"));
-    app.listen(PORT, () => console.log(`сервер стартанул на порте ${PORT}`));
-    httpServer.listen(socketIoPort, () => {
-      console.log(`Сервер Socket.IO стартовал на порту ${socketIoPort}`);
-    });
+    httpServer.listen(PORT, () =>
+      console.log(`сервер стартанул на порте ${PORT}`)
+    );
   } catch (e) {
     console.log(e);
   }
