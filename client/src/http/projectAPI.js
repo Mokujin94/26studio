@@ -8,10 +8,7 @@ export const fetchProject = async (pathFromProject, baseURL) => {
   };
   const { data } = await $host.get("/api/user/accept_project", config);
   let pathWithForwardSlashes = baseURL.replace(/\\/g, "/");
-  const correctedPath = pathWithForwardSlashes.replace(
-    /^https?:\/\//,
-    "http://"
-  );
+  const correctedPath = pathWithForwardSlashes.replace(/^https:\//, "https://");
   // // Преобразуем относительные пути в абсолютные
   const transformedContent = data.replace(
     /(<head>)/,
