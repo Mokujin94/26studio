@@ -33,7 +33,6 @@ function Header() {
     setIsLoading(true);
     searchAll(useDebounced).then((data) => {
       setSearchData(data);
-      console.log(data);
       setIsLoading(false);
     });
   }, [useDebounced]);
