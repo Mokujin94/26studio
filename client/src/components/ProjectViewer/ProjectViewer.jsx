@@ -12,6 +12,8 @@ const ProjectViewer = ({ pathFromProject, baseURL, styles, styleWrap }) => {
       try {
         const content = await fetchProject(pathFromProject, baseURL);
         setHtmlContent(content);
+        console.log(content);
+        console.log(pathFromProject, baseURL);
       } catch (error) {
         // Обработка ошибок
       }
