@@ -8,21 +8,21 @@ export const fetchProject = async (pathFromProject, baseURL) => {
   };
   const { data } = await $host.get("/api/user/accept_project", config);
   // console.log(data);
-  let pathWithForwardSlashes = baseURL.replace(/\\/g, "/");
-  const correctedPath = pathWithForwardSlashes.replace(/^http:\//, "http://");
+  // let pathWithForwardSlashes = baseURL.replace(/\\/g, "/");
+  // const correctedPath = pathWithForwardSlashes.replace(/^http:\//, "http://");
   // // console.log(pathWithForwardSlashes);
   // // Преобразуем относительные пути в абсолютные
   const transformedContent = data.replace(
     /(<head>)/,
-    (match, p1) => p1 + `<base href="${correctedPath}/">`
+    (match, p1) => p1 + `<base href="${baseURL}">`
   );
 
-  // const updatedLinks = transformedContent.replace(
-  //   /(<link\s+.*?href=")(.*?)(".*?>)/g,
-  //   (match, p1, p2, p3) => p1 + p2 + p3
-  // );
+  const updatedLinks = transformedContent.replace(
+    /(<link\s+.*?href=")(.*?)(".*?>)/g,
+    (match, p1, p2, p3) => p1 + p2 + p3
+  );
 
-  return transformedContent;
+  return updatedLinks;
 };
 
 export const uploadFinishedProject = async (project) => {
