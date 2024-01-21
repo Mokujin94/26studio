@@ -169,7 +169,6 @@ const Projects = observer(() => {
         );
       });
 
-  console.log(projectsData);
   const projectLoading = isLoaded && newSkeletonList;
   const projectLoaded =
     !isLoaded &&

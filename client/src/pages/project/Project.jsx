@@ -81,7 +81,6 @@ function Project() {
   }, [user, amountLike]);
 
   const setLike = async () => {
-    console.log(user.user.id);
     await condidate(id, user.user.id)
       .then(async (dataCondidate) => {
         if (dataCondidate.length) {

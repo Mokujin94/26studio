@@ -7,19 +7,12 @@ const ProjectViewer = ({ pathFromProject, baseURL, styles, styleWrap }) => {
   const [htmlContent, setHtmlContent] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const content = await fetchProject(pathFromProject, baseURL);
-        setHtmlContent(content);
-        console.log("content: " + content);
-        console.log("pathFromProject: " + pathFromProject);
-        console.log("baseUrl: " + baseURL);
-      } catch (error) {
-        // Обработка ошибок
-      }
-    };
-
-    fetchData();
+    fetchProject(pathFromProject, baseURL).then((data) => {
+      setHtmlContent(data);
+      console.log("content: " + content);
+      console.log("pathFromProject: " + pathFromProject);
+      console.log("baseUrl: " + baseURL);
+    });
   }, [pathFromProject, baseURL]);
   return (
     <div className={style.wrap} style={styleWrap}>

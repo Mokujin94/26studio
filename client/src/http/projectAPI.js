@@ -20,7 +20,7 @@ export const fetchProject = async (pathFromProject, baseURL) => {
     (match, p1, p2, p3) => p1 + p2 + p3
   );
 
-  return data;
+  return updatedLinks;
 };
 
 export const uploadFinishedProject = async (project) => {
