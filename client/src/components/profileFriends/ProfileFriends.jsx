@@ -12,13 +12,14 @@ function ProfileFriends() {
 
   useEffect(() => {
     fetchFriends(id).then((data) => {
+      console.log(data)
       setFriendData(data);
     });
   }, []);
   return (
     <>
       {friendData.length ? (
-        friendData.map(({ id }) => <FriendCard userId={id} key={id} />)
+        friendData.map(({ id_sender }) => <FriendCard userId={id_sender} key={id} />)
       ) : (
         <div className={style.friends}>
           <svg

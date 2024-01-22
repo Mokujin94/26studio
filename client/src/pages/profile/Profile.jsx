@@ -19,11 +19,13 @@ import { fetchGroups } from "../../http/groupsAPI";
 import { fetchUserById } from "../../http/userAPI";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
+import { addFriend, addSubscriber, deleteSubscriber, fetchFriends, fetchFriendsSubscriber } from "../../http/friendAPI";
 
 const Profile = observer(() => {
   const { profile, user, groups } = useContext(Context);
   const [group, setGroup] = useState("");
   const [userId, setUserId] = useState({});
+  const [textButton, setTextButton] = useState('');
   const location = useLocation();
   const { id } = useParams();
 
@@ -32,18 +34,31 @@ const Profile = observer(() => {
   useEffect(() => {
     fetchUserById(id)
       .then((dataUser) => {
+        console.log(dataUser)
         setUserId(dataUser);
-        fetchGroups().then((dataGroup) => {
-          dataGroup.rows.map((item) => {
-            if (dataUser.groupId == item.id) {
-              setGroup(item.name);
-            }
-          });
-        });
+        setGroup(dataUser.group.name)
       })
       .catch((err) => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
+      if (id !== user.user.id) {
+        console.log('успех')
+        fetchFriendsSubscriber(id).then(data => {
+          console.log(data)
+          if (!data.length) {
+            return setTextButton('Добавить в друзья')
+          }
+          data.map(item => {
+            if (item.id_sender === user.user.id) {
+              return setTextButton('Отменить заявку')
+            } if (item.id_sender == id && item.id_recipient == user.user.id) {
+              return setTextButton('Принять заявку')
+            } 
+              return setTextButton('Добавить в друзья')
+
+          })
+        })
+      }
   }, [location.pathname]);
 
   const [prevId, setPrevId] = useState(0);
@@ -59,6 +74,16 @@ const Profile = observer(() => {
       setPrevId(profile.selectedMenu.id);
     }
   };
+
+  const RequestFriend = () => {
+    if (textButton === "Отменить заявку") {
+      deleteSubscriber(user.user.id, id).then(setTextButton('Добавить в друзья'))
+    } else if (textButton === "Принять заявку") {
+      addFriend(id, user.user.id).then(setTextButton('У вас в друзьях'))
+    } else {
+      addSubscriber(user.user.id, id).then(data => setTextButton('Отменить заявку'))
+    }
+  }
 
   useEffect(() => {
     const root = document.querySelector(":root");
@@ -91,10 +116,19 @@ const Profile = observer(() => {
               />
             </div>
 
-            <div className="profile__button">
-              <FunctionButton>
-                {id == user.user.id ? "Редактировать" : "Добавить в друзья"}
+            <div className="profile__button"> 
+            {id !== user.user.id  ?
+
+              <FunctionButton onClick={RequestFriend}>
+                {textButton}
               </FunctionButton>
+
+              :
+              <FunctionButton>
+                Редактировать
+              </FunctionButton>  
+            }
+
             </div>
 
             <div className="profile__socials">

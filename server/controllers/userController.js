@@ -15,6 +15,7 @@ const {
   UserAchivment,
   GettingAchivment,
   Project,
+  Group,
 } = require("../models/models");
 const { Op } = require("sequelize");
 
@@ -158,7 +159,8 @@ class UserController {
   async getProfileUser(req, res, next) {
     const { id } = req.params;
     const user = await User.findOne({
-      where: { id },
+      include: [Group, Friend],
+      where: { id},
     });
     if (!user) {
       return next(ApiError.internal("Пользователь не найден"));
@@ -169,6 +171,7 @@ class UserController {
   async getOneUser(req, res, next) {
     const { id } = req.params;
     const user = await User.findOne({
+      include: [Group, Friend],
       where: { id },
     });
     return res.json(user);
