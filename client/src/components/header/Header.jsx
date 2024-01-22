@@ -12,6 +12,8 @@ import SearchAll from "../searchAll/SearchAll";
 import { useDebounce } from "../../hooks/useDebounce";
 import { searchAll } from "../../http/searchAPI";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { Link } from "react-router-dom";
+import { NEWS_ROUTE } from "../../utils/consts";
 
 function Header() {
   const { user } = useContext(Context);
@@ -52,7 +54,9 @@ function Header() {
           >
             <img src={burger} alt="icon" />
           </div>
-          <img src={logo} alt="logo" className={style.header__logo} />
+          <Link to={NEWS_ROUTE} className={style.header__logo}>
+            <img src={logo} alt="logo"  />
+          </Link>
           <div className={style.header__search} ref={nodeRef}>
             <input
               className={style.header__search__input}

@@ -39,6 +39,9 @@
   &__logo {
     position: absolute;
     left: 60px;
+    img {
+      display: block;
+    }
   }
   &__search {
     position: relative;
