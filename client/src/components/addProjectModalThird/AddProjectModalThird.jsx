@@ -7,8 +7,7 @@ import ProjectViewer from "../ProjectViewer/ProjectViewer";
 import { uploadFinishedProject } from "../../http/projectAPI";
 
 const AddProjectModalThird = observer(({ baseURL }) => {
-  const { project } = useContext(Context);
-  const { user } = useContext(Context);
+  const { user, project, modal } = useContext(Context);
 
   const upload = async () => {
     const formData = new FormData();
@@ -22,9 +21,11 @@ const AddProjectModalThird = observer(({ baseURL }) => {
     formData.append("userId", user.user.id);
     const response = await uploadFinishedProject(formData)
       .then((data) => {
-        console.log("Успешно");
+        modal.setModalCompleteMessage("Проект успешно добавлен!");
+        modal.setModalComplete(true);
+        user.setModalProject(false);
       })
-      .catch();
+      .catch((e) => console.log(e));
     return response;
   };
 

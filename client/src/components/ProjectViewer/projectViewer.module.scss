@@ -1,10 +1,16 @@
+@import "../../resource/styles/variables";
+
 .wrap {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 215px;
   padding: 0;
   overflow: hidden;
   border-radius: 0 0 15px 15px;
+  background: $studio-black-opacity-03;
 }
 .iframe {
   position: absolute;

@@ -27,14 +27,13 @@ class ProjectController {
 
   async getAll(req, res) {
     let { limit, page, filter } = req.query;
-    page = page || 1;
+    // page = page || 1;
     limit = limit || 9;
-    let offset = page * limit - limit;
+    // let offset = limit - limit;
 
     let projects = await Project.findAndCountAll({
       include: [Likes, Comments, User, View],
       limit,
-      offset,
     });
     return res.json(projects);
   }

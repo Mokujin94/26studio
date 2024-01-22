@@ -3,30 +3,40 @@ import React, { useContext, useState } from "react";
 import style from "./commentsEnd.module.scss";
 import { Context } from "../..";
 import { createNews, createProject } from "../../http/commentsAPI";
+import Spinner from "../spinner/Spinner";
 
 function CommentsEnd({ projectId, newsId }) {
   const { user, error } = useContext(Context);
 
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const sendMessage = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     if (message.replace(/\s/g, "")) {
       if (projectId) {
         await createProject(message, projectId, user.user.id)
-          .then(setMessage(""))
+          .then(() => {
+            setMessage("");
+            setIsLoading(false);
+          })
           .catch((err) => {
             console.log(err.response.data.message);
             error.setNotAuthError(true);
+            setIsLoading(false);
           });
       }
       if (newsId) {
         await createNews(message, newsId, user.user.id)
-          .then(setMessage(""))
+          .then(() => {
+            setMessage("");
+            setIsLoading(false);
+          })
           .catch((err) => {
             console.log(err.response.data.message);
             error.setNotAuthError(true);
+            setIsLoading(false);
           });
       }
     }
@@ -44,8 +54,9 @@ function CommentsEnd({ projectId, newsId }) {
         type="submit"
         className={style.block__btn}
         onClick={(e) => sendMessage(e)}
+        disabled={isLoading}
       >
-        Отправить
+        {isLoading ? <Spinner /> : "Отправить"}
       </button>
     </form>
   );

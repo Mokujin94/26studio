@@ -6,7 +6,8 @@ let io;
 function initSocket(httpServer) {
   io = socketIo(httpServer, {
     cors: {
-      origin: "https://poetic-halva-67c56b.netlify.app", // Укажите адрес вашего клиентского приложения
+      // origin: "https://poetic-halva-67c56b.netlify.app", // Укажите ваш фронтенд-адрес
+      origin: "http://localhost:3000", // Укажите ваш фронтенд-адрес
       methods: ["GET", "POST"],
     },
   });

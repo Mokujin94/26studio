@@ -82,8 +82,8 @@ const App = observer(() => {
           </CSSTransition>
           <CSSTransition
             in={modal.modalComplete}
-            timeout={0}
-            classNames="node"
+            timeout={300}
+            classNames="popup-success"
             unmountOnExit
           >
             <div className="modal__complete">
