@@ -8,16 +8,41 @@ import { Context } from "../..";
 
 const AddProjectModalSecond = observer(
   ({ projectPathes, setStages, uniqueFolder, baseURL }) => {
-    const { project } = useContext(Context);
-
+    const { project, modal } = useContext(Context);
     const onSelectPath = (e) => {
-      project.setProjectPath(uniqueFolder + "/" + e.target.value);
-      project.setProjectSelectedPath(e.target.value);
+        project.setProjectPath(uniqueFolder + "/" + e.target.value);
+        project.setProjectSelectedPath(e.target.value);
     };
 
     const selectPreviewFile = (e) => {
       project.setProjectPreview(e.target.files[0]);
     };
+
+    const onButton = (e) => {
+      let message = []
+      if (!project.projectName || !project.projectDescr || !project.projectSelectedPath || !project.projectPreview ) {
+        if (!project.projectName) {
+          message.push(`Название не заполнено`)
+        }
+
+        if (!project.projectDescr) {
+          message.push(`Описание не заполнено`)
+        }
+
+        if (!project.projectSelectedPath) {
+          message.push(`Файл не выбран`)
+        }
+
+        if (!project.projectPreview) {
+          message.push(`Превью не выбрано`)
+        }
+
+        modal.setModalComplete(true)
+        modal.setModalCompleteMessage(message.join(`\n \n`))
+        return
+      }
+      setStages(3)
+    }
 
     return (
       <div className={style.block}>
@@ -54,15 +79,18 @@ const AddProjectModalSecond = observer(
             <select
               className={style.block__infoItemInput}
               onChange={onSelectPath}
-              value={project.projectSelectedPath}
+              // value={project.projectSelectedPath}
             >
+              <option selected disabled>Выберите файл</option>
               {projectPathes &&
                 projectPathes.map((item, i) => {
-                  return (
-                    <option key={i} value={item}>
-                      {item}
-                    </option>
-                  );
+                  if (item.split('.').at(-1) === 'html') {
+                    return (
+                      <option key={i} value={item}>
+                        {item}
+                      </option>
+                    );
+                  }
                 })}
             </select>
           </div>
@@ -108,7 +136,7 @@ const AddProjectModalSecond = observer(
             </div>
           </div>
         </div>
-        <button className={style.block__button} onClick={() => setStages(3)}>
+        <button className={style.block__button} onClick={onButton}>
           Далее
         </button>
       </div>

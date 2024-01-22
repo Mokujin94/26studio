@@ -16,7 +16,7 @@ const ProjectViewer = ({ pathFromProject, baseURL, styles, styleWrap }) => {
       console.log("pathFromProject: " + pathFromProject);
       console.log("baseUrl: " + baseURL);
       setIsLoading(false);
-    });
+    }).catch();
   }, [pathFromProject, baseURL]);
   return (
     <div className={style.wrap} style={styleWrap}>
