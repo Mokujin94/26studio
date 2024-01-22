@@ -3,7 +3,7 @@ const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../error/ApiError");
 const { getIo } = require("../socket");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 class ProjectController {
   async create(req, res, next) {
@@ -27,14 +27,49 @@ class ProjectController {
 
   async getAll(req, res) {
     let { limit, page, filter } = req.query;
-    // page = page || 1;
+    page = page || 1;
     limit = limit || 9;
-    // let offset = limit - limit;
-
-    let projects = await Project.findAndCountAll({
-      include: [Likes, Comments, User, View],
-      limit,
-    });
+    filter = filter || "0";
+    let offset = page * limit - limit;
+    let projects;
+    if (filter === "0") {
+      projects = await Project.findAndCountAll({
+        attributes: Object.keys(Project.rawAttributes),
+        include: [Likes, Comments, User, View],
+        order: [
+          [
+            Sequelize.literal(
+              '(SELECT COUNT(*) FROM "likes" WHERE "likes"."projectId" = "project"."id")'
+            ),
+            "DESC",
+          ],
+        ],
+        limit,
+        offset,
+      });
+    } else if (filter === "1") {
+      projects = await Project.findAndCountAll({
+        attributes: Object.keys(Project.rawAttributes),
+        include: [Likes, Comments, User, View],
+        order: [
+          [
+            Sequelize.literal(
+              '(SELECT COUNT(*) FROM "views" WHERE "views"."projectId" = "project"."id")'
+            ),
+            "DESC",
+          ],
+        ],
+        limit,
+        offset,
+      });
+    } else if (filter === "2") {
+      projects = await Project.findAndCountAll({
+        include: [Likes, Comments, User, View],
+        order: [["createdAt", "DESC"]], // Сортировка по полю createdAt в убывающем порядке
+        limit,
+        offset,
+      });
+    }
     return res.json(projects);
   }
 
@@ -116,27 +151,84 @@ class ProjectController {
   }
 
   async searchProject(req, res) {
-    let { search, limit, page } = req.query;
+    let { search, limit, page, filter } = req.query;
     page = page || 1;
     limit = limit || 9;
     let offset = page * limit - limit;
-    const project = await Project.findAndCountAll({
-      include: [Likes, Comments, User, View],
-      limit,
-      offset,
-      where: {
-        [Op.or]: {
-          name: {
-            [Op.iLike]: "%" + search + "%",
+
+    let projects;
+    if (filter === "0") {
+      projects = await Project.findAndCountAll({
+        attributes: Object.keys(Project.rawAttributes),
+        include: [Likes, Comments, User, View],
+        order: [
+          [
+            Sequelize.literal(
+              '(SELECT COUNT(*) FROM "likes" WHERE "likes"."projectId" = "project"."id")'
+            ),
+            "DESC",
+          ],
+        ],
+        limit,
+        offset,
+        where: {
+          [Op.or]: {
+            name: {
+              [Op.iLike]: "%" + search + "%",
+            },
+            description: {
+              [Op.iLike]: "%" + search + "%",
+            },
           },
-          description: {
-            [Op.iLike]: "%" + search + "%",
-          },
+          is_private: false,
         },
-        is_private: false,
-      },
-    });
-    return res.json(project);
+      });
+    } else if (filter === "1") {
+      projects = await Project.findAndCountAll({
+        attributes: Object.keys(Project.rawAttributes),
+        include: [Likes, Comments, User, View],
+        order: [
+          [
+            Sequelize.literal(
+              '(SELECT COUNT(*) FROM "views" WHERE "views"."projectId" = "project"."id")'
+            ),
+            "DESC",
+          ],
+        ],
+        limit,
+        offset,
+        where: {
+          [Op.or]: {
+            name: {
+              [Op.iLike]: "%" + search + "%",
+            },
+            description: {
+              [Op.iLike]: "%" + search + "%",
+            },
+          },
+          is_private: false,
+        },
+      });
+    } else if (filter === "2") {
+      projects = await Project.findAndCountAll({
+        include: [Likes, Comments, User, View],
+        limit,
+        offset,
+        order: [["createdAt", "DESC"]],
+        where: {
+          [Op.or]: {
+            name: {
+              [Op.iLike]: "%" + search + "%",
+            },
+            description: {
+              [Op.iLike]: "%" + search + "%",
+            },
+          },
+          is_private: false,
+        },
+      });
+    }
+    return res.json(projects);
   }
 }
 

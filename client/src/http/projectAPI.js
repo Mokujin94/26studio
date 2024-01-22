@@ -92,10 +92,11 @@ export const fetchProjectsUser = async (id) => {
   return data;
 };
 
-export const searchProject = async (search) => {
+export const searchProject = async (search, filter) => {
   const config = {
     params: {
       search,
+      filter,
     },
   };
   const { data } = await $host.get("api/project/search/", config);

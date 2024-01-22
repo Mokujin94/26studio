@@ -34,81 +34,46 @@ const Projects = observer(() => {
     setIsLoaded(true);
     setIsLoadingSlider(true);
     getAll().then((data) => {
-      if (selectedItem === "0") {
-        project.setProjects(
-          data.rows.sort(
-            (a, b) => Number(b.likes.length) - Number(a.likes.length)
-          )
-        );
-      } else if (selectedItem === "1") {
-        project.setProjects(
-          data.rows.sort((a, b) => b.views.length - a.views.length)
-        );
-      } else {
-        project.setProjects(
-          data.rows.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() / 1000 -
-              new Date(a.createdAt).getTime() / 1000
-          )
-        );
-      }
-
-      setProjectsData(
-        data.rows.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      );
+      project.setProjects(data.rows);
+      console.log(data);
       setIsLoaded(false);
+    });
+    getAll("2").then((data) => {
+      setProjectsData(data.rows);
       setIsLoadingSlider(false);
     });
   }, []);
 
   useEffect(() => {
     setIsLoaded(true);
-    getAll().then((data) => {
-      if (selectedItem === "0") {
-        project.setProjects(
-          data.rows.sort(
-            (a, b) => Number(b.likes.length) - Number(a.likes.length)
-          )
-        );
-      } else if (selectedItem === "1") {
-        project.setProjects(
-          data.rows.sort((a, b) => b.views.length - a.views.length)
-        );
-      } else {
-        project.setProjects(
-          data.rows.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() / 1000 -
-              new Date(a.createdAt).getTime() / 1000
-          )
-        );
-      }
+    getAll(selectedItem).then((data) => {
+      // if (selectedItem === "0") {
+      //   project.setProjects(
+      //     data.rows.sort(
+      //       (a, b) => Number(b.likes.length) - Number(a.likes.length)
+      //     )
+      //   );
+      // } else if (selectedItem === "1") {
+      //   project.setProjects(
+      //     data.rows.sort((a, b) => b.views.length - a.views.length)
+      //   );
+      // } else {
+      //   project.setProjects(
+      //     data.rows.sort(
+      //       (a, b) =>
+      //         new Date(b.createdAt).getTime() / 1000 -
+      //         new Date(a.createdAt).getTime() / 1000
+      //     )
+      //   );
+      // }
+      project.setProjects(data.rows);
       setIsLoaded(false);
     });
   }, [selectedItem]);
 
   useEffect(() => {
-    searchProject(useDebounced).then((data) => {
-      if (selectedItem === "0") {
-        project.setProjects(
-          data.rows.sort(
-            (a, b) => Number(b.likes.length) - Number(a.likes.length)
-          )
-        );
-      } else if (selectedItem === "1") {
-        project.setProjects(
-          data.rows.sort((a, b) => b.views.length - a.views.length)
-        );
-      } else {
-        project.setProjects(
-          data.rows.sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() / 1000 -
-              new Date(a.createdAt).getTime() / 1000
-          )
-        );
-      }
+    searchProject(useDebounced, selectedItem).then((data) => {
+      project.setProjects(data.rows);
       setIsLoaded(false);
     });
   }, [useDebounced]);

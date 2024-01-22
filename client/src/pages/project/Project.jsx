@@ -54,7 +54,7 @@ function Project() {
     });
 
     socket.on("sendLikesToClients", (updatedLikes) => {
-      console.log("Получены новые комментарии:", updatedLikes);
+      console.log("Получены новые лайки:", updatedLikes);
       if (updatedLikes) {
         updatedLikes.filter((item) => {
           if (item.id == id) {
