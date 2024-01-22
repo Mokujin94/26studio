@@ -8,6 +8,8 @@ import { fetchProjectsUser } from "../../http/projectAPI";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { PROJECTS_ROUTE } from "../../utils/consts";
 
+import style from './profileProjects.module.scss'
+
 const ProfileProjects = observer(() => {
   const { id } = useParams();
   const location = useLocation();
@@ -17,7 +19,8 @@ const ProfileProjects = observer(() => {
   }, [location.pathname]);
   return (
     <>
-      {dataProjects.map((item) => {
+      {dataProjects.length ? (
+        dataProjects.map((item) => {
         return (
           <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
             <ProjectCard
@@ -30,7 +33,12 @@ const ProfileProjects = observer(() => {
             />
           </Link>
         );
-      })}
+      })
+      ) : (
+        <div className={style.projects}>
+          <h2 className={style.projects__title}>У вас нет друзей</h2>
+        </div>
+      )}
     </>
   );
 });

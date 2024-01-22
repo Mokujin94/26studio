@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import style from "./addProjectModalFirst.module.scss";
+import { Context } from "../..";
 
 function AddProjectModalFirst({ setFile, setStages }) {
+  const {modal} = useContext(Context)
   const onChangeStages = (e) => {
+    let fileExt = e.target.files[0].name.split('.').at(-1);
+    if (fileExt !== 'zip') {
+      modal.setModalComplete(true)
+      modal.setModalCompleteMessage('Доступные расширения: .zip')
+      return
+    }
     setStages(2);
     setFile(e.target.files[0]);
   };
@@ -31,6 +39,7 @@ function AddProjectModalFirst({ setFile, setStages }) {
         name="file"
         id="input_file"
         onChange={onChangeStages}
+        accept=".zip"
       />
       <span className={style.descr_file}>Загрузите архив с проектом</span>
       <label htmlFor="input_file" className={style.block__button}>
