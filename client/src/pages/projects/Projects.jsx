@@ -3,10 +3,10 @@ import ProjectCard from "../../components/projectCard/ProjectCard";
 import projectPhoto from "../../resource/graphics/images/projectCard/bg.jpg";
 import ProjectTags from "../../components/projectTags/ProjectTags";
 import ProjectFilter from "../../components/projectFilter/ProjectFilter";
-import { Splide, SplideTrack, SplideSlide } from '@splidejs/react-splide';
+import { Splide, SplideTrack, SplideSlide } from "@splidejs/react-splide";
 
 import "./projects.scss";
-import '@splidejs/react-splide/css';
+import "@splidejs/react-splide/css";
 
 import ProjectSkeleton from "../../components/ProjectSkeleton";
 import SliderButton from "../../components/sliderButton/SliderButton";
@@ -60,21 +60,6 @@ const Projects = observer(() => {
 
   const stylePrevArrow = { transform: "rotate(180deg)" };
 
-  const settings = {
-    // dots: false,
-    // infinite: true,
-    slidesToShow: 4,
-    // slidesToScroll: 1,
-    // rows: 1,
-    // autoplay: true,
-    // // speed: 2000,
-    // autoplaySpeed: 2000,
-    // pauseOnHover: true,
-    // // cssEase: "linear"
-    // nextArrow: <SliderButton />,
-    // prevArrow: <SliderButton styling={stylePrevArrow} />,
-  };
-
   const skeletonList = [
     { id: 0 },
     { id: 1 },
@@ -94,7 +79,9 @@ const Projects = observer(() => {
     <ProjectSkeleton key={id} />
   ));
   const newLastAddedSkeletonList = lastAddedSkeletonList.map(({ id }) => (
-    <ProjectSkeleton key={id} />
+    <SplideSlide>
+      <ProjectSkeleton key={id} />
+    </SplideSlide>
   ));
 
   const sliderRenderer = isLoadingSlider
@@ -150,19 +137,33 @@ const Projects = observer(() => {
         <h1 className="projects__title">Новые проекты</h1>
         <div className="projects__wrapper" style={{ display: "block" }}>
           <Splide
-          hasTrack={ false }
-            options={ {
+            hasTrack={false}
+            options={{
+              type: "loop",
               perPage: 4,
               hasTrack: false,
-              gap: 20
-            } } 
+              gap: 20,
+              speed: 600,
+              perMove: 1,
+              arrows: true,
+              pagination: false,
+              autoplay: true,
+              interval: 1500,
+              rewind: true,
+              omitEnd: true,
+              trimSpace: true,
+              padding: { top: 20, bottom: 20 },
+              clones: true,
+              cloneStatus: true,
+            }}
           >
-            <SplideTrack>
-              {sliderRenderer}
-            </SplideTrack>
+            <SplideTrack>{sliderRenderer}</SplideTrack>
             <div className="splide__arrows">
-              <SliderButton className="splide__arrow splide__arrow--prev" styling={stylePrevArrow} />
-              <SliderButton className="splide__arrow splide__arrow--next"  />
+              <SliderButton
+                className="splide__arrow splide__arrow--prev"
+                styling={stylePrevArrow}
+              />
+              <SliderButton className="splide__arrow splide__arrow--next" />
             </div>
           </Splide>
         </div>

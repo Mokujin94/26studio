@@ -73,10 +73,10 @@
 .splide {
   width: calc(100% + 40px);
   transform: translateX(-20px);
-  &__list {
+  &__track {
     padding: 20px !important;
   }
-  &__arrow  {
+  &__arrow {
     svg {
       fill: none;
     }
@@ -88,8 +88,6 @@
     }
   }
 }
-
-
 
 @media (max-width: $xxl) {
   .projects {
