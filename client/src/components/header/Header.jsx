@@ -21,16 +21,25 @@ function Header() {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const [activeCreatePopup, setActiveCreatePopup] = useState(false);
+
   const [searchOpen, setSearchOpen] = useState(false);
 
   const [searchData, setSearchData] = useState({});
 
   const useDebounced = useDebounce(search, 200);
+  const createPopupRef = useRef(null)
 
   const nodeRef = useRef(null);
   useClickOutside(nodeRef, () => {
     setSearchOpen(false);
   });
+
+  useClickOutside(createPopupRef, () => {
+    setActiveCreatePopup(false)
+  });
+
+  
   useEffect(() => {
     setIsLoading(true);
     searchAll(useDebounced).then((data) => {
@@ -82,7 +91,7 @@ function Header() {
             )}
           </div>
           <div className={style.header__createButtonPopUp}>
-            <CreateButtonPopUp />
+            <CreateButtonPopUp createPopupRef={createPopupRef} setActiveCreatePopup={setActiveCreatePopup} activeCreatePopup={activeCreatePopup}/>
             {/* <ThemeChangeButton /> */}
           </div>
         </div>

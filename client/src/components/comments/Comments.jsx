@@ -8,7 +8,7 @@ import style from "./comments.module.scss";
 const Comments = ({ comments, setComments, projectId, newsId }) => {
   useEffect(() => {
     // const socket = socketIOClient("https://26studio-production.up.railway.app");
-    const socket = socketIOClient("http://localhost:5000");
+    const socket = socketIOClient(process.env.REACT_APP_API_URL);
     // console.log(socket);
     // Подписываемся на событие обновления комментариев
     if (projectId) {

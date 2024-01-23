@@ -7,15 +7,16 @@ import addNews from '../../resource/graphics/icons/createButtonPopUp/addNews.svg
 import { CSSTransition } from 'react-transition-group';
 import { Context } from '../..';
 
-function CreateButtonPopUp() {
-  const [active, setActive] = useState(false);
+function CreateButtonPopUp({createPopupRef, setActiveCreatePopup, activeCreatePopup}) {
+
 
   const { user } = useContext(Context);
 
   return (
     <div
-      onClick={() => setActive((item) => !item)}
-      className={active ? `${style.button} ${style.button_active}` : style.button}
+      onClick={() => setActiveCreatePopup((item) => !item)}
+      ref={createPopupRef}
+      className={activeCreatePopup ? `${style.button} ${style.button_active}` : style.button}
     >
       <svg
         className={style.button__cross}
@@ -29,16 +30,16 @@ function CreateButtonPopUp() {
         <path d="M11 21L11 1Z" fill="#27323E" />
         <path d="M11 21L11 1" stroke="#FCFCFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
-      <CSSTransition in={active} timeout={300} classNames="create-anim" mountOnEnter unmountOnExit>
+      <CSSTransition in={activeCreatePopup} timeout={300} classNames="create-anim" mountOnEnter unmountOnExit>
         <div
-          className={active ? `${style.button__content} ${style.button__content_active}` : style.button__content}
+          className={activeCreatePopup ? `${style.button__content} ${style.button__content_active}` : style.button__content}
           onClick={(e) => e.stopPropagation()}
         >
           <div
             className={style.button__contentItem}
             onClick={() => {
               user.setModalProject(true);
-              setActive((item) => !item);
+              setActiveCreatePopup((item) => !item);
             }}
           >
             <img className={style.button__contentItemImg} src={addProject} alt="" />
@@ -48,7 +49,7 @@ function CreateButtonPopUp() {
             className={style.button__contentItem}
             onClick={() => {
               user.setModalNews(true);
-              setActive((item) => !item);
+              setActiveCreatePopup((item) => !item);
             }}
           >
             <img className={style.button__contentItemImg} src={addNews} alt="" />

@@ -40,7 +40,7 @@ function Project() {
     getAllCommentsProject(id).then((data) => setComments(data[0].comments));
 
     // const socket = socketIOClient("https://26studio-production.up.railway.app");
-    const socket = socketIOClient("http://localhost:5000");
+    const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
     socket.on("sendViewsToClients", (updatedViews) => {
       console.log("Получены новые просмотры:", updatedViews);
