@@ -20,6 +20,7 @@ const Friend = sequelize.define("friend", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   id_sender: { type: DataTypes.INTEGER },
   id_recipient: { type: DataTypes.INTEGER },
+  status: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false,}
 });
 
 const Subscriber = sequelize.define("subscriber", {

@@ -9,6 +9,7 @@
   border: 1px solid $studio-primary-border;
   border-radius: 50%;
   transition: $studio-transition-03;
+  background: transparent ;
   &:hover {
     background: $studio-primary-button;
     .arrow__item {
@@ -24,3 +25,5 @@
     }
   }
 }
+
+

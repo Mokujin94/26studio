@@ -7,7 +7,7 @@ import arrowIcon from "../../resource/graphics/icons/sliderButton/arrow.svg";
 function SliderButton(props) {
   const { className, style, onClick } = props;
   return (
-    <button onClick={onClick} className={`${className} ${styles.arrow}`}>
+    <div onClick={onClick} className={`${className} ${styles.arrow}`}>
       <svg
         className={styles.arrow__item}
         style={props.styling}
@@ -26,7 +26,7 @@ function SliderButton(props) {
           strokeLinejoin="round"
         />
       </svg>
-    </button>
+    </div>
   );
 }
 

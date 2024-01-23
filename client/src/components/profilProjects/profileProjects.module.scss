@@ -6,3 +6,25 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
 }
+
+.projects {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    text-align: center;
+    &__title {
+        font-size: 24px;
+        font-weight: 400;
+        color: #fcfcfc;
+        text-align: center;
+    }
+    &__icon {
+        height: 300px;
+        svg {
+            fill: transparent;
+            height: 100%;
+            path {
+                stroke: $studio-primary-element;
+            }
+        }
+    }
+}

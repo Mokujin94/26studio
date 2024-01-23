@@ -3,11 +3,9 @@ const router = new Router();
 const FriendController = require('../controllers/friendController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-router.post('/', authMiddleware, FriendController.addFriend);
-router.post('/subscriber', authMiddleware, FriendController.addSubscriber);
+router.post('/',  FriendController.reqFriend);
+router.patch('/', authMiddleware, FriendController.addFriend);
 router.get('/', FriendController.getAllFriends);
-router.get('/subscriber',  FriendController.getAllSubscriber);
 router.delete('/', authMiddleware, FriendController.deleteFriend);
-router.delete('/subscriber', authMiddleware, FriendController.deleteSubscriber);
 
 module.exports = router;

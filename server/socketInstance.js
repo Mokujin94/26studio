@@ -6,7 +6,7 @@ const app = require("./index"); // Подключите ваш Express-серв�
 // const server = http.createServer(app);
 const io = socketIo(app, {
   cors: {
-    origin: "https://poetic-halva-67c56b.netlify.app", // Укажите ваш фронтенд-адрес
+    origin: process.env.CLIENTURL, // Укажите ваш фронтенд-адрес
     // origin: "http://localhost:3000", // Укажите ваш фронтенд-адрес
     methods: ["GET", "POST"],
   },

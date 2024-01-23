@@ -3,11 +3,10 @@ import ProjectCard from "../../components/projectCard/ProjectCard";
 import projectPhoto from "../../resource/graphics/images/projectCard/bg.jpg";
 import ProjectTags from "../../components/projectTags/ProjectTags";
 import ProjectFilter from "../../components/projectFilter/ProjectFilter";
-import Slider from "react-slick";
+import { Splide, SplideTrack, SplideSlide } from '@splidejs/react-splide';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import "./projects.scss";
+import '@splidejs/react-splide/css';
 
 import ProjectSkeleton from "../../components/ProjectSkeleton";
 import SliderButton from "../../components/sliderButton/SliderButton";
@@ -47,25 +46,6 @@ const Projects = observer(() => {
   useEffect(() => {
     setIsLoaded(true);
     getAll(selectedItem).then((data) => {
-      // if (selectedItem === "0") {
-      //   project.setProjects(
-      //     data.rows.sort(
-      //       (a, b) => Number(b.likes.length) - Number(a.likes.length)
-      //     )
-      //   );
-      // } else if (selectedItem === "1") {
-      //   project.setProjects(
-      //     data.rows.sort((a, b) => b.views.length - a.views.length)
-      //   );
-      // } else {
-      //   project.setProjects(
-      //     data.rows.sort(
-      //       (a, b) =>
-      //         new Date(b.createdAt).getTime() / 1000 -
-      //         new Date(a.createdAt).getTime() / 1000
-      //     )
-      //   );
-      // }
       project.setProjects(data.rows);
       setIsLoaded(false);
     });
@@ -81,17 +61,18 @@ const Projects = observer(() => {
   const stylePrevArrow = { transform: "rotate(180deg)" };
 
   const settings = {
-    dots: false,
-    infinite: true,
+    // dots: false,
+    // infinite: true,
     slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    // speed: 2000,
-    autoplaySpeed: 2000,
-    pauseOnHover: true,
-    // cssEase: "linear"
-    nextArrow: <SliderButton />,
-    prevArrow: <SliderButton styling={stylePrevArrow} />,
+    // slidesToScroll: 1,
+    // rows: 1,
+    // autoplay: true,
+    // // speed: 2000,
+    // autoplaySpeed: 2000,
+    // pauseOnHover: true,
+    // // cssEase: "linear"
+    // nextArrow: <SliderButton />,
+    // prevArrow: <SliderButton styling={stylePrevArrow} />,
   };
 
   const skeletonList = [
@@ -120,17 +101,19 @@ const Projects = observer(() => {
     ? newLastAddedSkeletonList
     : projectsData.map((item) => {
         return (
-          <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
-            <ProjectCard
-              img={item.preview}
-              title={item.name}
-              name={item.user.name}
-              date={item.start_date}
-              like={item.likes.length}
-              view={item.views.length}
-              comment={item.comments.length}
-            />
-          </Link>
+          <SplideSlide>
+            <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
+              <ProjectCard
+                img={item.preview}
+                title={item.name}
+                name={item.user.name}
+                date={item.start_date}
+                like={item.likes.length}
+                view={item.views.length}
+                comment={item.comments.length}
+              />
+            </Link>
+          </SplideSlide>
         );
       });
 
@@ -166,7 +149,22 @@ const Projects = observer(() => {
       <div className="projects">
         <h1 className="projects__title">Новые проекты</h1>
         <div className="projects__wrapper" style={{ display: "block" }}>
-          <Slider {...settings}>{sliderRenderer}</Slider>
+          <Splide
+          hasTrack={ false }
+            options={ {
+              perPage: 4,
+              hasTrack: false,
+              gap: 20
+            } } 
+          >
+            <SplideTrack>
+              {sliderRenderer}
+            </SplideTrack>
+            <div className="splide__arrows">
+              <SliderButton className="splide__arrow splide__arrow--prev" styling={stylePrevArrow} />
+              <SliderButton className="splide__arrow splide__arrow--next"  />
+            </div>
+          </Splide>
         </div>
         <div className="projects__searchSettings">
           <div className="projects__searchSettings-search">

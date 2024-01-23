@@ -19,10 +19,10 @@ import { fetchGroups } from "../../http/groupsAPI";
 import { fetchUserById } from "../../http/userAPI";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
-import { addFriend, addSubscriber, deleteSubscriber, fetchFriends, fetchFriendsSubscriber } from "../../http/friendAPI";
+import { addFriend, deleteFriend, getFriends, reqFriend } from "../../http/friendAPI";
 
 const Profile = observer(() => {
-  const { profile, user, groups } = useContext(Context);
+  const { profile, user, groups, modal } = useContext(Context);
   const [group, setGroup] = useState("");
   const [userId, setUserId] = useState({});
   const [textButton, setTextButton] = useState('');
@@ -41,25 +41,36 @@ const Profile = observer(() => {
       .catch((err) => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
-      if (id !== user.user.id) {
-        console.log('успех')
-        fetchFriendsSubscriber(id).then(data => {
-          console.log(data)
-          if (!data.length) {
-            return setTextButton('Добавить в друзья')
-          }
-          data.map(item => {
-            if (item.id_sender === user.user.id) {
-              return setTextButton('Отменить заявку')
-            } if (item.id_sender == id && item.id_recipient == user.user.id) {
-              return setTextButton('Принять заявку')
-            } 
-              return setTextButton('Добавить в друзья')
 
+      if (user.user.id) {
+        if (Number(id) === user.user.id) {
+          setTextButton('Редактировать')
+        } else {
+          getFriends(id).then(data => {
+            if (data.length) {
+              data.filter(item => {
+                console.log(item)
+                if (item.id_sender === user.user.id && !item.status) {
+                  return setTextButton('Отменить заявку')
+                }
+                if (item.id_recipient === user.user.id && !item.status) {
+                  return setTextButton('Принять заявку')
+                }
+                if (item.id_recipient === user.user.id || item.id_sender === user.user.id && item.status) {
+                  return setTextButton('Удалить из друзей')
+                }
+              })
+            } else {
+              return setTextButton('Добавить в друзья')
+            }
           })
-        })
+        }
+      } else {
+        return setTextButton('Добавить в друзья')
       }
-  }, [location.pathname]);
+
+  }, [location.pathname, user.user.id]);
+
 
   const [prevId, setPrevId] = useState(0);
   const [boolPrevId, setBoolPrevId] = useState(false);
@@ -75,15 +86,45 @@ const Profile = observer(() => {
     }
   };
 
-  const RequestFriend = () => {
-    if (textButton === "Отменить заявку") {
-      deleteSubscriber(user.user.id, id).then(setTextButton('Добавить в друзья'))
+  const onButton = () => {
+    if (textButton === 'Редактировать') {
+      console.log('Редактировать')
+    } else if (textButton === 'Добавить в друзья') {
+      return reqFriend(user.user.id, id).then(() => {
+        modal.setModalComplete(true)
+        modal.setModalCompleteMessage("Заявка отправлена")
+        setTextButton('Отменить заявку');
+      }).catch(() => {
+        modal.setModalComplete(true)
+        modal.setModalCompleteMessage(`${userId.name} уже хочет быть вашим другом`)
+        setTextButton('Принять заявку');
+      })
+    } else if (textButton === "Отменить заявку") {
+      return deleteFriend(user.user.id, id).then(() => {
+        modal.setModalComplete(true)
+        modal.setModalCompleteMessage("Заявка отменена")
+        setTextButton('Добавить в друзья');
+      })
     } else if (textButton === "Принять заявку") {
-      addFriend(id, user.user.id).then(setTextButton('У вас в друзьях'))
-    } else {
-      addSubscriber(user.user.id, id).then(data => setTextButton('Отменить заявку'))
+      return addFriend(id, user.user.id).then(() => {
+        modal.setModalComplete(true)
+        modal.setModalCompleteMessage(userId.name + " теперь у вас в друзьях!")
+        setTextButton('Удалить из друзей');
+      }).catch(e => {
+        modal.setModalComplete(true)
+        modal.setModalCompleteMessage(e.response.data.message)
+        setTextButton('Добавить в друзья');
+      })
+    } else if (textButton === "Удалить из друзей") {
+      return deleteFriend(user.user.id, id).then(() => {
+        modal.setModalComplete(true)
+        modal.setModalCompleteMessage(`Пользователь ${userId.name} удалён из друзей`)
+        setTextButton('Добавить в друзья');
+      })
     }
   }
+
+
 
   useEffect(() => {
     const root = document.querySelector(":root");
@@ -117,18 +158,9 @@ const Profile = observer(() => {
             </div>
 
             <div className="profile__button"> 
-            {id !== user.user.id  ?
-
-              <FunctionButton onClick={RequestFriend}>
+              <FunctionButton onClick={onButton}>
                 {textButton}
               </FunctionButton>
-
-              :
-              <FunctionButton>
-                Редактировать
-              </FunctionButton>  
-            }
-
             </div>
 
             <div className="profile__socials">

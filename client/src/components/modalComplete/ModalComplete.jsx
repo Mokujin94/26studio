@@ -1,9 +1,13 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import style from './modalComplete.module.scss';
 import { Context } from '../..';
 
 const ModalComplete = ({ completeMessage, setCompleteModal }) => {
   const { modal } = useContext(Context);
+
+  useEffect(() => {
+    setTimeout(() => modal.setModalComplete(false), 5000)
+  },[])
   const onCloseModal = () => {
     if (setCompleteModal) {
       return setCompleteModal(false);

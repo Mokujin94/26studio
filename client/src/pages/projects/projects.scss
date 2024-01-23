@@ -70,13 +70,26 @@
 //   margin-right: 15px;
 // }
 
-.slick-next {
-  right: -60px;
+.splide {
+  width: calc(100% + 40px);
+  transform: translateX(-20px);
+  &__list {
+    padding: 20px !important;
+  }
+  &__arrow  {
+    svg {
+      fill: none;
+    }
+    &--next {
+      right: -4em;
+    }
+    &--prev {
+      left: -4em;
+    }
+  }
 }
 
-.slick-prev {
-  left: -60px;
-}
+
 
 @media (max-width: $xxl) {
   .projects {
