@@ -28,7 +28,7 @@ class ProjectController {
   async getAll(req, res) {
     let { limit, page, filter } = req.query;
     page = page || 1;
-    limit = limit || 1;
+    limit = limit || 9;
     filter = filter || "0";
     let offset = page * limit - limit;
     let projects;
@@ -153,7 +153,7 @@ class ProjectController {
   async searchProject(req, res) {
     let { search, limit, page, filter } = req.query;
     page = page || 1;
-    limit = limit || 1;
+    limit = limit || 9;
     let offset = page * limit - limit;
 
     let projects;

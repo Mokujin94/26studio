@@ -60,7 +60,8 @@ const Projects = observer(() => {
 
   const stylePrevArrow = { transform: "rotate(180deg)" };
 
-  const skeletonList = [
+  const skeletonList = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }];
+  const lastAddedSkeletonList = [
     { id: 0 },
     { id: 1 },
     { id: 2 },
@@ -69,11 +70,7 @@ const Projects = observer(() => {
     { id: 5 },
     { id: 6 },
     { id: 7 },
-    { id: 8 },
-    { id: 9 },
-    { id: 10 },
   ];
-  const lastAddedSkeletonList = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }];
 
   const newSkeletonList = skeletonList.map(({ id }) => (
     <ProjectSkeleton key={id} />
@@ -88,8 +85,8 @@ const Projects = observer(() => {
     ? newLastAddedSkeletonList
     : projectsData.map((item) => {
         return (
-          <SplideSlide>
-            <Link to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
+          <SplideSlide key={item.id}>
+            <Link to={PROJECTS_ROUTE + "/" + item.id}>
               <ProjectCard
                 img={item.preview}
                 title={item.name}
@@ -135,27 +132,27 @@ const Projects = observer(() => {
     <div className="container">
       <div className="projects">
         <h1 className="projects__title">Новые проекты</h1>
-        <div className="projects__wrapper" style={{ display: "block" }}>
+        <div
+          className="projects__wrapper"
+          style={{ position: "relative", display: "block" }}
+          id="autoplay-example-heading"
+        >
           <Splide
             hasTrack={false}
             options={{
               type: "loop",
+              isNavigation: true,
               perPage: 4,
-              hasTrack: false,
-              gap: 20,
-              speed: 600,
-              perMove: 1,
-              arrows: true,
-              pagination: false,
-              autoplay: true,
-              interval: 1500,
-              rewind: true,
-              omitEnd: true,
-              trimSpace: true,
-              padding: { top: 20, bottom: 20 },
-              clones: true,
               cloneStatus: true,
+              gap: 20,
+              autoplay: true,
+              resetProgress: false,
+              pauseOnHover: true,
+              interval: 3000,
+              pagination: false,
+              speed: 800,
             }}
+            aria-labelledby="autoplay-example-heading"
           >
             <SplideTrack>{sliderRenderer}</SplideTrack>
             <div className="splide__arrows">

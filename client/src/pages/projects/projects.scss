@@ -76,6 +76,12 @@
   &__track {
     padding: 20px !important;
   }
+  &__slide {
+    border: none !important;
+  }
+  &__slide.is-active {
+    border: none !important;
+  }
   &__arrow {
     svg {
       fill: none;
