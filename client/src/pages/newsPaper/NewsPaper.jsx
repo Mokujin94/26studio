@@ -151,24 +151,27 @@ const NewsPaper = observer(() => {
   return (
     <div className="container">
       <div className="news-paper">
+        <div className="news-paper__header">
         <h2 className="news-paper__title">{newsData.title}</h2>
+          <div className="news-paper__activity">
+            <AmountComponent
+              img={likeIcon}
+              value={formatedLikes}
+              onClick={setLike}
+            />
+            <AmountComponent img={view} value={formatedViews} />
+          </div>
+        </div>
         <div className="news-paper__content">
           <NewsPaperContent
             img={process.env.REACT_APP_API_URL + newsData.img}
           />
-          <Comments comments={comments} setComments={setComments} newsId={id} />
-        </div>
-        <div className="news-paper__info">
           <Description title="Описание" descr={newsData.description} />
         </div>
-        <div className="news-paper__bottom">
-          <AmountComponent
-            img={likeIcon}
-            value={formatedLikes}
-            onClick={setLike}
-          />
-          <AmountComponent img={view} value={formatedViews} />
+        <div className="news-paper__info">
+          <Comments comments={comments} setComments={setComments} newsId={id} />
         </div>
+        
       </div>
     </div>
   );

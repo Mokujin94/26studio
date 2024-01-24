@@ -3,12 +3,7 @@
 .block {
   display: flex;
   flex-direction: column;
-  max-width: 530px;
-  height: 560px;
-  max-height: 560px;
-  width: 100%;
-  padding: 30px 20px;
-  background-color: $studio-dark-element;
+  // padding: 30px 20px;
   border-radius: 5px;
   &__title {
     font-weight: 400;
@@ -17,18 +12,22 @@
     color: $studio-white-text;
     margin-bottom: 10px;
   }
-  &__underline {
+  &__line {
     height: 1px;
     background-color: $studio-white-border;
-    margin-bottom: 30px;
   }
+
+  &__input {
+    margin-top: 30px;
+  }
+
   &__comments {
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 30px;
     overflow-y: auto;
     padding-right: 30px;
-    margin-bottom: 30px;
+    margin-top: 30px;
     &::-webkit-scrollbar {
       width: 10px;
       background-color: rgba(37, 80, 126, 0.5);
@@ -39,7 +38,5 @@
       border-radius: 5px;
     }
   }
-  &__bottom {
-    margin-top: auto;
-  }
+  
 }

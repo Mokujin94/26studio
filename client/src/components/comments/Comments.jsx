@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import socketIOClient from "socket.io-client";
-import CommentsEnd from "../commentsEnd/CommentsEnd";
+import CommentsInput from "../commentsInput/CommentsInput";
 import NewsComment from "../newsComment/NewsComment";
 
 import style from "./comments.module.scss";
@@ -41,7 +41,10 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
   return (
     <div className={style.block}>
       <div className={style.block__title}>Комментарии</div>
-      <div className={style.block__underline}></div>
+      <div className={style.block__line}></div>
+      <div className={style.block__input}>
+        <CommentsInput projectId={projectId} newsId={newsId} />
+      </div>
       <div className={style.block__comments}>
         {comments.map((item) => {
           return (
@@ -56,9 +59,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
           );
         })}
       </div>
-      <div className={style.block__bottom}>
-        <CommentsEnd projectId={projectId} newsId={newsId} />
-      </div>
+      
     </div>
   );
 };

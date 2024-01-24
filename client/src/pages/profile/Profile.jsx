@@ -28,8 +28,11 @@ const Profile = observer(() => {
   const [textButton, setTextButton] = useState('');
   const location = useLocation();
   const { id } = useParams();
-
+  const [prevId, setPrevId] = useState(0);
+  const [boolPrevId, setBoolPrevId] = useState(false);
   const nav = useNavigate();
+  const [avatarFile, setAvatarFile] = useState(null)
+  const [avatarReader, setAvatarReader] = useState(null)
 
   useEffect(() => {
     fetchUserById(id)
@@ -72,8 +75,7 @@ const Profile = observer(() => {
   }, [location.pathname, user.user.id]);
 
 
-  const [prevId, setPrevId] = useState(0);
-  const [boolPrevId, setBoolPrevId] = useState(false);
+  
 
   const checkPrevId = (item) => {
     profile.setSelectedMenu(item);
@@ -124,8 +126,6 @@ const Profile = observer(() => {
     }
   }
 
-
-
   useEffect(() => {
     const root = document.querySelector(":root");
     if (!boolPrevId) {
@@ -140,21 +140,47 @@ const Profile = observer(() => {
     });
   }, [boolPrevId, prevId]);
 
+  useEffect(() => {
+    console.log(avatarFile);
+    if(!avatarFile) {
+      return
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setAvatarReader(reader.result)
+      console.log(reader.result);
+    }
+    reader.readAsDataURL(avatarFile)
+    // console.log(reader);
+    // console.log(reader.result);
+  }, [avatarFile])
+
   return (
     <div className="profile">
       <div className="container">
         <div className="profile__top-wrapper">
           <div className="profile__face">
             <div className="profile__avatar">
-              <img
-                className="profile__avatar-img"
-                src={
-                  id == user.user.id
-                    ? process.env.REACT_APP_API_URL + user.user.avatar
-                    : process.env.REACT_APP_API_URL + userId.avatar
-                }
-                alt="icon"
-              />
+              <label htmlFor="avatar" className="profile__avatar-inner">
+                <img
+                  className="profile__avatar-img"
+                  src={
+                    id == user.user.id
+                      ? process.env.REACT_APP_API_URL + user.user.avatar
+                      : process.env.REACT_APP_API_URL + userId.avatar
+                  }
+                  alt="icon"
+                />
+                <input
+                  className="profile__avatar-input"
+                  onChange={(e) => setAvatarFile(e.target.files[0])}
+                  type="file" 
+                  name="avatar" 
+                  id="avatar" 
+                  accept="image/png, image/jpeg"
+                />
+              </label>
+              
             </div>
 
             <div className="profile__button"> 

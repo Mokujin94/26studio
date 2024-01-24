@@ -121,14 +121,14 @@ function Project() {
             pathFromProject={dataProject.path_from_project}
             baseURL={dataProject.baseURL}
           />
+          <Description title="Описание" descr={dataProject.description} />
+        </div>
+        <div className="project__info">
           <Comments
             comments={comments}
             setComments={setComments}
             projectId={id}
           />
-        </div>
-        <div className="project__info">
-          <Description title="Описание" descr={dataProject.description} />
         </div>
       </div>
     </div>
