@@ -3,21 +3,21 @@
     "username": "postgres",
     "password": "2*4BcE2d-6Bc14eeGE6aC6CcCfB4*6-D",
     "database": "railway",
-    "host": "26studio-production.up.railway.app",
+    "host": "viaduct.proxy.rlwy.net",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
     "password": "2*4BcE2d-6Bc14eeGE6aC6CcCfB4*6-D",
     "database": "railway",
-    "host": "26studio-production.up.railway.app",
+    "host": "viaduct.proxy.rlwy.net",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
     "password": "2*4BcE2d-6Bc14eeGE6aC6CcCfB4*6-D",
     "database": "railway",
-    "host": "26studio-production.up.railway.app",
+    "host": "viaduct.proxy.rlwy.net",
     "dialect": "postgres"
   }
 }

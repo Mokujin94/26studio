@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx sequelize-cli db:migrate && nodemon index.js"
+    "dev": "npx sequelize-cli db:migrate && nodemon index.js",
+    "install": "npm install --omit=dev"
   },
   "keywords": [],
   "author": "",
