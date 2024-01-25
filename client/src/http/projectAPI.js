@@ -32,9 +32,10 @@ export const uploadFinishedProject = async (project) => {
   return data;
 };
 
-export const getAll = async (filter) => {
+export const getAll = async (filter, page) => {
   const config = {
     params: {
+      page,
       filter,
     },
   };
@@ -92,11 +93,12 @@ export const fetchProjectsUser = async (id) => {
   return data;
 };
 
-export const searchProject = async (search, filter) => {
+export const searchProject = async (search, filter, page) => {
   const config = {
     params: {
       search,
       filter,
+      page,
     },
   };
   const { data } = await $host.get("api/project/search/", config);
