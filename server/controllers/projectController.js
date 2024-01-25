@@ -28,13 +28,15 @@ class ProjectController {
   async getAll(req, res) {
     let { limit, page, filter } = req.query;
     page = page || 1;
-    limit = limit || 9;
+    limit = limit || 12;
     filter = filter || "0";
     let offset = page * limit - limit;
     let projects;
+
+    const totalCount = await Project.count();
     if (filter === "0") {
       projects = await Project.findAndCountAll({
-        attributes: Object.keys(Project.rawAttributes),
+        // attributes: Object.keys(Project.rawAttributes),
         include: [Likes, Comments, User, View],
         order: [
           [
@@ -44,12 +46,12 @@ class ProjectController {
             "DESC",
           ],
         ],
-        limit,
         offset,
+        limit,
       });
     } else if (filter === "1") {
       projects = await Project.findAndCountAll({
-        attributes: Object.keys(Project.rawAttributes),
+        // attributes: Object.keys(Project.rawAttributes),
         include: [Likes, Comments, User, View],
         order: [
           [
@@ -59,18 +61,18 @@ class ProjectController {
             "DESC",
           ],
         ],
-        limit,
         offset,
+        limit,
       });
     } else if (filter === "2") {
       projects = await Project.findAndCountAll({
         include: [Likes, Comments, User, View],
         order: [["createdAt", "DESC"]], // Сортировка по полю createdAt в убывающем порядке
-        limit,
         offset,
+        limit,
       });
     }
-    return res.json(projects);
+    return res.json({ count: totalCount, rows: projects.rows });
   }
 
   async getOne(req, res) {
@@ -153,12 +155,39 @@ class ProjectController {
   async searchProject(req, res) {
     let { search, limit, page, filter } = req.query;
     page = page || 1;
-    limit = limit || 9;
+    limit = limit || 12;
     let offset = page * limit - limit;
+    let whereCondition = {
+      [Op.or]: {
+        name: {
+          [Op.iLike]: "%" + search + "%",
+        },
+        description: {
+          [Op.iLike]: "%" + search + "%",
+        },
+      },
+      is_private: false,
+    };
+
+    let countCondition = {
+      where: whereCondition,
+    };
+
+    if (filter === "0") {
+      countCondition.include = [Likes, Comments, User, View];
+    } else if (filter === "1") {
+      countCondition.include = [Likes, Comments, User, View];
+    } else if (filter === "2") {
+      countCondition.include = [Likes, Comments, User, View];
+    }
+
+    const totalCountProjects = await Project.count();
+    const totalCountSearch = await Project.findAll(countCondition);
 
     let projects;
+
     if (filter === "0") {
-      projects = await Project.findAndCountAll({
+      projects = await Project.findAll({
         attributes: Object.keys(Project.rawAttributes),
         include: [Likes, Comments, User, View],
         order: [
@@ -171,20 +200,10 @@ class ProjectController {
         ],
         limit,
         offset,
-        where: {
-          [Op.or]: {
-            name: {
-              [Op.iLike]: "%" + search + "%",
-            },
-            description: {
-              [Op.iLike]: "%" + search + "%",
-            },
-          },
-          is_private: false,
-        },
+        where: whereCondition,
       });
     } else if (filter === "1") {
-      projects = await Project.findAndCountAll({
+      projects = await Project.findAll({
         attributes: Object.keys(Project.rawAttributes),
         include: [Likes, Comments, User, View],
         order: [
@@ -197,38 +216,23 @@ class ProjectController {
         ],
         limit,
         offset,
-        where: {
-          [Op.or]: {
-            name: {
-              [Op.iLike]: "%" + search + "%",
-            },
-            description: {
-              [Op.iLike]: "%" + search + "%",
-            },
-          },
-          is_private: false,
-        },
+        where: whereCondition,
       });
     } else if (filter === "2") {
-      projects = await Project.findAndCountAll({
+      projects = await Project.findAll({
         include: [Likes, Comments, User, View],
         limit,
         offset,
         order: [["createdAt", "DESC"]],
-        where: {
-          [Op.or]: {
-            name: {
-              [Op.iLike]: "%" + search + "%",
-            },
-            description: {
-              [Op.iLike]: "%" + search + "%",
-            },
-          },
-          is_private: false,
-        },
+        where: whereCondition,
       });
     }
-    return res.json(projects);
+
+    return res.json({
+      count: totalCountProjects,
+      rows: projects,
+      countSearch: totalCountSearch.length,
+    });
   }
 }
 

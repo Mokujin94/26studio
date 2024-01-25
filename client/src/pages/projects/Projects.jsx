@@ -17,50 +17,120 @@ import { fetchAllLikes, getAll, searchProject } from "../../http/projectAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { useDebounce } from "../../hooks/useDebounce";
+import Spinner from "../../components/spinner/Spinner";
 
 const Projects = observer(() => {
   const { project } = useContext(Context);
   const [isLoaded, setIsLoaded] = useState(true);
+  const [isLoadedSpinner, setIsLoadedSpinner] = useState(false);
   const [isLoadingSlider, setIsLoadingSlider] = useState(true);
+  const [sliderData, setSliderData] = useState([]);
   const [projectsData, setProjectsData] = useState([]);
 
   const [searchValue, setSearchValue] = useState("");
   const useDebounced = useDebounce(searchValue);
 
   const [selectedItem, setSelectedItem] = useState("0");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [fetching, setFetching] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalCountSearch, setTotalCountSearch] = useState(0);
 
   useEffect(() => {
     setIsLoaded(true);
     setIsLoadingSlider(true);
-    getAll().then((data) => {
-      project.setProjects(data.rows);
-      console.log(data);
-      setIsLoaded(false);
-    });
     getAll("2").then((data) => {
-      setProjectsData(data.rows);
+      setSliderData(data.rows);
       setIsLoadingSlider(false);
+    });
+
+    searchProject(useDebounced, selectedItem, currentPage).then((data) => {
+      console.log(data);
+      setProjectsData(data.rows);
+      setIsLoaded(false);
     });
   }, []);
 
   useEffect(() => {
-    setIsLoaded(true);
-    getAll(selectedItem).then((data) => {
-      project.setProjects(data.rows);
-      setIsLoaded(false);
-    });
-  }, [selectedItem]);
+    if (fetching) {
+      console.log(projectsData);
+      setIsLoadedSpinner(true);
+      searchProject(useDebounced, selectedItem, currentPage)
+        .then((data) => {
+          setProjectsData([...projectsData, ...data.rows]);
+          setCurrentPage((page) => page + 1);
+          setTotalCountSearch(data.countSearch);
+          setIsLoadedSpinner(false);
+          setIsLoaded(false);
+        })
+        .finally(() => setFetching(false));
+    }
+  }, [fetching]);
 
   useEffect(() => {
-    searchProject(useDebounced, selectedItem).then((data) => {
-      project.setProjects(data.rows);
-      setIsLoaded(false);
-    });
-  }, [useDebounced]);
+    setIsLoaded(true);
+    setCurrentPage(2);
+    if (useDebounced.length !== 0) {
+      searchProject(useDebounced, selectedItem)
+        .then((data) => {
+          setProjectsData(data.rows);
+          setTotalCountSearch(data.countSearch);
+          console.log(data);
+          setIsLoaded(false);
+        })
+        .finally(() => setFetching(false));
+    } else {
+      searchProject(useDebounced, selectedItem, 1)
+        .then((data) => {
+          setProjectsData(data.rows);
+          setTotalCountSearch(data.countSearch);
+          setIsLoaded(false);
+        })
+        .finally(() => setFetching(false));
+    }
+  }, [selectedItem, useDebounced]);
+
+  useEffect(() => {
+    document.addEventListener("scroll", scrollHandler);
+
+    return function () {
+      document.removeEventListener("scroll", scrollHandler);
+    };
+  }, [projectsData, fetching, totalCountSearch]);
+
+  const scrollHandler = (e) => {
+    if (
+      e.target.documentElement.scrollHeight -
+        (e.target.documentElement.scrollTop + window.innerHeight) <
+        100 &&
+      projectsData.length < totalCountSearch
+    ) {
+      setFetching(true);
+      console.log(projectsData.length);
+      console.log(totalCountSearch);
+      console.log(currentPage);
+    } else {
+      console.log(projectsData.length);
+      console.log(totalCountSearch);
+    }
+  };
 
   const stylePrevArrow = { transform: "rotate(180deg)" };
 
-  const skeletonList = [{ id: 0 }, { id: 1 }, { id: 2 }, { id: 3 }];
+  const skeletonList = [
+    { id: 0 },
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+    { id: 8 },
+    { id: 9 },
+    { id: 10 },
+    { id: 11 },
+  ];
   const lastAddedSkeletonList = [
     { id: 0 },
     { id: 1 },
@@ -83,7 +153,7 @@ const Projects = observer(() => {
 
   const sliderRenderer = isLoadingSlider
     ? newLastAddedSkeletonList
-    : projectsData.map((item) => {
+    : sliderData.map((item) => {
         return (
           <SplideSlide key={item.id}>
             <Link to={PROJECTS_ROUTE + "/" + item.id}>
@@ -104,7 +174,7 @@ const Projects = observer(() => {
   const projectLoading = isLoaded && newSkeletonList;
   const projectLoaded =
     !isLoaded &&
-    project.projects.map((item) => {
+    projectsData.map((item) => {
       return (
         <Link
           className="projects__link"
@@ -124,7 +194,7 @@ const Projects = observer(() => {
       );
     });
 
-  const projectError = !isLoaded && !project.projects.length && (
+  const projectError = !isLoaded && !projectsData.length && (
     <p className="projects__error">Не найдено</p>
   );
 
@@ -151,6 +221,20 @@ const Projects = observer(() => {
               interval: 3000,
               pagination: false,
               speed: 800,
+              breakpoints: {
+                1200: {
+                  perPage: 3,
+                },
+                1024: {
+                  perPage: 2,
+                },
+                768: {
+                  arrows: false,
+                },
+                576: {
+                  perPage: 1,
+                },
+              },
             }}
             aria-labelledby="autoplay-example-heading"
           >
@@ -183,6 +267,11 @@ const Projects = observer(() => {
           {projectLoading}
           {projectLoaded}
           {projectError}
+          {isLoadedSpinner && (
+            <div className="projects__spinner">
+              <Spinner />
+            </div>
+          )}
         </div>
       </div>
     </div>
