@@ -48,6 +48,9 @@ class ProjectController {
         ],
         offset,
         limit,
+        where: {
+          is_private: false,
+        }
       });
     } else if (filter === "1") {
       projects = await Project.findAndCountAll({
@@ -63,6 +66,9 @@ class ProjectController {
         ],
         offset,
         limit,
+        where: {
+          is_private: false,
+        }
       });
     } else if (filter === "2") {
       projects = await Project.findAndCountAll({
@@ -70,6 +76,9 @@ class ProjectController {
         order: [["createdAt", "DESC"]], // Сортировка по полю createdAt в убывающем порядке
         offset,
         limit,
+        where: {
+          is_private: false,
+        }
       });
     }
     return res.json({ count: totalCount, rows: projects.rows });

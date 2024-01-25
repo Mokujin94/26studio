@@ -46,48 +46,39 @@ const Projects = observer(() => {
 
     searchProject(useDebounced, selectedItem, currentPage).then((data) => {
       console.log(data);
-      setProjectsData(data.rows);
+          console.log(data)
+          setProjectsData(data.rows);
       setIsLoaded(false);
     });
   }, []);
 
   useEffect(() => {
-    if (fetching) {
-      console.log(projectsData);
+      if (fetching) {
       setIsLoadedSpinner(true);
       searchProject(useDebounced, selectedItem, currentPage)
         .then((data) => {
           setProjectsData([...projectsData, ...data.rows]);
           setCurrentPage((page) => page + 1);
           setTotalCountSearch(data.countSearch);
+          console.log(data)
           setIsLoadedSpinner(false);
           setIsLoaded(false);
         })
         .finally(() => setFetching(false));
-    }
-  }, [fetching]);
+      }
+  }, [fetching, selectedItem, useDebounced]);
 
   useEffect(() => {
     setIsLoaded(true);
-    setCurrentPage(2);
-    if (useDebounced.length !== 0) {
-      searchProject(useDebounced, selectedItem)
-        .then((data) => {
-          setProjectsData(data.rows);
-          setTotalCountSearch(data.countSearch);
-          console.log(data);
-          setIsLoaded(false);
-        })
-        .finally(() => setFetching(false));
-    } else {
       searchProject(useDebounced, selectedItem, 1)
         .then((data) => {
           setProjectsData(data.rows);
+          console.log(data)
           setTotalCountSearch(data.countSearch);
+          setCurrentPage(2)
           setIsLoaded(false);
         })
         .finally(() => setFetching(false));
-    }
   }, [selectedItem, useDebounced]);
 
   useEffect(() => {
@@ -102,17 +93,11 @@ const Projects = observer(() => {
     if (
       e.target.documentElement.scrollHeight -
         (e.target.documentElement.scrollTop + window.innerHeight) <
-        100 &&
+        200 &&
       projectsData.length < totalCountSearch
     ) {
       setFetching(true);
-      console.log(projectsData.length);
-      console.log(totalCountSearch);
-      console.log(currentPage);
-    } else {
-      console.log(projectsData.length);
-      console.log(totalCountSearch);
-    }
+    } 
   };
 
   const stylePrevArrow = { transform: "rotate(180deg)" };

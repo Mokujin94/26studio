@@ -1,14 +1,38 @@
 @import '../../resource/styles/variables';
 
 .block{
+    position: relative;
     max-width: 1000px;
     width: 100%;
     max-height: 560px;
     overflow: hidden;
     border-radius: 5px;
+    &:hover .fullscreen {
+        opacity: 1;
+    }
     &__img{
         width: 100%;
         max-height: inherit;
         object-fit: cover;
+    }
+}
+
+.fullscreen {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 1;
+    opacity: 0;
+    transition: $studio-transition-03;
+    svg {
+        width: 100%;
+        height: 100%;
+        path {
+            fill: $studio-primary-element;
+            stroke: $studio-primary-element;
+        }
     }
 }
