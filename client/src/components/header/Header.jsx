@@ -14,6 +14,7 @@ import { searchAll } from "../../http/searchAPI";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { Link } from "react-router-dom";
 import { NEWS_ROUTE } from "../../utils/consts";
+import Notification from "../notification/Notification";
 
 function Header() {
   const { user } = useContext(Context);
@@ -28,7 +29,7 @@ function Header() {
   const [searchData, setSearchData] = useState({});
 
   const useDebounced = useDebounce(search, 200);
-  const createPopupRef = useRef(null)
+  const createPopupRef = useRef(null);
 
   const nodeRef = useRef(null);
   useClickOutside(nodeRef, () => {
@@ -36,10 +37,9 @@ function Header() {
   });
 
   useClickOutside(createPopupRef, () => {
-    setActiveCreatePopup(false)
+    setActiveCreatePopup(false);
   });
 
-  
   useEffect(() => {
     setIsLoading(true);
     searchAll(useDebounced).then((data) => {
@@ -64,7 +64,7 @@ function Header() {
             <img src={burger} alt="icon" />
           </div>
           <Link to={NEWS_ROUTE} className={style.header__logo}>
-            <img src={logo} alt="logo"  />
+            <img src={logo} alt="logo" />
           </Link>
           <div className={style.header__search} ref={nodeRef}>
             <input
@@ -91,7 +91,12 @@ function Header() {
             )}
           </div>
           <div className={style.header__createButtonPopUp}>
-            <CreateButtonPopUp createPopupRef={createPopupRef} setActiveCreatePopup={setActiveCreatePopup} activeCreatePopup={activeCreatePopup}/>
+            <Notification />
+            <CreateButtonPopUp
+              createPopupRef={createPopupRef}
+              setActiveCreatePopup={setActiveCreatePopup}
+              activeCreatePopup={activeCreatePopup}
+            />
             {/* <ThemeChangeButton /> */}
           </div>
         </div>

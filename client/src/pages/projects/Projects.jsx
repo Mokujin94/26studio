@@ -18,6 +18,7 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { useDebounce } from "../../hooks/useDebounce";
 import Spinner from "../../components/spinner/Spinner";
+import { CSSTransition } from "react-transition-group";
 
 const Projects = observer(() => {
   const { project } = useContext(Context);
@@ -46,39 +47,39 @@ const Projects = observer(() => {
 
     searchProject(useDebounced, selectedItem, currentPage).then((data) => {
       console.log(data);
-          console.log(data)
-          setProjectsData(data.rows);
+      console.log(data);
+      setProjectsData(data.rows);
       setIsLoaded(false);
     });
   }, []);
 
   useEffect(() => {
-      if (fetching) {
+    if (fetching) {
       setIsLoadedSpinner(true);
       searchProject(useDebounced, selectedItem, currentPage)
         .then((data) => {
           setProjectsData([...projectsData, ...data.rows]);
           setCurrentPage((page) => page + 1);
           setTotalCountSearch(data.countSearch);
-          console.log(data)
+          console.log(data);
           setIsLoadedSpinner(false);
           setIsLoaded(false);
         })
         .finally(() => setFetching(false));
-      }
+    }
   }, [fetching, selectedItem, useDebounced]);
 
   useEffect(() => {
     setIsLoaded(true);
-      searchProject(useDebounced, selectedItem, 1)
-        .then((data) => {
-          setProjectsData(data.rows);
-          console.log(data)
-          setTotalCountSearch(data.countSearch);
-          setCurrentPage(2)
-          setIsLoaded(false);
-        })
-        .finally(() => setFetching(false));
+    searchProject(useDebounced, selectedItem, 1)
+      .then((data) => {
+        setProjectsData(data.rows);
+        console.log(data);
+        setTotalCountSearch(data.countSearch);
+        setCurrentPage(2);
+        setIsLoaded(false);
+      })
+      .finally(() => setFetching(false));
   }, [selectedItem, useDebounced]);
 
   useEffect(() => {
@@ -97,7 +98,7 @@ const Projects = observer(() => {
       projectsData.length < totalCountSearch
     ) {
       setFetching(true);
-    } 
+    }
   };
 
   const stylePrevArrow = { transform: "rotate(180deg)" };

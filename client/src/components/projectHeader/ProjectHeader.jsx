@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AmountComponent from "../amountComponent/AmountComponent";
 
 import style from "./projectHeader.module.scss";
@@ -8,8 +8,6 @@ import { useCountFormatter } from "../../hooks/useCountFormatter";
 
 const ProjectHeader = observer(({ title, onClick, likes, isLike, views }) => {
   const { user } = useContext(Context);
-
-  const [onLike, setOnLike] = useState(false);
 
   const formatedLikes = useCountFormatter(likes.length);
   const formatedViews = useCountFormatter(views.length);

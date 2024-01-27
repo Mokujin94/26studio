@@ -178,6 +178,11 @@
     &__wrapper {
       grid-template-columns: 1fr 1fr 1fr;
     }
+
+    &__spinner {
+      grid-column-start: 2;
+      grid-column-end: 3;
+    }
   }
 }
 
@@ -199,6 +204,10 @@
 
     &__wrapper {
       grid-template-columns: 1fr 1fr;
+    }
+    &__spinner {
+      grid-column-start: 1;
+      grid-column-end: 3;
     }
   }
 }
@@ -228,6 +237,13 @@
 
     &__wrapper {
       grid-template-columns: 1fr;
+    }
+
+    &__spinner {
+      grid-column-start: 1;
+      grid-column-end: 2;
+      // margin: 0 auto;
+      margin-top: 40px;
     }
   }
 

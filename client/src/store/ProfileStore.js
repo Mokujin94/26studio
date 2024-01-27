@@ -1,16 +1,16 @@
-import { makeAutoObservable } from 'mobx';
-import { createRef } from 'react';
-import ProfileProjects from '../components/profilProjects/ProfileProjects';
-import AchievementCard from '../components/achievementCard/AchievementCard';
-import FriendCard from '../components/friendCard/FriendCard';
-import SettingCard from '../components/settingCard/SettingCard';
-import projectPhoto from '../resource/graphics/images/projectCard/bg.jpg';
+import { makeAutoObservable } from "mobx";
+import { createRef } from "react";
+import ProfileProjects from "../components/profilProjects/ProfileProjects";
+import AchievementCard from "../components/achievementCard/AchievementCard";
+import FriendCard from "../components/friendCard/FriendCard";
+import SettingCard from "../components/settingCard/SettingCard";
+import projectPhoto from "../resource/graphics/images/projectCard/bg.jpg";
 
-import ProfileSettings from '../components/profileSettings/ProfileSettings';
-import ProjectCard from '../components/projectCard/ProjectCard';
-import ProgressAchievement from '../components/progressAchievement/ProgressAchievement';
-import ProfileAchievements from '../components/profileAchievements/ProfileAchievements';
-import ProfileFriends from '../components/profileFriends/ProfileFriends';
+import ProfileSettings from "../components/profileSettings/ProfileSettings";
+import ProjectCard from "../components/projectCard/ProjectCard";
+import ProgressAchievement from "../components/progressAchievement/ProgressAchievement";
+import ProfileAchievements from "../components/profileAchievements/ProfileAchievements";
+import ProfileFriends from "../components/profileFriends/ProfileFriends";
 
 export default class ProfileStore {
   constructor() {
@@ -22,19 +22,19 @@ export default class ProfileStore {
     ];
 
     this._menuItems = [
-      { id: 0, title: 'Проекты' },
-      { id: 1, title: 'Друзья' },
-      { id: 2, title: 'Награды' },
-      { id: 3, title: 'Настройки' },
+      { id: 0, title: "Проекты" },
+      { id: 1, title: "Друзья" },
+      { id: 2, title: "Награды" },
+      { id: 3, title: "Настройки" },
     ];
 
     this._menuItemsOtherUser = [
-      { id: 0, title: 'Проекты' },
-      { id: 1, title: 'Друзья' },
-      { id: 2, title: 'Награды' },
+      { id: 0, title: "Проекты" },
+      { id: 1, title: "Друзья" },
+      { id: 2, title: "Награды" },
     ];
 
-    this._selectedMenu = { id: 0, title: 'Проекты' };
+    this._selectedMenu = { id: 0, title: "Проекты" };
     makeAutoObservable(this);
   }
 

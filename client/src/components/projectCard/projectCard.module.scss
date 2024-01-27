@@ -8,6 +8,7 @@
   border: 2px solid transparent;
   transition: $studio-transition-03;
   overflow: hidden;
+  z-index: 1;
   &:hover {
     @include studio-mixin-primary-element-hover;
   }

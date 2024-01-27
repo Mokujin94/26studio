@@ -53,30 +53,44 @@
 
 .profile {
   width: 100%;
-  margin-top: 160px;
+  margin-top: 100px;
 
-  &__top-wrapper {
-    display: flex;
-    margin-bottom: 100px;
+  &__top {
+    &-content {
+      display: flex;
+      gap: 20px;
+    }
+    &-wrapper {
+      display: flex;
+      margin-bottom: 20px;
+      padding: 40px;
+      background: $studio-dark-element;
+      border-radius: 10px;
+      width: 70%;
+      &:last-child {
+        width: 30%;
+      }
+    }
   }
 
   &__face {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-right: 160px;
+    margin-right: 60px;
+    gap: 20px;
   }
 
   &__avatar {
     position: relative;
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     overflow: hidden;
-    margin-bottom: 35px;
     &-inner {
       &::after {
-        content: '';
-        background: url('../../resource/graphics/icons/profile/edit.svg') no-repeat center center / 50px rgba(0, 0, 0, 1);
+        content: "";
+        background: url("../../resource/graphics/icons/profile/edit.svg")
+          no-repeat center center / 50px rgba(0, 0, 0, 1);
         position: absolute;
         z-index: 5;
         width: 100%;
@@ -90,10 +104,10 @@
         cursor: pointer;
         transition: $studio-transition-03;
       }
-      
+
       &:hover {
         &:after {
-          opacity: .5;
+          opacity: 0.5;
         }
       }
     }
@@ -127,9 +141,6 @@
         transform: scale(0.9);
       }
     }
-  }
-  &__button {
-    margin-bottom: 35px;
   }
 
   &__socials {
@@ -182,7 +193,7 @@
     font-weight: 100;
     font-size: 20px;
     color: $studio-white-text;
-    margin-bottom: auto;
+    margin-bottom: 40px;
   }
 
   &__full-name {
@@ -194,7 +205,7 @@
     font-size: 20px;
     text-align: justify;
     color: $studio-white-text;
-    min-height: 170px;
+    margin-bottom: auto;
   }
 
   &__content {
@@ -205,6 +216,10 @@
       grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 20px;
       width: 100%;
+      padding: 40px;
+      background: $studio-dark-element;
+      border-radius: 10px;
+      overflow: hidden;
       &-settings {
         grid-template-columns: 1fr 1fr 1fr;
         gap: 225px;
@@ -219,8 +234,14 @@
   }
 
   &__menu-wrapper {
-    margin-bottom: 56px;
+    margin-bottom: 20px;
     overflow: hidden;
     width: 100%;
+    padding: 0px 40px;
+    background: $studio-dark-element;
+    border-radius: 10px;
   }
+}
+
+.transition-group {
 }
