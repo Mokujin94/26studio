@@ -51,20 +51,23 @@ body {
   }
 }
 
-.addProjectModal__bg {
-  position: fixed;
-  width: 100%;
-  height: 100vh;
-  background-color: $studio-black-opacity-03;
-  z-index: 6;
-}
-
-.modal__complete {
-  position: fixed;
-  left: 20px;
-  // transform: translateX(-50%);
-  bottom: 20px;
-  z-index: 99;
+.modal {
+  &__bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: $studio-black-opacity-03;
+    z-index: 6;
+  }
+  &__complete {
+    position: fixed;
+    left: 20px;
+    // transform: translateX(-50%);
+    bottom: 20px;
+    z-index: 99;
+  }
 }
 
 @media (max-width: $xxl) {

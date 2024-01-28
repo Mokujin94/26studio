@@ -1,4 +1,4 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, { createRef, useContext, useEffect, useRef, useState } from "react";
 import {
   CSSTransition,
   SwitchTransition,
@@ -8,6 +8,9 @@ import {
 
 import FunctionButton from "../../components/functionButton/FunctionButton";
 import ProfileMenu from "../../components/profileMenu/ProfileMenu";
+
+import ReactCrop from 'react-image-crop'
+import 'react-image-crop/src/ReactCrop.scss'
 
 import vk from "../../resource/graphics/icons/profile/vk.svg";
 import tg from "../../resource/graphics/icons/profile/tg.svg";
@@ -26,6 +29,7 @@ import {
   getFriends,
   reqFriend,
 } from "../../http/friendAPI";
+import { useClickOutside } from "../../hooks/useClickOutside";
 
 const Profile = observer(() => {
   const { profile, user, groups, modal } = useContext(Context);
@@ -39,9 +43,24 @@ const Profile = observer(() => {
   const nav = useNavigate();
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarReader, setAvatarReader] = useState(null);
+  const [crop, setCrop] = useState({
+    unit: '%', // Can be 'px' or '%'
+    x: 25,
+    y: 25,
+    width: 50,
+    height: 50
+  });
   const [offsetMenuLineActive, setOffsetMenuLineActive] = useState(
     100 / profile.menuItemsOtherUser.length
   );
+  const miniatureRef = useRef(null)
+   useClickOutside(miniatureRef, () => {
+      setAvatarFile(null)
+      user.setModalProfileMiniature(false)
+      setTimeout(() => {
+        setAvatarReader(null)
+      }, 300)
+  })
 
   useEffect(() => {
     profile.setSelectedMenu({ id: 0, title: "Проекты" });
@@ -193,12 +212,44 @@ const Profile = observer(() => {
     reader.readAsDataURL(avatarFile);
     // console.log(reader);
     // console.log(reader.result);
-  }, [avatarFile]);
+}, [avatarFile, user.modalProfileMiniature]);
+
+  // const onMiniatureButton = () => {
+    
+  // }
+ 
 
   return (
     <div className="profile">
       <div className="container">
         <div className="profile__top-content">
+          {
+            <CSSTransition
+              in={user.modalProfileMiniature}
+              timeout={300}
+              classNames="create-anim"
+              unmountOnExit
+              >
+              <div className="profile__miniature-modal">
+                <div className="profile__miniature-modal-content" ref={miniatureRef}>
+                  <div className="profile__miniature-modal-img">
+                      <ReactCrop crop={crop} circularCrop aspect={1} onChange={c => setCrop(c)}>
+                        <img src={avatarReader} />
+                      </ReactCrop>
+                  </div>
+                  {/* <img className="profile__miniature-modal-img" src={avatarReader} alt="" /> */}
+                  <div className="profile__miniature-modal-btn">
+                    <FunctionButton onClick={() => {
+                      setAvatarFile(null);
+                      user.setModalProfileMiniature(false)
+                    }}>Загрузить фотографию</FunctionButton>
+                  </div>
+                </div>
+              </div>
+            </CSSTransition>
+          }
+          
+          
           <div className="profile__top-wrapper">
             <div className="profile__face">
               <div className="profile__avatar">
@@ -214,7 +265,14 @@ const Profile = observer(() => {
                   />
                   <input
                     className="profile__avatar-input"
-                    onChange={(e) => setAvatarFile(e.target.files[0])}
+                    onClick={(e) => {
+                      e.target.value = ''
+                    }}
+                    onChange={(e) => {
+                      user.setModalProfileMiniature(true)
+                      setAvatarFile(e.target.files[0]);
+                      }
+                    }
                     type="file"
                     name="avatar"
                     id="avatar"

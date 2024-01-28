@@ -13,6 +13,7 @@ export default class UserStore {
     this._path = '';
     this._modalProject = false;
     this._modalNews = false;
+    this._modalProfileMiniature = false;
     this._errorAuth = [
       {
         id: 0,
@@ -94,6 +95,10 @@ export default class UserStore {
     this._path = path;
   }
 
+  setModalProfileMiniature(modalProfileMiniature) {
+    this._modalProfileMiniature = modalProfileMiniature;
+  }
+
   setModalProject(modalProject) {
     this._modalProject = modalProject;
   }
@@ -132,6 +137,10 @@ export default class UserStore {
 
   get path() {
     return this._path;
+  }
+
+  get modalProfileMiniature() {
+    return this._modalProfileMiniature;
   }
 
   get modalProject() {

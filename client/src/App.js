@@ -22,6 +22,7 @@ import ModalError from "./components/modalError/ModalError";
 import NotAuthPopup from "./components/notAuthPopup/NotAuthPopup";
 import ModalNewsUpload from "./components/modalNewsUpload/ModalNewsUpload";
 import ModalComplete from "./components/modalComplete/ModalComplete";
+import ProfileMiniatureModal from "./components/profileMiniatureModal/ProfileMiniatureModal";
 
 const App = observer(() => {
   const { user, error, modal } = useContext(Context);
@@ -46,7 +47,7 @@ const App = observer(() => {
             unmountOnExit
           >
             <div
-              className="addProjectModal__bg"
+              className="modal__bg"
               onClick={() => user.setModalProject(false)}
             >
               <AddProjectModal />
@@ -60,7 +61,7 @@ const App = observer(() => {
             unmountOnExit
           >
             <div
-              className="addProjectModal__bg"
+              className="modal__bg"
               onClick={() => user.setModalNews(false)}
             >
               <ModalNewsUpload />;
@@ -74,7 +75,7 @@ const App = observer(() => {
             unmountOnExit
           >
             <div
-              className="addProjectModal__bg"
+              className="modal__bg"
               onClick={() => error.setNotAuthError(false)}
             >
               <NotAuthPopup />
