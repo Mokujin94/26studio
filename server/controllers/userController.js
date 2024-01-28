@@ -160,7 +160,7 @@ class UserController {
     const { id } = req.params;
     const user = await User.findOne({
       include: [Group, Friend],
-      where: { id},
+      where: { id },
     });
     if (!user) {
       return next(ApiError.internal("Пользователь не найден"));
@@ -367,7 +367,7 @@ class UserController {
   async updateAvatar(req, res, next) {
     const { id } = req.body;
     let fileName;
-    const user = await User.findOne({where: {id}})
+    const user = await User.findOne({ where: { id } });
     if (req.files) {
       fileName = uuid.v4() + ".jpg";
       const { avatar } = req.files;
@@ -375,10 +375,18 @@ class UserController {
     } else {
       fileName = "avatar.jpg";
     }
-    await user.update({avatar: fileName})
-
-    return res.json(user);
+    await user.update({ avatar: fileName });
+    const token = generateJwt(
+      user.id,
+      user.name,
+      user.full_name,
+      user.email,
+      user.description,
+      user.avatar,
+      user.groupId,
+      user.roleId
+    );
+    return res.json({ token });
   }
-
 }
 module.exports = new UserController();

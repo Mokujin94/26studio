@@ -1,9 +1,23 @@
+import { useContext, useEffect } from "react";
+import { Context } from "../..";
 import style from "./modalError.module.scss";
 
 const ModalError = ({ error, setErrorModal }) => {
+  const { modal } = useContext(Context);
+
+  useEffect(() => {
+    setTimeout(() => modal.setModalError(false), 5000);
+  }, []);
+
+  const onCloseModal = () => {
+    if (setErrorModal) {
+      return setErrorModal(false);
+    }
+    modal.setModalError(false);
+  };
   return (
     <div className={style.modal}>
-      <div className={style.modal__close} onClick={() => setErrorModal(false)}>
+      <div className={style.modal__close} onClick={onCloseModal}>
         <svg
           className={style.modal__close_icon}
           xmlns="http://www.w3.org/2000/svg"

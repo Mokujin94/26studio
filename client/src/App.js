@@ -60,10 +60,7 @@ const App = observer(() => {
             mountOnEnter
             unmountOnExit
           >
-            <div
-              className="modal__bg"
-              onClick={() => user.setModalNews(false)}
-            >
+            <div className="modal__bg" onClick={() => user.setModalNews(false)}>
               <ModalNewsUpload />;
             </div>
           </CSSTransition>
@@ -89,6 +86,17 @@ const App = observer(() => {
           >
             <div className="modal__complete">
               <ModalComplete completeMessage={modal.modalCompleteMessage} />
+            </div>
+          </CSSTransition>
+
+          <CSSTransition
+            in={modal.modalError}
+            timeout={300}
+            classNames="popup-success"
+            unmountOnExit
+          >
+            <div className="modal__complete">
+              <ModalError error={modal.modalErrorMessage} />
             </div>
           </CSSTransition>
 
