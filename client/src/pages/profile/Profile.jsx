@@ -9,8 +9,9 @@ import {
 import FunctionButton from "../../components/functionButton/FunctionButton";
 import ProfileMenu from "../../components/profileMenu/ProfileMenu";
 
-import ReactCrop from 'react-image-crop'
+import ReactCrop, { centerCrop, convertToPercentCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop'
 import 'react-image-crop/src/ReactCrop.scss'
+import setCanvasPreview from "../../hooks/setCanvasPreview";
 
 import vk from "../../resource/graphics/icons/profile/vk.svg";
 import tg from "../../resource/graphics/icons/profile/tg.svg";
@@ -20,7 +21,7 @@ import achievement from "../../resource/graphics/icons/profile/achievement.svg";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { fetchGroups } from "../../http/groupsAPI";
-import { fetchUserById } from "../../http/userAPI";
+import { fetchUserById, updateAvatar } from "../../http/userAPI";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 import {
@@ -43,21 +44,23 @@ const Profile = observer(() => {
   const nav = useNavigate();
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarReader, setAvatarReader] = useState(null);
-  const [crop, setCrop] = useState({
-    unit: '%', // Can be 'px' or '%'
-    x: 25,
-    y: 25,
-    width: 50,
-    height: 50
-  });
   const [offsetMenuLineActive, setOffsetMenuLineActive] = useState(
     100 / profile.menuItemsOtherUser.length
-  );
+    );
+  const [crop, setCrop] = useState();
+  const [completedCrop, setCompletedCrop] = useState(null);
   const miniatureRef = useRef(null)
+  const imageMiniatureRef = useRef(null)
+  const canvasRef = useRef(null)
+  const imgRef = useRef(null)
+  const blobUrlRef = useRef("");
+  const hiddenAnchorRef = useRef("")
+
    useClickOutside(miniatureRef, () => {
       setAvatarFile(null)
       user.setModalProfileMiniature(false)
       setTimeout(() => {
+        setCrop(null)
         setAvatarReader(null)
       }, 300)
   })
@@ -210,14 +213,93 @@ const Profile = observer(() => {
       console.log(reader.result);
     };
     reader.readAsDataURL(avatarFile);
-    // console.log(reader);
-    // console.log(reader.result);
 }, [avatarFile, user.modalProfileMiniature]);
 
-  // const onMiniatureButton = () => {
-    
+  const onProfileImageLoad = (e) => {
+    const { width, height } = e.currentTarget;
+    const cropWidthPrecent = (150 / width) * 100;
+    const crop = makeAspectCrop(
+      {
+        unit: "%",
+        width: cropWidthPrecent,
+      },
+      1,
+      width,
+      height
+    );
+    const centeredCrop = centerCrop(crop, width, height)
+    setCrop(centeredCrop);
+  }
+
+  // const onButtonProfileMiniature = async () => {
+  //   const image = imageMiniatureRef.current;
+  //   const previewCanvas = canvasRef.current;
+  //   if (!image || !previewCanvas || !completedCrop) {
+  //     throw new Error("Crop canvas does not exist");
+  //   }
+
+  //   // This will size relative to the uploaded image
+  //   // size. If you want to size according to what they
+  //   // are looking at on screen, remove scaleX + scaleY
+  //   const scaleX = image.width / image.width;
+  //   const scaleY = image.height / image.height;
+
+  //   const offscreen = new OffscreenCanvas(
+  //     completedCrop.width * scaleX,
+  //     completedCrop.height * scaleY,
+  //   );
+  //   const ctx = offscreen.getContext("2d");
+  //   if (!ctx) {
+  //     throw new Error("No 2d context");
+  //   }
+
+  //   ctx.drawImage(
+  //     previewCanvas,
+  //     0,
+  //     0,
+  //     previewCanvas.width,
+  //     previewCanvas.height,
+  //     0,
+  //     0,
+  //     offscreen.width,
+  //     offscreen.height,
+  //   );
+  //   // You might want { type: "image/jpeg", quality: <0 to 1> } to
+  //   // reduce image size
+  //   const blob = await offscreen.convertToBlob({
+  //     type: "image/jpeg",
+  //   });
+
+  //   if (blobUrlRef.current) {
+  //     URL.revokeObjectURL(blobUrlRef.current);
+  //   }
+  //   blobUrlRef.current = URL.createObjectURL(blob);
+  //   const file = await blobToFile(blob, 'avatarFile.jpg')
+  //   console.log(file);
+  //   hiddenAnchorRef.current.href = blobUrlRef.current;
+  //   hiddenAnchorRef.current.click();
+  //   console.log(blobUrlRef.current);
+  //   const formData = new FormData()
+  //   formData.append('avatar', file)
+  //   updateAvatar(user.user.id, formData).then((data) => {
+  //     console.log(data);
+  //   }).catch((e) => console.log(e))
   // }
- 
+
+  // async function blobToFile (blob, fileName) {
+  //   // Создаем массив байтов из Blob
+  //   const arrayBuffer = await blob.arrayBuffer();
+
+  //   // Создаем File из массива байтов
+  //   const file = new File([arrayBuffer], fileName, { type: blob.type });
+
+  //   return file;
+  // };
+
+  const completeAvatar = (c) => {
+    setCompletedCrop(c)
+    
+  }
 
   return (
     <div className="profile">
@@ -233,18 +315,47 @@ const Profile = observer(() => {
               <div className="profile__miniature-modal">
                 <div className="profile__miniature-modal-content" ref={miniatureRef}>
                   <div className="profile__miniature-modal-img">
-                      <ReactCrop crop={crop} circularCrop aspect={1} onChange={c => setCrop(c)}>
-                        <img src={avatarReader} />
-                      </ReactCrop>
+                    <ReactCrop
+                      crop={crop}
+                      circularCrop
+                      aspect={1} 
+                      keepSelection 
+                      onComplete={(c) => completeAvatar(c)} 
+                      onChange={(pixelCrop, precentCrop) => setCrop(precentCrop)}
+                      minWidth={150}
+                    >
+                      <img ref={imageMiniatureRef} src={avatarReader} style={{maxHeight: '500px'}} onLoad={onProfileImageLoad}/>
+                    </ReactCrop>
                   </div>
-                  {/* <img className="profile__miniature-modal-img" src={avatarReader} alt="" /> */}
                   <div className="profile__miniature-modal-btn">
-                    <FunctionButton onClick={() => {
-                      setAvatarFile(null);
-                      user.setModalProfileMiniature(false)
-                    }}>Загрузить фотографию</FunctionButton>
+                    {/* <FunctionButton onClick={onButtonProfileMiniature}>Загрузить фотографию</FunctionButton> */}
+                    <FunctionButton
+                      onClick={() => setCanvasPreview(
+                      imageMiniatureRef.current,
+                      canvasRef.current,
+                      convertToPercentCrop(
+                        crop,
+                        imageMiniatureRef.current.width,
+                        imageMiniatureRef.current.height
+                      )
+                      )}>
+                      Загрузить фотографию
+                    </FunctionButton>
                   </div>
                 </div>
+                <a href="#" onClick={(e) => e.preventDefault} ref={hiddenAnchorRef} download style={{display: 'none'}}></a>
+                <canvas
+                  ref={canvasRef}
+                  style={completedCrop && {
+                    width: completedCrop.width,
+                    height: completedCrop.height,
+                    position: 'absolute',
+                    top: '40%',
+                    display: 'block',
+                    zIndex: '10'
+                  }}
+                />
+                <img ref={imgRef} src="" alt="" style={{display: 'none'}}/>
               </div>
             </CSSTransition>
           }

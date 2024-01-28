@@ -18,5 +18,6 @@ router.get('/group_manage', userController.getUsersByGroupStatus);
 router.get('/search/groups', userController.searchUsersByName);
 router.get('/:id', userController.getProfileUser);
 router.get('/', userController.getOneUser);
+router.patch('/avatar', authMiddleware, userController.updateAvatar);
 
 module.exports = router;

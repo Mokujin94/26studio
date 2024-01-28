@@ -88,4 +88,7 @@ export const uploadProject = async (file) => {
   return data;
 };
 
-
+export const updateAvatar = async (id, avatar) => {
+  const { data } = await $authHost.patch("api/user/avatar", { id }, avatar );
+  return data;
+};

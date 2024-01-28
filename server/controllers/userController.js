@@ -363,5 +363,22 @@ class UserController {
 
     res.json(project);
   }
+
+  async updateAvatar(req, res, next) {
+    const { id } = req.body;
+    let fileName;
+    const user = await User.findOne({where: {id}})
+    if (req.files) {
+      fileName = uuid.v4() + ".jpg";
+      const { avatar } = req.files;
+      avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+    } else {
+      fileName = "avatar.jpg";
+    }
+    await user.update({avatar: fileName})
+
+    return res.json(user);
+  }
+
 }
 module.exports = new UserController();
