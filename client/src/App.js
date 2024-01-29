@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter, useLocation } from "react-router-dom";
+import socketIOClient from "socket.io-client";
 import { ScrollContainer } from "react-nice-scroll";
 import "react-nice-scroll/dist/styles.css";
 
@@ -8,6 +9,8 @@ import BurgerMenu from "./components/burgerMenu/BurgerMenu";
 import Header from "./components/header/Header";
 
 import "./resource/styles/style.scss";
+
+import notificationAudio from './resource/audio/notification.mp3'
 import { observer } from "mobx-react-lite";
 import { Context } from ".";
 import Footer from "./components/footer/Footer";
@@ -33,6 +36,27 @@ const App = observer(() => {
       user.setAuth(true);
     });
   }, []);
+
+  useEffect(() => {
+    const socket = socketIOClient(process.env.REACT_APP_API_URL);
+
+    socket.on("notification", (updateNotification) => {
+      if (updateNotification.flag === "comment") {
+        if (updateNotification.savedComment.user.id === user.user.id || updateNotification.savedComment.project.userId !== user.user.id) {
+          return;
+        }
+      }
+
+      if (updateNotification.flag === "like") {
+        if (updateNotification.newLikes.user.id === user.user.id || updateNotification.newLikes.project.userId !== user.user.id) {
+          return;
+        }
+      }
+
+      console.log("Получены новые уведомления:", updateNotification);
+      new Audio(notificationAudio).play();
+    });
+  }, [user.user])
 
   return (
     <div className="App">

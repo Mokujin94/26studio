@@ -255,7 +255,7 @@ const Profile = observer(() => {
           <div className="profile__top-wrapper">
             <div className="profile__face">
               <div className="profile__avatar">
-                <label htmlFor="avatar" className="profile__avatar-inner">
+                {Number(id) === user.user.id ? <label htmlFor="avatar" className="profile__avatar-inner">
                   <img
                     className="profile__avatar-img"
                     src={
@@ -276,7 +276,17 @@ const Profile = observer(() => {
                     id="avatar"
                     accept="image/png, image/jpeg"
                   />
-                </label>
+
+                </label> :                   <img
+                    className="profile__avatar-img"
+                    src={
+                      id == user.user.id
+                        ? process.env.REACT_APP_API_URL + user.user.avatar
+                        : process.env.REACT_APP_API_URL + userId.avatar
+                    }
+                    alt="icon"
+                  />}
+                
               </div>
 
               <div className="profile__button">

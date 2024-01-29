@@ -134,12 +134,19 @@ class ProjectController {
       userId,
     });
 
+    const newLikes = await Likes.findOne({
+      include: [User, Project],
+      where: {id: likes.id},
+    });
+
+
     const allLikes = await Project.findAll({
       include: [Likes, Comments, View],
       where: { id: projectId },
     });
     const io = getIo();
     io.emit("sendLikesToClients", allLikes);
+    io.emit("notification", {newLikes, flag: "like"});
     return res.json(likes);
   }
 

@@ -1,4 +1,4 @@
-const { News, Likes, Comments, User, View } = require("../models/models");
+const { News, Likes, Comments, User, View, Project } = require("../models/models");
 const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../error/ApiError");
@@ -87,12 +87,18 @@ class NewsController {
       userId,
     });
 
+    const newLikes = await Likes.findOne({
+      include: [User, Project],
+      where: {id: likes.id}
+    })
+
     const allLikes = await News.findAll({
       include: [Likes, Comments, View],
       where: { id: newsId },
     });
     const io = getIo();
-    io.emit("sendLikesNewsToClients", allLikes);
+    io.emit("sendLikesToClients", allLikes);
+    io.emit("notification", {newLikes, flag: "like"});
     return res.json(likes);
   }
 

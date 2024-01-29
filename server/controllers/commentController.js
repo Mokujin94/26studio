@@ -55,16 +55,12 @@ class CommentController {
 
     const savedComment = await Comments.findOne({
       where: { id: comment.id },
-      include: [
-        {
-          model: User,
-          attributes: ["id", "name", "avatar"],
-        },
-      ],
+      include: [User, Project],
     });
 
     const io = getIo();
     io.emit("sendCommentsToClients", savedComment);
+    io.emit("notification", {savedComment, flag: "comment"});
     return res.json(savedComment);
   }
 

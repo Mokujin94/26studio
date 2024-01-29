@@ -53,6 +53,11 @@ function initSocket(httpServer) {
       console.log("Отправка уведомления о новом комментарии : ", comment);
       io.emit("receiveNewComment", comment);
     });
+
+    socket.on("notification", (notification) => {
+      console.log("Отправка уведомления : ", notification);
+      io.emit("receiveNotification", notification);
+    });
   });
 
   return io;
