@@ -161,11 +161,11 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
   return (
     <>
       {imageSrc && (
-        <div>
+        <div className={style.imageCropper}>
           <ReactCrop
             crop={crop}
             onChange={(pixelCrop, percentCrop) => {
-              setCrop(pixelCrop);
+              setCrop(percentCrop);
             }}
             onComplete={(c) => {
               onCompletedCrop(c);

@@ -4,6 +4,6 @@ const rolesController = require("../controllers/rolesController");
 const authMiddleware = require("../middleware/authMiddleware");
 const checkRoleMiddleware = require("../middleware/checkRoleMiddleware");
 
-router.post("/", checkRoleMiddleware(2), rolesController.create);
+router.post("/",  rolesController.create);
 
 module.exports = router;

@@ -1,1 +1,7 @@
 @import "../../resource/styles/variables";
+
+.imageCropper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

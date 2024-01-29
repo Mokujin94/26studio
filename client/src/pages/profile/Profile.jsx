@@ -209,8 +209,8 @@ const Profile = observer(() => {
       imageElement.src = imageUrl;
 
       imageElement.addEventListener("load", (e) => {
-        const { naturalWidth, naturalHeigth } = e.currentTarget;
-        if (naturalWidth < 150 || naturalHeigth < 150) {
+        const { naturalWidth, naturalHeight } = e.currentTarget;
+        if (naturalWidth < 150 || naturalHeight < 150) {
           modal.setModalErrorMessage(
             "Минимальный размер изображения: 150 x 150"
           );
@@ -255,7 +255,8 @@ const Profile = observer(() => {
           <div className="profile__top-wrapper">
             <div className="profile__face">
               <div className="profile__avatar">
-                {Number(id) === user.user.id ? <label htmlFor="avatar" className="profile__avatar-inner">
+                {Number(id) === user.user.id ? 
+                <label htmlFor="avatar" className="profile__avatar-inner">
                   <img
                     className="profile__avatar-img"
                     src={

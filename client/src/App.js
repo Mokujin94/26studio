@@ -54,6 +54,7 @@ const App = observer(() => {
       }
 
       console.log("Получены новые уведомления:", updateNotification);
+      
       new Audio(notificationAudio).play();
     });
   }, [user.user])

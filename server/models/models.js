@@ -151,6 +151,11 @@ const TypeOfAttachment = sequelize.define("type_of_attachment", {
   name: { type: DataTypes.STRING },
 });
 
+const Notifications = sequelize.define("notifications", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+});
+
+
 User.hasMany(Project);
 Project.belongsTo(User);
 
