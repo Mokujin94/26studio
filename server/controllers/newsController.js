@@ -1,4 +1,11 @@
-const { News, Likes, Comments, User, View, Project } = require("../models/models");
+const {
+  News,
+  Likes,
+  Comments,
+  User,
+  View,
+  Project,
+} = require("../models/models");
 const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../error/ApiError");
@@ -29,8 +36,8 @@ class NewsController {
       limit,
       offset,
       where: {
-        isProposed: false
-      }
+        isProposed: false,
+      },
     });
     return res.json(news);
   }
@@ -46,8 +53,8 @@ class NewsController {
       limit,
       offset,
       where: {
-        isProposed: true
-      }
+        isProposed: true,
+      },
     });
     return res.json(news);
   }
@@ -89,8 +96,8 @@ class NewsController {
 
     const newLikes = await Likes.findOne({
       include: [User, Project],
-      where: {id: likes.id}
-    })
+      where: { id: likes.id },
+    });
 
     const allLikes = await News.findAll({
       include: [Likes, Comments, View],
@@ -98,7 +105,7 @@ class NewsController {
     });
     const io = getIo();
     io.emit("sendLikesToClients", allLikes);
-    io.emit("notification", {newLikes, flag: "like"});
+    // io.emit("notification", {newLikes, flag: "like"});
     return res.json(likes);
   }
 

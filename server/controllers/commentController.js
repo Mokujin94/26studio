@@ -60,7 +60,7 @@ class CommentController {
 
     const io = getIo();
     io.emit("sendCommentsToClients", savedComment);
-    io.emit("notification", {savedComment, flag: "comment"});
+    // io.emit("notification", {savedComment, flag: "comment"});
     return res.json(savedComment);
   }
 

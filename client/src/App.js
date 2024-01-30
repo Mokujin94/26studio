@@ -41,14 +41,15 @@ const App = observer(() => {
     const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
     socket.on("notification", (updateNotification) => {
-      // if (user.user.id && updateNotification.senderId === user.user.id) {
-      //   return;
-      // }
-      console.log("Получены новые уведомления:", updateNotification);
+      if (user.user.id && updateNotification.senderId === user.user.id) {
+        return;
+      } else {
+        console.log("Получены новые уведомления:", updateNotification);
 
-      new Audio(notificationAudio).play();
+        new Audio(notificationAudio).play();
+      }
     });
-  }, []);
+  }, [user.user.id]);
 
   return (
     <div className="App">

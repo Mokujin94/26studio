@@ -94,8 +94,15 @@ class ProjectController {
   async getOne(req, res) {
     const { id } = req.params;
     const project = await Project.findOne({
-      include: [Likes, View],
       where: { id },
+      include: [
+        {
+          model: Likes,
+          where: { status: true },
+          required: false,
+        },
+        View,
+      ],
     });
 
     return res.json(project);
@@ -123,7 +130,7 @@ class ProjectController {
     }
 
     const condidate = await Likes.findAll({
-      where: { userId, projectId },
+      where: { userId, projectId, status: true },
     });
 
     return res.json(condidate);
@@ -132,33 +139,45 @@ class ProjectController {
   async setLike(req, res, next) {
     const { projectId, userId } = req.body;
     const io = getIo();
+    let likes;
 
     if (!userId) {
       return next(ApiError.internal("Не авторизован"));
     }
 
-    const likes = await Likes.create({
-      projectId,
-      userId,
-    });
-    const findLike = await Likes.findOne({
-      include: [User, Project],
-      where: { id: likes.id },
-    });
-
-    const findNotification = await Notifications.findOne({
-      where: {
-        likeId: likes.id,
-        senderId: userId,
-        recipientId: findLike.project.userId,
-      },
+    const checkLikeOnProject = await Project.findOne({
+      where: { id: projectId },
+      include: [
+        {
+          model: Likes,
+          where: { userId, status: true },
+        },
+      ],
     });
 
-    if (findNotification !== null) {
+    const userProject = await Project.findOne({
+      where: { id: projectId },
+      include: [User],
+    });
+
+    if (checkLikeOnProject) {
+      likes = await Likes.findOne({
+        where: { projectId, userId, status: false },
+      });
+      likes.update({
+        status: true,
+      });
+    } else {
+      likes = await Likes.create({
+        projectId,
+        userId,
+        status: true,
+      });
+
       const notification = await Notifications.create({
         likeId: likes.id,
         senderId: userId,
-        recipientId: findLike.project.userId,
+        recipientId: userProject.user.id,
       });
       const sendNotification = await Notifications.findOne({
         where: { id: notification.id },
@@ -177,11 +196,26 @@ class ProjectController {
           },
         ],
       });
-      io.emit("notification", findNotification);
+      io.emit("notification", sendNotification);
     }
 
+    // const checkLikeOnProject1 = await User.findOne({
+    //   where: {id: userId},
+    //   include: [{
+    //     model: Likes,
+    //     where: {projectId, status: true}
+    //   }]
+    // })
+
     const allLikes = await Project.findAll({
-      include: [Likes, Comments, View],
+      include: [
+        {
+          model: Likes,
+          where: { status: true },
+        },
+        Comments,
+        View,
+      ],
       where: { id: projectId },
     });
 
@@ -190,16 +224,26 @@ class ProjectController {
   }
 
   async deleteLike(req, res, next) {
-    const { projectId, userId } = req.query;
+    const { projectId, userId } = req.body;
+    let likes;
     if (!userId) {
-      return next(ApiError.internal("Не авторизован"));
+      return next(ApiError.internal("Не авторизован: " + userId));
     }
-    const likes = await Likes.destroy({
-      where: { projectId, userId },
+    likes = await Likes.findOne({
+      where: { projectId, userId, status: true },
     });
 
+    await likes.update({ status: false });
+
     const allLikes = await Project.findAll({
-      include: [Likes, Comments, View],
+      include: [
+        {
+          model: Likes,
+          where: { status: true },
+        },
+        Comments,
+        View,
+      ],
       where: { id: projectId },
     });
     const io = getIo();

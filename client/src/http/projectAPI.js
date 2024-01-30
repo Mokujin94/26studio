@@ -74,7 +74,10 @@ export const deleteLike = async (projectId, userId) => {
       userId,
     },
   };
-  const { data } = await $authHost.delete("api/project/delete", config);
+  const { data } = await $authHost.patch("api/project/like", {
+    projectId,
+    userId,
+  });
   return data;
 };
 
