@@ -10,7 +10,7 @@ import Header from "./components/header/Header";
 
 import "./resource/styles/style.scss";
 
-import notificationAudio from './resource/audio/notification.mp3'
+import notificationAudio from "./resource/audio/notification.mp3";
 import { observer } from "mobx-react-lite";
 import { Context } from ".";
 import Footer from "./components/footer/Footer";
@@ -41,23 +41,14 @@ const App = observer(() => {
     const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
     socket.on("notification", (updateNotification) => {
-      if (updateNotification.flag === "comment") {
-        if (updateNotification.savedComment.user.id === user.user.id || updateNotification.savedComment.project.userId !== user.user.id) {
-          return;
-        }
-      }
-
-      if (updateNotification.flag === "like") {
-        if (updateNotification.newLikes.user.id === user.user.id || updateNotification.newLikes.project.userId !== user.user.id) {
-          return;
-        }
-      }
-
+      // if (user.user.id && updateNotification.senderId === user.user.id) {
+      //   return;
+      // }
       console.log("Получены новые уведомления:", updateNotification);
-      
+
       new Audio(notificationAudio).play();
     });
-  }, [user.user])
+  }, []);
 
   return (
     <div className="App">

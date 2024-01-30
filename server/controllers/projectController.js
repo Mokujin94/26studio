@@ -1,4 +1,11 @@
-const { Project, Likes, User, Comments, View } = require("../models/models");
+const {
+  Project,
+  Likes,
+  User,
+  Comments,
+  View,
+  Notifications,
+} = require("../models/models");
 const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../error/ApiError");
@@ -50,7 +57,7 @@ class ProjectController {
         limit,
         where: {
           is_private: false,
-        }
+        },
       });
     } else if (filter === "1") {
       projects = await Project.findAndCountAll({
@@ -68,7 +75,7 @@ class ProjectController {
         limit,
         where: {
           is_private: false,
-        }
+        },
       });
     } else if (filter === "2") {
       projects = await Project.findAndCountAll({
@@ -78,7 +85,7 @@ class ProjectController {
         limit,
         where: {
           is_private: false,
-        }
+        },
       });
     }
     return res.json({ count: totalCount, rows: projects.rows });
@@ -124,6 +131,7 @@ class ProjectController {
 
   async setLike(req, res, next) {
     const { projectId, userId } = req.body;
+    const io = getIo();
 
     if (!userId) {
       return next(ApiError.internal("Не авторизован"));
@@ -133,20 +141,51 @@ class ProjectController {
       projectId,
       userId,
     });
-
-    const newLikes = await Likes.findOne({
+    const findLike = await Likes.findOne({
       include: [User, Project],
-      where: {id: likes.id},
+      where: { id: likes.id },
     });
 
+    const findNotification = await Notifications.findOne({
+      where: {
+        likeId: likes.id,
+        senderId: userId,
+        recipientId: findLike.project.userId,
+      },
+    });
+
+    if (findNotification !== null) {
+      const notification = await Notifications.create({
+        likeId: likes.id,
+        senderId: userId,
+        recipientId: findLike.project.userId,
+      });
+      const sendNotification = await Notifications.findOne({
+        where: { id: notification.id },
+        include: [
+          {
+            model: Likes,
+            as: "like", // Укажите алиас, который соответствует вашей ассоциации
+          },
+          {
+            model: User,
+            as: "sender", // Укажите алиас, который соответствует вашей ассоциации
+          },
+          {
+            model: User,
+            as: "recipient", // Укажите алиас, который соответствует вашей ассоциации
+          },
+        ],
+      });
+      io.emit("notification", findNotification);
+    }
 
     const allLikes = await Project.findAll({
       include: [Likes, Comments, View],
       where: { id: projectId },
     });
-    const io = getIo();
+
     io.emit("sendLikesToClients", allLikes);
-    io.emit("notification", {newLikes, flag: "like"});
     return res.json(likes);
   }
 

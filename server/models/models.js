@@ -20,7 +20,7 @@ const Friend = sequelize.define("friend", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   id_sender: { type: DataTypes.INTEGER },
   id_recipient: { type: DataTypes.INTEGER },
-  status: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false,}
+  status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 });
 
 const Subscriber = sequelize.define("subscriber", {
@@ -153,8 +153,9 @@ const TypeOfAttachment = sequelize.define("type_of_attachment", {
 
 const Notifications = sequelize.define("notifications", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  senderId: DataTypes.INTEGER,
+  recipientId: DataTypes.INTEGER,
 });
-
 
 User.hasMany(Project);
 Project.belongsTo(User);
@@ -174,6 +175,11 @@ Project.belongsTo(Team);
 Team.hasMany(TeamAccess);
 TeamAccess.belongsTo(Team);
 
+Notifications.belongsTo(User, { foreignKey: "senderId", as: "sender" });
+Notifications.belongsTo(User, { foreignKey: "recipientId", as: "recipient" });
+Notifications.belongsTo(Likes, { foreignKey: "likeId", as: "like" });
+Notifications.belongsTo(Comments, { foreignKey: "commentId", as: "comment" });
+
 Project.hasMany(Comments);
 Comments.belongsTo(Project);
 
@@ -184,7 +190,7 @@ User.hasMany(Comments);
 Comments.belongsTo(User, { foreignKey: "userId" });
 
 Project.hasMany(Likes);
-Likes.belongsTo(Project);
+Likes.belongsTo(Project, { foreignKey: "projectId" });
 
 Project.hasMany(View, { foreignKey: "projectId" });
 View.belongsTo(Project);
@@ -252,13 +258,5 @@ module.exports = {
   Comments,
   Likes,
   View,
+  Notifications,
 };
-sequelize.sync();
-// sequelize
-//   .sync()
-//   .then(() => {
-//     console.log("All models were synchronized successfully.");
-//   })
-//   .catch((error) => {
-//     console.error("Error synchronizing models:", error);
-//   });
