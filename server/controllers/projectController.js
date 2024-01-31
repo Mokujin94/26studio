@@ -145,14 +145,8 @@ class ProjectController {
       return next(ApiError.internal("Не авторизован"));
     }
 
-    const checkLikeOnProject = await Project.findOne({
-      where: { id: projectId },
-      include: [
-        {
-          model: Likes,
-          where: { userId, status: true },
-        },
-      ],
+    const checkLikeOnProject = await Likes.findOne({
+      where: { projectId, userId, status: false },
     });
 
     const userProject = await Project.findOne({

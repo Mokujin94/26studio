@@ -45,10 +45,14 @@ const App = observer(() => {
         return;
       } else {
         console.log("Получены новые уведомления:", updateNotification);
-
+        console.log("почему 2");
         new Audio(notificationAudio).play();
       }
     });
+
+    return () => {
+      socket.disconnect();
+    };
   }, [user.user.id]);
 
   return (

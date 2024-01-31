@@ -9,7 +9,7 @@ import { useCountFormatter } from "../../hooks/useCountFormatter";
 const ProjectHeader = observer(({ title, onClick, likes, isLike, views }) => {
   const { user } = useContext(Context);
 
-  const formatedLikes = useCountFormatter(likes.length);
+  const formatedLikes = useCountFormatter(likes);
   const formatedViews = useCountFormatter(views.length);
 
   const like = (style) => {

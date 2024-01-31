@@ -13,7 +13,7 @@ import {
   fetchProjectById,
   like,
 } from "../../http/projectAPI";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router";
 import { getAllCommentsProject } from "../../http/commentsAPI";
 import { Context } from "../..";
 import { useCountFormatter } from "../../hooks/useCountFormatter";
@@ -22,7 +22,7 @@ import { viewProject } from "../../http/viewAPI";
 function Project() {
   const { id } = useParams();
   const { user, error } = useContext(Context);
-
+  const location = useLocation();
   const [dataProject, setDataProject] = useState({});
   const [amountLike, setAmountLike] = useState([]);
   const [comments, setComments] = useState([]);
@@ -34,7 +34,13 @@ function Project() {
     fetchProjectById(id).then((data) => {
       console.log(data);
       setDataProject(data);
-      setAmountLike(data.likes);
+      setAmountLike(data.likes.length);
+      data.likes.filter((item) => {
+        if (item.userId === user.user.id && item.status) {
+          setIsLike(true);
+          console.log(true);
+        }
+      });
       setViews(data.views);
     });
     getAllCommentsProject(id).then((data) => setComments(data[0].comments));
@@ -53,46 +59,30 @@ function Project() {
       }
     });
 
-    socket.on("sendLikesToClients", (updatedLikes) => {
-      console.log("Получены новые лайки:", updatedLikes);
-      if (updatedLikes) {
-        updatedLikes.filter((item) => {
-          if (item.id == id) {
-            setAmountLike(updatedLikes[0].likes);
-          }
-        });
-      }
-    });
-
-    // Закрываем соединение при размонтировании компонента
     return () => {
       socket.disconnect();
     };
-  }, []);
-
-  useEffect(() => {
-    if (amountLike) {
-      for (let i = 0; i < amountLike.length; i++) {
-        if (amountLike[i].userId === user.user.id) {
-          setIsLike(true);
-        }
-      }
-    }
-  }, [user, amountLike]);
+  }, [location.pathname, user.user.id]);
 
   const setLike = async () => {
     await condidate(id, user.user.id)
       .then(async (dataCondidate) => {
         if (dataCondidate.length) {
           await deleteLike(id, user.user.id)
-            .then(setIsLike(false))
+            .then(() => {
+              setIsLike(false);
+              setAmountLike((amountLike) => amountLike - 1);
+            })
             .catch((data) => {
               console.log(data.response.data.message);
               error.setNotAuthError(true);
             });
         } else {
           await like(id, user.user.id)
-            .then(setIsLike(true))
+            .then(() => {
+              setIsLike(true);
+              setAmountLike((amountLike) => amountLike + 1);
+            })
             .catch((data) => {
               console.log(data.response.data.message);
               error.setNotAuthError(true);
