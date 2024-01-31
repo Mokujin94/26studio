@@ -4,7 +4,6 @@
   position: relative;
   width: 37px;
   height: 37px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,12 +13,27 @@
   user-select: none;
   border-radius: 10px;
   border: 1px solid $studio-white-border;
+  cursor: pointer;
+  transition: $studio-transition-03;
+  &_active {
+    border-color: $studio-primary-border;
+    > .notification__icon {
+      path {
+        stroke: $studio-primary-border;
+      }
+    }
+  }
   &__icon {
     display: block;
     width: 30px;
+    transform-origin: top;
+    &_active {  
+      animation: animateNotification 1s forwards;
+    }
     path {
       stroke: $studio-white-element;
       stroke-width: 1;
+      transition: $studio-transition-03;
     }
   }
   &__circle {
@@ -31,5 +45,25 @@
     background-color: $studio-primary-element;
     border-radius: 50%;
     // border: 1px solid $studio-grey-border;
+  }
+}
+
+
+@keyframes animateNotification {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  33% {
+    transform: rotate(-7deg);
+
+  }
+
+  66% {
+    transform: rotate(7deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
   }
 }

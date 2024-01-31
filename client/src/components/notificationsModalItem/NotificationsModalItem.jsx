@@ -5,6 +5,8 @@ import style from './notificationsModalItem.module.scss'
 import avatar from '../../resource/graphics/images/profile/avatar.jpg'
 import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
+import { Link } from 'react-router-dom'
+import { PROFILE_ROUTE } from '../../utils/consts'
 
 
 
@@ -32,22 +34,24 @@ const NotificationsModalItem = observer(({notification}) => {
 
   return (
     <div className={style.item}>
-      <div className={style.item__avatar}>
-        <img className={style.item__avatarImg} src={process.env.REACT_APP_API_URL + notification.sender.avatar} alt="" />
-        <div className={style.item__avatarIcon}>
-          {
-            notification.likeId && like
-          }
-          {
-            notification.commentId && comment
-          }
-          {
-            !notification.likeId && !notification.commentId && add
-          }
+      <Link to={PROFILE_ROUTE + '/' + notification.senderId}>
+        <div className={style.item__avatar}>
+          <img className={style.item__avatarImg} src={process.env.REACT_APP_API_URL + notification.sender.avatar} alt="" />
+          <div className={style.item__avatarIcon}>
+            {
+              notification.likeId && like
+            }
+            {
+              notification.commentId && comment
+            }
+            {
+              !notification.likeId && !notification.commentId && add
+            }
+          </div>
         </div>
-      </div>
+      </Link>
       <div className={style.item__content}>
-        <h3 className={style.item__contentName}>{notification.sender.name}</h3>
+        <Link to={PROFILE_ROUTE + '/' + notification.senderId} className={style.item__contentName}>{notification.sender.name}</Link>
           {
           notification.likeId
           && <p className={style.item__contentText}>

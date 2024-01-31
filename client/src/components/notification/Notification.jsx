@@ -22,12 +22,12 @@ const Notification = observer(({ notificationsRef, setActiveNotifications, activ
   
   return (
     <div
-      className={style.notification}
+      className={activeNotifications ? style.notification + " " + style.notification_active : style.notification}
       onClick={() => { setActiveNotifications(item => !item);  setIsViewNotifications(false)}}
       ref={notificationsRef}
     >
       <svg
-        className={style.notification__icon}
+        className={isViewNotifications ? style.notification__icon + " " + style.notification__icon_active : style.notification__icon}
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
