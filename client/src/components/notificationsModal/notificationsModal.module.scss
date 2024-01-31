@@ -1,0 +1,30 @@
+@import "../../resource/styles/variables";
+
+.block {
+  position: absolute;
+  top: 150%;
+  right: 0;
+  width: 400px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 15px;
+  border: 1px solid $studio-grey-element;
+  background-color: $studio-dark-element;
+  padding: 20px 20px;
+  cursor: default;
+  
+  &Title {
+    font-size: 20px;
+    font-weight: 700;
+    color: $studio-white-text;
+    text-align: center;
+  }
+
+  &List {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}

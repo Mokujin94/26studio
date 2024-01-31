@@ -4,10 +4,15 @@ import style from "./notification.module.scss";
 
 import { CSSTransition } from "react-transition-group";
 import { Context } from "../..";
+import NotificationsModal from "../notificationsModal/NotificationsModal";
 
-function Notification() {
+function Notification({notificationsRef, setActiveNotifications, activeNotifications}) {
   return (
-    <div className={style.notification}>
+    <div
+      className={style.notification}
+      onClick={() => setActiveNotifications(item => !item)}
+      ref={notificationsRef}
+    >
       <svg
         className={style.notification__icon}
         viewBox="0 0 24 24"
@@ -29,12 +34,13 @@ function Notification() {
         />
       </svg>
       <CSSTransition
+        in={activeNotifications}
         timeout={300}
         classNames="create-anim"
         mountOnEnter
         unmountOnExit
       >
-        <div></div>
+        <NotificationsModal/>
       </CSSTransition>
     </div>
   );

@@ -1,0 +1,58 @@
+@import "../../resource/styles/variables";
+
+.item {
+  background: $studio-black-opacity-02;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 15px;
+  padding: 12px;
+  cursor: pointer;
+  &__avatar {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    &Img {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+      object-fit: cover;
+    }
+
+    &Icon {
+      position: absolute;
+      right: -2px;
+      bottom: -4px;
+      svg {
+        display: block;
+        width: 16px;
+        height: auto;
+        path {
+          stroke: $studio-black-opacity-02;
+          stroke-width: 1;
+        }
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    &Name {
+      font-size: 16px;
+      font-weight: 700;
+      color: $studio-primary-text;
+    }
+
+    &Text {
+      font-size: 16px;
+      font-weight: 500;
+      color: $studio-white-text;
+      &_primary {
+        color: $studio-primary-text;
+      }
+    }
+  }
+}

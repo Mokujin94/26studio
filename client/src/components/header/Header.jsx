@@ -24,12 +24,18 @@ function Header() {
 
   const [activeCreatePopup, setActiveCreatePopup] = useState(false);
 
+  const [activeNotifications, setActiveNotifications] = useState(false)
+
   const [searchOpen, setSearchOpen] = useState(false);
 
   const [searchData, setSearchData] = useState({});
 
   const useDebounced = useDebounce(search, 200);
+
   const createPopupRef = useRef(null);
+
+  const notificationsRef = useRef(null)
+
 
   const nodeRef = useRef(null);
   useClickOutside(nodeRef, () => {
@@ -38,6 +44,10 @@ function Header() {
 
   useClickOutside(createPopupRef, () => {
     setActiveCreatePopup(false);
+  });
+
+  useClickOutside(notificationsRef, () => {
+    setActiveNotifications(false);
   });
 
   useEffect(() => {
@@ -91,7 +101,11 @@ function Header() {
             )}
           </div>
           <div className={style.header__createButtonPopUp}>
-            <Notification />
+            <Notification
+              notificationsRef={notificationsRef}
+              setActiveNotifications={setActiveNotifications}
+              activeNotifications={activeNotifications}
+            />
             <CreateButtonPopUp
               createPopupRef={createPopupRef}
               setActiveCreatePopup={setActiveCreatePopup}
