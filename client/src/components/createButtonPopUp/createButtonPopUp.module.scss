@@ -30,14 +30,14 @@
   }
 
   &__content {
+    position: absolute;
+    top: 150%;
+    right: 0;
     display: flex;
     cursor: default;
     width: 225px;
     border-radius: 15px;
     border: 1px solid $studio-grey-border;
-    position: absolute;
-    bottom: -120px;
-    right: 0;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;

@@ -30,7 +30,13 @@ function CreateButtonPopUp({createPopupRef, setActiveCreatePopup, activeCreatePo
         <path d="M11 21L11 1Z" fill="#27323E" />
         <path d="M11 21L11 1" stroke="#FCFCFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
-      <CSSTransition in={activeCreatePopup} timeout={300} classNames="create-anim" mountOnEnter unmountOnExit>
+      <CSSTransition
+        in={activeCreatePopup}
+        timeout={300}
+        classNames="create-anim"
+        mountOnEnter
+        unmountOnExit
+      >
         <div
           className={activeCreatePopup ? `${style.button__content} ${style.button__content_active}` : style.button__content}
           onClick={(e) => e.stopPropagation()}
