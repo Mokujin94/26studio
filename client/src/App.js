@@ -26,6 +26,7 @@ import NotAuthPopup from "./components/notAuthPopup/NotAuthPopup";
 import ModalNewsUpload from "./components/modalNewsUpload/ModalNewsUpload";
 import ModalComplete from "./components/modalComplete/ModalComplete";
 import ProfileMiniatureModal from "./components/profileMiniatureModal/ProfileMiniatureModal";
+import { fetchNotifications } from "./http/notificationAPI";
 
 const App = observer(() => {
   const { user, error, modal } = useContext(Context);
@@ -36,15 +37,21 @@ const App = observer(() => {
       user.setAuth(true);
     });
   }, []);
-
+  
   useEffect(() => {
+    if (user.user.id) {
+      fetchNotifications(user.user.id).then(data => {
+        user.setNotifications(data)
+      })
+    }
     const socket = socketIOClient(process.env.REACT_APP_API_URL);
-
     socket.on("notification", (updateNotification) => {
       if (user.user.id && updateNotification.senderId === user.user.id) {
         return;
       } else {
-        console.log("Получены новые уведомления:", updateNotification);
+        user.setNotifications([...user.notifications, updateNotification])
+        console.log(updateNotification);
+        // console.log("Получены новые уведомления:", updateNotification);
         console.log("почему 2");
         new Audio(notificationAudio).play();
       }

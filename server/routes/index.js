@@ -11,6 +11,7 @@ const FriendRouter = require("./friendRouter");
 const CommentRouter = require("./commentRouter");
 const ViewRouter = require("./viewRouter");
 const SearchRouter = require("./searchRouter");
+const NotificationRouter = require("./notificationsRouter")
 
 router.use("/user", UserRouter);
 router.use("/project", ProjectRouter);
@@ -22,5 +23,6 @@ router.use("/friend", FriendRouter);
 router.use("/comment", CommentRouter);
 router.use("/view", ViewRouter);
 router.use("/search", SearchRouter);
+router.use("/notification", NotificationRouter)
 
 module.exports = router;

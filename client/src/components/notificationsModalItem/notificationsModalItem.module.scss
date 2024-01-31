@@ -1,12 +1,13 @@
 @import "../../resource/styles/variables";
 
 .item {
-  background: $studio-black-opacity-02;
+  position: relative;
+  background: $studio-darker-element;
   display: flex;
   align-items: center;
   gap: 10px;
   border-radius: 15px;
-  padding: 12px;
+  padding: 12px 12px 30px 12px;
   cursor: pointer;
   &__avatar {
     position: relative;
@@ -30,7 +31,7 @@
         width: 16px;
         height: auto;
         path {
-          stroke: $studio-black-opacity-02;
+          stroke: $studio-darker-element;
           stroke-width: 1;
         }
       }
@@ -53,6 +54,15 @@
       &_primary {
         color: $studio-primary-text;
       }
+    }
+
+    &Time {
+      position: absolute;
+      bottom: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: $studio-grey-text;
+      
     }
   }
 }

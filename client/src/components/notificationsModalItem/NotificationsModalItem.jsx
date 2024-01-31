@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import style from './notificationsModalItem.module.scss'
 
 import avatar from '../../resource/graphics/images/profile/avatar.jpg'
+import { Context } from '../..'
+import { observer } from 'mobx-react-lite'
 
 
 
-const NotificationsModalItem = () => {
+const NotificationsModalItem = observer(({notification}) => {
+  const { user } = useContext(Context)
+  console.log(notification);
 
   const add =
     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none">
@@ -29,17 +33,43 @@ const NotificationsModalItem = () => {
   return (
     <div className={style.item}>
       <div className={style.item__avatar}>
-        <img className={style.item__avatarImg} src={avatar} alt="" />
+        <img className={style.item__avatarImg} src={process.env.REACT_APP_API_URL + notification.sender.avatar} alt="" />
         <div className={style.item__avatarIcon}>
-          {like}
+          {
+            notification.likeId && like
+          }
+          {
+            notification.commentId && comment
+          }
+          {
+            !notification.likeId && !notification.commentId && add
+          }
         </div>
       </div>
       <div className={style.item__content}>
-        <h3 className={style.item__contentName}>Mokujin</h3>
-        <p className={style.item__contentText}>Хочет добавить вас в друзья</p>
+        <h3 className={style.item__contentName}>{notification.sender.name}</h3>
+          {
+          notification.likeId
+          && <p className={style.item__contentText}>
+              Оценил ваш <span className={style.item__contentText_primary}>проект</span>
+            </p>
+          }
+          {
+          notification.commentId
+          && <p className={style.item__contentText}>
+              Оставил <span className={style.item__contentText_primary}>комментарий</span>
+            </p>
+          }
+          {
+          !notification.likeId && !notification.commentId
+          && <p className={style.item__contentText}>
+              Хочет добавить вас в друзья
+            </p>
+          }
+        <span className={style.item__contentTime}>7 минут назад</span>
       </div>
     </div>
   )
-}
+})
 
 export default NotificationsModalItem

@@ -1,6 +1,7 @@
 @import "../../resource/styles/variables";
 
 .notification {
+  position: relative;
   width: 37px;
   height: 37px;
   cursor: pointer;
@@ -20,5 +21,15 @@
       stroke: $studio-white-element;
       stroke-width: 1;
     }
+  }
+  &__circle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: -5px;
+    right: -5px;
+    background-color: $studio-primary-element;
+    border-radius: 50%;
+    // border: 1px solid $studio-grey-border;
   }
 }

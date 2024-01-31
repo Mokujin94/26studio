@@ -1,16 +1,29 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import style from "./notification.module.scss";
 
 import { CSSTransition } from "react-transition-group";
 import { Context } from "../..";
 import NotificationsModal from "../notificationsModal/NotificationsModal";
+import { observer } from "mobx-react-lite";
+import { fetchNotifications } from "../../http/notificationAPI";
 
-function Notification({notificationsRef, setActiveNotifications, activeNotifications}) {
+const Notification = observer(({ notificationsRef, setActiveNotifications, activeNotifications }) => {
+  const { user } = useContext(Context)
+  const [isViewNotifications, setIsViewNotifications] = useState(false)
+
+
+  useEffect(() => {
+    user.notifications.filter(item => {
+      if(!item.status) return setIsViewNotifications(true)
+    })
+  }, [user.notifications])
+  
+  
   return (
     <div
       className={style.notification}
-      onClick={() => setActiveNotifications(item => !item)}
+      onClick={() => { setActiveNotifications(item => !item);  setIsViewNotifications(false)}}
       ref={notificationsRef}
     >
       <svg
@@ -40,10 +53,19 @@ function Notification({notificationsRef, setActiveNotifications, activeNotificat
         mountOnEnter
         unmountOnExit
       >
-        <NotificationsModal/>
+        <NotificationsModal />
+      </CSSTransition>
+        <CSSTransition
+        in={isViewNotifications}
+        timeout={300}
+        classNames="create-anim"
+        mountOnEnter
+        unmountOnExit
+      >
+        <div className={style.notification__circle}></div>
       </CSSTransition>
     </div>
   );
-}
+})
 
 export default Notification;

@@ -156,6 +156,7 @@ const Notifications = sequelize.define("notifications", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   senderId: DataTypes.INTEGER,
   recipientId: DataTypes.INTEGER,
+  status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 });
 
 User.hasMany(Project);
