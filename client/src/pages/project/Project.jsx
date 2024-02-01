@@ -28,6 +28,7 @@ function Project() {
   const [comments, setComments] = useState([]);
   const [views, setViews] = useState([]);
   const [isLike, setIsLike] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   useEffect(() => {
     viewProject(id, user.user.id).catch((e) => console.log(e));
@@ -65,6 +66,7 @@ function Project() {
   }, [location.pathname, user.user.id]);
 
   const setLike = async () => {
+    setLikeLoading(true);
     await condidate(id, user.user.id)
       .then(async (dataCondidate) => {
         if (dataCondidate.length) {
@@ -72,6 +74,7 @@ function Project() {
             .then(() => {
               setIsLike(false);
               setAmountLike((amountLike) => amountLike - 1);
+              setLikeLoading(false);
             })
             .catch((data) => {
               console.log(data.response.data.message);
@@ -82,6 +85,7 @@ function Project() {
             .then(() => {
               setIsLike(true);
               setAmountLike((amountLike) => amountLike + 1);
+              setLikeLoading(false);
             })
             .catch((data) => {
               console.log(data.response.data.message);
@@ -104,6 +108,7 @@ function Project() {
             likes={amountLike}
             isLike={isLike}
             views={views}
+            likeLoading={likeLoading}
           />
         </div>
         <div className="project__content">

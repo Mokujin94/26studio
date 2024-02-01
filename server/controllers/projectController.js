@@ -11,6 +11,7 @@ const path = require("path");
 const ApiError = require("../error/ApiError");
 const { getIo } = require("../socket");
 const { Op, Sequelize } = require("sequelize");
+const { sequelize } = require("../db");
 
 class ProjectController {
   async create(req, res, next) {
@@ -161,7 +162,7 @@ class ProjectController {
       return next(ApiError.internal("Не авторизован"));
     }
 
-    const t = await Sequelize.transaction();
+    const t = await sequelize.transaction();
 
     try {
       const checkLikeOnProject = await Likes.findOne({
@@ -252,7 +253,7 @@ class ProjectController {
       return next(ApiError.internal("Не авторизован: " + userId));
     }
 
-    const t = await Sequelize.transaction();
+    const t = await sequelize.transaction();
 
     try {
       likes = await Likes.findOne({

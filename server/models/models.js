@@ -1,6 +1,5 @@
-const sequelize = require("../db");
 const { DataTypes } = require("sequelize");
-const { Sequelize } = require("../db");
+const { sequelize } = require("../db");
 
 let now = new Date();
 

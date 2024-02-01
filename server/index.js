@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
-const sequelize = require("./db");
+const { sequelize } = require("./db");
 const models = require("./models/models");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
@@ -18,30 +18,31 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
-const allowedOrigins = ['https://poetic-halva-67c56b.netlify.app'];
+const allowedOrigins = ["https://poetic-halva-67c56b.netlify.app"];
 
 // Включение middleware для обработки CORS с настройками
-app.use(cors({
-  origin: function (origin, callback) {
-    // Проверяем, является ли origin разрешенным
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,  // Разрешение передачи учетных данных (например, куки, авторизацию) между доменами
-  optionsSuccessStatus: 204,  // Отправлять успешный статус для OPTIONS запросов
-}));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Проверяем, является ли origin разрешенным
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true, // Разрешение передачи учетных данных (например, куки, авторизацию) между доменами
+    optionsSuccessStatus: 204, // Отправлять успешный статус для OPTIONS запросов
+  })
+);
+app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static/news")));
 app.use(express.static(path.resolve(__dirname, "static/avatars")));
 app.use(express.static(path.resolve(__dirname, "static/projects")));
 app.use(express.static(path.resolve(__dirname, "extracted")));
 app.use(fileUpload({}));
-
-
 
 // app.use("/api/user/accept_project", (req, res, next) => {
 //   res.header(
@@ -64,13 +65,13 @@ app.use(errorHandler);
 const start = async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync()
-    .then(async () => {
-        await models.Role.create({name: "student"})
-        await models.Group.create({name: "ИС 11/9"})
-      }
-    )
-    .catch(e => console.log(e));
+    await sequelize
+      .sync()
+      .then(async () => {
+        await models.Role.create({ name: "student" });
+        await models.Group.create({ name: "ИС 11/9" });
+      })
+      .catch((e) => console.log(e));
     // console.log(path.resolve(__dirname, "static"));
     httpServer.listen(PORT, () =>
       console.log(`сервер стартанул на порте ${PORT}`)
