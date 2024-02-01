@@ -8,6 +8,7 @@ const {
   Notifications,
 } = require("../models/models");
 const ApiError = require("../error/ApiError");
+const { getIo } = require("../socket");
 
 class FriendController {
   async getAllFriends(req, res, next) {
