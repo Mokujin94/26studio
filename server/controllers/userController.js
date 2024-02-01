@@ -314,9 +314,7 @@ class UserController {
 
         // Используем потоки для разархивации
         const readStream = fs.createReadStream(zipFilePath);
-        const extractStream = readStream.pipe(
-          unzipper.Parse({ forceStream: true })
-        );
+        const extractStream = readStream.pipe(unzipper.Parse());
 
         const filePaths = [];
         let normalPath = "";
