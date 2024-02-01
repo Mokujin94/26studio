@@ -41,6 +41,7 @@ function CommentsEnd({ projectId, newsId }) {
             setIsLoading(false);
           });
       }
+      return setIsLoading(false);
     }
   };
   return (
