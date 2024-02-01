@@ -95,7 +95,7 @@ class ProjectController {
     }
   }
 
-  async getOne(req, res) {
+  async getOne(req, res, next) {
     try {
       const { id } = req.params;
       const project = await Project.findOne({
@@ -153,70 +153,73 @@ class ProjectController {
   }
 
   async setLike(req, res, next) {
+    const { projectId, userId } = req.body;
+    const io = getIo();
+    let likes;
+
+    if (!userId) {
+      return next(ApiError.internal("Не авторизован"));
+    }
+
+    const t = await Sequelize.transaction();
+
     try {
-      const { projectId, userId } = req.body;
-      const io = getIo();
-      let likes;
-
-      if (!userId) {
-        return next(ApiError.internal("Не авторизован"));
-      }
-
       const checkLikeOnProject = await Likes.findOne({
         where: { projectId, userId, status: false },
+        transaction: t,
       });
 
       const userProject = await Project.findOne({
         where: { id: projectId },
         include: [User],
+        transaction: t,
       });
 
       if (checkLikeOnProject) {
         likes = await Likes.findOne({
           where: { projectId, userId, status: false },
+          transaction: t,
         });
-        likes.update({
-          status: true,
-        });
+        await likes.update({ status: true }, { transaction: t });
       } else {
-        likes = await Likes.create({
-          projectId,
-          userId,
-          status: true,
-        });
+        likes = await Likes.create(
+          {
+            projectId,
+            userId,
+            status: true,
+          },
+          { transaction: t }
+        );
 
-        const notification = await Notifications.create({
-          likeId: likes.id,
-          senderId: userId,
-          recipientId: userProject.user.id,
-        });
+        const notification = await Notifications.create(
+          {
+            likeId: likes.id,
+            senderId: userId,
+            recipientId: userProject.user.id,
+          },
+          { transaction: t }
+        );
+
         const sendNotification = await Notifications.findOne({
           where: { id: notification.id },
           include: [
             {
               model: Likes,
-              as: "like", // Укажите алиас, который соответствует вашей ассоциации
+              as: "like",
             },
             {
               model: User,
-              as: "sender", // Укажите алиас, который соответствует вашей ассоциации
+              as: "sender",
             },
             {
               model: User,
-              as: "recipient", // Укажите алиас, который соответствует вашей ассоциации
+              as: "recipient",
             },
           ],
+          transaction: t,
         });
         io.emit("notification", sendNotification);
       }
-
-      // const checkLikeOnProject1 = await User.findOne({
-      //   where: {id: userId},
-      //   include: [{
-      //     model: Likes,
-      //     where: {projectId, status: true}
-      //   }]
-      // })
 
       const allLikes = await Project.findAll({
         include: [
@@ -228,43 +231,60 @@ class ProjectController {
           View,
         ],
         where: { id: projectId },
+        transaction: t,
       });
 
       io.emit("sendLikesToClients", allLikes);
+      await t.commit();
+
       return res.json(likes);
     } catch (error) {
+      await t.rollback();
       next(ApiError.badRequest(error.message));
     }
   }
 
   async deleteLike(req, res, next) {
+    const { projectId, userId } = req.body;
+    let likes;
+
+    if (!userId) {
+      return next(ApiError.internal("Не авторизован: " + userId));
+    }
+
+    const t = await Sequelize.transaction();
+
     try {
-      const { projectId, userId } = req.body;
-      let likes;
-      if (!userId) {
-        return next(ApiError.internal("Не авторизован: " + userId));
-      }
       likes = await Likes.findOne({
         where: { projectId, userId, status: true },
+        transaction: t,
       });
 
-      await likes.update({ status: false });
+      if (likes) {
+        await likes.update({ status: false }, { transaction: t });
 
-      const allLikes = await Project.findAll({
-        include: [
-          {
-            model: Likes,
-            where: { status: true },
-          },
-          Comments,
-          View,
-        ],
-        where: { id: projectId },
-      });
-      const io = getIo();
-      io.emit("sendLikesToClients", allLikes);
+        const allLikes = await Project.findAll({
+          include: [
+            {
+              model: Likes,
+              where: { status: true },
+            },
+            Comments,
+            View,
+          ],
+          where: { id: projectId },
+          transaction: t,
+        });
+
+        const io = getIo();
+        io.emit("sendLikesToClients", allLikes);
+      }
+
+      await t.commit();
+
       return res.json(likes);
     } catch (error) {
+      await t.rollback();
       next(ApiError.badRequest(error.message));
     }
   }
