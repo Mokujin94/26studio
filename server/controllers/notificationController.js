@@ -29,7 +29,7 @@ class NotificationController {
       where: {
         recipientId,
         senderId: {
-          [Op.ne]: Sequelize.literal("recipientId"),
+          [Op.ne]: recipientId,
         },
       },
     });
