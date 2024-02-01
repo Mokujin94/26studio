@@ -14,31 +14,33 @@ function CommentsEnd({ projectId, newsId }) {
   const sendMessage = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    if (message.replace(/\s/g, "")) {
-      if (projectId) {
-        await createProject(message, projectId, user.user.id)
-          .then(() => {
-            setMessage("");
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            console.log(err.response.data.message);
-            error.setNotAuthError(true);
-            setIsLoading(false);
-          })
-          .finally(setIsLoading(false));
-      }
-      if (newsId) {
-        await createNews(message, newsId, user.user.id)
-          .then(() => {
-            setMessage("");
-            setIsLoading(false);
-          })
-          .catch((err) => {
-            console.log(err.response.data.message);
-            error.setNotAuthError(true);
-            setIsLoading(false);
-          });
+    if (message !== "") {
+      if (message.replace(/\s/g, "")) {
+        if (projectId) {
+          await createProject(message, projectId, user.user.id)
+            .then(() => {
+              setMessage("");
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              console.log(err.response.data.message);
+              error.setNotAuthError(true);
+              setIsLoading(false);
+            })
+            .finally(setIsLoading(false));
+        }
+        if (newsId) {
+          await createNews(message, newsId, user.user.id)
+            .then(() => {
+              setMessage("");
+              setIsLoading(false);
+            })
+            .catch((err) => {
+              console.log(err.response.data.message);
+              error.setNotAuthError(true);
+              setIsLoading(false);
+            });
+        }
       }
     }
   };
