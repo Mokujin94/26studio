@@ -57,6 +57,7 @@ class CommentController {
   async createCommentProject(req, res, next) {
     try {
       const { message, projectId, resendId, userId } = req.body;
+      const io = getIo();
 
       if (!userId) {
         return next(ApiError.internal("Вы не авторизованы"));
@@ -109,7 +110,6 @@ class CommentController {
       });
       io.emit("notification", sendNotification);
 
-      const io = getIo();
       io.emit("sendCommentsToClients", savedComment);
       return res.json(savedComment);
     } catch (error) {
