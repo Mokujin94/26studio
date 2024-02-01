@@ -1,5 +1,12 @@
 const { Op } = require("sequelize");
-const { Friend, Subscriber, User } = require("../models/models");
+const {
+  Friend,
+  Subscriber,
+  User,
+  Likes,
+  Comments,
+  Notifications,
+} = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class FriendController {
@@ -45,7 +52,7 @@ class FriendController {
   async reqFriend(req, res, next) {
     try {
       const { id_sender, id_recipient } = req.body;
-
+      const io = getIo();
       const friendCondidate = await Friend.findOne({
         where: {
           [Op.or]: [
@@ -64,6 +71,34 @@ class FriendController {
         id_recipient,
         userId: id_sender,
       });
+
+      const notification = await Notifications.create({
+        senderId: id_sender,
+        recipientId: id_recipient,
+      });
+
+      const sendNotification = await Notifications.findOne({
+        where: { id: notification.id },
+        include: [
+          {
+            model: Likes,
+            as: "like",
+          },
+          {
+            model: Comments,
+            as: "comment",
+          },
+          {
+            model: User,
+            as: "sender",
+          },
+          {
+            model: User,
+            as: "recipient",
+          },
+        ],
+      });
+      io.emit("notification", sendNotification);
 
       return res.json(friend);
     } catch (error) {

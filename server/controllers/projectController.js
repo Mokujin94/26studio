@@ -209,6 +209,10 @@ class ProjectController {
               as: "like",
             },
             {
+              model: Comments,
+              as: "comment",
+            },
+            {
               model: User,
               as: "sender",
             },
