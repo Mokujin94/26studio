@@ -26,8 +26,7 @@ function CommentsEnd({ projectId, newsId }) {
             console.log(err.response.data.message);
             error.setNotAuthError(true);
             setIsLoading(false);
-          })
-          .finally(setIsLoading(false));
+          });
       }
       if (newsId) {
         await createNews(message, newsId, user.user.id)
@@ -41,7 +40,6 @@ function CommentsEnd({ projectId, newsId }) {
             setIsLoading(false);
           });
       }
-      return setIsLoading(false);
     }
   };
   return (
