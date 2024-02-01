@@ -24,7 +24,6 @@ const allowedOrigins = ["https://poetic-halva-67c56b.netlify.app"];
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Проверяем, является ли origin разрешенным
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -32,8 +31,9 @@ app.use(
       }
     },
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true, // Разрешение передачи учетных данных (например, куки, авторизацию) между доменами
-    optionsSuccessStatus: 204, // Отправлять успешный статус для OPTIONS запросов
+    credentials: true,
+    optionsSuccessStatus: 204,
+    allowedHeaders: "Content-Type,Authorization",
   })
 );
 // app.use(cors());
