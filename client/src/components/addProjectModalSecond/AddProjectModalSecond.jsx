@@ -96,6 +96,7 @@ const AddProjectModalSecond = observer(
 
                   //   );
                   // }
+                  console.log(item);
                   return (
                     <option key={i} value={item}>
                       {item}
