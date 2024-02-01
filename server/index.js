@@ -36,7 +36,7 @@ app.use(
     optionsSuccessStatus: 204, // Отправлять успешный статус для OPTIONS запросов
   })
 );
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static/news")));
 app.use(express.static(path.resolve(__dirname, "static/avatars")));
