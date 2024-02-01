@@ -83,7 +83,7 @@ class CommentController {
       const notification = await Notifications.create({
         commentId: comment.id,
         senderId: userId,
-        recipientId: Project.user.id,
+        recipientId: savedComment.project.user.id,
       });
 
       const sendNotification = await Notifications.findOne({
