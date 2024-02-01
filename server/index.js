@@ -26,6 +26,13 @@ app.use(express.static(path.resolve(__dirname, "static/projects")));
 app.use(express.static(path.resolve(__dirname, "extracted")));
 app.use(fileUpload({}));
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://poetic-halva-67c56b.netlify.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 // app.use("/api/user/accept_project", (req, res, next) => {
 //   res.header(
 //     "Access-Control-Allow-Origin",
