@@ -65,12 +65,12 @@ const start = async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync()
-    // .then(async () => {
-    //     await models.Role.create({name: "student"})
-    //     await models.Group.create({name: "ИС 11/9"})
-    //   }
-    // )
-    // .catch(e => console.log(e));
+    .then(async () => {
+        await models.Role.create({name: "student"})
+        await models.Group.create({name: "ИС 11/9"})
+      }
+    )
+    .catch(e => console.log(e));
     // console.log(path.resolve(__dirname, "static"));
     httpServer.listen(PORT, () =>
       console.log(`сервер стартанул на порте ${PORT}`)
