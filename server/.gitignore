@@ -5,6 +5,7 @@
 /.pnp
 /extracted
 /uploads
+/static
 .pnp.js
 
 # testing
