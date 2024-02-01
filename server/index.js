@@ -18,12 +18,22 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://poetic-halva-67c56b.netlify.app');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+const allowedOrigins = ['https://poetic-halva-67c56b.netlify.app'];
+
+// Включение middleware для обработки CORS с настройками
+app.use(cors({
+  origin: function (origin, callback) {
+    // Проверяем, является ли origin разрешенным
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,  // Разрешение передачи учетных данных (например, куки, авторизацию) между доменами
+  optionsSuccessStatus: 204,  // Отправлять успешный статус для OPTIONS запросов
+}));
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static/news")));
 app.use(express.static(path.resolve(__dirname, "static/avatars")));
@@ -54,13 +64,13 @@ app.use(errorHandler);
 const start = async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({force: true})
-    .then(async () => {
-        await models.Role.create({name: "student"})
-        await models.Group.create({name: "ИС 11/9"})
-      }
-    )
-    .catch(e => console.log(e));
+    await sequelize.sync()
+    // .then(async () => {
+    //     await models.Role.create({name: "student"})
+    //     await models.Group.create({name: "ИС 11/9"})
+    //   }
+    // )
+    // .catch(e => console.log(e));
     // console.log(path.resolve(__dirname, "static"));
     httpServer.listen(PORT, () =>
       console.log(`сервер стартанул на порте ${PORT}`)
