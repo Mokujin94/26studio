@@ -61,6 +61,7 @@ class UserController {
           ApiError.badRequest("Пользовательно с такой почтой существует")
         );
       }
+      return res.json();
     } catch (error) {
       next(ApiError.badRequest(error.message));
     }
