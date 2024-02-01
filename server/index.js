@@ -47,7 +47,13 @@ app.use(errorHandler);
 const start = async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync();
+    await sequelize.sync({force: true})
+    .then(async () => {
+        await models.Role.create({name: "student"})
+        await models.Group.create({name: "ИС 11/9"})
+      }
+    )
+    .catch(e => console.log(e));
     // console.log(path.resolve(__dirname, "static"));
     httpServer.listen(PORT, () =>
       console.log(`сервер стартанул на порте ${PORT}`)
