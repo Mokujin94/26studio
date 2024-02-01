@@ -68,8 +68,8 @@ const start = async () => {
     await sequelize
       .sync()
       .then(async () => {
-        await models.Role.create({ name: "student" });
-        await models.Group.create({ name: "ИС 11/9" });
+        await models.Role.findOrCreate({ where: { name: "student" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 11/9" } });
       })
       .catch((e) => console.log(e));
     // console.log(path.resolve(__dirname, "static"));

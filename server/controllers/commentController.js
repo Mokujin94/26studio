@@ -1,5 +1,12 @@
 const ApiError = require("../error/ApiError");
-const { Comments, Project, News, User } = require("../models/models");
+const {
+  Comments,
+  Project,
+  News,
+  User,
+  Notifications,
+  Likes,
+} = require("../models/models");
 const { getIo } = require("../socket");
 
 class CommentController {
@@ -64,12 +71,47 @@ class CommentController {
 
       const savedComment = await Comments.findOne({
         where: { id: comment.id },
-        include: [User, Project],
+        include: [
+          User,
+          {
+            model: Project,
+            include: [User],
+          },
+        ],
       });
+
+      const notification = await Notifications.create({
+        commentId: comment.id,
+        senderId: userId,
+        recipientId: Project.user.id,
+      });
+
+      const sendNotification = await Notifications.findOne({
+        where: { id: notification.id },
+        include: [
+          {
+            model: Comments,
+            as: "comment",
+          },
+          {
+            model: Likes,
+            as: "like",
+          },
+          {
+            model: User,
+            as: "sender",
+          },
+          {
+            model: User,
+            as: "recipient",
+          },
+        ],
+      });
+      io.emit("notification", sendNotification);
 
       const io = getIo();
       io.emit("sendCommentsToClients", savedComment);
-      // io.emit("notification", {savedComment, flag: "comment"});
+      io.emit("notification", { savedComment, flag: "comment" });
       return res.json(savedComment);
     } catch (error) {
       next(ApiError.badRequest(error.message));

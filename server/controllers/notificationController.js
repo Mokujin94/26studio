@@ -20,6 +20,10 @@ class NotificationController {
             as: "like", // Укажите алиас, который соответствует вашей ассоциации
           },
           {
+            model: Comments,
+            as: "comment", // Укажите алиас, который соответствует вашей ассоциации
+          },
+          {
             model: User,
             as: "sender", // Укажите алиас, который соответствует вашей ассоциации
           },
@@ -53,6 +57,10 @@ class NotificationController {
           {
             model: Likes,
             as: "like", // Укажите алиас, который соответствует вашей ассоциации
+          },
+          {
+            model: Comments,
+            as: "comment", // Укажите алиас, который соответствует вашей ассоциации
           },
           {
             model: User,
