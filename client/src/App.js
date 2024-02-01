@@ -37,22 +37,25 @@ const App = observer(() => {
       user.setAuth(true);
     });
   }, []);
-  
+
   useEffect(() => {
     if (user.user.id) {
-      fetchNotifications(user.user.id).then(data => {
-        user.setNotifications(data)
-      })
+      fetchNotifications(user.user.id).then((data) => {
+        user.setNotifications(data);
+      });
     }
     const socket = socketIOClient(process.env.REACT_APP_API_URL);
     socket.on("notification", (updateNotification) => {
-      if (updateNotification.recipientId === user.user.id) {
-        user.setNotifications([...user.notifications, updateNotification])
+      if (
+        updateNotification.senderId !== user.user.id &&
+        updateNotification.recipientId === user.user.id
+      ) {
+        user.setNotifications([...user.notifications, updateNotification]);
         console.log(updateNotification);
         // console.log("Получены новые уведомления:", updateNotification);
         console.log("почему 2");
         new Audio(notificationAudio).play();
-      } 
+      }
     });
 
     return () => {
