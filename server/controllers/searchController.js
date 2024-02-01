@@ -6,66 +6,70 @@ const { getIo } = require("../socket");
 
 class SearchController {
   async searching(req, res, next) {
-    const { search } = req.query;
+    try {
+      const { search } = req.query;
 
-    // if (!search) {
-    //   return res.json();
-    // }
+      // if (!search) {
+      //   return res.json();
+      // }
 
-    const users = await User.findAll({
-      where: {
-        [Op.or]: {
-          name: {
-            [Op.iLike]: "%" + search + "%",
-          },
-          full_name: {
-            [Op.iLike]: "%" + search + "%",
-          },
-        },
-      },
-      include: [Group],
-      required: false,
-    });
-
-    const projects = await Project.findAll({
-      where: {
-        [Op.or]: {
-          name: {
-            [Op.iLike]: "%" + search + "%",
-          },
-        },
-      },
-      include: [
-        {
-          model: User,
-          where: {
-            [Op.or]: {
-              name: {
-                [Op.iLike]: "%" + search + "%",
-              },
-              full_name: {
-                [Op.iLike]: "%" + search + "%",
-              },
+      const users = await User.findAll({
+        where: {
+          [Op.or]: {
+            name: {
+              [Op.iLike]: "%" + search + "%",
+            },
+            full_name: {
+              [Op.iLike]: "%" + search + "%",
             },
           },
-          required: false,
         },
-      ],
-      required: false,
-    });
+        include: [Group],
+        required: false,
+      });
 
-    const groups = await Group.findAll({
-      where: {
-        [Op.or]: {
-          name: {
-            [Op.iLike]: "%" + search + "%",
+      const projects = await Project.findAll({
+        where: {
+          [Op.or]: {
+            name: {
+              [Op.iLike]: "%" + search + "%",
+            },
           },
         },
-      },
-      required: false,
-    });
+        include: [
+          {
+            model: User,
+            where: {
+              [Op.or]: {
+                name: {
+                  [Op.iLike]: "%" + search + "%",
+                },
+                full_name: {
+                  [Op.iLike]: "%" + search + "%",
+                },
+              },
+            },
+            required: false,
+          },
+        ],
+        required: false,
+      });
 
-    res.json({ users, projects, groups });
+      const groups = await Group.findAll({
+        where: {
+          [Op.or]: {
+            name: {
+              [Op.iLike]: "%" + search + "%",
+            },
+          },
+        },
+        required: false,
+      });
+
+      res.json({ users, projects, groups });
+    } catch (error) {
+      next(ApiError.badRequest(e.message));
+    }
   }
 }
 
