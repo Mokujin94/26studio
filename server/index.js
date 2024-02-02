@@ -36,7 +36,7 @@ app.use(
     allowedHeaders: "Content-Type,Authorization",
   })
 );
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static/news")));
 app.use(express.static(path.resolve(__dirname, "static/avatars")));
