@@ -10,7 +10,7 @@ const {
 const ApiError = require("../error/ApiError");
 
 class NotificationController {
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     try {
       const { recipientId } = req.query;
       const notification = await Notifications.findAll({
