@@ -7,12 +7,29 @@ import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
 import { PROFILE_ROUTE } from '../../utils/consts'
+import { useDateFormatter } from '../../hooks/useDateFormatter'
+import { deleteNotification } from '../../http/notificationAPI'
 
 
 
 const NotificationsModalItem = observer(({notification}) => {
   const { user } = useContext(Context)
   console.log(notification);
+
+  const notificationDate = useDateFormatter(notification.createdAt);
+
+  const onRemove = async () => {
+    await deleteNotification(notification.id).then(data => {
+      const updateNotification = user.notifications.filter(item => {
+        if (item.id !== notification.id) {
+          return data;
+        }
+      })
+      user.setNotifications(updateNotification)
+      console.log(updateNotification)
+    })
+  }
+
 
   const add =
     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none">
@@ -34,6 +51,9 @@ const NotificationsModalItem = observer(({notification}) => {
 
   return (
     <div className={style.item}>
+      <div className={style.item__close} onClick={onRemove}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><path d="M1 11.0901H21Z" fill="#27323E"></path><path d="M1 11.0901H21" stroke="#FCFCFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 21L11 1Z" fill="#27323E"></path><path d="M11 21L11 1" stroke="#FCFCFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
       <Link to={PROFILE_ROUTE + '/' + notification.senderId}>
         <div className={style.item__avatar}>
           <img className={style.item__avatarImg} src={process.env.REACT_APP_API_URL + notification.sender.avatar} alt="" />
@@ -45,7 +65,10 @@ const NotificationsModalItem = observer(({notification}) => {
               notification.commentId && comment
             }
             {
-              !notification.likeId && !notification.commentId && add
+              !notification.likeId && !notification.commentId && notification.friend_status === false && add
+            }
+            {
+              !notification.likeId && !notification.commentId && notification.friend_status === true && add
             }
           </div>
         </div>
@@ -65,12 +88,18 @@ const NotificationsModalItem = observer(({notification}) => {
             </p>
           }
           {
-          !notification.likeId && !notification.commentId
+          !notification.likeId && !notification.commentId && notification.friend_status === false
           && <p className={style.item__contentText}>
               Хочет добавить вас в друзья
             </p>
           }
-        <span className={style.item__contentTime}>7 минут назад</span>
+          {
+          !notification.likeId && !notification.commentId && notification.friend_status === true
+          && <p className={style.item__contentText}>
+              Принял вашу заявку
+            </p>
+          }
+        <span className={style.item__contentTime}>{notificationDate}</span>
       </div>
     </div>
   )

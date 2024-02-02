@@ -31,7 +31,7 @@ class FriendController {
   async addFriend(req, res, next) {
     try {
       const { id_sender, id_recipient } = req.body;
-
+      const io = getIo();
       let friend = await Friend.findOne({
         where: { id_sender, id_recipient },
       });
@@ -43,6 +43,35 @@ class FriendController {
       friend.update({
         status: true,
       });
+
+      const notification = await Notifications.create({
+        senderId: id_recipient,
+        recipientId: id_sender,
+        friend_status: true
+      });
+
+      const sendNotification = await Notifications.findOne({
+        where: { id: notification.id },
+        include: [
+          {
+            model: Likes,
+            as: "like",
+          },
+          {
+            model: Comments,
+            as: "comment",
+          },
+          {
+            model: User,
+            as: "sender",
+          },
+          {
+            model: User,
+            as: "recipient",
+          },
+        ],
+      });
+      io.emit("notification", sendNotification);
 
       return res.json(friend);
     } catch (error) {

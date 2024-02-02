@@ -38,6 +38,7 @@ class NotificationController {
             [Op.ne]: recipientId,
           },
         },
+        order: [["createdAt", "DESC"]],
       });
       return res.json(notification);
     } catch (error) {
@@ -74,6 +75,20 @@ class NotificationController {
         where: { recipientId },
       });
       return res.json(notification);
+    } catch (error) {
+      next(ApiError.badRequest(error.message));
+    }
+  }
+
+  async deleteNotification (req, res, next) {
+    try {
+      const {id} = req.params;
+
+      const notification = Notifications.destroy({
+        where: {id}
+      })
+
+      return res.json(notification)
     } catch (error) {
       next(ApiError.badRequest(error.message));
     }

@@ -156,6 +156,7 @@ const Notifications = sequelize.define("notifications", {
   senderId: DataTypes.INTEGER,
   recipientId: DataTypes.INTEGER,
   status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+  friend_status: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false}
 });
 
 User.hasMany(Project);

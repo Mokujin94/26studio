@@ -3,7 +3,8 @@ const router = new Router();
 const NotificationController = require('../controllers/notificationController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', authMiddleware, NotificationController.getAll);
 router.patch('/', authMiddleware, NotificationController.viewNotification);
+router.delete('/:id', authMiddleware, NotificationController.deleteNotification);
+router.get('/', authMiddleware, NotificationController.getAll);
 
 module.exports = router;

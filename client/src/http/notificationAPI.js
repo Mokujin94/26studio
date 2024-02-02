@@ -14,3 +14,8 @@ export const updateViewNotifications = async (recipientId) => {
   const { data } = await $authHost.patch('api/notification', { recipientId });
   return data;
 };
+
+export const deleteNotification = async (id) => {
+  const { data } = await $authHost.delete('api/notification/' + id);
+  return data;
+};

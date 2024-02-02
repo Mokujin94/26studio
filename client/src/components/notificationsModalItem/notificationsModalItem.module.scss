@@ -8,7 +8,6 @@
   gap: 10px;
   border-radius: 15px;
   padding: 12px 12px 30px 12px;
-  cursor: pointer;
   &__avatar {
     position: relative;
     width: 36px;
@@ -63,6 +62,32 @@
       font-weight: 500;
       color: $studio-grey-text;
       
+    }
+  }
+  &__close {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    transform: rotate(45deg);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      svg {
+        path {
+          stroke: $studio-red-element;
+        }
+      }
+    }
+    svg {
+      width: 15px;
+      height: 15px;
+      path {
+        transition: $studio-transition-03;
+      }
     }
   }
 }
