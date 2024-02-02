@@ -24,11 +24,11 @@ const allowedOrigins = ["https://poetic-halva-67c56b.netlify.app"];
 app.use(
   cors({
     origin: function (origin, callback) {
-      callback(null, true);
-      console.log(origin)
-      console.log(allowedOrigins.includes(origin))
-      console.log(!origin || allowedOrigins.includes(origin));
+      // console.log(origin)
+      // console.log(allowedOrigins.includes(origin))
+      // console.log(!origin || allowedOrigins.includes(origin));
       if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
