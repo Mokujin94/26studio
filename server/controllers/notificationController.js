@@ -46,7 +46,7 @@ class NotificationController {
     }
   }
 
-  async viewNotification(req, res) {
+  async viewNotification(req, res, next) {
     try {
       const { recipientId } = req.body;
       await Notifications.update(
