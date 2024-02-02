@@ -18,7 +18,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const io = initSocket(httpServer);
 
-const allowedOrigins = ["poetic-halva-67c56b.netlify.app"];
+const allowedOrigins = ["https://poetic-halva-67c56b.netlify.app"];
 
 // Включение middleware для обработки CORS с настройками
 app.use(
