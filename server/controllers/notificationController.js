@@ -80,15 +80,29 @@ class NotificationController {
     }
   }
 
-  async deleteNotification (req, res, next) {
+  async deleteNotification(req, res, next) {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
 
       const notification = Notifications.destroy({
-        where: {id}
-      })
+        where: { id },
+      });
 
-      return res.json(notification)
+      return res.json(notification);
+    } catch (error) {
+      next(ApiError.badRequest(error.message));
+    }
+  }
+
+  async deleteAllNotification(req, res, next) {
+    try {
+      const { userId } = req.query;
+
+      const notification = Notifications.destroy({
+        where: { recipientId: userId },
+      });
+
+      return res.json(notification);
     } catch (error) {
       next(ApiError.badRequest(error.message));
     }

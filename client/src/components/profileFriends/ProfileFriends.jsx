@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import style from "./profileFriends.module.scss";
 
 import FriendCard from "../friendCard/FriendCard";
-import { getFriends } from "../../http/friendAPI";
+import { getFriends, getRequestFriends } from "../../http/friendAPI";
 import { useParams } from "react-router-dom";
 
 function ProfileFriends() {
@@ -11,8 +11,8 @@ function ProfileFriends() {
   const [friendData, setFriendData] = useState([]);
 
   useEffect(() => {
-    getFriends(id).then((data) => {
-      console.log(data)
+    getRequestFriends(id).then((data) => {
+      console.log(data);
       setFriendData(data);
     });
   }, []);
@@ -21,15 +21,11 @@ function ProfileFriends() {
       {friendData.length ? (
         friendData.map(({ id_sender, id_recipient, status }) => {
           if (Number(id) === id_sender && status) {
-            return (
-              <FriendCard userId={id_recipient} key={id} />
-            )
+            return <FriendCard userId={id_recipient} key={id} />;
           } else if (Number(id) === id_recipient && status) {
-            return (
-              <FriendCard userId={id_sender} key={id} />
-            )
+            return <FriendCard userId={id_sender} key={id} />;
           }
-      })
+        })
       ) : (
         <div className={style.friends}>
           <svg

@@ -46,7 +46,16 @@ class ProjectController {
       if (filter === "0") {
         projects = await Project.findAndCountAll({
           // attributes: Object.keys(Project.rawAttributes),
-          include: [Likes, Comments, User, View],
+          include: [
+            {
+              model: Likes,
+              where: { status: true },
+              required: false,
+            },
+            Comments,
+            User,
+            View,
+          ],
           order: [
             [
               Sequelize.literal(
@@ -64,7 +73,16 @@ class ProjectController {
       } else if (filter === "1") {
         projects = await Project.findAndCountAll({
           // attributes: Object.keys(Project.rawAttributes),
-          include: [Likes, Comments, User, View],
+          include: [
+            {
+              model: Likes,
+              where: { status: true },
+              required: false,
+            },
+            Comments,
+            User,
+            View,
+          ],
           order: [
             [
               Sequelize.literal(
@@ -81,7 +99,16 @@ class ProjectController {
         });
       } else if (filter === "2") {
         projects = await Project.findAndCountAll({
-          include: [Likes, Comments, User, View],
+          include: [
+            {
+              model: Likes,
+              where: { status: true },
+              required: false,
+            },
+            Comments,
+            User,
+            View,
+          ],
           order: [["createdAt", "DESC"]], // Сортировка по полю createdAt в убывающем порядке
           offset,
           limit,
@@ -332,7 +359,16 @@ class ProjectController {
       if (filter === "0") {
         projects = await Project.findAll({
           attributes: Object.keys(Project.rawAttributes),
-          include: [Likes, Comments, User, View],
+          include: [
+            {
+              model: Likes,
+              where: { status: true },
+              required: false,
+            },
+            Comments,
+            User,
+            View,
+          ],
           order: [
             [
               Sequelize.literal(
@@ -348,7 +384,16 @@ class ProjectController {
       } else if (filter === "1") {
         projects = await Project.findAll({
           attributes: Object.keys(Project.rawAttributes),
-          include: [Likes, Comments, User, View],
+          include: [
+            {
+              model: Likes,
+              where: { status: true },
+              required: false,
+            },
+            Comments,
+            User,
+            View,
+          ],
           order: [
             [
               Sequelize.literal(
@@ -363,7 +408,16 @@ class ProjectController {
         });
       } else if (filter === "2") {
         projects = await Project.findAll({
-          include: [Likes, Comments, User, View],
+          include: [
+            {
+              model: Likes,
+              where: { status: true },
+              required: false,
+            },
+            Comments,
+            User,
+            View,
+          ],
           limit,
           offset,
           order: [["createdAt", "DESC"]],

@@ -11,7 +11,7 @@ const ApiError = require("../error/ApiError");
 const { getIo } = require("../socket");
 
 class FriendController {
-  async getAllFriends(req, res, next) {
+  async getFriends(req, res, next) {
     try {
       const { userId } = req.query;
 
@@ -19,6 +19,24 @@ class FriendController {
         include: [User],
         where: {
           [Op.or]: [{ id_sender: userId }, { id_recipient: userId }],
+        },
+      });
+
+      return res.json(friend);
+    } catch (error) {
+      next(ApiError.badRequest(error.message));
+    }
+  }
+
+  async getFriendsRequest(req, res, next) {
+    try {
+      const { userId } = req.query;
+
+      const friend = await Friend.findAll({
+        include: [User],
+        where: {
+          [Op.or]: [{ id_sender: userId }, { id_recipient: userId }],
+          status: true,
         },
       });
 
@@ -47,7 +65,7 @@ class FriendController {
       const notification = await Notifications.create({
         senderId: id_recipient,
         recipientId: id_sender,
-        friend_status: true
+        friend_status: true,
       });
 
       const sendNotification = await Notifications.findOne({
