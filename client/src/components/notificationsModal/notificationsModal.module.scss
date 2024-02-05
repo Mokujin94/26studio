@@ -14,7 +14,7 @@
   background-color: $studio-dark-element;
   padding: 20px 20px;
   cursor: default;
-  
+
   &Title {
     font-size: 20px;
     font-weight: 700;
@@ -37,6 +37,29 @@
       font-size: 16px;
       color: $studio-white-text;
       text-align: center;
+    }
+  }
+
+  &__trash {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+
+    svg {
+      path {
+        stroke: $studio-white-element;
+        transition: $studio-transition-03;
+      }
+    }
+    &:hover {
+      svg {
+        path {
+          stroke: $studio-red-element;
+        }
+      }
     }
   }
 }

@@ -72,34 +72,31 @@ const Profile = observer(() => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
 
-    if (user.user.id) {
-      if (Number(id) === user.user.id) {
-        setTextButton("Редактировать");
-      } else {
-        getFriends(id).then((data) => {
-          if (data.length) {
-            data.filter((item) => {
-              if (item.id_sender === user.user.id && !item.status) {
-                return setTextButton("Отменить заявку");
-              }
-              if (item.id_recipient === user.user.id && !item.status) {
-                return setTextButton("Принять заявку");
-              }
-              if (
-                item.id_recipient === user.user.id ||
-                (item.id_sender === user.user.id && item.status)
-              ) {
-                return setTextButton("Удалить из друзей");
-              }
-              return setTextButton("Добавить в друзья");
-            });
-          } else {
-            return setTextButton("Добавить в друзья");
-          }
-        });
-      }
+    if (Number(id) === user.user.id) {
+      setTextButton("Редактировать");
     } else {
-      return setTextButton("Добавить в друзья");
+      getFriends(Number(id)).then((data) => {
+        console.log(data.length);
+        if (data.length) {
+          data.filter((item) => {
+            if (item.id_sender === user.user.id && !item.status) {
+              return setTextButton("Отменить заявку");
+            }
+            if (item.id_recipient === user.user.id && !item.status) {
+              return setTextButton("Принять заявку");
+            }
+            if (
+              item.id_recipient === user.user.id ||
+              (item.id_sender === user.user.id && item.status)
+            ) {
+              return setTextButton("Удалить из друзей");
+            }
+            return setTextButton("Добавить в друзья");
+          });
+        } else {
+          return setTextButton("Добавить в друзья");
+        }
+      });
     }
   }, [location.pathname, user.user.id]);
 
@@ -150,11 +147,13 @@ const Profile = observer(() => {
           setTextButton("Принять заявку");
         });
     } else if (textButton === "Отменить заявку") {
-      return deleteFriend(user.user.id, id).then(() => {
-        modal.setModalComplete(true);
-        modal.setModalCompleteMessage("Заявка отменена");
-        setTextButton("Добавить в друзья");
-      });
+      return deleteFriend(user.user.id, id)
+        .then(() => {
+          modal.setModalComplete(true);
+          modal.setModalCompleteMessage("Заявка отменена");
+          setTextButton("Добавить в друзья");
+        })
+        .catch((e) => console.log(e));
     } else if (textButton === "Принять заявку") {
       return addFriend(id, user.user.id)
         .then(() => {
@@ -168,15 +167,18 @@ const Profile = observer(() => {
           modal.setModalComplete(true);
           modal.setModalCompleteMessage(e.response.data.message);
           setTextButton("Добавить в друзья");
-        });
+        })
+        .catch((e) => console.log(e));
     } else if (textButton === "Удалить из друзей") {
-      return deleteFriend(user.user.id, id).then(() => {
-        modal.setModalComplete(true);
-        modal.setModalCompleteMessage(
-          `Пользователь ${userId.name} удалён из друзей`
-        );
-        setTextButton("Добавить в друзья");
-      });
+      return deleteFriend(user.user.id, id)
+        .then(() => {
+          modal.setModalComplete(true);
+          modal.setModalCompleteMessage(
+            `Пользователь ${userId.name} удалён из друзей`
+          );
+          setTextButton("Добавить в друзья");
+        })
+        .catch((e) => console.log(e));
     }
   };
 
@@ -256,8 +258,30 @@ const Profile = observer(() => {
           <div className="profile__top-content-wrapper">
             <div className="profile__face">
               <div className="profile__avatar">
-                {Number(id) === user.user.id ? 
-                <label htmlFor="avatar" className="profile__avatar-inner">
+                {Number(id) === user.user.id ? (
+                  <label htmlFor="avatar" className="profile__avatar-inner">
+                    <img
+                      className="profile__avatar-img"
+                      src={
+                        id == user.user.id
+                          ? process.env.REACT_APP_API_URL + user.user.avatar
+                          : process.env.REACT_APP_API_URL + userId.avatar
+                      }
+                      alt="icon"
+                    />
+                    <input
+                      className="profile__avatar-input"
+                      onClick={(e) => {
+                        e.target.value = "";
+                      }}
+                      onChange={onSelectAvatarFile}
+                      type="file"
+                      name="avatar"
+                      id="avatar"
+                      accept="image/png, image/jpeg"
+                    />
+                  </label>
+                ) : (
                   <img
                     className="profile__avatar-img"
                     src={
@@ -267,28 +291,7 @@ const Profile = observer(() => {
                     }
                     alt="icon"
                   />
-                  <input
-                    className="profile__avatar-input"
-                    onClick={(e) => {
-                      e.target.value = "";
-                    }}
-                    onChange={onSelectAvatarFile}
-                    type="file"
-                    name="avatar"
-                    id="avatar"
-                    accept="image/png, image/jpeg"
-                  />
-
-                </label> :                   <img
-                    className="profile__avatar-img"
-                    src={
-                      id == user.user.id
-                        ? process.env.REACT_APP_API_URL + user.user.avatar
-                        : process.env.REACT_APP_API_URL + userId.avatar
-                    }
-                    alt="icon"
-                  />}
-                
+                )}
               </div>
 
               <div className="profile__button">
@@ -325,11 +328,11 @@ const Profile = observer(() => {
                 <div className="profile__nickname">
                   {id == user.user.id ? user.user.name : userId.name}
                 </div>
-                <img
+                {/* <img
                   className="profile__achievement"
                   src={achievement}
                   alt=""
-                />
+                /> */}
               </div>
               <div className="profile__more-info">
                 <div className="profile__full-name">
