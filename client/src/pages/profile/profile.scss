@@ -83,20 +83,70 @@
 
   &__top {
     &-content {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
       gap: 20px;
-    }
-    &-wrapper {
-      display: flex;
       margin-bottom: 20px;
-      padding: 40px;
-      background: $studio-dark-element;
-      border-radius: 10px;
-      width: 70%;
-      &:last-child {
-        width: 30%;
+      &-wrapper {
+        display: flex;
+        padding: 40px;
+        background: $studio-dark-element;
+        border-radius: 10px;
+        grid-column-start: 1;
+        grid-column-end: 8;
+      }
+      &-friends {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        border-radius: 10px;
+        grid-column-start: 8;
+        grid-column-end: 11;
+        &-menu {
+          list-style: none;
+          display: flex;
+          gap: 10px;
+          background-color: $studio-dark-element;
+          padding: 10px;
+          border-radius: 10px;
+          &-item {
+            width: 100%;
+            text-align: center;
+            padding: 10px 15px;
+            background-color: $studio-dark-button;
+            color: $studio-primary-text;
+            font-size: 16px;
+            line-height: 20px;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            border-radius: 10px;
+            text-transform: uppercase;
+            border: 1px solid $studio-border-color;
+            cursor: pointer;
+            transition: all $studio-transition-03;
+            &:hover {
+              background-color: $studio-dark-element-hover;
+            }
+            &_active {
+              background-color: $studio-primary-button;
+              color: $studio-dark-text;
+              border: 1px solid $studio-primary-border;
+              &:hover {
+                background-color: $studio-primary-button-hover;
+              }
+            }
+          }
+        }
+
+        &-inner {
+          background: $studio-dark-element;
+          border-radius: 10px;
+          padding: 10px;
+          height: 100%;
+        }
       }
     }
+    
   }
 
   &__face {

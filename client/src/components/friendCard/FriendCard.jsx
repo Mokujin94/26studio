@@ -29,21 +29,17 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
         />
       </div>
       <div className={style.friendCard__info}>
-        <div className={style.friendCard__info__nick}>
-          <h2 className={style.friendCard__info__nick__nickName}>
-            {user.name}
-          </h2>
-          <div className={style.friendCard__info__nick__achievement}></div>
-        </div>
-        <div className={style.friendCard__info__name}>
-          <h2 className={style.friendCard__info__name__fullname}>
-            {user.full_name}
-          </h2>
-          {/* <h2 className={style.friendCard__info__name__group}>{group}</h2> */}
-        </div>
+        <h2 className={style.friendCard__infoNickName}>
+          {user.name}
+        </h2>
+        <h2 className={style.friendCard__infoFullname}>
+          {user.full_name}
+        </h2>
         <h2 className={style.friendCard__info__online}>был в сети: 4ч назад</h2>
       </div>
-      <div className={style.friendCard__buttons}>
+      {
+        options &&
+          <div className={style.friendCard__buttons}>
         {options === 1 ? (
           <>
             <div
@@ -66,7 +62,7 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
               </svg>
             </div>
           </>
-        ) : options === 2 ? (
+        ) : options === 2 && (
           <>
             <div
               className={style.friendCard__buttons__item}
@@ -107,25 +103,10 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
               </svg>
             </div>
           </>
-        ) : !options ? (
-          <>
-            <div className={style.friendCard__buttons__item}>
-              <img
-                src={message}
-                alt="img"
-                className={style.friendCard__buttons__item__icon}
-              />
-            </div>
-            <div className={style.friendCard__buttons__item}>
-              <img
-                src={deleteFriend}
-                alt="img"
-                className={style.friendCard__buttons__item__icon}
-              />
-            </div>
-          </>
-        ) : null}
+        )}
       </div>
+      }
+      
     </div>
   );
 };

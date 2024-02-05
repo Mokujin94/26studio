@@ -16,23 +16,30 @@ export default class ProfileStore {
   constructor() {
     this._wrapperItems = [
       { id: 0, element: <ProfileProjects />, nodeRef: createRef(null) },
-      { id: 1, element: <ProfileFriends />, nodeRef: createRef(null) },
-      { id: 2, element: <ProfileAchievements />, nodeRef: createRef(null) },
-      { id: 3, element: <ProfileSettings />, nodeRef: createRef(null) },
+      { id: 1, element: <ProfileAchievements />, nodeRef: createRef(null) },
+      { id: 2, element: <ProfileSettings />, nodeRef: createRef(null) },
     ];
 
     this._menuItems = [
       { id: 0, title: "Проекты" },
-      { id: 1, title: "Друзья" },
-      { id: 2, title: "Награды" },
-      { id: 3, title: "Настройки" },
+      { id: 1, title: "Награды" },
+      { id: 2, title: "Настройки" },
     ];
 
     this._menuItemsOtherUser = [
       { id: 0, title: "Проекты" },
-      { id: 1, title: "Друзья" },
-      { id: 2, title: "Награды" },
+      { id: 1, title: "Награды" },
     ];
+
+    this._menuFriends = [
+      { id: 0, title: "Друзья" },
+      { id: 1, title: "Заявки" }
+    ]
+
+    this._WrapperMenuFriends = [
+      { id: 0, element: <ProfileFriends />, nodeRef: createRef(null) },
+      { id: 1, element: <ProfileFriends />, nodeRef: createRef(null) },
+    ]
 
     this._selectedMenu = { id: 0, title: "Проекты" };
     makeAutoObservable(this);
@@ -54,6 +61,14 @@ export default class ProfileStore {
     this._selectedMenu = menuItems;
   }
 
+  setMenuFriends(menuFriends) {
+    this._menuFriends = menuFriends;
+  }
+
+  setWrapperMenuFriends(wrapperMenuFriends) {
+    this._wrappermenuFriends = wrapperMenuFriends;
+  }
+
   get wrapperItems() {
     return this._wrapperItems;
   }
@@ -68,5 +83,13 @@ export default class ProfileStore {
 
   get selectedMenu() {
     return this._selectedMenu;
+  }
+
+  get menuFriends() {
+    return this._menuFriends;
+  }
+
+  get wrapperMenuFriends() {
+    return this._wrapperMenuFriends;
   }
 }

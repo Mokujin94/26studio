@@ -33,6 +33,7 @@ import {
 } from "../../http/friendAPI";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import ImageCropper from "../../components/imageCropper/ImageCropper";
+import ProfileFriends from "../../components/profileFriends/ProfileFriends";
 
 const Profile = observer(() => {
   const { profile, user, modal } = useContext(Context);
@@ -252,7 +253,7 @@ const Profile = observer(() => {
               </div>
             </div>
           </CSSTransition>
-          <div className="profile__top-wrapper">
+          <div className="profile__top-content-wrapper">
             <div className="profile__face">
               <div className="profile__avatar">
                 {Number(id) === user.user.id ? 
@@ -343,7 +344,19 @@ const Profile = observer(() => {
               </div>
             </div>
           </div>
-          <div className="profile__top-wrapper"></div>
+          <div className="profile__top-content-friends">
+            <ul className="profile__top-content-friends-menu">
+              <li className="profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active">
+                Друзья
+              </li>
+              <li className="profile__top-content-friends-menu-item">
+                Заявки
+              </li>
+            </ul>
+            <div className="profile__top-content-friends-inner">
+              <ProfileFriends/>
+            </div>
+          </div>
         </div>
         <div className="profile__content">
           <div className="profile__menu-wrapper">
