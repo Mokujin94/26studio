@@ -348,14 +348,22 @@ const Profile = observer(() => {
             </div>
           </div>
           <div className="profile__top-content-friends">
-            <ul className="profile__top-content-friends-menu">
-              <li className="profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active">
-                Друзья
-              </li>
-              <li className="profile__top-content-friends-menu-item">
-                Заявки
-              </li>
-            </ul>
+              {
+                id == user.user.id 
+                ? <ul className="profile__top-content-friends-menu">
+                    <li className="profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active">
+                      Друзья
+                    </li>
+                    <li className="profile__top-content-friends-menu-item">
+                      Заявки
+                    </li>
+                  </ul> 
+                : <ul className="profile__top-content-friends-menu">
+                    <li className="profile__top-content-friends-menu-item profile__top-content-friends-menu-item_other">
+                      Друзья
+                    </li>
+                  </ul>
+              }
             <div className="profile__top-content-friends-inner">
               <ProfileFriends/>
             </div>

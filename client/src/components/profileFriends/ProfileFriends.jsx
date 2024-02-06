@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import style from "./profileFriends.module.scss";
 
 import FriendCard from "../friendCard/FriendCard";
 import { getFriends, getRequestFriends } from "../../http/friendAPI";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { Context } from "../..";
+import { observer } from "mobx-react-lite";
 
-function ProfileFriends() {
+const ProfileFriends = observer(() => {
+  const { user } = useContext(Context)
   const { id } = useParams();
 
   const [friendData, setFriendData] = useState([]);
+
+  const location = useLocation()
 
   useEffect(() => {
     getRequestFriends(id).then((data) => {
       console.log(data);
       setFriendData(data);
     });
-  }, []);
+  }, [location.pathname, user.user.id]);
+
+
   return (
     <>
       {friendData.length ? (
@@ -72,6 +79,6 @@ function ProfileFriends() {
       )}
     </>
   );
-}
+})
 
 export default ProfileFriends;

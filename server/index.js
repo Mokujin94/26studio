@@ -73,6 +73,17 @@ const start = async () => {
       .then(async () => {
         await models.Role.findOrCreate({ where: { name: "student" } });
         await models.Group.findOrCreate({ where: { name: "ИС 11/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 12/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 13/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 21/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 22/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 23/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 31/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 32/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 33/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 41/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 42/9" } });
+        await models.Group.findOrCreate({ where: { name: "ИС 43/9" } });
       })
       .catch((e) => console.log(e));
     // console.log(path.resolve(__dirname, "static"));
