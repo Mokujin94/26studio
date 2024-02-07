@@ -18,8 +18,9 @@ import { getAllCommentsProject } from "../../http/commentsAPI";
 import { Context } from "../..";
 import { useCountFormatter } from "../../hooks/useCountFormatter";
 import { viewProject } from "../../http/viewAPI";
+import { observer } from "mobx-react-lite";
 
-function Project() {
+const Project = observer(() => {
   const { id } = useParams();
   const { user, error } = useContext(Context);
   const location = useLocation();
@@ -79,6 +80,7 @@ function Project() {
             .catch((data) => {
               console.log(data.response.data.message);
               error.setNotAuthError(true);
+              setLikeLoading(false)
             });
         } else {
           await like(id, user.user.id)
@@ -90,12 +92,14 @@ function Project() {
             .catch((data) => {
               console.log(data.response.data.message);
               error.setNotAuthError(true);
+              setLikeLoading(false)
             });
         }
       })
       .catch((data) => {
         console.log(data.response.data.message);
         error.setNotAuthError(true);
+        setLikeLoading(false)
       });
   };
   return (
@@ -128,6 +132,6 @@ function Project() {
       </div>
     </div>
   );
-}
+})
 
 export default Project;

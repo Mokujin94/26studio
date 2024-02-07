@@ -15,6 +15,7 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { updateAvatar } from "../../http/userAPI";
 import FunctionButton from "../functionButton/FunctionButton";
+import Spinner from "../spinner/Spinner";
 
 const ASPECT_RATIO = 1;
 const MIN_DIMENSION = 150;
@@ -27,6 +28,7 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
   const [crop, setCrop] = useState();
   const [completedCrop, setCompletedCrop] = useState();
   const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(false)
 
   const onImageLoad = (e) => {
     const { width, height } = e.currentTarget;
@@ -77,6 +79,7 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
   };
 
   const onButtonProfileMiniature = async () => {
+    setIsLoading(true)
     console.log(crop);
     console.log(completedCrop);
     // setCanvasPreview(
@@ -145,7 +148,8 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
         modal.setModalComplete(true);
         modal.setModalCompleteMessage("Изображение обновлено!");
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.log(e))
+      .finally(setIsLoading(true))
   };
 
   async function blobToFile(blob, fileName) {
@@ -183,9 +187,12 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
               onLoad={onImageLoad}
             />
           </ReactCrop>
-          <div className="profile__miniature-modal-btn">
+          <div className={style.imageCropper__btn}>
             <FunctionButton onClick={onButtonProfileMiniature}>
-              Загрузить фотографию
+              {
+                isLoading ? <Spinner/> : "Загрузить фотографию"
+              }
+              
             </FunctionButton>
           </div>
         </div>

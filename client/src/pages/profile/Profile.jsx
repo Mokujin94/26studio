@@ -64,6 +64,7 @@ const Profile = observer(() => {
 
   useEffect(() => {
     profile.setSelectedMenu({ id: 0, title: "Проекты" });
+    setStatusFriend(true)
     fetchUserById(id)
       .then((dataUser) => {
         setUserId(dataUser);
@@ -350,35 +351,60 @@ const Profile = observer(() => {
             </div>
           </div>
           <div className="profile__top-content-friends">
-            <ul className="profile__top-content-friends-menu">
-              <li className={statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
-                onClick={() => {setStatusFriend(true)}}
-              >
-                Друзья
-              </li>
-              <li className={!statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
-                onClick={() => {setStatusFriend(false)}}
-              >
-                Заявки
-              </li>
-            </ul>
+              {
+                user.user.id == id
+                  ? 
+                  <ul className="profile__top-content-friends-menu">
+                    <li className={statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
+                      onClick={() => {setStatusFriend(true)}}
+                    >
+                      Друзья
+                    </li>
+                    <li className={!statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
+                      onClick={() => {setStatusFriend(false)}}
+                    >
+                      Заявки
+                    </li>
+                  </ul>
+                  :
+                  <ul className="profile__top-content-friends-menu">
+                    <li className={"profile__top-content-friends-menu-item profile__top-content-friends-menu-item_other"}
+                    >
+                      Друзья
+                    </li>
+                  </ul>
+              }
+              
+            {
+              user.user.id == id
+                ? 
+                <div className="profile__top-content-friends-inner">
+                  <SwitchTransition mode="out-in">
+                    <CSSTransition
+                      key={statusFriend}
+                      classNames="create-anim"
+                    >
+                        <ProfileFriends status={statusFriend} />
+                    </CSSTransition>
+                  </SwitchTransition>
+                </div>
+                :
+                <div className="profile__top-content-friends-inner">
+                  <ProfileFriends status={true}/>
+                </div>
+            }
             
-            <div className="profile__top-content-friends-inner">
-              <SwitchTransition mode="out-in">
-                <CSSTransition
-                  key={statusFriend}
-                  classNames="create-anim"
-                >
-                    <ProfileFriends status={statusFriend} />
-                </CSSTransition>
-              </SwitchTransition>
-            </div>
           </div>
         </div>
         <div className="profile__content">
-          <div className="profile__menu-wrapper">
-            <ProfileMenu id={id} onClick={checkPrevId} />
-          </div>
+          {
+            user.user.id == id
+              &&
+              <div className="profile__menu-wrapper">
+                <ProfileMenu id={id} onClick={checkPrevId} />
+              </div>
+          }
+          
           <TransitionGroup className="transition-group">
             {profile.wrapperItems.map((item) => {
               if (profile.selectedMenu.id === item.id) {

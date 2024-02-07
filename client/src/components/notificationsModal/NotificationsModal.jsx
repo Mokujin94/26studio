@@ -51,7 +51,10 @@ const NotificationsModal = observer(() => {
   return (
     <div className={style.block} onClick={(e) => e.stopPropagation()}>
       <h3 className={style.blockTitle}>Уведомления</h3>
-      <div
+      {
+        user.notifications.length !== 0
+        &&
+        <div
         className={style.block__trash}
         title="Очистить уведомления"
         onClick={onDeleteAll}
@@ -74,8 +77,9 @@ const NotificationsModal = observer(() => {
           </g>
         </svg>
       </div>
+      }
       {spinnerRenderer}
-      <div className={style.blockList}>{notificationRenderer} </div>
+      <div className={style.blockList}>{notificationRenderer}</div>
     </div>
   );
 });

@@ -1,6 +1,24 @@
+@import "../../resource/styles/variables";
+
 .block {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 350px;
-  height: 200px;
-  background: rgb(32, 50, 70);
+  background: $studio-dark-element;
   border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  &__title {
+    color: $studio-white-text;
+    text-align: center;
+    font-weight: 400;
+  }
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
 }
