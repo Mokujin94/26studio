@@ -7,8 +7,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { Context } from "../..";
 import { observer } from "mobx-react-lite";
 
-const ProfileFriends = observer(() => {
-  const { user } = useContext(Context)
+function ProfileFriends() {
   const { id } = useParams();
 
   const [friendData, setFriendData] = useState([]);
@@ -16,7 +15,7 @@ const ProfileFriends = observer(() => {
   const location = useLocation()
 
   useEffect(() => {
-    getRequestFriends(id).then((data) => {
+    getFriends(id, status).then((data) => {
       console.log(data);
       setFriendData(data);
     });
@@ -25,12 +24,12 @@ const ProfileFriends = observer(() => {
 
   return (
     <>
-      {friendData.length ? (
-        friendData.map(({ id_sender, id_recipient, status }) => {
-          if (Number(id) === id_sender && status) {
-            return <FriendCard userId={id_recipient} key={id} />;
-          } else if (Number(id) === id_recipient && status) {
-            return <FriendCard userId={id_sender} key={id} />;
+      {(friendData.length) ? (
+        friendData.map(({ id_sender, id_recipient }) => {
+          if (Number(id) === id_sender) {
+            return <FriendCard userId={id_recipient} status={status} key={id} />;
+          } else if (Number(id) === id_recipient) {
+            return <FriendCard userId={id_sender} status={status} key={id} />;
           }
         })
       ) : (
@@ -74,7 +73,12 @@ const ProfileFriends = observer(() => {
               ></path>
             </g>
           </svg>
-          <h2 className={style.friends__icon__title}>У вас нет друзей</h2>
+            <h2 className={style.friends__icon__title}>
+              {
+                status ? "У вас нет друзей" : "У вас нет заявок"
+              }
+              
+            </h2>
         </div>
       )}
     </>

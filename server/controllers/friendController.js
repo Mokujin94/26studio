@@ -13,15 +13,14 @@ const { getIo } = require("../socket");
 class FriendController {
   async getFriends(req, res, next) {
     try {
-      const { userId } = req.query;
-
+      const { userId, status } = req.query;
       const friend = await Friend.findAll({
         include: [User],
         where: {
           [Op.or]: [{ id_sender: userId }, { id_recipient: userId }],
+          status: status !== undefined ? status : { [Op.not]: null }
         },
       });
-
       return res.json(friend);
     } catch (error) {
       next(ApiError.badRequest(error.message));

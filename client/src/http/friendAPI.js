@@ -27,10 +27,11 @@ export const deleteFriend = async (id_sender, id_recipient) => {
   return data;
 };
 
-export const getFriends = async (userId) => {
+export const getFriends = async (userId, status) => {
   const config = {
     params: {
       userId,
+      status
     },
   };
   const { data } = await $host.get("api/friend/", config);

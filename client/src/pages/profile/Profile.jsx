@@ -50,6 +50,7 @@ const Profile = observer(() => {
   const [offsetMenuLineActive, setOffsetMenuLineActive] = useState(
     100 / profile.menuItemsOtherUser.length
   );
+  const [statusFriend, setStatusFriend] = useState(true)
 
   const miniatureRef = useRef(null);
 
@@ -139,7 +140,8 @@ const Profile = observer(() => {
           modal.setModalCompleteMessage("Заявка отправлена");
           setTextButton("Отменить заявку");
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           modal.setModalComplete(true);
           modal.setModalCompleteMessage(
             `${userId.name} уже хочет быть вашим другом`
@@ -348,24 +350,28 @@ const Profile = observer(() => {
             </div>
           </div>
           <div className="profile__top-content-friends">
-              {
-                id == user.user.id 
-                ? <ul className="profile__top-content-friends-menu">
-                    <li className="profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active">
-                      Друзья
-                    </li>
-                    <li className="profile__top-content-friends-menu-item">
-                      Заявки
-                    </li>
-                  </ul> 
-                : <ul className="profile__top-content-friends-menu">
-                    <li className="profile__top-content-friends-menu-item profile__top-content-friends-menu-item_other">
-                      Друзья
-                    </li>
-                  </ul>
-              }
+            <ul className="profile__top-content-friends-menu">
+              <li className={statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
+                onClick={() => {setStatusFriend(true)}}
+              >
+                Друзья
+              </li>
+              <li className={!statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
+                onClick={() => {setStatusFriend(false)}}
+              >
+                Заявки
+              </li>
+            </ul>
+            
             <div className="profile__top-content-friends-inner">
-              <ProfileFriends/>
+              <SwitchTransition mode="out-in">
+                <CSSTransition
+                  key={statusFriend}
+                  classNames="create-anim"
+                >
+                    <ProfileFriends status={statusFriend} />
+                </CSSTransition>
+              </SwitchTransition>
             </div>
           </div>
         </div>
