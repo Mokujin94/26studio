@@ -38,6 +38,7 @@ import ProfileFriends from "../../components/profileFriends/ProfileFriends";
 const Profile = observer(() => {
   const { profile, user, modal } = useContext(Context);
   const [group, setGroup] = useState("");
+  const [descr, setDescr] = useState("")
   const [userId, setUserId] = useState({});
   const [textButton, setTextButton] = useState("");
   const location = useLocation();
@@ -68,39 +69,68 @@ const Profile = observer(() => {
     fetchUserById(id)
       .then((dataUser) => {
         setUserId(dataUser);
-        setGroup(dataUser.group.name);
+        console.log(dataUser);
+        if (dataUser.group_status) {
+          setGroup(dataUser.group.name);
+        } else {
+          setGroup(`${dataUser.group.name} (Группа не подтверджена)`)
+        }
+        if (dataUser.description) {
+          setDescr(dataUser.description)
+        } else {
+          if (dataUser.id !== user.user.id) {
+              setDescr("Нет описания")
+          } else {
+              setDescr("Расскажите о себе")
+          }
+        }
+        // if (id == user.user.id) {
+        //   if (user.user.description) {
+        //     setDescr(dataUser.description)
+        //   }
+        //   setDescr("Расскажите о себе")
+        // } 
+        // id == user.user.id && !user.user.description
+        //             ? "Расскажите о себе"
+        //               : (id !== user.user.id && !userId.description)
+        //               ? "Нет описания"
+        //               : (id == user.user.id && user.user.description)
+        //               ? user.user.description
+        //               : userId.description
+        if (dataUser.id == user.user.id) {
+          return setTextButton("Редактировать");
+        } else {
+          console.log(id, user.user.id);
+          getFriends(dataUser.id).then((data) => {
+            console.log(data.length);
+            if (data.length) {
+              data.filter((item) => {
+                if (item.id_sender === user.user.id && !item.status) {
+                  return setTextButton("Отменить заявку");
+                }
+                if (item.id_recipient === user.user.id && !item.status) {
+                  return setTextButton("Принять заявку");
+                }
+                if (
+                  item.id_recipient === user.user.id && item.status||
+                  (item.id_sender === user.user.id && item.status)
+                ) {
+                  return setTextButton("Удалить из друзей");
+                }
+                return setTextButton("Добавить в друзья");
+              });
+            } else {
+              return setTextButton("Добавить в друзья");
+            }
+          });
+        }
       })
       .catch((err) => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
 
-    if (Number(id) === user.user.id) {
-      setTextButton("Редактировать");
-    } else {
-      getFriends(Number(id)).then((data) => {
-        console.log(data.length);
-        if (data.length) {
-          data.filter((item) => {
-            if (item.id_sender === user.user.id && !item.status) {
-              return setTextButton("Отменить заявку");
-            }
-            if (item.id_recipient === user.user.id && !item.status) {
-              return setTextButton("Принять заявку");
-            }
-            if (
-              item.id_recipient === user.user.id ||
-              (item.id_sender === user.user.id && item.status)
-            ) {
-              return setTextButton("Удалить из друзей");
-            }
-            return setTextButton("Добавить в друзья");
-          });
-        } else {
-          return setTextButton("Добавить в друзья");
-        }
-      });
-    }
-  }, [location.pathname, user.user.id]);
+    
+  }, [user.user.id, id]);
 
   useEffect(() => {
     const root = document.querySelector(":root");
@@ -301,7 +331,7 @@ const Profile = observer(() => {
                 <FunctionButton onClick={onButton}>{textButton}</FunctionButton>
               </div>
 
-              <div className="profile__socials">
+              {/* <div className="profile__socials">
                 <div className="profile__socials-icon">
                   <img
                     className="profile__socials-icon-img"
@@ -323,7 +353,7 @@ const Profile = observer(() => {
                     alt="icon"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="profile__info">
@@ -344,9 +374,10 @@ const Profile = observer(() => {
                 <div className="profile__group">{group}</div>
               </div>
               <div className="profile__description">
-                {id == user.user.id
-                  ? user.user.description
-                  : userId.description}
+                {/* 520 символов максимум  */}
+                {
+                  descr
+                }
               </div>
             </div>
           </div>

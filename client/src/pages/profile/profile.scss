@@ -264,7 +264,7 @@
   }
 
   &__nickname {
-    font-weight: 400;
+    font-weight: 500;
     font-size: 48px;
     color: $studio-white-text;
   }
@@ -276,10 +276,11 @@
   &__more-info {
     display: flex;
     flex-direction: column;
-    font-weight: 100;
-    font-size: 20px;
+    font-weight: 400;
+    font-size: 18px;
     color: $studio-white-text;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    margin-top: 10px;
   }
 
   &__full-name {
@@ -287,11 +288,14 @@
   }
 
   &__description {
-    font-weight: 100;
-    font-size: 20px;
+    font-weight: 400;
+    font-size: 18px;
     text-align: justify;
     color: $studio-white-text;
-    margin-bottom: auto;
+    height: 100%;
+    background-color: $studio-darker-element;
+    border-radius: 5px;
+    padding: 10px;
   }
 
   &__content {
