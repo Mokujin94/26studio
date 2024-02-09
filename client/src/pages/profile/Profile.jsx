@@ -410,18 +410,25 @@ const Profile = observer(() => {
               user.user.id == id
                 ? 
                 <div className="profile__top-content-friends-inner">
-                  <SwitchTransition mode="out-in">
-                    <CSSTransition
-                      key={statusFriend}
-                      classNames="create-anim"
-                    >
-                        <ProfileFriends status={statusFriend} />
-                    </CSSTransition>
-                  </SwitchTransition>
+                  {
+                    statusFriend && <input type="text" className="profile__top-content-friends-search" placeholder="Поиск друзей"/>
+                  }
+                  <div className="profile__top-content-friends-content">
+                    <SwitchTransition mode="out-in">
+                      <CSSTransition
+                        key={statusFriend}
+                        classNames="create-anim"
+                      >
+                          <ProfileFriends status={statusFriend} />
+                      </CSSTransition>
+                    </SwitchTransition>
+                  </div>
                 </div>
                 :
                 <div className="profile__top-content-friends-inner">
-                  <ProfileFriends status={true}/>
+                  <div className="profile__top-content-friends-content">
+                    <ProfileFriends status={true}/>
+                  </div>
                 </div>
             }
             
