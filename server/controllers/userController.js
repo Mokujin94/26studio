@@ -16,6 +16,7 @@ const {
   GettingAchivment,
   Project,
   Group,
+  UserFriend,
 } = require("../models/models");
 const { Op } = require("sequelize");
 
@@ -184,7 +185,14 @@ class UserController {
     try {
       const { id } = req.params;
       const user = await User.findOne({
-        include: [Group, Friend],
+        include: [
+          Group,
+          {
+            model: Friend,
+            through: UserFriend,
+            as: "friends",
+          },
+        ],
         where: { id },
       });
       if (!user) {
