@@ -28,12 +28,16 @@ import { PROFILE_ROUTE } from "../../utils/consts";
 import {
   addFriend,
   deleteFriend,
+  friendAccept,
+  friendDelete,
+  friendRequest,
   getFriends,
   reqFriend,
 } from "../../http/friendAPI";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import ImageCropper from "../../components/imageCropper/ImageCropper";
 import ProfileFriends from "../../components/profileFriends/ProfileFriends";
+import FriendCard from "../../components/friendCard/FriendCard";
 
 const Profile = observer(() => {
   const { profile, user, modal } = useContext(Context);
@@ -52,9 +56,9 @@ const Profile = observer(() => {
     100 / profile.menuItemsOtherUser.length
   );
 
-  const [friendsRequest, setFriendsRequest] = useState([])
-  const [friends, setFriends] = useState([])
-  const [statusFriend, setStatusFriend] = useState(false)
+  const [friendsRequest, setFriendsRequest] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [statusFriend, setStatusFriend] = useState(false);
 
   const miniatureRef = useRef(null);
 
@@ -67,9 +71,11 @@ const Profile = observer(() => {
   });
 
   useEffect(() => {
+    setFriendsRequest([]);
+    setFriends([]);
     profile.setSelectedMenu({ id: 0, title: "Проекты" });
     setStatusFriend(true);
-    fetchUserById(id)
+    fetchUserById(Number(id))
       .then((dataUser) => {
         setUserId(dataUser);
         console.log(dataUser);
@@ -88,15 +94,63 @@ const Profile = observer(() => {
             setDescr("Расскажите о себе");
           }
         }
+        const requestsAll = dataUser.friends.map((item) => {
+          if (!item.status) {
+            if (item.friendId === dataUser.id) {
+              return <FriendCard userId={item.userId} key={item.id} />;
+            } else {
+              return <FriendCard userId={item.friendId} key={item.id} />;
+            }
+          }
+        });
 
-        
+        const friendsAll = dataUser.friends.map((item) => {
+          if (item.status) {
+            if (item.friendId === dataUser.id) {
+              return <FriendCard userId={item.userId} key={item.id} />;
+            } else {
+              return <FriendCard userId={item.friendId} key={item.id} />;
+            }
+          }
+        });
 
-
+        setFriends(friendsAll);
+        setFriendsRequest(requestsAll);
       })
+      .then(console.log(friends, friendsRequest))
       .catch((err) => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
   }, [id]);
+
+  useEffect(() => {
+    if (user.user.id) {
+      if (userId.friends && userId.friends.length) {
+        userId.friends.forEach((item) => {
+          if (!user.user.id) return setTextButton("Добавить в друзья");
+          if (item.status) {
+            if (
+              item.userId === user.user.id ||
+              item.friendId === user.user.id
+            ) {
+              return setTextButton("Удалить из друзей");
+            }
+          } else {
+            if (item.userId === user.user.id) {
+              return setTextButton("Отменить заявку");
+            }
+            if (item.friendId === user.user.id) {
+              return setTextButton("Принять заявку");
+            }
+          }
+        });
+      } else {
+        setTextButton("Добавить в друзья");
+      }
+    } else {
+      setTextButton("Добавить в друзья");
+    }
+  }, [user.user.id, userId]);
 
   useEffect(() => {
     const root = document.querySelector(":root");
@@ -174,6 +228,39 @@ const Profile = observer(() => {
     reader.readAsDataURL(file);
   };
 
+  const onClickFriend = () => {
+    if (textButton === "Добавить в друзья") {
+      return friendRequest(user.user.id, userId.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage("Заявка отправлена");
+        setTextButton("Отменить заявку");
+      });
+    }
+    if (textButton === "Отменить заявку") {
+      return friendDelete(user.user.id, userId.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage("Заявка отменена");
+        setTextButton("Добавить в друзья");
+      });
+    }
+    if (textButton === "Принять заявку") {
+      return friendAccept(userId.id, user.user.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage(
+          `Пользователь ${data} теперь у вас в друзьях`
+        );
+        setTextButton("Удалить из друзей");
+      });
+    }
+    if (textButton === "Удалить из друзей") {
+      return friendDelete(user.user.id, userId.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage(`Пользователь ${data} удален из друзей`);
+        setTextButton("Добавить в друзья");
+      });
+    }
+  };
+
   return (
     <div className="profile">
       <div className="container">
@@ -238,17 +325,21 @@ const Profile = observer(() => {
                 )}
               </div>
 
-              {user.user.id == id 
-                ?
+              {user.user.id == id ? (
                 <div className="profile__button">
                   <FunctionButton>Редактировать</FunctionButton>
                 </div>
-                :
+              ) : user.user.id ? (
                 <div className="profile__button">
-                  <FunctionButton>{textButton}</FunctionButton>
+                  <FunctionButton onClick={onClickFriend}>
+                    {textButton}
+                  </FunctionButton>
                 </div>
-              }
-
+              ) : (
+                <div className="profile__button">
+                  <FunctionButton>Добавить в друзья</FunctionButton>
+                </div>
+              )}
 
               {/* <div className="profile__socials">
                 <div className="profile__socials-icon">
@@ -277,9 +368,7 @@ const Profile = observer(() => {
 
             <div className="profile__info">
               <div className="profile__name">
-                <div className="profile__nickname">
-                  {id == user.user.id ? user.user.name : userId.name}
-                </div>
+                <div className="profile__nickname">{userId.name}</div>
                 {/* <img
                   className="profile__achievement"
                   src={achievement}
@@ -287,9 +376,7 @@ const Profile = observer(() => {
                 /> */}
               </div>
               <div className="profile__more-info">
-                <div className="profile__full-name">
-                  {id == user.user.id ? user.user.full_name : userId.full_name}
-                </div>
+                <div className="profile__full-name">{userId.full_name}</div>
                 <div className="profile__group">{group}</div>
               </div>
               <div className="profile__description">
@@ -338,30 +425,18 @@ const Profile = observer(() => {
               </ul>
             )}
 
-            {user.user.id == id ? (
-              <div className="profile__top-content-friends-inner">
-                {statusFriend && (
-                  <input
-                    type="text"
-                    className="profile__top-content-friends-search"
-                    placeholder="Поиск друзей"
-                  />
-                )}
-                <div className="profile__top-content-friends-content">
-                  <SwitchTransition mode="out-in">
-                    <CSSTransition key={statusFriend} classNames="create-anim">
-                      <ProfileFriends status={statusFriend} />
-                    </CSSTransition>
-                  </SwitchTransition>
-                </div>
+            <div className="profile__top-content-friends-inner">
+              {statusFriend && id == user.user.id && (
+                <input
+                  type="text"
+                  className="profile__top-content-friends-search"
+                  placeholder="Поиск друзей"
+                />
+              )}
+              <div className="profile__top-content-friends-content">
+                {statusFriend ? friends : friendsRequest}
               </div>
-            ) : (
-              <div className="profile__top-content-friends-inner">
-                <div className="profile__top-content-friends-content">
-                  <ProfileFriends status={true} />
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
         <div className="profile__content">
