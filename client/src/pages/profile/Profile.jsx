@@ -26,18 +26,16 @@ import { fetchUserById, updateAvatar } from "../../http/userAPI";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 import {
-  addFriend,
-  deleteFriend,
   friendAccept,
   friendDelete,
   friendRequest,
-  getFriends,
-  reqFriend,
 } from "../../http/friendAPI";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import ImageCropper from "../../components/imageCropper/ImageCropper";
 import ProfileFriends from "../../components/profileFriends/ProfileFriends";
 import FriendCard from "../../components/friendCard/FriendCard";
+import ProfileMainSkeleton from "../../components/Skeletons/ProfileMainSkeleton";
+import ProfileFriendsSkeleton from "../../components/Skeletons/ProfileFriendsSkeleton";
 
 const Profile = observer(() => {
   const { profile, user, modal } = useContext(Context);
@@ -60,6 +58,8 @@ const Profile = observer(() => {
   const [friends, setFriends] = useState([]);
   const [statusFriend, setStatusFriend] = useState(false);
 
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+
   const miniatureRef = useRef(null);
 
   useClickOutside(miniatureRef, () => {
@@ -71,6 +71,7 @@ const Profile = observer(() => {
   });
 
   useEffect(() => {
+    setIsLoadingProfile(true);
     setFriendsRequest([]);
     setFriends([]);
     profile.setSelectedMenu({ id: 0, title: "Проекты" });
@@ -117,7 +118,7 @@ const Profile = observer(() => {
         setFriends(friendsAll);
         setFriendsRequest(requestsAll);
       })
-      .then(console.log(friends, friendsRequest))
+      .then(() => setIsLoadingProfile(false))
       .catch((err) => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
@@ -286,62 +287,69 @@ const Profile = observer(() => {
               </div>
             </div>
           </CSSTransition>
-          <div className="profile__top-content-wrapper">
-            <div className="profile__face">
-              <div className="profile__avatar">
-                {Number(id) === user.user.id ? (
-                  <label htmlFor="avatar" className="profile__avatar-inner">
-                    <img
-                      className="profile__avatar-img"
-                      src={
-                        id == user.user.id
-                          ? process.env.REACT_APP_API_URL + user.user.avatar
-                          : process.env.REACT_APP_API_URL + userId.avatar
-                      }
-                      alt="icon"
-                    />
-                    <input
-                      className="profile__avatar-input"
-                      onClick={(e) => {
-                        e.target.value = "";
-                      }}
-                      onChange={onSelectAvatarFile}
-                      type="file"
-                      name="avatar"
-                      id="avatar"
-                      accept="image/png, image/jpeg"
-                    />
-                  </label>
-                ) : (
-                  <img
-                    className="profile__avatar-img"
-                    src={
-                      id == user.user.id
-                        ? process.env.REACT_APP_API_URL + user.user.avatar
-                        : process.env.REACT_APP_API_URL + userId.avatar
-                    }
-                    alt="icon"
-                  />
-                )}
-              </div>
+          <div
+            className="profile__top-content-wrapper"
+            style={isLoadingProfile ? { padding: "0px" } : null}
+          >
+            {isLoadingProfile ? (
+              <ProfileMainSkeleton />
+            ) : (
+              <>
+                <div className="profile__face">
+                  <div className="profile__avatar">
+                    {Number(id) === user.user.id ? (
+                      <label htmlFor="avatar" className="profile__avatar-inner">
+                        <img
+                          className="profile__avatar-img"
+                          src={
+                            id == user.user.id
+                              ? process.env.REACT_APP_API_URL + user.user.avatar
+                              : process.env.REACT_APP_API_URL + userId.avatar
+                          }
+                          alt="icon"
+                        />
+                        <input
+                          className="profile__avatar-input"
+                          onClick={(e) => {
+                            e.target.value = "";
+                          }}
+                          onChange={onSelectAvatarFile}
+                          type="file"
+                          name="avatar"
+                          id="avatar"
+                          accept="image/png, image/jpeg"
+                        />
+                      </label>
+                    ) : (
+                      <img
+                        className="profile__avatar-img"
+                        src={
+                          id == user.user.id
+                            ? process.env.REACT_APP_API_URL + user.user.avatar
+                            : process.env.REACT_APP_API_URL + userId.avatar
+                        }
+                        alt="icon"
+                      />
+                    )}
+                  </div>
 
-              {user.user.id == id ? (
-                <div className="profile__button">
-                  <FunctionButton>Редактировать</FunctionButton>
-                </div>
-              ) : user.user.id ? (
-                <div className="profile__button">
-                  <FunctionButton onClick={onClickFriend}>
-                    {textButton}
-                  </FunctionButton>
-                </div>
-              ) : (
-                <div className="profile__button">
-                  <FunctionButton>Добавить в друзья</FunctionButton>
-                </div>
-              )}
+                  {user.user.id == id ? (
+                    <div className="profile__button">
+                      <FunctionButton>Редактировать</FunctionButton>
+                    </div>
+                  ) : user.user.id ? (
+                    <div className="profile__button">
+                      <FunctionButton onClick={onClickFriend}>
+                        {textButton}
+                      </FunctionButton>
+                    </div>
+                  ) : (
+                    <div className="profile__button">
+                      <FunctionButton>Добавить в друзья</FunctionButton>
+                    </div>
+                  )}
 
-              {/* <div className="profile__socials">
+                  {/* <div className="profile__socials">
                 <div className="profile__socials-icon">
                   <img
                     className="profile__socials-icon-img"
@@ -364,26 +372,28 @@ const Profile = observer(() => {
                   />
                 </div>
               </div> */}
-            </div>
+                </div>
 
-            <div className="profile__info">
-              <div className="profile__name">
-                <div className="profile__nickname">{userId.name}</div>
-                {/* <img
+                <div className="profile__info">
+                  <div className="profile__name">
+                    <div className="profile__nickname">{userId.name}</div>
+                    {/* <img
                   className="profile__achievement"
                   src={achievement}
                   alt=""
                 /> */}
-              </div>
-              <div className="profile__more-info">
-                <div className="profile__full-name">{userId.full_name}</div>
-                <div className="profile__group">{group}</div>
-              </div>
-              <div className="profile__description">
-                {/* 520 символов максимум  */}
-                {descr}
-              </div>
-            </div>
+                  </div>
+                  <div className="profile__more-info">
+                    <div className="profile__full-name">{userId.full_name}</div>
+                    <div className="profile__group">{group}</div>
+                  </div>
+                  <div className="profile__description">
+                    {/* 520 символов максимум  */}
+                    {descr}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <div className="profile__top-content-friends">
             {user.user.id == id ? (
@@ -434,7 +444,13 @@ const Profile = observer(() => {
                 />
               )}
               <div className="profile__top-content-friends-content">
-                {statusFriend ? friends : friendsRequest}
+                {isLoadingProfile ? (
+                  <ProfileFriendsSkeleton />
+                ) : statusFriend ? (
+                  friends
+                ) : (
+                  friendsRequest
+                )}
               </div>
             </div>
           </div>
