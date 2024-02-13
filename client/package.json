@@ -23,7 +23,6 @@
     "react-image-crop": "^11.0.5",
     "react-nice-scroll": "^1.0.0",
     "react-router-dom": "^6.10.0",
-    "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
     "react-transition-group": "^4.4.5",
     "sass": "^1.60.0",
@@ -34,10 +33,10 @@
     "yup": "^1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
+    "start": "rsbuild dev",
+    "build": "rsbuild build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "preview": "rsbuild preview"
   },
   "eslintConfig": {
     "extends": [
@@ -56,5 +55,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^0.4.1",
+    "@rsbuild/plugin-react": "^0.4.1"
   }
 }

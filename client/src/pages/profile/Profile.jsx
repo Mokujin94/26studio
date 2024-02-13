@@ -28,17 +28,21 @@ import { PROFILE_ROUTE } from "../../utils/consts";
 import {
   addFriend,
   deleteFriend,
+  friendAccept,
+  friendDelete,
+  friendRequest,
   getFriends,
   reqFriend,
 } from "../../http/friendAPI";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import ImageCropper from "../../components/imageCropper/ImageCropper";
 import ProfileFriends from "../../components/profileFriends/ProfileFriends";
+import FriendCard from "../../components/friendCard/FriendCard";
 
 const Profile = observer(() => {
   const { profile, user, modal } = useContext(Context);
   const [group, setGroup] = useState("");
-  const [descr, setDescr] = useState("")
+  const [descr, setDescr] = useState("");
   const [userId, setUserId] = useState({});
   const [textButton, setTextButton] = useState("");
   const location = useLocation();
@@ -51,7 +55,10 @@ const Profile = observer(() => {
   const [offsetMenuLineActive, setOffsetMenuLineActive] = useState(
     100 / profile.menuItemsOtherUser.length
   );
-  const [statusFriend, setStatusFriend] = useState(true)
+
+  const [friendsRequest, setFriendsRequest] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [statusFriend, setStatusFriend] = useState(false);
 
   const miniatureRef = useRef(null);
 
@@ -64,73 +71,86 @@ const Profile = observer(() => {
   });
 
   useEffect(() => {
+    setFriendsRequest([]);
+    setFriends([]);
     profile.setSelectedMenu({ id: 0, title: "Проекты" });
-    setStatusFriend(true)
-    fetchUserById(id)
+    setStatusFriend(true);
+    fetchUserById(Number(id))
       .then((dataUser) => {
         setUserId(dataUser);
         console.log(dataUser);
         if (dataUser.group_status) {
           setGroup(dataUser.group.name);
         } else {
-          setGroup(`${dataUser.group.name} (Группа не подтверджена)`)
+          setGroup(`${dataUser.group.name} (Группа не подтверджена)`);
         }
+
         if (dataUser.description) {
-          setDescr(dataUser.description)
+          setDescr(dataUser.description);
         } else {
           if (dataUser.id !== user.user.id) {
-              setDescr("Нет описания")
+            setDescr("Нет описания");
           } else {
-              setDescr("Расскажите о себе")
+            setDescr("Расскажите о себе");
           }
         }
-        // if (id == user.user.id) {
-        //   if (user.user.description) {
-        //     setDescr(dataUser.description)
-        //   }
-        //   setDescr("Расскажите о себе")
-        // } 
-        // id == user.user.id && !user.user.description
-        //             ? "Расскажите о себе"
-        //               : (id !== user.user.id && !userId.description)
-        //               ? "Нет описания"
-        //               : (id == user.user.id && user.user.description)
-        //               ? user.user.description
-        //               : userId.description
-        if (dataUser.id == user.user.id) {
-          return setTextButton("Редактировать");
-        } else {
-          console.log(id, user.user.id);
-          getFriends(dataUser.id).then((data) => {
-            console.log(data.length);
-            if (data.length) {
-              data.filter((item) => {
-                if (item.id_sender === user.user.id && !item.status) {
-                  return setTextButton("Отменить заявку");
-                }
-                if (item.id_recipient === user.user.id && !item.status) {
-                  return setTextButton("Принять заявку");
-                }
-                if (
-                  item.id_recipient === user.user.id && item.status||
-                  (item.id_sender === user.user.id && item.status)
-                ) {
-                  return setTextButton("Удалить из друзей");
-                }
-                return setTextButton("Добавить в друзья");
-              });
+        const requestsAll = dataUser.friends.map((item) => {
+          if (!item.status) {
+            if (item.friendId === dataUser.id) {
+              return <FriendCard userId={item.userId} key={item.id} />;
             } else {
-              return setTextButton("Добавить в друзья");
+              return <FriendCard userId={item.friendId} key={item.id} />;
             }
-          });
-        }
+          }
+        });
+
+        const friendsAll = dataUser.friends.map((item) => {
+          if (item.status) {
+            if (item.friendId === dataUser.id) {
+              return <FriendCard userId={item.userId} key={item.id} />;
+            } else {
+              return <FriendCard userId={item.friendId} key={item.id} />;
+            }
+          }
+        });
+
+        setFriends(friendsAll);
+        setFriendsRequest(requestsAll);
       })
+      .then(console.log(friends, friendsRequest))
       .catch((err) => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
+  }, [id]);
 
-    
-  }, [user.user.id, id]);
+  useEffect(() => {
+    if (user.user.id) {
+      if (userId.friends && userId.friends.length) {
+        userId.friends.forEach((item) => {
+          if (!user.user.id) return setTextButton("Добавить в друзья");
+          if (item.status) {
+            if (
+              item.userId === user.user.id ||
+              item.friendId === user.user.id
+            ) {
+              return setTextButton("Удалить из друзей");
+            }
+          } else {
+            if (item.userId === user.user.id) {
+              return setTextButton("Отменить заявку");
+            }
+            if (item.friendId === user.user.id) {
+              return setTextButton("Принять заявку");
+            }
+          }
+        });
+      } else {
+        setTextButton("Добавить в друзья");
+      }
+    } else {
+      setTextButton("Добавить в друзья");
+    }
+  }, [user.user.id, userId]);
 
   useEffect(() => {
     const root = document.querySelector(":root");
@@ -157,61 +177,6 @@ const Profile = observer(() => {
     } else if (prevId < profile.selectedMenu.id) {
       setBoolPrevId(true);
       setPrevId(profile.selectedMenu.id);
-    }
-  };
-
-  const onButton = () => {
-    if (textButton === "Редактировать") {
-      console.log("Редактировать");
-      new Audio(notification).play();
-    } else if (textButton === "Добавить в друзья") {
-      return reqFriend(user.user.id, id)
-        .then(() => {
-          modal.setModalComplete(true);
-          modal.setModalCompleteMessage("Заявка отправлена");
-          setTextButton("Отменить заявку");
-        })
-        .catch((err) => {
-          console.log(err);
-          modal.setModalComplete(true);
-          modal.setModalCompleteMessage(
-            `${userId.name} уже хочет быть вашим другом`
-          );
-          setTextButton("Принять заявку");
-        });
-    } else if (textButton === "Отменить заявку") {
-      return deleteFriend(user.user.id, id)
-        .then(() => {
-          modal.setModalComplete(true);
-          modal.setModalCompleteMessage("Заявка отменена");
-          setTextButton("Добавить в друзья");
-        })
-        .catch((e) => console.log(e));
-    } else if (textButton === "Принять заявку") {
-      return addFriend(id, user.user.id)
-        .then(() => {
-          modal.setModalComplete(true);
-          modal.setModalCompleteMessage(
-            userId.name + " теперь у вас в друзьях!"
-          );
-          setTextButton("Удалить из друзей");
-        })
-        .catch((e) => {
-          modal.setModalComplete(true);
-          modal.setModalCompleteMessage(e.response.data.message);
-          setTextButton("Добавить в друзья");
-        })
-        .catch((e) => console.log(e));
-    } else if (textButton === "Удалить из друзей") {
-      return deleteFriend(user.user.id, id)
-        .then(() => {
-          modal.setModalComplete(true);
-          modal.setModalCompleteMessage(
-            `Пользователь ${userId.name} удалён из друзей`
-          );
-          setTextButton("Добавить в друзья");
-        })
-        .catch((e) => console.log(e));
     }
   };
 
@@ -261,6 +226,39 @@ const Profile = observer(() => {
       setAvatarReader(imageUrl);
     });
     reader.readAsDataURL(file);
+  };
+
+  const onClickFriend = () => {
+    if (textButton === "Добавить в друзья") {
+      return friendRequest(user.user.id, userId.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage("Заявка отправлена");
+        setTextButton("Отменить заявку");
+      });
+    }
+    if (textButton === "Отменить заявку") {
+      return friendDelete(user.user.id, userId.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage("Заявка отменена");
+        setTextButton("Добавить в друзья");
+      });
+    }
+    if (textButton === "Принять заявку") {
+      return friendAccept(userId.id, user.user.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage(
+          `Пользователь ${data} теперь у вас в друзьях`
+        );
+        setTextButton("Удалить из друзей");
+      });
+    }
+    if (textButton === "Удалить из друзей") {
+      return friendDelete(user.user.id, userId.id).then((data) => {
+        modal.setModalComplete(true);
+        modal.setModalCompleteMessage(`Пользователь ${data} удален из друзей`);
+        setTextButton("Добавить в друзья");
+      });
+    }
   };
 
   return (
@@ -327,9 +325,21 @@ const Profile = observer(() => {
                 )}
               </div>
 
-              <div className="profile__button">
-                <FunctionButton onClick={onButton}>{textButton}</FunctionButton>
-              </div>
+              {user.user.id == id ? (
+                <div className="profile__button">
+                  <FunctionButton>Редактировать</FunctionButton>
+                </div>
+              ) : user.user.id ? (
+                <div className="profile__button">
+                  <FunctionButton onClick={onClickFriend}>
+                    {textButton}
+                  </FunctionButton>
+                </div>
+              ) : (
+                <div className="profile__button">
+                  <FunctionButton>Добавить в друзья</FunctionButton>
+                </div>
+              )}
 
               {/* <div className="profile__socials">
                 <div className="profile__socials-icon">
@@ -358,9 +368,7 @@ const Profile = observer(() => {
 
             <div className="profile__info">
               <div className="profile__name">
-                <div className="profile__nickname">
-                  {id == user.user.id ? user.user.name : userId.name}
-                </div>
+                <div className="profile__nickname">{userId.name}</div>
                 {/* <img
                   className="profile__achievement"
                   src={achievement}
@@ -368,81 +376,76 @@ const Profile = observer(() => {
                 /> */}
               </div>
               <div className="profile__more-info">
-                <div className="profile__full-name">
-                  {id == user.user.id ? user.user.full_name : userId.full_name}
-                </div>
+                <div className="profile__full-name">{userId.full_name}</div>
                 <div className="profile__group">{group}</div>
               </div>
               <div className="profile__description">
                 {/* 520 символов максимум  */}
-                {
-                  descr
-                }
+                {descr}
               </div>
             </div>
           </div>
           <div className="profile__top-content-friends">
-              {
-                user.user.id == id
-                  ? 
-                  <ul className="profile__top-content-friends-menu">
-                    <li className={statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
-                      onClick={() => {setStatusFriend(true)}}
-                    >
-                      Друзья
-                    </li>
-                    <li className={!statusFriend ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active" : "profile__top-content-friends-menu-item"}
-                      onClick={() => {setStatusFriend(false)}}
-                    >
-                      Заявки
-                    </li>
-                  </ul>
-                  :
-                  <ul className="profile__top-content-friends-menu">
-                    <li className={"profile__top-content-friends-menu-item profile__top-content-friends-menu-item_other"}
-                    >
-                      Друзья
-                    </li>
-                  </ul>
-              }
-              
-            {
-              user.user.id == id
-                ? 
-                <div className="profile__top-content-friends-inner">
-                  {
-                    statusFriend && <input type="text" className="profile__top-content-friends-search" placeholder="Поиск друзей"/>
+            {user.user.id == id ? (
+              <ul className="profile__top-content-friends-menu">
+                <li
+                  className={
+                    statusFriend
+                      ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active"
+                      : "profile__top-content-friends-menu-item"
                   }
-                  <div className="profile__top-content-friends-content">
-                    <SwitchTransition mode="out-in">
-                      <CSSTransition
-                        key={statusFriend}
-                        classNames="create-anim"
-                      >
-                          <ProfileFriends status={statusFriend} />
-                      </CSSTransition>
-                    </SwitchTransition>
-                  </div>
-                </div>
-                :
-                <div className="profile__top-content-friends-inner">
-                  <div className="profile__top-content-friends-content">
-                    <ProfileFriends status={true}/>
-                  </div>
-                </div>
-            }
-            
+                  onClick={() => {
+                    setStatusFriend(true);
+                  }}
+                >
+                  Друзья
+                </li>
+                <li
+                  className={
+                    !statusFriend
+                      ? "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_active"
+                      : "profile__top-content-friends-menu-item"
+                  }
+                  onClick={() => {
+                    setStatusFriend(false);
+                  }}
+                >
+                  Заявки
+                </li>
+              </ul>
+            ) : (
+              <ul className="profile__top-content-friends-menu">
+                <li
+                  className={
+                    "profile__top-content-friends-menu-item profile__top-content-friends-menu-item_other"
+                  }
+                >
+                  Друзья
+                </li>
+              </ul>
+            )}
+
+            <div className="profile__top-content-friends-inner">
+              {statusFriend && id == user.user.id && (
+                <input
+                  type="text"
+                  className="profile__top-content-friends-search"
+                  placeholder="Поиск друзей"
+                />
+              )}
+              <div className="profile__top-content-friends-content">
+                {statusFriend ? friends : friendsRequest}
+              </div>
+            </div>
           </div>
         </div>
         <div className="profile__content">
-          {
-            user.user.id == id
-              &&
-              <div className="profile__menu-wrapper">
-                <ProfileMenu id={id} onClick={checkPrevId} />
-              </div>
-          }
-          
+          {user.user.id == id && (
+            <div className="profile__menu-wrapper">
+              <ProfileMenu id={id} onClick={checkPrevId} />
+            </div>
+          )}
+
           <TransitionGroup className="transition-group">
             {profile.wrapperItems.map((item) => {
               if (profile.selectedMenu.id === item.id) {

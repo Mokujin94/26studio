@@ -17,8 +17,8 @@ const User = sequelize.define("user", {
 
 const Friend = sequelize.define("friend", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  id_sender: { type: DataTypes.INTEGER },
-  id_recipient: { type: DataTypes.INTEGER },
+  userId: { type: DataTypes.INTEGER },
+  friendId: { type: DataTypes.INTEGER },
   status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 });
 
@@ -156,7 +156,15 @@ const Notifications = sequelize.define("notifications", {
   senderId: DataTypes.INTEGER,
   recipientId: DataTypes.INTEGER,
   status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-  friend_status: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false}
+  friend_status: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+});
+
+const UserFriend = sequelize.define("user_friend", {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
 User.hasMany(Project);
@@ -209,8 +217,7 @@ Likes.belongsTo(User);
 User.hasMany(View, { foreignKey: "userId" });
 View.belongsTo(User);
 
-User.hasMany(Friend);
-Friend.belongsTo(User);
+User.belongsToMany(Friend, { through: UserFriend, as: "friends" });
 
 User.hasMany(Subscriber);
 Subscriber.belongsTo(User);
@@ -261,4 +268,5 @@ module.exports = {
   Likes,
   View,
   Notifications,
+  UserFriend,
 };
