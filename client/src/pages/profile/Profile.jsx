@@ -51,7 +51,10 @@ const Profile = observer(() => {
   const [offsetMenuLineActive, setOffsetMenuLineActive] = useState(
     100 / profile.menuItemsOtherUser.length
   );
-  const [statusFriend, setStatusFriend] = useState(true);
+
+  const [friendsRequest, setFriendsRequest] = useState([])
+  const [friends, setFriends] = useState([])
+  const [statusFriend, setStatusFriend] = useState(false)
 
   const miniatureRef = useRef(null);
 
@@ -75,6 +78,7 @@ const Profile = observer(() => {
         } else {
           setGroup(`${dataUser.group.name} (Группа не подтверджена)`);
         }
+
         if (dataUser.description) {
           setDescr(dataUser.description);
         } else {
@@ -84,11 +88,15 @@ const Profile = observer(() => {
             setDescr("Расскажите о себе");
           }
         }
+
+        
+
+
       })
       .catch((err) => {
         nav(PROFILE_ROUTE + "/" + user.user.id);
       });
-  }, [user.user.id, location.pathname]);
+  }, [id]);
 
   useEffect(() => {
     const root = document.querySelector(":root");
@@ -230,9 +238,17 @@ const Profile = observer(() => {
                 )}
               </div>
 
-              <div className="profile__button">
-                <FunctionButton>Редактировать</FunctionButton>
-              </div>
+              {user.user.id == id 
+                ?
+                <div className="profile__button">
+                  <FunctionButton>Редактировать</FunctionButton>
+                </div>
+                :
+                <div className="profile__button">
+                  <FunctionButton>{textButton}</FunctionButton>
+                </div>
+              }
+
 
               {/* <div className="profile__socials">
                 <div className="profile__socials-icon">
