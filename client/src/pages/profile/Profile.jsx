@@ -127,22 +127,29 @@ const Profile = observer(() => {
   useEffect(() => {
     if (user.user.id) {
       if (userId.friends && userId.friends.length) {
-        userId.friends.forEach((item) => {
-          if (!user.user.id) return setTextButton("Добавить в друзья");
-          if (item.status) {
-            if (
-              item.userId === user.user.id ||
-              item.friendId === user.user.id
-            ) {
-              return setTextButton("Удалить из друзей");
+        userId.friends.filter((item) => {
+          if (item.userId !== user.user.id || item.friendId !== user.user.id) {
+            if (item.status) {
+              if (
+                item.userId === user.user.id ||
+                item.friendId === user.user.id
+              ) {
+                console.log("2");
+                return setTextButton("Удалить из друзей");
+              }
+            } else {
+              if (item.userId === user.user.id) {
+                console.log("3");
+                return setTextButton("Отменить заявку");
+              }
+              if (item.friendId === user.user.id) {
+                console.log("4");
+                return setTextButton("Принять заявку");
+              }
             }
           } else {
-            if (item.userId === user.user.id) {
-              return setTextButton("Отменить заявку");
-            }
-            if (item.friendId === user.user.id) {
-              return setTextButton("Принять заявку");
-            }
+            console.log("1");
+            return setTextButton("Добавить в друзья");
           }
         });
       } else {
