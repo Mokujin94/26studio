@@ -95,28 +95,33 @@ const Profile = observer(() => {
             setDescr("Расскажите о себе");
           }
         }
-        const requestsAll = dataUser.friends.map((item) => {
-          if (!item.status) {
-            if (item.friendId === dataUser.id) {
-              return <FriendCard userId={item.userId} key={item.id} />;
-            } else {
-              return <FriendCard userId={item.friendId} key={item.id} />;
-            }
-          }
-        });
 
-        const friendsAll = dataUser.friends.map((item) => {
-          if (item.status) {
-            if (item.friendId === dataUser.id) {
-              return <FriendCard userId={item.userId} key={item.id} />;
-            } else {
-              return <FriendCard userId={item.friendId} key={item.id} />;
-            }
-          }
-        });
+        if (dataUser.friends.length) {
+          const friendsAll = dataUser.friends
+            .filter((item) => item.status)
+            .map((item) => (
+              <FriendCard
+                userId={
+                  item.friendId === dataUser.id ? item.userId : item.friendId
+                }
+                key={item.id}
+              />
+            ));
 
-        setFriends(friendsAll);
-        setFriendsRequest(requestsAll);
+          const requestsAll = dataUser.friends
+            .filter((item) => !item.status)
+            .map((item) => (
+              <FriendCard
+                userId={
+                  item.friendId === dataUser.id ? item.userId : item.friendId
+                }
+                key={item.id}
+              />
+            ));
+
+          setFriends(friendsAll);
+          setFriendsRequest(requestsAll);
+        }
       })
       .then(() => setIsLoadingProfile(false))
       .catch((err) => {
@@ -454,9 +459,18 @@ const Profile = observer(() => {
                 {isLoadingProfile ? (
                   <ProfileFriendsSkeleton />
                 ) : statusFriend ? (
-                  friends
+                  friends.length ? (
+                    friends
+                  ) : (
+                    "Нет друзей"
+                  )
+                ) : friendsRequest.length ? (
+                  <>
+                    {friendsRequest}
+                    {console.log(friendsRequest)}
+                  </>
                 ) : (
-                  friendsRequest
+                  "Нет заявок"
                 )}
               </div>
             </div>
