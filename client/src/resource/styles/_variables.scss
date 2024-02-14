@@ -29,10 +29,8 @@ $studio-grey-element: #596470;
 $studio-red-element: #ff9595;
 // hover
 @mixin studio-mixin-primary-element-hover {
-  border: 2px solid $studio-primary-border;
+  outline: 2px solid $studio-primary-border;
   box-shadow: $studio-primary-box-shadow;
-  transform: scale(1.02);
-  z-index: 2;
 }
 @mixin studio-mixin-dark-element-hover {
   background: $studio-primary-element;

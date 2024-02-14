@@ -260,7 +260,7 @@ const Profile = observer(() => {
       return friendAccept(userId.id, user.user.id).then((data) => {
         modal.setModalComplete(true);
         modal.setModalCompleteMessage(
-          `Пользователь ${data} теперь у вас в друзьях`
+          `Пользователь ${userId.name} теперь у вас в друзьях`
         );
         setTextButton("Удалить из друзей");
       });
@@ -268,7 +268,7 @@ const Profile = observer(() => {
     if (textButton === "Удалить из друзей") {
       return friendDelete(user.user.id, userId.id).then((data) => {
         modal.setModalComplete(true);
-        modal.setModalCompleteMessage(`Пользователь ${data} удален из друзей`);
+        modal.setModalCompleteMessage(`Пользователь ${userId.name} удален из друзей`);
         setTextButton("Добавить в друзья");
       });
     }
@@ -477,11 +477,11 @@ const Profile = observer(() => {
           </div>
         </div>
         <div className="profile__content">
-          {user.user.id == id && (
+          {/* {user.user.id == id && (
             <div className="profile__menu-wrapper">
               <ProfileMenu id={id} onClick={checkPrevId} />
             </div>
-          )}
+          )} */}
 
           <TransitionGroup className="transition-group">
             {profile.wrapperItems.map((item) => {

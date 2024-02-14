@@ -16,12 +16,10 @@ export default class ProfileStore {
   constructor() {
     this._wrapperItems = [
       { id: 0, element: <ProfileProjects />, nodeRef: createRef(null) },
-      { id: 1, element: <ProfileSettings />, nodeRef: createRef(null) },
     ];
 
     this._menuItems = [
       { id: 0, title: "Проекты" },
-      { id: 1, title: "Настройки" },
     ];
 
     this._menuItemsOtherUser = [

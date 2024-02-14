@@ -80,6 +80,7 @@ const ModalNewsUpload = observer(() => {
           <textarea
             value={descr}
             onChange={(e) => setDescr(e.target.value)}
+
             name=""
             id=""
             className={style.modal__contentInputsItem}

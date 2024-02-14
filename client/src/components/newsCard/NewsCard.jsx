@@ -11,7 +11,7 @@ import commentsIcon from "../../resource/graphics/icons/newsCard/comments.svg";
 
 function NewsCard({ news }) {
   return (
-    <div className={style.card}>
+    <div className={style.card + ' ' + style.card_special}>
       <div className={style.preview}>
         <img
           src={process.env.REACT_APP_API_URL + news.img}
