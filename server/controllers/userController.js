@@ -10,451 +10,463 @@ const fs = require("fs");
 const unzipper = require("unzipper");
 const { v4: uuidv4 } = require("uuid");
 const {
-  User,
-  Friend,
-  UserAchivment,
-  GettingAchivment,
-  Project,
-  Group,
-  UserFriend,
+	User,
+	Friend,
+	UserAchivment,
+	GettingAchivment,
+	Project,
+	Group,
+	UserFriend,
 } = require("../models/models");
 const { Op } = require("sequelize");
 
 const generateJwt = (
-  id,
-  name,
-  full_name,
-  email,
-  description,
-  avatar,
-  groupId,
-  roleId
+	id,
+	name,
+	full_name,
+	email,
+	description,
+	avatar,
+	group,
+	groupId,
+	roleId
 ) => {
-  return jwt.sign(
-    { id, name, full_name, email, description, avatar, groupId, roleId },
-    process.env.SECRET_KEY,
-    {
-      expiresIn: "24h",
-    }
-  );
+	return jwt.sign(
+		{ id, name, full_name, email, description, avatar, group, groupId, roleId },
+		process.env.SECRET_KEY,
+		{
+			expiresIn: "24h",
+		}
+	);
 };
 
 class UserController {
-  async checkCondidate(req, res, next) {
-    try {
-      const { name, email } = req.body;
-      const condidateName = await User.findOne({ where: { name } });
-      const condidateMail = await User.findOne({ where: { email } });
-      if (condidateName && condidateMail) {
-        return next(
-          ApiError.badRequest(
-            "Пользовательно с таким ником и почтой существуют"
-          )
-        );
-      }
-      if (condidateName) {
-        return next(
-          ApiError.badRequest("Пользовательно с таким ником существует")
-        );
-      }
-      if (condidateMail) {
-        return next(
-          ApiError.badRequest("Пользовательно с такой почтой существует")
-        );
-      }
-      return res.json();
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
-  async generateCode(req, res, next) {
-    try {
-      const { email, code } = req.body;
-      // console.log(code);
-      const message = {
-        to: email,
-        subject: "Код подтверждения аккаунта 26Studio",
-        text: `Ваш код - ${code}`,
-      };
-      mailer(message);
-      return res.json(code);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
-  async registration(req, res, next) {
-    try {
-      const { name, full_name, email, password, description, groupId, roleId } =
-        req.body;
+	async checkCondidate(req, res, next) {
+		try {
+			const { name, email } = req.body;
+			const condidateName = await User.findOne({ where: { name } });
+			const condidateMail = await User.findOne({ where: { email } });
+			if (condidateName && condidateMail) {
+				return next(
+					ApiError.badRequest(
+						"Пользовательно с таким ником и почтой существуют"
+					)
+				);
+			}
+			if (condidateName) {
+				return next(
+					ApiError.badRequest("Пользовательно с таким ником существует")
+				);
+			}
+			if (condidateMail) {
+				return next(
+					ApiError.badRequest("Пользовательно с такой почтой существует")
+				);
+			}
+			return res.json();
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
+	async generateCode(req, res, next) {
+		try {
+			const { email, code } = req.body;
+			// console.log(code);
+			const message = {
+				to: email,
+				subject: "Код подтверждения аккаунта 26Studio",
+				text: `Ваш код - ${code}`,
+			};
+			mailer(message);
+			return res.json(code);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
+	async registration(req, res, next) {
+		try {
+			const { name, full_name, email, password, description, groupId, roleId } =
+				req.body;
 
-      let fileName;
+			let fileName;
 
-      if (!email || !password) {
-        return next(ApiError.badRequest("Неверная почта или пароль"));
-      }
-      const condidate = await User.findOne({ where: { email } });
-      if (condidate) {
-        return next(
-          ApiError.badRequest("Пользовательно с такой почтой существует")
-        );
-      }
-      if (req.files) {
-        fileName = uuid.v4() + ".jpg";
-        const { avatar } = req.files;
-        avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
-      } else {
-        fileName = "avatar.jpg";
-      }
-      const hashPassword = await bcrypt.hash(password, 5);
-      const user = await User.create({
-        name,
-        full_name,
-        email,
-        password: hashPassword,
-        description,
-        avatar: fileName,
-        groupId,
-        roleId,
-      });
-      const achivment = await UserAchivment.create({ userId: user.id });
-      const gettingAchivment = await GettingAchivment.create({
-        userId: user.id,
-      });
-      const token = generateJwt(
-        user.id,
-        user.name,
-        user.full_name,
-        user.email,
-        user.description,
-        user.avatar,
-        user.groupId,
-        user.roleId
-      );
-      return res.json({ token });
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			if (!email || !password) {
+				return next(ApiError.badRequest("Неверная почта или пароль"));
+			}
+			const condidate = await User.findOne({ where: { email } });
+			if (condidate) {
+				return next(
+					ApiError.badRequest("Пользовательно с такой почтой существует")
+				);
+			}
+			if (req.files) {
+				fileName = uuid.v4() + ".jpg";
+				const { avatar } = req.files;
+				avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+			} else {
+				fileName = "avatar.jpg";
+			}
+			const hashPassword = await bcrypt.hash(password, 5);
+			const user = await User.create({
+				name,
+				full_name,
+				email,
+				password: hashPassword,
+				description,
+				avatar: fileName,
+				groupId,
+				roleId,
+			});
 
-  async login(req, res, next) {
-    try {
-      const { email, password } = req.body;
-      const user = await User.findOne({ where: { email } });
-      if (!user) {
-        return next(ApiError.internal("Пользователь с такой почтой не найден"));
-      }
-      let comparePassword = bcrypt.compareSync(password, user.password);
-      if (!comparePassword) {
-        return next(ApiError.internal("Неверная почта или пароль"));
-      }
-      const token = generateJwt(
-        user.id,
-        user.name,
-        user.full_name,
-        user.email,
-        user.description,
-        user.avatar,
-        user.groupId,
-        user.roleId
-      );
-      return res.json({ token });
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			const findUser = await User.findOne({
+				include: [Group],
+				where: { id: user.id }
+			})
+			const achivment = await UserAchivment.create({ userId: user.id });
+			const gettingAchivment = await GettingAchivment.create({
+				userId: user.id,
+			});
+			const token = generateJwt(
+				findUser.id,
+				findUser.name,
+				findUser.full_name,
+				findUser.email,
+				findUser.description,
+				findUser.avatar,
+				user.group,
+				findUser.groupId,
+				findUser.roleId
+			);
+			return res.json({ token });
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-  async check(req, res, next) {
-    try {
-      const token = generateJwt(
-        req.user.id,
-        req.user.name,
-        req.user.full_name,
-        req.user.email,
-        req.user.description,
-        req.user.avatar,
-        req.user.groupId,
-        req.user.roleId
-      );
-      return res.json({ token });
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async login(req, res, next) {
+		try {
+			const { email, password } = req.body;
+			const user = await User.findOne({
+				include: [Group],
+				where: { email }
+			});
+			if (!user) {
+				return next(ApiError.internal("Пользователь с такой почтой не найден"));
+			}
+			let comparePassword = bcrypt.compareSync(password, user.password);
+			if (!comparePassword) {
+				return next(ApiError.internal("Неверная почта или пароль"));
+			}
+			const token = generateJwt(
+				user.id,
+				user.name,
+				user.full_name,
+				user.email,
+				user.description,
+				user.avatar,
+				user.group,
+				user.groupId,
+				user.roleId
+			);
+			return res.json({ token });
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-  async getProfileUser(req, res, next) {
-    try {
-      const { id } = req.params;
-      const user = await User.findOne({
-        include: [
-          Group,
-          {
-            model: Friend,
-            through: UserFriend,
-            as: "friends",
-          },
-        ],
-        where: { id },
-      });
-      if (!user) {
-        return next(ApiError.internal("Пользователь не найден"));
-      }
-      return res.json(user);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async check(req, res, next) {
+		try {
+			const token = generateJwt(
+				req.user.id,
+				req.user.name,
+				req.user.full_name,
+				req.user.email,
+				req.user.description,
+				req.user.avatar,
+				req.user.group,
+				req.user.groupId,
+				req.user.roleId
+			);
+			return res.json({ token });
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-  async getOneUser(req, res, next) {
-    try {
-      const { id } = req.params;
-      const user = await User.findOne({
-        include: [Group, Friend],
-        where: { id },
-      });
-      return res.json(user);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async getProfileUser(req, res, next) {
+		try {
+			const { id } = req.params;
+			const user = await User.findOne({
+				include: [
+					Group,
+					{
+						model: Friend,
+						through: UserFriend,
+						as: "friends",
+					},
+				],
+				where: { id },
+			});
+			if (!user) {
+				return next(ApiError.internal("Пользователь не найден"));
+			}
+			return res.json(user);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-  async getAll(req, res, next) {
-    try {
-      const { groupId } = req.query;
-      const user = await User.findAll({
-        where: { group_status: false, groupId },
-      });
-      return res.json(user);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async getOneUser(req, res, next) {
+		try {
+			const { id } = req.params;
+			const user = await User.findOne({
+				include: [Group, Friend],
+				where: { id },
+			});
+			return res.json(user);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-  async searchUsersByName(req, res, next) {
-    try {
-      const { search, groupId, group_status } = req.query;
+	async getAll(req, res, next) {
+		try {
+			const { groupId } = req.query;
+			const user = await User.findAll({
+				where: { group_status: false, groupId },
+			});
+			return res.json(user);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      const user = await User.findAll({
-        where: {
-          [Op.or]: {
-            name: {
-              [Op.iLike]: "%" + search + "%",
-            },
-            full_name: {
-              [Op.iLike]: "%" + search + "%",
-            },
-          },
-          group_status,
-          groupId,
-        },
-      });
-      return res.json(user);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async searchUsersByName(req, res, next) {
+		try {
+			const { search, groupId, group_status } = req.query;
 
-  async getUsersByGroupStatus(req, res, next) {
-    try {
-      const { groupId, group_status } = req.query;
+			const user = await User.findAll({
+				where: {
+					[Op.or]: {
+						name: {
+							[Op.iLike]: "%" + search + "%",
+						},
+						full_name: {
+							[Op.iLike]: "%" + search + "%",
+						},
+					},
+					group_status,
+					groupId,
+				},
+			});
+			return res.json(user);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      const user = await User.findAll({
-        where: {
-          groupId,
-          group_status,
-        },
-      });
-      return res.json(user);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async getUsersByGroupStatus(req, res, next) {
+		try {
+			const { groupId, group_status } = req.query;
 
-  async getAllTutors(req, res, next) {
-    try {
-      const user = await User.findAll({
-        where: {
-          roleId: 2,
-        },
-      });
-      return res.json(user);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			const user = await User.findAll({
+				where: {
+					groupId,
+					group_status,
+				},
+			});
+			return res.json(user);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-  async uploadProject(req, res) {
-    try {
-      const uploadPath = path.join(__dirname, "..", "uploads");
-      const extractPath = path.join(__dirname, "..", "extracted");
+	async getAllTutors(req, res, next) {
+		try {
+			const user = await User.findAll({
+				where: {
+					roleId: 2,
+				},
+			});
+			return res.json(user);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      if (!fs.existsSync(uploadPath)) {
-        fs.mkdirSync(uploadPath);
-      }
+	async uploadProject(req, res) {
+		try {
+			const uploadPath = path.join(__dirname, "..", "uploads");
+			const extractPath = path.join(__dirname, "..", "extracted");
 
-      if (!fs.existsSync(extractPath)) {
-        fs.mkdirSync(extractPath);
-      }
+			if (!fs.existsSync(uploadPath)) {
+				fs.mkdirSync(uploadPath);
+			}
 
-      if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).send("No files were uploaded.");
-      }
+			if (!fs.existsSync(extractPath)) {
+				fs.mkdirSync(extractPath);
+			}
 
-      const { projectFile } = req.files;
-      const maxFileSize = 100 * 1024 * 1024; // 100 МБ в байтах
-      if (projectFile.size > maxFileSize) {
-        return res
-          .status(400)
-          .send("File size exceeds the allowed limit (100 MB).");
-      }
+			if (!req.files || Object.keys(req.files).length === 0) {
+				return res.status(400).send("No files were uploaded.");
+			}
 
-      const zipFile = projectFile;
+			const { projectFile } = req.files;
+			const maxFileSize = 100 * 1024 * 1024; // 100 МБ в байтах
+			if (projectFile.size > maxFileSize) {
+				return res
+					.status(400)
+					.send("File size exceeds the allowed limit (100 MB).");
+			}
 
-      // Сохраняем zip-архив на сервере
-      zipFile.mv(path.join(uploadPath, zipFile.name), (err) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
+			const zipFile = projectFile;
 
-        const zipFilePath = path.join(uploadPath, zipFile.name);
-        const uniqueExtractPath = path.join(extractPath, uuidv4());
+			// Сохраняем zip-архив на сервере
+			zipFile.mv(path.join(uploadPath, zipFile.name), (err) => {
+				if (err) {
+					return res.status(500).send(err);
+				}
 
-        fs.mkdirSync(uniqueExtractPath);
+				const zipFilePath = path.join(uploadPath, zipFile.name);
+				const uniqueExtractPath = path.join(extractPath, uuidv4());
 
-        // Используем потоки для разархивации
-        const readStream = fs.createReadStream(zipFilePath);
-        const extractStream = readStream.pipe(unzipper.Parse());
+				fs.mkdirSync(uniqueExtractPath);
 
-        const filePaths = [];
-        let normalPath = "";
-        let baseUrl = "";
+				// Используем потоки для разархивации
+				const readStream = fs.createReadStream(zipFilePath);
+				const extractStream = readStream.pipe(unzipper.Parse());
 
-        extractStream.on("entry", async (entry) => {
-          const entryPath = path.join(uniqueExtractPath, entry.path);
-          // Добавляем относительный путь файла в массив
-          const relativePath = path.relative(uniqueExtractPath, entryPath);
-          normalPath = path.relative(extractPath, uniqueExtractPath);
-          const fileNamePos = entry.path.indexOf("/");
-          baseUrl = path.join(
-            process.env.BASEURL + "/",
-            normalPath + "/",
-            entry.path.substr(0, fileNamePos) + "/"
-          );
-          filePaths.push(relativePath);
+				const filePaths = [];
+				let normalPath = "";
+				let baseUrl = "";
 
-          // Создаем уникальную папку для файла (включая все предшествующие директории)
-          if (entry.type === "Directory") {
-            fs.mkdirSync(entryPath, { recursive: true });
-          } else {
-            // Создаем все предшествующие директории
-            const dirname = path.dirname(entryPath);
-            fs.mkdirSync(dirname, { recursive: true });
+				extractStream.on("entry", async (entry) => {
+					const entryPath = path.join(uniqueExtractPath, entry.path);
+					// Добавляем относительный путь файла в массив
+					const relativePath = path.relative(uniqueExtractPath, entryPath);
+					normalPath = path.relative(extractPath, uniqueExtractPath);
+					const fileNamePos = entry.path.indexOf("/");
+					baseUrl = path.join(
+						process.env.BASEURL + "/",
+						normalPath + "/",
+						entry.path.substr(0, fileNamePos) + "/"
+					);
+					filePaths.push(relativePath);
 
-            // Читаем буфер и преобразуем его в строку
-            const buffer = await entry.buffer();
-            const content = buffer.toString("utf-8");
-            fs.writeFileSync(entryPath, content, "utf-8");
-          }
+					// Создаем уникальную папку для файла (включая все предшествующие директории)
+					if (entry.type === "Directory") {
+						fs.mkdirSync(entryPath, { recursive: true });
+					} else {
+						// Создаем все предшествующие директории
+						const dirname = path.dirname(entryPath);
+						fs.mkdirSync(dirname, { recursive: true });
 
-          // Пропускаем содержимое файла
-          entry.autodrain();
-        });
+						// Читаем буфер и преобразуем его в строку
+						const buffer = await entry.buffer();
+						const content = buffer.toString("utf-8");
+						fs.writeFileSync(entryPath, content, "utf-8");
+					}
 
-        extractStream.on("finish", () => {
-          // Выводим список относительных путей файлов
-          console.log("Files in the archive:", filePaths);
+					// Пропускаем содержимое файла
+					entry.autodrain();
+				});
 
-          res.json({ filePaths, normalPath, baseUrl });
-        });
+				extractStream.on("finish", () => {
+					// Выводим список относительных путей файлов
+					console.log("Files in the archive:", filePaths);
 
-        extractStream.on("error", (err) => {
-          console.error("Error during extraction:", err);
-          res.status(500).send("Error during extraction");
-        });
-      });
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+					res.json({ filePaths, normalPath, baseUrl });
+				});
 
-  async sendProjectViewer(req, res) {
-    try {
-      const { filePath } = req.query;
+				extractStream.on("error", (err) => {
+					console.error("Error during extraction:", err);
+					res.status(500).send("Error during extraction");
+				});
+			});
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      if (!filePath) {
-        return res.status(400).send("File path is missing.");
-      }
+	async sendProjectViewer(req, res) {
+		try {
+			const { filePath } = req.query;
 
-      // Формируем полный путь к файлу, включая уникальную папку
-      const fullPath = path.join(__dirname, "../extracted/", filePath);
+			if (!filePath) {
+				return res.status(400).send("File path is missing.");
+			}
 
-      // Отправляем файл клиенту
-      res.sendFile(fullPath);
-    } catch (error) {
-      console.error("Error during project view:", error);
-      res.status(500).send("Error during project view");
-    }
-  }
+			// Формируем полный путь к файлу, включая уникальную папку
+			const fullPath = path.join(__dirname, "../extracted/", filePath);
 
-  async uploadFinishedProject(req, res) {
-    try {
-      const {
-        name,
-        description,
-        path_from_project,
-        baseURL,
-        is_private,
-        is_private_comments,
-        userId,
-      } = req.body;
+			// Отправляем файл клиенту
+			res.sendFile(fullPath);
+		} catch (error) {
+			console.error("Error during project view:", error);
+			res.status(500).send("Error during project view");
+		}
+	}
 
-      const previewFile = uuid.v4() + ".jpg";
-      const { preview } = req.files;
-      preview.mv(path.resolve(__dirname, "..", "static/projects", previewFile));
+	async uploadFinishedProject(req, res) {
+		try {
+			const {
+				name,
+				description,
+				path_from_project,
+				baseURL,
+				is_private,
+				is_private_comments,
+				userId,
+			} = req.body;
 
-      const project = await Project.create({
-        name,
-        description,
-        path_from_project,
-        baseURL,
-        preview: previewFile,
-        is_private,
-        is_private_comments,
-        userId,
-      });
+			const previewFile = uuid.v4() + ".jpg";
+			const { preview } = req.files;
+			preview.mv(path.resolve(__dirname, "..", "static/projects", previewFile));
 
-      return res.json(project);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			const project = await Project.create({
+				name,
+				description,
+				path_from_project,
+				baseURL,
+				preview: previewFile,
+				is_private,
+				is_private_comments,
+				userId,
+			});
 
-  async updateAvatar(req, res, next) {
-    try {
-      const { id } = req.body;
-      let fileName;
-      const user = await User.findOne({ where: { id } });
-      if (req.files) {
-        fileName = uuid.v4() + ".jpg";
-        const { avatar } = req.files;
-        avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
-      } else {
-        fileName = "avatar.jpg";
-      }
-      await user.update({ avatar: fileName });
-      const token = generateJwt(
-        user.id,
-        user.name,
-        user.full_name,
-        user.email,
-        user.description,
-        user.avatar,
-        user.groupId,
-        user.roleId
-      );
-      return res.json({ token });
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			return res.json(project);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
+
+	async updateAvatar(req, res, next) {
+		try {
+			const { id } = req.body;
+			let fileName;
+			const user = await User.findOne({ where: { id } });
+			if (req.files) {
+				fileName = uuid.v4() + ".jpg";
+				const { avatar } = req.files;
+				avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+			} else {
+				fileName = "avatar.jpg";
+			}
+			await user.update({ avatar: fileName });
+			const token = generateJwt(
+				user.id,
+				user.name,
+				user.full_name,
+				user.email,
+				user.description,
+				user.avatar,
+				user.groupId,
+				user.roleId
+			);
+			return res.json({ token });
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 }
 module.exports = new UserController();

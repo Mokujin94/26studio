@@ -37,11 +37,17 @@ export default class ProfileStore {
     ]
 
     this._selectedMenu = { id: 0, title: "Проекты" };
+
+		this._editModal = false;
     makeAutoObservable(this);
   }
 
   setWrapperItems(wrapperItems) {
     this._wrapperItems = wrapperItems;
+  }
+
+	setEditModal(editModal) {
+    this._editModal = editModal;
   }
 
   setMenuItems(menuItems) {
@@ -86,5 +92,9 @@ export default class ProfileStore {
 
   get wrapperMenuFriends() {
     return this._wrapperMenuFriends;
+  }
+
+	get editModal() {
+    return this._editModal;
   }
 }

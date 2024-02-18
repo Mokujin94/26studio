@@ -27,127 +27,140 @@ import ModalNewsUpload from "./components/modalNewsUpload/ModalNewsUpload";
 import ModalComplete from "./components/modalComplete/ModalComplete";
 import ProfileMiniatureModal from "./components/profileMiniatureModal/ProfileMiniatureModal";
 import { fetchNotifications } from "./http/notificationAPI";
+import EditModal from "./components/editModal/EditModal";
 
 const App = observer(() => {
-  const { user, error, modal } = useContext(Context);
+	const { user, error, modal, profile } = useContext(Context);
 
-  useEffect(() => {
-    check().then((data) => {
-      user.setUser(data);
-      user.setAuth(true);
-    });
-  }, []);
+	useEffect(() => {
+		check().then((data) => {
+			console.log(data)
+			user.setUser(data);
+			user.setAuth(true);
+		});
+	}, []);
 
-  useEffect(() => {
-    if (user.user.id) {
-      fetchNotifications(user.user.id).then((data) => {
-        user.setNotifications(data);
-      });
-    }
-    const socket = socketIOClient(process.env.REACT_APP_API_URL);
-    socket.on("notification", (updateNotification) => {
-      if (
-        updateNotification.senderId !== user.user.id &&
-        updateNotification.recipientId === user.user.id
-      ) {
-        user.setNotifications([...user.notifications, updateNotification]);
-        console.log(updateNotification);
-        // console.log("Получены новые уведомления:", updateNotification);
-        console.log("почему 2");
-        new Audio(notificationAudio).play();
-      }
-    });
+	useEffect(() => {
+		if (user.user.id) {
+			fetchNotifications(user.user.id).then((data) => {
+				user.setNotifications(data);
+			});
+		}
+		const socket = socketIOClient(process.env.REACT_APP_API_URL);
+		socket.on("notification", (updateNotification) => {
+			if (
+				updateNotification.senderId !== user.user.id &&
+				updateNotification.recipientId === user.user.id
+			) {
+				user.setNotifications([...user.notifications, updateNotification]);
+				console.log(updateNotification);
+				// console.log("Получены новые уведомления:", updateNotification);
+				console.log("почему 2");
+				new Audio(notificationAudio).play();
+			}
+		});
 
-    return () => {
-      socket.disconnect();
-    };
-  }, [user.user.id]);
+		return () => {
+			socket.disconnect();
+		};
+	}, [user.user.id]);
 
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <AuthProvider>
-          <ScrollToTop />
-          <CSSTransition
-            in={user.modalProject}
-            timeout={300}
-            classNames="create-anim"
-            mountOnEnter
-            unmountOnExit
-          >
-            <div
-              className="modal__bg"
-              onClick={() => user.setModalProject(false)}
-            >
-              <AddProjectModal />
-            </div>
-          </CSSTransition>
-          <CSSTransition
-            in={user.modalNews}
-            timeout={300}
-            classNames="create-anim"
-            mountOnEnter
-            unmountOnExit
-          >
-            <div className="modal__bg" onClick={() => user.setModalNews(false)}>
-              <ModalNewsUpload />;
-            </div>
-          </CSSTransition>
-          <CSSTransition
-            in={error.notAuthError}
-            timeout={0}
-            classNames="create-anim"
-            mountOnEnter
-            unmountOnExit
-          >
-            <div
-              className="modal__bg"
-              onClick={() => error.setNotAuthError(false)}
-            >
-              <NotAuthPopup />
-            </div>
-          </CSSTransition>
-          <CSSTransition
-            in={modal.modalComplete}
-            timeout={300}
-            classNames="popup-success"
-            unmountOnExit
-          >
-            <div className="modal__complete">
-              <ModalComplete completeMessage={modal.modalCompleteMessage} />
-            </div>
-          </CSSTransition>
+	return (
+		<div className="App">
+			<BrowserRouter>
+				<AuthProvider>
+					<ScrollToTop />
+					<CSSTransition
+						in={user.modalProject}
+						timeout={300}
+						classNames="create-anim"
+						mountOnEnter
+						unmountOnExit
+					>
+						<div
+							className="modal__bg"
+							onClick={() => user.setModalProject(false)}
+						>
+							<AddProjectModal />
+						</div>
+					</CSSTransition>
+					<CSSTransition
+						in={user.modalNews}
+						timeout={300}
+						classNames="create-anim"
+						mountOnEnter
+						unmountOnExit
+					>
+						<div className="modal__bg" onClick={() => user.setModalNews(false)}>
+							<ModalNewsUpload />;
+						</div>
+					</CSSTransition>
+					<CSSTransition
+						in={profile.editModal}
+						timeout={300}
+						classNames="create-anim"
+						mountOnEnter
+						unmountOnExit
+					>
+						<div className="modal__bg" onClick={() => profile.setEditModal(false)}>
+							<EditModal />;
+						</div>
+					</CSSTransition>
+					<CSSTransition
+						in={error.notAuthError}
+						timeout={0}
+						classNames="create-anim"
+						mountOnEnter
+						unmountOnExit
+					>
+						<div
+							className="modal__bg"
+							onClick={() => error.setNotAuthError(false)}
+						>
+							<NotAuthPopup />
+						</div>
+					</CSSTransition>
+					<CSSTransition
+						in={modal.modalComplete}
+						timeout={300}
+						classNames="popup-success"
+						unmountOnExit
+					>
+						<div className="modal__complete">
+							<ModalComplete completeMessage={modal.modalCompleteMessage} />
+						</div>
+					</CSSTransition>
 
-          <CSSTransition
-            in={modal.modalError}
-            timeout={300}
-            classNames="popup-success"
-            unmountOnExit
-          >
-            <div className="modal__complete">
-              <ModalError error={modal.modalErrorMessage} />
-            </div>
-          </CSSTransition>
+					<CSSTransition
+						in={modal.modalError}
+						timeout={300}
+						classNames="popup-success"
+						unmountOnExit
+					>
+						<div className="modal__complete">
+							<ModalError error={modal.modalErrorMessage} />
+						</div>
+					</CSSTransition>
 
-          {user.path === REGISTRATION_ROUTE ||
-          user.path === LOGIN_ROUTE ? null : (
-            <BurgerMenu />
-          )}
-          {user.path === REGISTRATION_ROUTE ||
-          user.path === LOGIN_ROUTE ? null : (
-            <Header />
-          )}
-          <div className="App__inner">
-            <AppRouter />
-          </div>
-          {user.path === REGISTRATION_ROUTE ||
-          user.path === LOGIN_ROUTE ? null : (
-            <Footer />
-          )}
-        </AuthProvider>
-      </BrowserRouter>
-    </div>
-  );
+					{user.path === REGISTRATION_ROUTE ||
+						user.path === LOGIN_ROUTE ? null : (
+						<BurgerMenu />
+					)}
+					{user.path === REGISTRATION_ROUTE ||
+						user.path === LOGIN_ROUTE ? null : (
+						<Header />
+					)}
+					<div className="App__inner">
+						<AppRouter />
+					</div>
+					{user.path === REGISTRATION_ROUTE ||
+						user.path === LOGIN_ROUTE ? null : (
+						<Footer />
+					)}
+				</AuthProvider>
+			</BrowserRouter>
+		</div>
+	);
 });
 
 export default App;
