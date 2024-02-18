@@ -109,7 +109,7 @@ const Profile = observer(() => {
 						));
 
 					const requestsAll = dataUser.friends
-						.filter((item) => !item.status)
+						.filter((item) => !item.status && item.userId !== user.user.id)
 						.map((item) => (
 							<FriendCard
 								userId={
@@ -134,29 +134,28 @@ const Profile = observer(() => {
 			if (userId.friends && userId.friends.length) {
 				userId.friends.filter((item) => {
 					if (item.userId === user.user.id && item.friendId === userId.id || item.friendId === user.user.id && item.userId === userId.id) {
-						if (item.status) {
-							if (
-								item.userId === user.user.id ||
-								item.friendId === user.user.id
-							) {
-								console.log("2");
-								return setTextButton("Удалить из друзей");
-							}
-						} else {
-							if (item.userId === user.user.id) {
-								console.log("3");
-								return setTextButton("Отменить заявку");
-							}
-							if (item.friendId === user.user.id) {
-								console.log("4");
-								return setTextButton("Принять заявку");
-							}
+						return item;
+					}
+				}).map(item => {
+					if (item.status) {
+						if (
+							item.userId === user.user.id ||
+							item.friendId === user.user.id
+						) {
+							console.log("2");
+							return setTextButton("Удалить из друзей");
 						}
 					} else {
-						console.log("1");
-						return setTextButton("Добавить в друзья");
+						if (item.userId === user.user.id) {
+							console.log("3");
+							return setTextButton("Отменить заявку");
+						}
+						if (item.friendId === user.user.id) {
+							console.log("4");
+							return setTextButton("Принять заявку");
+						}
 					}
-				});
+				})
 			} else {
 				setTextButton("Добавить в друзья");
 			}
