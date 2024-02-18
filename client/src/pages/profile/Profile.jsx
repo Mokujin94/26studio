@@ -133,7 +133,7 @@ const Profile = observer(() => {
 		if (user.user.id) {
 			if (userId.friends && userId.friends.length) {
 				userId.friends.filter((item) => {
-					if (item.userId !== user.user.id || item.friendId !== user.user.id) {
+					if (item.userId === user.user.id && item.friendId === userId.id || item.friendId === user.user.id && item.userId === userId.id) {
 						if (item.status) {
 							if (
 								item.userId === user.user.id ||
