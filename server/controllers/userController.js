@@ -468,5 +468,60 @@ class UserController {
 			next(ApiError.badRequest(error.message));
 		}
 	}
+
+	async update(req, res, next) {
+		const { id } = req.params;
+		const { name, full_name, email, password, groupId } = req.body;
+		const { avatar } = req.files;
+
+		let user;
+		let fileName;
+
+		if (!id) {
+			next(ApiError.badRequest({ error: "Interal Server Error" }))
+		}
+
+		try {
+			user = await User.findOne({
+				include: [Group],
+				where: { id }
+			})
+
+			let updateFields = {}; // Объект для хранения обновляемых полей
+
+			// Проверяем, передано ли поле в req.body, и если да, добавляем его в объект обновления
+			if (name) updateFields.name = name;
+			if (full_name) updateFields.full_name = full_name;
+			if (email) updateFields.email = email;
+			if (password) {
+				const hashPassword = await bcrypt.hash(password, 5);
+				updateFields.password = hashPassword;
+			}
+			if (groupId) updateFields.groupId = groupId;
+
+			if (req.files && req.files.avatar) {
+				fileName = uuid.v4() + ".jpg";
+				avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+				updateFields.avatar = fileName;
+			}
+
+
+
+			await user.update(updateFields);
+			const token = generateJwt(
+				user.id,
+				user.name,
+				user.full_name,
+				user.email,
+				user.description,
+				user.avatar,
+				user.groupId,
+				user.roleId
+			);
+			return res.json({ token });
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 }
 module.exports = new UserController();
