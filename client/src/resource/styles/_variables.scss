@@ -32,6 +32,12 @@ $studio-red-element: #ff9595;
   outline: 2px solid $studio-primary-border;
   box-shadow: $studio-primary-box-shadow;
 }
+
+@mixin studio-mixin-red-element-hover {
+  outline: 2px solid $studio-red-border;
+  box-shadow: $studio-red-box-shadow;
+}
+
 @mixin studio-mixin-dark-element-hover {
   background: $studio-primary-element;
   color: $studio-dark-text;
@@ -123,6 +129,7 @@ $studio-black-input: #1d252e;
 
 // box-shadow
 $studio-primary-box-shadow: 0px 0px 16px 7px rgba(151, 188, 230, 0.2);
+$studio-red-box-shadow: 0px 0px 16px 7px rgba(230, 151, 151, 0.2);
 
 /*------------------------------------------------------------------*/
 
@@ -146,6 +153,7 @@ $studio-border-color: #596470;
 $studio-black-opacity-02: rgba(0, 0, 0, 0.15);
 $studio-black-opacity-03: rgba(0, 0, 0, 0.3);
 $studio-black-opacity-05: rgba(0, 0, 0, 0.5);
+$studio-primary-opacity-04: rgba(39, 50, 62, 0.4);
 $studio-placholder-color: rgba(255, 255, 255, 0.5);
 
 /*------------------------------------------------------------------*/
