@@ -57,7 +57,7 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 						<h2 className={style.friendCard__infoNickName}>{user.name}</h2>
 						<h2 className={style.friendCard__infoFullname}>{user.full_name}</h2>
 						<h2 className={style.friendCard__info__online}>
-							{isOnline ? 'online' : lastTimeOnline}
+							{isOnline ? 'Online' : `Был в сети ${lastTimeOnline}`}
 						</h2>
 					</div>
 					{options && (

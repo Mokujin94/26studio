@@ -91,17 +91,14 @@ const AddProjectModalSecond = observer(
 							</option>
 							{projectPathes &&
 								projectPathes.map((item, i) => {
-									// if (item.split('.').at(-1) === 'html') {
-									//   return (
-
-									//   );
-									// }
+									if (item.split('.').at(-1) === 'html') {
+										return (
+											<option key={i} value={item}>
+												{item}
+											</option>
+										);
+									}
 									console.log(item);
-									return (
-										<option key={i} value={item}>
-											{item}
-										</option>
-									);
 								})}
 						</select>
 					</div>

@@ -236,6 +236,28 @@
       border-radius: 100%;
     }
 
+		&-online {
+			position: absolute;
+			bottom: 15px;
+			right: 15px;
+			&_true {
+				background-color: #97bce6;
+				border-radius: 100%;
+				border: 3px solid #27323e;
+				width: 35px;
+				height: 35px;
+			}
+
+			&_false {
+				font-weight: 600;
+				color: $studio-white-text;
+				padding: 2px 10px;
+				background-color: $studio-grey-element;
+				border: 3px solid $studio-dark-border;
+				border-radius: 30px;
+			}
+		}
+
     &-input {
       position: absolute;
       display: none;
