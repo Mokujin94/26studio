@@ -11,17 +11,31 @@ import { Link } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 
 import FriendCardSkeleton from "../../components/Skeletons/FriendCardSkeleton";
+import { useDateFormatter } from "../../hooks/useDateFormatter";
 
 const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 	const [user, setUser] = useState({});
 	const [group, setGroup] = useState();
 	const [isLoadingFriend, setIsLoadingFriend] = useState(true);
+	const [isOnline, setIsOnline] = useState(false)
+	const [lastTimeOnline, setLastTimeOnline] = useState('')
 
 	useEffect(() => {
 		setIsLoadingFriend(true);
 		fetchOneUser(userId)
 			.then((data) => {
 				setUser(data);
+				console.log('data: ', data)
+				// console.log(data.lastOnline.getTime)
+				const lastOnline = new Date(data.lastOnline).getTime() / 1000;
+				const nowTime = new Date().getTime() / 1000;
+				console.log(nowTime - lastOnline)
+				if ((nowTime - lastOnline) <= 300) {
+					setIsOnline(true)
+				} else {
+					const time = useDateFormatter(data.lastOnline)
+					setLastTimeOnline(time);
+				}
 				setIsLoadingFriend(false);
 			})
 			.catch((err) => console.log(err));
@@ -31,7 +45,7 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 			{isLoadingFriend ? (
 				<FriendCardSkeleton />
 			) : (
-				<Link to={PROFILE_ROUTE + "/" + userId} className={style.friendCard + " " + style.friendCard_online}>
+				<Link to={PROFILE_ROUTE + "/" + userId} className={isOnline ? style.friendCard + " " + style.friendCard_online : style.friendCard}>
 					<div className={style.friendCard__avatar}>
 						<img
 							src={process.env.REACT_APP_API_URL + user.avatar}
@@ -43,7 +57,7 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 						<h2 className={style.friendCard__infoNickName}>{user.name}</h2>
 						<h2 className={style.friendCard__infoFullname}>{user.full_name}</h2>
 						<h2 className={style.friendCard__info__online}>
-							был в сети: 4ч назад
+							{isOnline ? 'online' : lastTimeOnline}
 						</h2>
 					</div>
 					{options && (

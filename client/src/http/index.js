@@ -20,21 +20,38 @@ const $adminHost = axios.create({
 const authInterceptor = async (config) => {
 	const token = localStorage.getItem("token");
 	config.headers.authorization = `Bearer ${token}`;
-	const decode = jwt_decode(token);
-	console.log(decode)
-	try {
-		await getUserOnline(decode.id)
-	} catch (error) {
-		throw error
+	if (token) {
+		const decode = jwt_decode(token);
+		console.log(decode)
+		try {
+			await getUserOnline(decode.id)
+		} catch (error) {
+			throw error
+		}
 	}
+
+	return config;
+};
+
+const hostInterceptor = async (config) => {
+	const token = localStorage.getItem("token");
+	if (token) {
+		const decode = jwt_decode(token);
+		console.log(decode)
+		try {
+			await getUserOnline(decode.id)
+		} catch (error) {
+			throw error
+		}
+	}
+
 	return config;
 };
 
 
-
 const getUserOnline = async (id) => {
 	try {
-		await $host.patch('api/user/' + id);
+		await $checkOnlineHost.patch('api/user/' + id);
 
 	} catch (error) {
 		throw error
@@ -78,6 +95,7 @@ const adminInterceptor = async (config) => {
 };
 
 $authHost.interceptors.request.use(authInterceptor);
+$host.interceptors.request.use(hostInterceptor);
 $adminHost.interceptors.request.use(adminInterceptor);
 
 export { $host, $authHost, $adminHost, };
