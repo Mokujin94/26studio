@@ -13,10 +13,25 @@ const $adminHost = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
-const authInterceptor = (config) => {
-  config.headers.authorization = `Bearer ${localStorage.getItem("token")}`;
+const authInterceptor = async (config) => {
+	config.headers.authorization = `Bearer ${localStorage.getItem("token")}`;
+	try {
+		await getUserOnline()
+	} catch (error) {
+		throw error
+	}
   return config;
 };
+
+const getUserOnline = async () => {
+	try {
+		const { data } = await $authHost.get('api/user/auth')
+		const decode = await jwt_decode(data.token);
+		await $authHost.patch('api/user/' + decode.id)
+	} catch (error) {
+		throw error
+	}
+}
 
 const getUserRoleFromAPI = async () => {
   try {

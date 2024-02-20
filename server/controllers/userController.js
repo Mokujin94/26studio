@@ -29,10 +29,11 @@ const generateJwt = (
 	avatar,
 	group,
 	groupId,
-	roleId
+	roleId,
+	lastOnline
 ) => {
 	return jwt.sign(
-		{ id, name, full_name, email, description, avatar, group, groupId, roleId },
+		{ id, name, full_name, email, description, avatar, group, groupId, roleId, lastOnline },
 		process.env.SECRET_KEY,
 		{
 			expiresIn: "24h",
@@ -133,9 +134,10 @@ class UserController {
 				findUser.email,
 				findUser.description,
 				findUser.avatar,
-				user.group,
+				findUser.group,
 				findUser.groupId,
-				findUser.roleId
+				findUser.roleId,
+				findUser.lastOnline
 			);
 			return res.json({ token });
 		} catch (error) {
@@ -166,7 +168,8 @@ class UserController {
 				user.avatar,
 				user.group,
 				user.groupId,
-				user.roleId
+				user.roleId,
+				user.lastOnline
 			);
 			return res.json({ token });
 		} catch (error) {
@@ -185,7 +188,8 @@ class UserController {
 				req.user.avatar,
 				req.user.group,
 				req.user.groupId,
-				req.user.roleId
+				req.user.roleId,
+				req.user.lastOnline,
 			);
 			return res.json({ token });
 		} catch (error) {
@@ -460,8 +464,10 @@ class UserController {
 				user.email,
 				user.description,
 				user.avatar,
+				user.group,
 				user.groupId,
-				user.roleId
+				user.roleId,
+				user.lastOnline
 			);
 			return res.json({ token });
 		} catch (error) {
@@ -515,10 +521,27 @@ class UserController {
 				user.email,
 				user.description,
 				user.avatar,
+				user.group,
 				user.groupId,
-				user.roleId
+				user.roleId,
+				user.lastOnline
 			);
 			return res.json({ token });
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
+
+	async checkOnline(req, res, next) {
+		const { id } = req.params;
+		if (!id) return next(ApiError.internal({error: 'Internal server error'}))
+		try {
+			const user = User.findOne({ where: { id } })
+			if (user && id) {
+				user.lastOnline = new Date(); // изменяем значение поля lastOnline
+				await user.save(); // сохраняем изменения в базе данных
+			}
+			return res.json(user);
 		} catch (error) {
 			next(ApiError.badRequest(error.message));
 		}

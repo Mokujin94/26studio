@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import likeIcon from "../../resource/graphics/icons/newsCard/likes.svg";
 import viewIcon from "../../resource/graphics/icons/newsCard/views.svg";
 import commentIcon from "../../resource/graphics/icons/newsCard/comments.svg";
@@ -10,15 +10,15 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { useLocation } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
+import { deleteProjectById } from "../../http/projectAPI";
 
-const ProjectCard = observer(({ id, img, title, name, date, like, view, comment }) => {
+const ProjectCard = observer(({ id, img, title, name, date, like, view, comment, dataProjects, setDataProjects }) => {
 	const { profile } = useContext(Context)
 	const formatedDate = useDateFormatter(date);
 	const formatedLikes = useCountFormatter(like);
 	const formatedViews = useCountFormatter(view);
 	const formatedComments = useCountFormatter(comment);
 	const [acceptDelete, setAcceptDelete] = useState(false)
-	const location = useLocation()
 
 	useEffect(() => {
 		setAcceptDelete(false)
@@ -32,6 +32,17 @@ const ProjectCard = observer(({ id, img, title, name, date, like, view, comment 
 		e.preventDefault()
 		setAcceptDelete(true)
 	}
+
+	const onDelete = () => {
+		deleteProjectById(id)
+			.then(e => {
+				const newDataProjects = dataProjects.filter((item) => item.id != id)
+				setDataProjects(newDataProjects)
+				console.log(e, 'Успешно удалено')
+			})
+			.catch(e => console.log(e, 'Ошибка при попытке удаления'))
+	}
+
 	return (
 		<>
 			{
@@ -42,7 +53,7 @@ const ProjectCard = observer(({ id, img, title, name, date, like, view, comment 
 							Вы действительно хотите удалить проект?
 						</p>
 						<div className={style.project__acceptDeleteButtons}>
-							<span className={style.project__acceptDeleteButtonsItem}>Да</span>
+							<span className={style.project__acceptDeleteButtonsItem} onClick={onDelete}>Да</span>
 							<span className={style.project__acceptDeleteButtonsItem} onClick={() => setAcceptDelete(false)}>Нет</span>
 						</div>
 					</div>

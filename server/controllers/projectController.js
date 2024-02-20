@@ -142,7 +142,24 @@ class ProjectController {
     } catch (error) {
       next(ApiError.badRequest(error.message));
     }
-  }
+	}
+
+	async deleteOne(req, res, next) {
+    try {
+      const { id } = req.params;
+      const project = await Project.destroy({
+        where: { id }
+			});
+			
+			if (!project) {
+        return res.status(404).json({ error: 'Проект не найден' });
+			}
+
+      return res.json(project);
+    } catch (error) {
+      next(ApiError.badRequest(error.message));
+    }
+	}
 
   async getAllUser(req, res, next) {
     try {

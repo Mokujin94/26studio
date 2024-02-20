@@ -12,8 +12,14 @@ const User = sequelize.define("user", {
   description: { type: DataTypes.STRING },
   avatar: { type: DataTypes.STRING, defaultValue: "avatar.jpg" },
   group_status: { type: DataTypes.BOOLEAN, defaultValue: false },
-  achivment_list: { type: DataTypes.JSON },
+	achivment_list: { type: DataTypes.JSON },
+	lastOnline: {
+    type: DataTypes.DATE,
+    allowNull: true // или false, в зависимости от ваших требований
+  }
 });
+
+
 
 const Friend = sequelize.define("friend", {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },

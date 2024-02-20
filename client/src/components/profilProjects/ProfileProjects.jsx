@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import projectPhoto from "../../resource/graphics/images/projectCard/bg.jpg";
 
@@ -24,7 +24,10 @@ const ProfileProjects = observer(({ isOnSetting }) => {
 			{dataProjects.length ? (
 				dataProjects.map((item) => {
 					return (
-						<Link className={profile.isOnSetting ? style.projectCardLink + " " + style.projectCardLink_isOnSetting : style.projectCardLink} to={PROJECTS_ROUTE + "/" + item.id} key={item.id}>
+						<Link className={profile.isOnSetting ? style.projectCardLink + " " + style.projectCardLink_isOnSetting : style.projectCardLink}
+							to={PROJECTS_ROUTE + "/" + item.id}
+							key={item.id}
+						>
 							<ProjectCard
 								id={item.id}
 								img={item.preview}
@@ -33,6 +36,8 @@ const ProfileProjects = observer(({ isOnSetting }) => {
 								like={item.likes.length}
 								view={item.views.length}
 								comment={item.comments.length}
+								dataProjects={dataProjects}
+								setDataProjects={setDataProjects}
 							/>
 						</Link>
 					);
