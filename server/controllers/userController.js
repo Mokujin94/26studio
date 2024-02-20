@@ -18,7 +18,7 @@ const {
 	Group,
 	UserFriend,
 } = require("../models/models");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 
 const generateJwt = (
 	id,
@@ -534,14 +534,27 @@ class UserController {
 
 	async checkOnline(req, res, next) {
 		const { id } = req.params;
-		if (!id) return next(ApiError.internal({error: 'Internal server error'}))
+		if (!id) return next(ApiError.internal({ error: 'Internal server error' }))
 		try {
-			const user = User.findOne({ where: { id } })
-			if (user && id) {
-				user.lastOnline = new Date(); // изменяем значение поля lastOnline
-				await user.save(); // сохраняем изменения в базе данных
-			}
-			return res.json(user);
+			// const users = User.findOne({ where: { id } })
+			// if (users && id) {
+			// user.lastOnline = new Date(); // изменяем значение поля lastOnline
+			const user = await User.update({ lastOnline: new Date() }, { where: { id } }); // сохраняем изменения в базе данных
+			// }
+
+			const token = generateJwt(
+				user.id,
+				user.name,
+				user.full_name,
+				user.email,
+				user.description,
+				user.avatar,
+				user.group,
+				user.groupId,
+				user.roleId,
+				user.lastOnline
+			);
+			return res.json({ token });
 		} catch (error) {
 			next(ApiError.badRequest(error.message));
 		}

@@ -5,14 +5,14 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 router.patch("/", authMiddleware, NotificationController.viewNotification);
 router.delete(
-  "/:id",
-  authMiddleware,
-  NotificationController.deleteNotification
+	"/:id",
+	authMiddleware,
+	NotificationController.deleteNotification
 );
 router.delete(
-  "/",
-  authMiddleware,
-  NotificationController.deleteAllNotification
+	"/",
+	authMiddleware,
+	NotificationController.deleteAllNotification
 );
 router.get("/", authMiddleware, NotificationController.getAll);
 
