@@ -299,6 +299,9 @@ class UserController {
 	}
 
 	async uploadProject(req, res, next) {
+		res.set('Access-Control-Allow-Origin', '*');
+		res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+		res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 		try {
 			const uploadPath = path.join(__dirname, "..", "uploads");
 			const extractPath = path.join(__dirname, "..", "extracted");
@@ -311,6 +314,7 @@ class UserController {
 			if (!fs.existsSync(extractPath)) {
 				fs.mkdirSync(extractPath);
 			}
+
 
 			if (!req.files) {
 				return res.status(400).send("No files were uploaded.");
