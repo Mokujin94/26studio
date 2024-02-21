@@ -22,16 +22,19 @@ const AddProjectModal = observer(() => {
 	const [baseURL, setBaseURL] = useState("");
 
 	useEffect(() => {
-		const formData = new FormData();
-		formData.append("projectFile", file);
-		uploadProject(formData)
-			.then((data) => {
-				setProjectPathes(data.filePaths);
-				setUniqueFolder(data.normalPath);
-				setBaseURL(data.baseUrl);
-				project.setBaseURL(data.baseUrl);
-			})
-			.catch((err) => console.log(err));
+		if (file) {
+			const formData = new FormData();
+			formData.append("projectFile", file);
+			uploadProject(formData)
+				.then((data) => {
+					setProjectPathes(data.filePaths);
+					setUniqueFolder(data.normalPath);
+					setBaseURL(data.baseUrl);
+					project.setBaseURL(data.baseUrl);
+				})
+				.catch((err) => console.log(err));
+		}
+
 	}, [file]);
 
 	return (

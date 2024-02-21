@@ -312,9 +312,9 @@ class UserController {
 				fs.mkdirSync(extractPath);
 			}
 
-			// if (!req.files) {
-			// 	return res.status(400).send("No files were uploaded.");
-			// }
+			if (!req.files) {
+				return res.status(400).send("No files were uploaded.");
+			}
 
 			const { projectFile } = req.files;
 			const maxFileSize = 100 * 1024 * 1024; // 100 МБ в байтах
