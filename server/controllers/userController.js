@@ -411,7 +411,7 @@ class UserController {
 		}
 	}
 
-	async uploadFinishedProject(req, res) {
+	async uploadFinishedProject(req, res, next) {
 		try {
 			const {
 				name,

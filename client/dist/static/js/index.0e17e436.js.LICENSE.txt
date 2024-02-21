@@ -1,0 +1,1321 @@
+/*! mobx-react-lite */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! ../.. */
+
+/*! ./pages/admin/Admin */
+
+/*! react */
+
+/*! ../../hooks/useDebounce */
+
+/*! canvas-confetti */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! jwt-decode */
+
+/*! ./burgerMenu.module.scss */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/es.array.at.js */
+
+/*! ../../components/thirdStageReg/ThirdStageReg */
+
+/*! ./pages/newsPaper/NewsPaper */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ./projectHeader.module.scss */
+
+/*! ../../resource/graphics/icons/registration/regEye.svg */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! react */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/es.string.replace-all.js */
+
+/*! react */
+
+/*! ../newsComment/NewsComment */
+
+/*! mobx-react-lite */
+
+/*! react/jsx-runtime */
+
+/*! ./components/modalComplete/ModalComplete */
+
+/*! jwt-decode */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! react */
+
+/*! ./primaryButton.module.scss */
+
+/*! core-js/modules/es.string.replace.js */
+
+/*! ../addProjectModalFirst/AddProjectModalFirst */
+
+/*! ./notificationsModalItem.module.scss */
+
+/*! react */
+
+/*! ./pages/projects/Projects */
+
+/*! react */
+
+/*! react */
+
+/*! ../../http/commentsAPI */
+
+/*! react */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../spinner/Spinner */
+
+/*! react */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../notification/Notification */
+
+/*! ../../http/notificationAPI */
+
+/*! . */
+
+/*! ../../components/ProjectSkeleton */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! ../../http/commentsAPI */
+
+/*! react */
+
+/*! ../../hooks/useClickOutside */
+
+/*! ./registration.scss */
+
+/*! react */
+
+/*! ../mainButton/MainButton */
+
+/*! core-js/modules/es.string.replace.js */
+
+/*! ../../components/spinner/Spinner */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/web.url-search-params.delete.js */
+
+/*! react/jsx-runtime */
+
+/*! react-transition-group */
+
+/*! react/jsx-runtime */
+
+/*! mobx-react-lite */
+
+/*! react */
+
+/*! ./groupCard.module.scss */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../../http/userAPI */
+
+/*! react */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! core-js/modules/es.array.push.js */
+
+/*! ../../utils/consts */
+
+/*! react/jsx-runtime */
+
+/*! react-router-dom */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/es.promise.finally.js */
+
+/*! ../../utils/consts */
+
+/*! react/jsx-runtime */
+
+/*! ../commentsInput/CommentsInput */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! ./addProjectStages.module.scss */
+
+/*! ./newsPaperContent.module.scss */
+
+/*! ./components/modalError/ModalError */
+
+/*! react */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! ./createButtonPopUp.module.scss */
+
+/*! react/jsx-runtime */
+
+/*! ../amountComponent/AmountComponent */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! react */
+
+/*! ./addProjectModalSecond.module.scss */
+
+/*! ../../components/newsSkeleton/NewsSkeleton */
+
+/*! react/jsx-runtime */
+
+/*! mobx-react-lite */
+
+/*! ../.. */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! react */
+
+/*! ../../http/newsAPI */
+
+/*! ../addProjectModalThird/AddProjectModalThird */
+
+/*! ../../utils/consts */
+
+/*! ../.. */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ../../http/projectAPI */
+
+/*! ../../hooks/useDateFormatter */
+
+/*! mobx-react-lite */
+
+/*! .. */
+
+/*! react/jsx-runtime */
+
+/*! ./functionButton.module.scss */
+
+/*! ../../hooks/useClickOutside */
+
+/*! core-js/modules/web.url-search-params.size.js */
+
+/*! ../../http/friendAPI */
+
+/*! mobx-react-lite */
+
+/*! ../spinner/Spinner */
+
+/*! ./components/header/Header */
+
+/*! mobx-react-lite */
+
+/*! ../functionButton/FunctionButton */
+
+/*! ./sliderButton.module.scss */
+
+/*! ./animate.scss */
+
+/*! ../../http/userAPI */
+
+/*! mobx */
+
+/*! ../createButtonPopUp/CreateButtonPopUp */
+
+/*! ../../resource/graphics/icons/burgerMenu/burger.svg */
+
+/*! ../../resource/graphics/icons/footer/footer_icon_tg.svg */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! ../../components/newsCard/NewsCard */
+
+/*! react */
+
+/*! mobx */
+
+/*! react */
+
+/*! react-router-dom */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! ./store/ProjectStore */
+
+/*! react */
+
+/*! react/jsx-runtime */
+
+/*! react */
+
+/*! ./notAuthPopup.module.scss */
+
+/*! react/jsx-runtime */
+
+/*! ./groupsManagement.scss */
+
+/*! ../../resource/graphics/icons/group/group_select_icon.svg */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../.. */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! react */
+
+/*! ../../utils/consts */
+
+/*! ./index */
+
+/*! react-transition-group */
+
+/*! ../../components/comments/Comments */
+
+/*! react */
+
+/*! ../../components/spSelect/SpSelect */
+
+/*! ../spinner/Spinner */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! ./pages/profile/Profile */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ./components/notAuthPopup/NotAuthPopup */
+
+/*! ./footer.module.scss */
+
+/*! react */
+
+/*! react */
+
+/*! mobx-react-lite */
+
+/*! ./components/ScrollToTop */
+
+/*! ../../http/searchAPI */
+
+/*! react/jsx-runtime */
+
+/*! ./modalNewsUpload.module.scss */
+
+/*! ../functionButton/FunctionButton */
+
+/*! ../.. */
+
+/*! react */
+
+/*! mobx-react-lite */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.async-iterator.for-each.js */
+
+/*! ../components/profilProjects/ProfileProjects */
+
+/*! react-content-loader */
+
+/*! react */
+
+/*! ./animate.scss */
+
+/*! react-content-loader */
+
+/*! core-js/modules/es.string.replace.js */
+
+/*! react-router */
+
+/*! ./spSelectMobile.module.scss */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! ../.. */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! ../../components/secondStageReg/SecondStageReg */
+
+/*! ../.. */
+
+/*! ../.. */
+
+/*! react */
+
+/*! react */
+
+/*! ../../index */
+
+/*! ./components/modalNewsUpload/ModalNewsUpload */
+
+/*! ./pages/auth/Auth */
+
+/*! react */
+
+/*! react-router-dom */
+
+/*! ../.. */
+
+/*! mobx-react-lite */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! mobx-react-lite */
+
+/*! ../mainButton/MainButton */
+
+/*! react/jsx-runtime */
+
+/*! react-transition-group */
+
+/*! ../../components/friendCard/FriendCard */
+
+/*! react-router-dom */
+
+/*! ./projectViewer.module.scss */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! react */
+
+/*! core-js/modules/esnext.string.at.js */
+
+/*! ./components/footer/Footer */
+
+/*! react */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! socket.io-client */
+
+/*! ./profileProjects.module.scss */
+
+/*! react-router-dom */
+
+/*! react-router-dom */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ./http/notificationAPI */
+
+/*! ../../hooks/useCountFormatter */
+
+/*! ./mainButton.module.scss */
+
+/*! react-router-dom */
+
+/*! ../addProjectStages/AddProjectStages */
+
+/*! react */
+
+/*! ../../http/viewAPI */
+
+/*! mobx-react-lite */
+
+/*! react */
+
+/*! react */
+
+/*! core-js/modules/es.string.replace.js */
+
+/*! ./index */
+
+/*! react */
+
+/*! ../../resource/graphics/icons/createButtonPopUp/addProject.svg */
+
+/*! ../../components/Skeletons/ProfileMainSkeleton */
+
+/*! ./newsSkeleton.module.scss */
+
+/*! ../.. */
+
+/*! react */
+
+/*! ./utils/consts */
+
+/*! ./news.scss */
+
+/*! ../../components/Skeletons/ProfileFriendsSkeleton */
+
+/*! ../../resource/graphics/icons/newsCard/likes.svg */
+
+/*! ../../http/userAPI */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react-router-dom */
+
+/*! react */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ../.. */
+
+/*! ./firstStageReg.module.scss */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../.. */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../.. */
+
+/*! react-router-dom */
+
+/*! ./resource/styles/style.scss */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ../../http/viewAPI */
+
+/*! core-js/modules/web.url.js */
+
+/*! ../../resource/graphics/icons/header/search.svg */
+
+/*! ../../resource/graphics/icons/newsCard/views.svg */
+
+/*! ../../resource/graphics/icons/newsCard/comments.svg */
+
+/*! react-transition-group */
+
+/*! ../.. */
+
+/*! react/jsx-runtime */
+
+/*! ../../http/projectAPI */
+
+/*! react */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react/jsx-runtime */
+
+/*! ../.. */
+
+/*! core-js/modules/es.string.at-alternative.js */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! react/jsx-runtime */
+
+/*! ../.. */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! ../addProjectModalSecond/AddProjectModalSecond */
+
+/*! react */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! ../../hooks/useCountFormatter */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! mobx-react-lite */
+
+/*! ../../components/comments/Comments */
+
+/*! ../resource/graphics/icons/burgerMenu/groupIcon.svg */
+
+/*! ./components/AppRouter */
+
+/*! ../resource/graphics/icons/burgerMenu/projectIcon.svg */
+
+/*! react/jsx-runtime */
+
+/*! ./pages/groupsManagement/GroupsManagement */
+
+/*! ../functionButton/FunctionButton */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.iterator.for-each.js */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! react/jsx-runtime */
+
+/*! ../.. */
+
+/*! react/jsx-runtime */
+
+/*! react */
+
+/*! ../../hooks/useCountFormatter */
+
+/*! mobx-react-lite */
+
+/*! react */
+
+/*! ./notification.module.scss */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ./registrationStages.module.scss */
+
+/*! core-js/modules/es.array.at.js */
+
+/*! ./pages/registration/Registation */
+
+/*! ../../utils/consts */
+
+/*! react */
+
+/*! react-router-dom */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ./modalError.module.scss */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! mobx-react-lite */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! react/jsx-runtime */
+
+/*! ./addProjectModal.module.scss */
+
+/*! ../../resource/graphics/icons/footer/footer_icon_vk.svg */
+
+/*! ../mainButton/MainButton */
+
+/*! react/jsx-runtime */
+
+/*! react */
+
+/*! ./index */
+
+/*! react/jsx-runtime */
+
+/*! ../.. */
+
+/*! react/jsx-runtime */
+
+/*! mobx-react-lite */
+
+/*! ../ProjectViewer/ProjectViewer */
+
+/*! ./friendCard.module.scss */
+
+/*! react-router-dom */
+
+/*! ./components/editModal/EditModal */
+
+/*! react-transition-group */
+
+/*! react-router-dom */
+
+/*! ../../components/modalError/ModalError */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ./group.scss */
+
+/*! ../../utils/consts */
+
+/*! ./store/ProfileStore */
+
+/*! ../../utils/consts */
+
+/*! ../../hooks/useDebounce */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! ../.. */
+
+/*! ../../hooks/useDateFormatter */
+
+/*! core-js/modules/web.url-search-params.js */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react */
+
+/*! ../.. */
+
+/*! mobx-react-lite */
+
+/*! ./animThirdStage.scss */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! ../.. */
+
+/*! react/jsx-runtime */
+
+/*! ../../components/projectHeader/ProjectHeader */
+
+/*! ../../components/spinner/Spinner */
+
+/*! react/jsx-runtime */
+
+/*! @splidejs/react-splide/css */
+
+/*! react */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! ./index */
+
+/*! mobx-react-lite */
+
+/*! ../../utils/consts */
+
+/*! ../../components/description/Description */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! mobx-react-lite */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! ../../http/projectAPI */
+
+/*! ./store/UserStore */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../../resource/graphics/icons/footer/footer_logo.svg */
+
+/*! ../../components/projectsSearch/ProjectsSearch */
+
+/*! ../../components/friendSkeleton/FriendSkeleton */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! react/jsx-runtime */
+
+/*! ./projectFilter.module.scss */
+
+/*! ./searchAll.module.scss */
+
+/*! core-js/modules/es.array.push.js */
+
+/*! react-router-dom */
+
+/*! ./newsCard.module.scss */
+
+/*! ./index */
+
+/*! react */
+
+/*! ./store/AuthStore */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! react */
+
+/*! ../../http/commentsAPI */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! react */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! react-image-crop */
+
+/*! ../../hooks/useDebounce */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ./components/burgerMenu/BurgerMenu */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ./secondStageReg.module.scss */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../spinner/Spinner */
+
+/*! ../../components/friendCard/FriendCard */
+
+/*! react/jsx-runtime */
+
+/*! socket.io-client */
+
+/*! react-router-dom */
+
+/*! ./commentsInput.module.scss */
+
+/*! ../../resource/graphics/icons/newsCard/likes.svg */
+
+/*! ../../http/groupsAPI */
+
+/*! ../../hooks/useDateFormatter */
+
+/*! mobx-react-lite */
+
+/*! ../../http/newsAPI */
+
+/*! ../../components/Skeletons/FriendCardSkeleton */
+
+/*! react/jsx-runtime */
+
+/*! ../../components/spSelectMobile/SpSelectMobile */
+
+/*! ./description.module.scss */
+
+/*! react-router-dom */
+
+/*! ../../components/primaryButton/PrimaryButton */
+
+/*! react/jsx-runtime */
+
+/*! ./newsPaper.scss */
+
+/*! @splidejs/react-splide */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! react */
+
+/*! ./notificationsModal.module.scss */
+
+/*! react/jsx-runtime */
+
+/*! ../../components/groupCard/GroupCard */
+
+/*! ../../utils/consts */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react */
+
+/*! mobx-react-lite */
+
+/*! ../../http/userAPI */
+
+/*! ./pages/groups/Groups */
+
+/*! ../searchAll/SearchAll */
+
+/*! ../../utils/consts */
+
+/*! react/jsx-runtime */
+
+/*! ../../utils/consts */
+
+/*! ../notificationsModalItem/NotificationsModalItem */
+
+/*! ../../resource/graphics/icons/newsCard/views.svg */
+
+/*! ../../resource/graphics/icons/newsCard/comments.svg */
+
+/*! @emailjs/browser */
+
+/*! ../spinner/Spinner */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! ./projects.scss */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! react */
+
+/*! mobx-react-lite */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! react/jsx-runtime */
+
+/*! ../notificationsModal/NotificationsModal */
+
+/*! ../.. */
+
+/*! react/jsx-runtime */
+
+/*! ./projectCard.module.scss */
+
+/*! core-js/modules/es.error.cause.js */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! ./comments.module.scss */
+
+/*! core-js/modules/esnext.iterator.filter.js */
+
+/*! ../../http/userAPI */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! react */
+
+/*! ./pages/project/Project */
+
+/*! ../components/profileFriends/ProfileFriends */
+
+/*! ./projectContent.module.scss */
+
+/*! ../../components/projectFilter/ProjectFilter */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! mobx-react-lite */
+
+/*! core-js/modules/esnext.iterator.constructor.js */
+
+/*! react/jsx-runtime */
+
+/*! ./addProjectModalFirst.module.scss */
+
+/*! react-image-crop/dist/ReactCrop.css */
+
+/*! react/jsx-runtime */
+
+/*! react */
+
+/*! react */
+
+/*! react */
+
+/*! mobx */
+
+/*! react-transition-group */
+
+/*! ./header.module.scss */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! ./utils/consts */
+
+/*! ../.. */
+
+/*! react */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! react-content-loader */
+
+/*! react */
+
+/*! react */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! ../../components/functionButton/FunctionButton */
+
+/*! react */
+
+/*! ../../components/description/Description */
+
+/*! react */
+
+/*! ../../index */
+
+/*! react */
+
+/*! ./profileFriends.module.scss */
+
+/*! mobx-react-lite */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react */
+
+/*! react/jsx-runtime */
+
+/*! ../spinner/Spinner */
+
+/*! core-js/modules/es.array.push.js */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! react */
+
+/*! ../../http/notificationAPI */
+
+/*! ../projectCard/ProjectCard */
+
+/*! mobx-react-lite */
+
+/*! react-dom/client */
+
+/*! ../routes */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! core-js/modules/esnext.string.at.js */
+
+/*! ../../http/projectAPI */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! ../../components/primaryButton/PrimaryButton */
+
+/*! ./index */
+
+/*! react-router-dom */
+
+/*! ../../components/adminCard/AdminCard */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! ../.. */
+
+/*! mobx-react-lite */
+
+/*! react-content-loader */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.async-iterator.filter.js */
+
+/*! react/jsx-runtime */
+
+/*! ./addProjectModalThird.module.scss */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ./newsComment.module.scss */
+
+/*! react/jsx-runtime */
+
+/*! ./index */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../utils/consts */
+
+/*! socket.io-client */
+
+/*! react */
+
+/*! ../.. */
+
+/*! ../../http/newsAPI */
+
+/*! ./createAnim.scss */
+
+/*! react-router-dom */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! react */
+
+/*! mobx-react-lite */
+
+/*! ./pages/messenger/Messenger */
+
+/*! ../.. */
+
+/*! ../resource/graphics/icons/burgerMenu/messegesIcon.svg */
+
+/*! ../.. */
+
+/*! ../../components/registrationStages/RegistrationStages */
+
+/*! react-nice-scroll/dist/styles.css */
+
+/*! ../.. */
+
+/*! ../../utils/consts */
+
+/*! ../.. */
+
+/*! core-js/modules/es.promise.finally.js */
+
+/*! ./store/ModalStore */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/esnext.iterator.map.js */
+
+/*! react-content-loader */
+
+/*! ./store/ErrorStore */
+
+/*! mobx */
+
+/*! ../../http/userAPI */
+
+/*! ../../hooks/setCanvasPreview */
+
+/*! mobx-react-lite */
+
+/*! ./store/GroupsStore */
+
+/*! ../../components/sliderButton/SliderButton */
+
+/*! react-router-dom */
+
+/*! react/jsx-runtime */
+
+/*! react-content-loader */
+
+/*! react */
+
+/*! ../../components/imageCropper/ImageCropper */
+
+/*! mobx */
+
+/*! ./projectsSearch.module.scss */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../.. */
+
+/*! react-router-dom */
+
+/*! ../../utils/consts */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! react */
+
+/*! ../resource/graphics/icons/burgerMenu/newsIcon.svg */
+
+/*! ../.. */
+
+/*! ./amountComponent.module.scss */
+
+/*! ./adminCard.module.scss */
+
+/*! react/jsx-runtime */
+
+/*! ../.. */
+
+/*! react/jsx-runtime */
+
+/*! ../../http/projectAPI */
+
+/*! ./index */
+
+/*! core-js/modules/esnext.async-iterator.map.js */
+
+/*! core-js/modules/es.error.cause.js */
+
+/*! ../../http/userAPI */
+
+/*! ./store/NewsStore */
+
+/*! ./editModal.module.scss */
+
+/*! ../ProjectViewer/ProjectViewer */
+
+/*! react/jsx-runtime */
+
+/*! ../../http/groupsAPI */
+
+/*! react-transition-group */
+
+/*! ./spSelect.module.scss */
+
+/*! mobx-react-lite */
+
+/*! ./App */
+
+/*! react-transition-group */
+
+/*! react */
+
+/*! ../../http/userAPI */
+
+/*! ../../http/projectAPI */
+
+/*! ../../hooks/useDateFormatter */
+
+/*! ../../components/modalError/ModalError */
+
+/*! ./resource/audio/notification.mp3 */
+
+/*! ../../components/firstStageReg/FirstStageReg */
+
+/*! ../../http/userAPI */
+
+/*! react/jsx-runtime */
+
+/*! core-js/modules/es.string.replace.js */
+
+/*! ./modalComplete.module.scss */
+
+/*! ../../components/newsPaperContent/NewsPaperContent */
+
+/*! ./pages/news/News */
+
+/*! mobx-react-lite */
+
+/*! ../../components/modalComplete/ModalComplete */
+
+/*! mobx */
+
+/*! ./thirdStageReg.module.scss */
+
+/*! react-transition-group */
+
+/*! ./project.scss */
+
+/*! socket.io-client */
+
+/*! ../../utils/consts */
+
+/*! ./imageCropper.module.scss */
+
+/*! ./spinner.module.scss */
+
+/*! .. */
+
+/*! ../../components/projectContent/ProjectContent */
+
+/*! ../../components/projectCard/ProjectCard */
+
+/*! ../.. */
+
+/*! ../../resource/graphics/icons/createButtonPopUp/addNews.svg */
+
+/*! ../../components/amountComponent/AmountComponent */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! ../.. */
+
+/*! ./index */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! react-transition-group */
+
+/*! ./http/userAPI */
+
+/*! react/jsx-runtime */
+
+/*! ./pages/group/Group */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! mobx */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! core-js/modules/web.url-search-params.has.js */
+
+/*! react/jsx-runtime */
+
+/*! axios */
+
+/*! mobx-react-lite */
+
+/*! core-js/modules/es.string.at-alternative.js */
+
+/*! ../../http/friendAPI */
+
+/*! ../.. */
+
+/*! ../friendCard/FriendCard */
+
+/*! ../../resource/graphics/icons/burgerMenu/closeIcon.svg */
+
+/*! ../../http/groupsAPI */
+
+/*! core-js/modules/esnext.array.group.js */
+
+/*! ./components/addProjectModal/AddProjectModal */
+
+/*! ../../components/friendCard/FriendCard */
+
+/*! react/jsx-runtime */
+
+/*! react-router-dom */
+
+/*! ../../components/functionButton/FunctionButton */
+
+/*! react/jsx-runtime */
+
+/*! react */
+
+/*! core-js/modules/web.dom-collections.iterator.js */
+
+/*! react-router-dom */
+
+/*! ../ProjectViewer/ProjectViewer */
+
+/*! react */
+
+/*! react */
