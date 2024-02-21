@@ -15,30 +15,13 @@ const { initSocket } = require("./socket"); // Подключаем функци
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-const httpServer = http.createServer(app);
-const io = initSocket(httpServer);
+
+
 
 const allowedOrigins = ["https://poetic-halva-67c56b.netlify.app"];
 
 // Включение middleware для обработки CORS с настройками
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // console.log(origin)
-      // console.log(allowedOrigins.includes(origin))
-      // console.log(!origin || allowedOrigins.includes(origin));
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    optionsSuccessStatus: 204,
-    allowedHeaders: "Content-Type,Authorization",
-  })
-);
+
 // app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static/news")));
@@ -63,36 +46,59 @@ app.use(fileUpload({}));
 
 app.use("/api", router);
 
+app.use(
+	cors({
+		origin: function (origin, callback) {
+			// console.log(origin)
+			// console.log(allowedOrigins.includes(origin))
+			// console.log(!origin || allowedOrigins.includes(origin));
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				callback(new Error("Not allowed by CORS"));
+			}
+		},
+		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		credentials: true,
+		optionsSuccessStatus: 204,
+		allowedHeaders: "Content-Type,Authorization",
+	})
+);
+
 app.use(errorHandler);
 
+const httpServer = http.createServer(app);
+const io = initSocket(httpServer);
+
+
 const start = async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize
-      .sync()
-      .then(async () => {
-        await models.Role.findOrCreate({ where: { name: "student" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 11/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 12/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 13/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 21/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 22/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 23/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 31/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 32/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 33/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 41/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 42/9" } });
-        await models.Group.findOrCreate({ where: { name: "ИС 43/9" } });
-      })
-      .catch((e) => console.log(e));
-    // console.log(path.resolve(__dirname, "static"));
-    httpServer.listen(PORT, () =>
-      console.log(`сервер стартанул на порте ${PORT}`)
-    );
-  } catch (e) {
-    console.log(e);
-  }
+	try {
+		await sequelize.authenticate();
+		await sequelize
+			.sync()
+			.then(async () => {
+				await models.Role.findOrCreate({ where: { name: "student" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 11/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 12/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 13/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 21/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 22/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 23/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 31/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 32/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 33/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 41/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 42/9" } });
+				await models.Group.findOrCreate({ where: { name: "ИС 43/9" } });
+			})
+			.catch((e) => console.log(e));
+		// console.log(path.resolve(__dirname, "static"));
+		httpServer.listen(PORT, () =>
+			console.log(`сервер стартанул на порте ${PORT}`)
+		);
+	} catch (e) {
+		console.log(e);
+	}
 };
 
 start();
