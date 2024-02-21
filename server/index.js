@@ -18,26 +18,21 @@ const app = express();
 
 
 
-const allowedOrigins = [process.env.CLIENTURL];
+const corsOptions = {
+	origin: function (origin, callback) {
+		if (origin === "https://poetic-halva-67c56b.netlify.app") {
+			// Разрешить доступ для указанного URL
+			callback(null, true);
+		} else {
+			// Запретить доступ для всех остальных
+			callback(new Error("Not allowed by CORS"));
+		}
+	},
+	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+	optionsSuccessStatus: 204,
+};
 
-
-// Включение middleware для обработки CORS с настройками
-app.use(
-	cors({
-		origin: function (origin, callback) {
-			// console.log(origin)
-			// console.log(allowedOrigins.includes(origin))
-			// console.log(!origin || allowedOrigins.includes(origin));
-			if (!origin || allowedOrigins.includes(origin)) {
-				callback(null, true);
-			} else {
-				callback(new Error("Not allowed by CORS"));
-			}
-		},
-		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-		optionsSuccessStatus: 204,
-	})
-);
+app.use(cors(corsOptions));
 // app.use(cors());
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static/news")));
