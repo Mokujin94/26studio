@@ -298,7 +298,7 @@ class UserController {
 		}
 	}
 
-	async uploadProject(req, res) {
+	async uploadProject(req, res, next) {
 		try {
 			const uploadPath = path.join(__dirname, "..", "uploads");
 			const extractPath = path.join(__dirname, "..", "extracted");
