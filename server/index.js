@@ -21,6 +21,24 @@ const app = express();
 const allowedOrigins = ["https://poetic-halva-67c56b.netlify.app"];
 
 // Включение middleware для обработки CORS с настройками
+app.use(
+	cors({
+		origin: function (origin, callback) {
+			// console.log(origin)
+			// console.log(allowedOrigins.includes(origin))
+			// console.log(!origin || allowedOrigins.includes(origin));
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				callback(new Error("Not allowed by CORS"));
+			}
+		},
+		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		credentials: true,
+		optionsSuccessStatus: 204,
+		allowedHeaders: "Content-Type,Authorization",
+	})
+);
 
 // app.use(cors());
 app.use(express.json());
@@ -46,24 +64,7 @@ app.use(fileUpload({}));
 
 app.use("/api", router);
 
-app.use(
-	cors({
-		origin: function (origin, callback) {
-			// console.log(origin)
-			// console.log(allowedOrigins.includes(origin))
-			// console.log(!origin || allowedOrigins.includes(origin));
-			if (!origin || allowedOrigins.includes(origin)) {
-				callback(null, true);
-			} else {
-				callback(new Error("Not allowed by CORS"));
-			}
-		},
-		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-		credentials: true,
-		optionsSuccessStatus: 204,
-		allowedHeaders: "Content-Type,Authorization",
-	})
-);
+
 
 app.use(errorHandler);
 
