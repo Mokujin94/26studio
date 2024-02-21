@@ -92,7 +92,7 @@ const AddProjectModal = observer(() => {
 							) : stages === 3 ? (
 								<AddProjectModalThird baseURL={baseURL} />
 							) : (
-								<AddProjectModalFirst setFile={setFile} setStages={setStages} />
+								<AddProjectModalFirst setFile={setFile} file={file} setStages={setStages} />
 							)
 						) : (
 							<AddProjectModalFirst setFile={setFile} setStages={setStages} />
