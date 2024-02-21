@@ -18,17 +18,8 @@ const app = express();
 
 
 
-const allowedOrigins = ["https://poetic-halva-67c56b.netlify.app"];
+const allowedOrigins = [process.env.CLIENTURL];
 
-
-
-// app.use(cors());
-app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "static/news")));
-app.use(express.static(path.resolve(__dirname, "static/avatars")));
-app.use(express.static(path.resolve(__dirname, "static/projects")));
-app.use(express.static(path.resolve(__dirname, "extracted")));
-app.use(fileUpload({}));
 
 // Включение middleware для обработки CORS с настройками
 app.use(
@@ -44,11 +35,18 @@ app.use(
 			}
 		},
 		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-		credentials: true,
 		optionsSuccessStatus: 204,
-		allowedHeaders: "Content-Type,Authorization",
 	})
 );
+// app.use(cors());
+app.use(express.json());
+app.use(express.static(path.resolve(__dirname, "static/news")));
+app.use(express.static(path.resolve(__dirname, "static/avatars")));
+app.use(express.static(path.resolve(__dirname, "static/projects")));
+app.use(express.static(path.resolve(__dirname, "extracted")));
+app.use(fileUpload({}));
+
+
 
 app.use("/api", router);
 
