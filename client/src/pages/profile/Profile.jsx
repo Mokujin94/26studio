@@ -89,6 +89,7 @@ const Profile = observer(() => {
 				} else {
 					const time = useDateFormatter(dataUser.lastOnline)
 					setLastTimeOnline(time);
+					setIsOnline(false)
 				}
 				document.title = `${dataUser.name}`
 				setUserId(dataUser);

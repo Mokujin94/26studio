@@ -35,11 +35,13 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 				} else {
 					const time = useDateFormatter(data.lastOnline)
 					setLastTimeOnline(time);
+					setIsOnline(false)
 				}
 				setIsLoadingFriend(false);
 			})
 			.catch((err) => console.log(err));
 	}, []);
+
 	return (
 		<>
 			{isLoadingFriend ? (
