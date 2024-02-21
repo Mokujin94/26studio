@@ -312,7 +312,7 @@ class UserController {
 				fs.mkdirSync(extractPath);
 			}
 
-			if (!req.files || Object.keys(req.files).length === 0) {
+			if (!req.files) {
 				return res.status(400).send("No files were uploaded.");
 			}
 
