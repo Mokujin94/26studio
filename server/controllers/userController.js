@@ -385,7 +385,7 @@ class UserController {
 
 				extractStream.on("error", (err) => {
 					console.error("Error during extraction:", err);
-					res.status(500).send("Error during extraction");
+					res.status(500).send("Error during extractions");
 				});
 			});
 		} catch (error) {
