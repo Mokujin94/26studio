@@ -299,7 +299,10 @@ class UserController {
 	}
 
 	async uploadProject(req, res, next) {
-
+		res.setHeader('Access-Control-Allow-Origin', 'https://poetic-halva-67c56b.netlify.app');
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+		res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+		res.setHeader('Access-Control-Allow-Credentials', 'true');
 		try {
 			const uploadPath = path.join(__dirname, "..", "uploads");
 			const extractPath = path.join(__dirname, "..", "extracted");
@@ -381,10 +384,7 @@ class UserController {
 				extractStream.on("finish", () => {
 					// Выводим список относительных путей файлов
 					console.log("Files in the archive:", filePaths);
-					res.setHeader('Access-Control-Allow-Origin', 'https://poetic-halva-67c56b.netlify.app');
-					res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-					res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-					res.setHeader('Access-Control-Allow-Credentials', 'true');
+
 					res.json({ filePaths, normalPath, baseUrl });
 				});
 
