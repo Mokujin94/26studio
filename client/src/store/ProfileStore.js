@@ -15,13 +15,11 @@ import ProfileFriends from "../components/profileFriends/ProfileFriends";
 export default class ProfileStore {
   constructor() {
     this._wrapperItems = [
-      { id: 0, element: <ProfileProjects />, nodeRef: createRef(null) },
-      { id: 1, element: <ProfileSettings />, nodeRef: createRef(null) },
-    ];
+			{ id: 0, element: <ProfileProjects />, nodeRef: createRef(null) },
+		];
 
     this._menuItems = [
       { id: 0, title: "Проекты" },
-      { id: 1, title: "Настройки" },
     ];
 
     this._menuItemsOtherUser = [
@@ -39,11 +37,22 @@ export default class ProfileStore {
     ]
 
     this._selectedMenu = { id: 0, title: "Проекты" };
+
+		this._editModal = false;
+		this._isOnSetting = false;
     makeAutoObservable(this);
   }
 
   setWrapperItems(wrapperItems) {
     this._wrapperItems = wrapperItems;
+  }
+
+	setEditModal(editModal) {
+    this._editModal = editModal;
+	}
+	
+	setIsOnSetting(isOnSetting) {
+    this._isOnSetting = isOnSetting;
   }
 
   setMenuItems(menuItems) {
@@ -88,5 +97,13 @@ export default class ProfileStore {
 
   get wrapperMenuFriends() {
     return this._wrapperMenuFriends;
+  }
+
+	get editModal() {
+    return this._editModal;
+	}
+	
+	get isOnSetting() {
+    return this._isOnSetting;
   }
 }

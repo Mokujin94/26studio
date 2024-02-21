@@ -60,11 +60,56 @@ export function useDateFormatter(inputDate) {
   }
 
   const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+	const month = (date.getMonth() + 1).toString().padStart(2, "0");
+	let monthName;
+	switch (month) {
+		case '01':
+			monthName = 'янв'
+			break;
+		case '02':
+			monthName = 'фув'
+			break;
+		case '03':
+			monthName = 'мар'
+			break;
+		case '04':
+			monthName = 'апр'
+			break;
+		case '05':
+			monthName = 'мая'
+			break;
+		case '06':
+			monthName = 'июн'
+			break;
+		case '07':
+			monthName = 'июл'
+			break;
+		case '08':
+			monthName = 'авг'
+			break;
+		case '09':
+			monthName = 'сен'
+			break;
+		case '10':
+			monthName = 'окт'
+			break;
+		case '11':
+			monthName = 'ноя'
+			break;
+		case '12':
+			monthName = 'дек'
+			break;
+	}
   const year = date.getFullYear();
   const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-
-  const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
+	const minutes = date.getMinutes().toString().padStart(2, "0");
+	
+	let formattedDate;
+	if (currentDate.getFullYear() !== date.getFullYear()) {
+		formattedDate = `${day} ${monthName} ${year}г`;
+		
+	} else {
+		formattedDate = `${day} ${monthName} в ${hours}:${minutes}`;
+	}
   return formattedDate;
 }

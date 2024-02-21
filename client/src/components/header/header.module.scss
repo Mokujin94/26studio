@@ -39,8 +39,10 @@
   &__logo {
     position: absolute;
     left: 60px;
-    img {
+		width: 200px;
+    svg {
       display: block;
+			width: 100%;
     }
   }
   &__search {

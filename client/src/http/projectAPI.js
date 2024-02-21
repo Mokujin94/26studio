@@ -48,6 +48,11 @@ export const fetchProjectById = async (id) => {
   return data;
 };
 
+export const deleteProjectById = async (id) => {
+  const { data } = await $authHost.delete("api/project/" + id);
+  return data;
+};
+
 export const condidate = async (projectId, userId) => {
   const config = {
     params: {

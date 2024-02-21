@@ -19,5 +19,7 @@ router.get('/search/groups', userController.searchUsersByName);
 router.get('/:id', userController.getProfileUser);
 router.get('/', userController.getOneUser);
 router.patch('/avatar', authMiddleware, userController.updateAvatar);
+router.patch('/update/:id', authMiddleware, userController.update);
+router.patch('/:id', userController.checkOnline)
 
 module.exports = router;

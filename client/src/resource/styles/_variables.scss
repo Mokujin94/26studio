@@ -24,16 +24,20 @@ $studio-box-shadow-burger: 0px 0px 101px -5px rgba(0, 0, 0, 0.5);
 $studio-primary-element: #97bce6;
 $studio-white-element: #fcfcfc;
 $studio-dark-element: #27323e;
-$studio-darker-element: #222C36;
+$studio-darker-element: #222c36;
 $studio-grey-element: #596470;
 $studio-red-element: #ff9595;
 // hover
 @mixin studio-mixin-primary-element-hover {
-  border: 2px solid $studio-primary-border;
+  outline: 2px solid $studio-primary-border;
   box-shadow: $studio-primary-box-shadow;
-  transform: scale(1.02);
-  z-index: 2;
 }
+
+@mixin studio-mixin-red-element-hover {
+  outline: 2px solid $studio-red-border;
+  box-shadow: $studio-red-box-shadow;
+}
+
 @mixin studio-mixin-dark-element-hover {
   background: $studio-primary-element;
   color: $studio-dark-text;
@@ -112,6 +116,7 @@ $studio-primary-border-active: #97bce6;
 $studio-primary-input: #97bce6;
 $studio-white-input: #fcfcfc;
 $studio-dark-input: #27323e;
+$studio-darker-input: #222c36;
 $studio-grey-input: #596470;
 $studio-black-input: #1d252e;
 // focus
@@ -124,6 +129,7 @@ $studio-black-input: #1d252e;
 
 // box-shadow
 $studio-primary-box-shadow: 0px 0px 16px 7px rgba(151, 188, 230, 0.2);
+$studio-red-box-shadow: 0px 0px 16px 7px rgba(230, 151, 151, 0.2);
 
 /*------------------------------------------------------------------*/
 
@@ -147,6 +153,7 @@ $studio-border-color: #596470;
 $studio-black-opacity-02: rgba(0, 0, 0, 0.15);
 $studio-black-opacity-03: rgba(0, 0, 0, 0.3);
 $studio-black-opacity-05: rgba(0, 0, 0, 0.5);
+$studio-primary-opacity-04: rgba(39, 50, 62, 0.4);
 $studio-placholder-color: rgba(255, 255, 255, 0.5);
 
 /*------------------------------------------------------------------*/

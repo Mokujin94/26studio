@@ -10,7 +10,7 @@
   align-items: center;
   border-radius: 25px;
   color: $studio-white-text;
-  border: 2px solid transparent;
+  outline: 2px solid transparent;
   box-shadow: $studio-box-shadow-element;
   transition: $studio-transition-03 all;
   cursor: pointer;
@@ -20,7 +20,30 @@
   &Link {
     text-decoration: none;
   }
+
+  &_special {
+    outline: none;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      transform: scale(1.02);
+      background: linear-gradient(60deg, $studio-dark-border, $studio-primary-border, $studio-dark-border);
+      border-radius: 26px;
+      z-index: -1;
+      animation: animatedgradient 3s ease alternate infinite;
+      background-size: 300% 300%;
+      transition: 0.3s;
+    }
+    &:hover {
+      outline: 0;
+    }
+  }
 }
+
 
 .preview {
   position: relative;
@@ -102,6 +125,19 @@
     font-size: 13px;
     line-height: 16px;
   }
+}
+
+
+@keyframes animatedgradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 @media (max-width: $xxl) {
@@ -218,3 +254,4 @@
     }
   }
 }
+

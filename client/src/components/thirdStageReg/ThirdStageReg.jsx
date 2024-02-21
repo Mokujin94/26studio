@@ -159,6 +159,19 @@ const ThirdStageReg = observer(
       }
     };
 
+    const onPasteCode = (e) => {
+      const pastedData = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      
+      const firstSixChars = pastedData.slice(0, 6);
+      // Разбиваем каждый символ на элементы массива
+      const charactersArray = firstSixChars.split('');
+      // Выводим данные в консоль
+      charactersArray.forEach((item, i) => {
+        eval(`setNumber${i + 1}(${item})`)
+        eval(`input${i+1}.current.focus()`)
+      });
+    }
+
     return (
       <div className={style.third}>
         {/* <h3 className={style.third__title}>Вы успешно создали аккаунт, пожалуйста подтвердите вашу почту!</h3> */}
@@ -168,6 +181,7 @@ const ThirdStageReg = observer(
             <input
               type="text"
               onChange={(e) => onChange(e)}
+              onPaste={(e) => onPasteCode(e)}
               onKeyDown={(e) => onDeleteBox(e)}
               value={number1}
               id="1"
@@ -181,6 +195,7 @@ const ThirdStageReg = observer(
             <input
               type="text"
               onChange={(e) => onChange(e)}
+              onPaste={(e) => onPasteCode(e)}
               onKeyDown={(e) => onDeleteBox(e)}
               value={number2}
               id="2"
@@ -194,6 +209,7 @@ const ThirdStageReg = observer(
             <input
               type="text"
               onChange={(e) => onChange(e)}
+              onPaste={(e) => onPasteCode(e)}
               onKeyDown={(e) => onDeleteBox(e)}
               value={number3}
               id="3"
@@ -207,6 +223,7 @@ const ThirdStageReg = observer(
             <input
               type="text"
               onChange={(e) => onChange(e)}
+              onPaste={(e) => onPasteCode(e)}
               onKeyDown={(e) => onDeleteBox(e)}
               value={number4}
               id="4"
@@ -220,6 +237,7 @@ const ThirdStageReg = observer(
             <input
               type="text"
               onChange={(e) => onChange(e)}
+              onPaste={(e) => onPasteCode(e)}
               onKeyDown={(e) => onDeleteBox(e)}
               value={number5}
               id="5"
@@ -233,6 +251,7 @@ const ThirdStageReg = observer(
             <input
               type="text"
               onChange={(e) => onChange(e)}
+              onPaste={(e) => onPasteCode(e)}
               onKeyDown={(e) => onDeleteBox(e)}
               value={number6}
               id="6"
