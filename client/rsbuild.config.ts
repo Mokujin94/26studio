@@ -11,4 +11,9 @@ export default defineConfig({
   source: {
     define: publicVars,
   },
+	output: {
+		distPath: {
+			root: "build"
+		}
+	}
 });
