@@ -20,7 +20,7 @@ const app = express();
 
 const corsOptions = {
 	origin: function (origin, callback) {
-		if (origin === "https://poetic-halva-67c56b.netlify.app") {
+		if (origin === 'http://91.201.41.143:80') {
 			// Разрешить доступ для указанного URL
 			callback(null, true);
 		} else {
