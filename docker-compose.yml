@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres:
-    image: studio26-postgres
+    image: postgres:13.14-alpine3.19
     restart: always
     environment:
       - POSTGRES_USER=postgres
