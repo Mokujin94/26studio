@@ -15,11 +15,6 @@
   }
   &__item {
     display: block;
-    &Wrapper {
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
     &Title {
       color: $studio-white-text;
       font-size: 16px;
@@ -46,18 +41,6 @@
     }
     &Bottom {
       position: relative;
-      img {
-        position: absolute;
-        right: 10px;
-        height: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        transition: $studio-transition-03;
-        &:hover {
-          opacity: 0.7;
-        }
-      }
     }
   }
 }

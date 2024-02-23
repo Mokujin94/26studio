@@ -41,9 +41,11 @@
     letter-spacing: 0.2em;
     color: $studio-white-text;
     margin-bottom: 36px;
+
   }
   &__form {
     display: flex;
+		gap: 15px;
     flex-direction: column;
   }
   &__forget {
@@ -54,10 +56,10 @@
     text-align: center;
     letter-spacing: 0.2em;
     color: $studio-white-text;
-    margin-bottom: 25px;
   }
   &__input {
     display: flex;
+		gap: 15px;
     flex-direction: column;
     align-items: flex-start;
     &-title {
@@ -66,8 +68,11 @@
       line-height: 19px;
       text-align: center;
       color: $studio-white-text;
-      margin-bottom: 15px;
     }
+		&-inner {
+			position: relative;
+		}
+
     &-item {
       width: 400px;
       height: 40px;
@@ -75,16 +80,33 @@
       border-radius: 20px;
       border: 2px solid $studio-primary-border;
       color: $studio-white-text;
-      margin-bottom: 15px;
       font-size: 16px;
-      padding: 0 20px;
+      padding: 0 40px 0 20px;
       outline: none;
     }
+		&-eye {
+			position: absolute;
+			right: 0;
+			top: 0;
+			display: flex;
+			align-items: center;
+			border-radius: 0 20px 20px 0;
+			width: 40px;
+			height: 100%;
+			cursor: pointer;
+			justify-content: center;
+			svg {
+				width: 20px;
+				height: 20px;
+				path {
+					stroke: $studio-white-element;
+				}
+			}
+	}
   }
   &__notAuth {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
     &Text {
       display: block;
       font-size: 16px;
