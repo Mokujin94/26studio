@@ -11,3 +11,13 @@ button:disabled {
 	opacity: .5;
 	pointer-events: none;
 }
+
+/* Скрываем глазик */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-eye,
+input[type="password"]::-webkit-inner-spin-button,
+input[type="password"]::-webkit-outer-spin-button {
+    display: none !important;
+}
