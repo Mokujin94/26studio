@@ -23,7 +23,7 @@ services:
       - DB_PASSWORD=studio26
       - DB_HOST=postgres
       - DB_PORT=5432
-      - CLIENTURL=http://91.201.41.143/
+      - CLIENTURL=http://91.201.41.143
     depends_on:
       - postgres
       - frontend
