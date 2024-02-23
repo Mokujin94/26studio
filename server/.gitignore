@@ -3,9 +3,9 @@
 # dependencies
 /node_modules
 /.pnp
-/extracted
-/uploads
-/static
+# /extracted
+# /uploads
+# /static
 # /static
 .pnp.js
 
