@@ -425,6 +425,12 @@ class UserController {
 				userId,
 			} = req.body;
 
+			const staticProjects = path.join(__dirname, "..", "static", "projects");
+
+			if (!fs.existsSync(staticProjects)) {
+				fs.mkdirSync(staticProjects);
+			}
+
 			const previewFile = uuid.v4() + ".jpg";
 			const { preview } = req.files;
 			preview.mv(path.resolve(__dirname, "..", "static/projects", previewFile));
