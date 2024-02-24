@@ -116,18 +116,18 @@ const Profile = observer(() => {
 						.map((item) => (
 							<FriendCard
 								userId={
-									item.friendId === dataUser.id ? item.userId : item.friendId
+									item.friendId == dataUser.id ? item.userId : item.friendId
 								}
 								key={item.id}
 							/>
 						));
 
 					const requestsAll = dataUser.friends
-						.filter((item) => !item.status && item.userId !== user.user.id)
+						.filter((item) => !item.status && item.userId !== dataUser.id)
 						.map((item) => (
 							<FriendCard
 								userId={
-									item.friendId === dataUser.id ? item.userId : item.friendId
+									item.friendId == dataUser.id ? item.userId : item.friendId
 								}
 								key={item.id}
 							/>
@@ -362,7 +362,13 @@ const Profile = observer(() => {
 													/>
 
 													{
-														isOnline ? <div className="profile__left-user-avatar-online profile__left-user-avatar-online_true"></div> : <div className="profile__left-user-avatar-online profile__left-user-avatar-online_false">{lastTimeOnline.replace(' назад', '')}</div>
+														isOnline 
+														? 
+														<div className="profile__left-user-avatar-online profile__left-user-avatar-online_true"></div> 
+														: 
+														<div className="profile__left-user-avatar-online profile__left-user-avatar-online_false">
+															{lastTimeOnline.replace(' назад', '')}
+														</div>
 													}
 												</>
 
@@ -496,7 +502,11 @@ const Profile = observer(() => {
 										setStatusFriend(true);
 									}}
 								>
-									{`Друзья (${friends.length})`}
+									{friends.length
+										?
+										`Друзья (${friends.length})`
+										: 'Друзья'
+									}
 								</li>
 								<li
 									className={

@@ -61,49 +61,51 @@ class FriendController {
       const io = getIo();
 
       const friend = await Friend.create({
-        userId,
-        friendId,
-        status: false,
+					userId,
+					friendId,
+					status: false
       });
 
       await UserFriend.create({
-        userId,
-        friendId: friend.id,
+					userId,
+					friendId: friend.id,
       });
 
       await UserFriend.create({
-        userId: friendId,
-        friendId: friend.id,
+					userId: friendId,
+					friendId: friend.id,
       });
 
-      const notification = await Notifications.create({
-        senderId: userId,
-        recipientId: friendId,
-        friend_status: false,
-      });
+				const notification = await Notifications.create({
+					senderId: userId,
+					recipientId: friendId,
+					friend_status: false,
+				});
+	
+			const sendNotification = await Notifications.findOne({
+				where: { id: notification.id },
+				include: [
+					{
+						model: Likes,
+						as: "like",
+					},
+					{
+						model: Comments,
+						as: "comment",
+					},
+					{
+						model: User,
+						as: "sender",
+					},
+					{
+						model: User,
+						as: "recipient",
+					},
+				],
+			});
+			io.emit("notification", sendNotification);
 
-      const sendNotification = await Notifications.findOne({
-        where: { id: notification.id },
-        include: [
-          {
-            model: Likes,
-            as: "like",
-          },
-          {
-            model: Comments,
-            as: "comment",
-          },
-          {
-            model: User,
-            as: "sender",
-          },
-          {
-            model: User,
-            as: "recipient",
-          },
-        ],
-      });
-      io.emit("notification", sendNotification);
+      
 
       return res.json(friend);
     } catch (error) {
