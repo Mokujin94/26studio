@@ -60,6 +60,8 @@ const start = async () => {
 			.sync()
 			.then(async () => {
 				await models.Role.findOrCreate({ where: { name: "student" } });
+				await models.Role.findOrCreate({ where: { name: "tutor" } });
+				await models.Role.findOrCreate({ where: { name: "admin" } });
 				await models.Group.findOrCreate({ where: { name: "ИС 11/9" } });
 				await models.Group.findOrCreate({ where: { name: "ИС 12/9" } });
 				await models.Group.findOrCreate({ where: { name: "ИС 13/9" } });

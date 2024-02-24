@@ -485,8 +485,7 @@ class UserController {
 
 	async update(req, res, next) {
 		const { id } = req.params;
-		const { name, full_name, email, password, groupId } = req.body;
-		const { avatar } = req.files;
+		const { name, full_name, about, email, old_password, password, groupId } = req.body;
 
 		let user;
 		let fileName;
@@ -506,17 +505,24 @@ class UserController {
 			// Проверяем, передано ли поле в req.body, и если да, добавляем его в объект обновления
 			if (name) updateFields.name = name;
 			if (full_name) updateFields.full_name = full_name;
+			updateFields.description = about;
 			if (email) updateFields.email = email;
-			if (password) {
+			if (password || old_password) {
+				if (!password) {
+					return next(ApiError.badRequest("Введите новый пароль"))
+				}
+				let comparePassword = bcrypt.compareSync(old_password, user.password);
+				if (!comparePassword) {
+					return next(ApiError.badRequest("Неверный пароль"))
+				}
 				const hashPassword = await bcrypt.hash(password, 5);
 				updateFields.password = hashPassword;
 			}
-			if (groupId) updateFields.groupId = groupId;
-
-			if (req.files && req.files.avatar) {
-				fileName = uuid.v4() + ".jpg";
-				avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
-				updateFields.avatar = fileName;
+			if (groupId) {
+				if (groupId !== user.groupId) {
+					updateFields.group_status = false;
+					updateFields.groupId = groupId;
+				}
 			}
 
 
@@ -547,7 +553,7 @@ class UserController {
 			// const users = User.findOne({ where: { id } })
 			// if (users && id) {
 			// user.lastOnline = new Date(); // изменяем значение поля lastOnline
-			const user = await User.update({ lastOnline: new Date() }, { where: { id } }); // сохраняем изменения в базе данных
+			const user = await User.update({ lastOnline: new Date() }, { where: { id }, include: [Group] }); // сохраняем изменения в базе данных
 			// }
 
 			const token = generateJwt(

@@ -87,32 +87,64 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
         {isUserList && (
           <ul className={style.search__content__list}>
             {searchData.users.map((item) => {
-              return (
-                <li>
-                  <Link
-                    to={PROFILE_ROUTE + "/" + item.id}
-                    className={style.search__content__list__item}
-                  >
-                    <div className={style.search__content__list__item__info}>
-                      <div className={style.search__user}>
-                        <img
-                          src={
-                            process.env.REACT_APP_API_URL + "/" + item.avatar
-                          }
-                          alt=""
-                          className={style.search__user__img}
-                        />
-                      </div>
-                      <h2 className={style.search__user__name}>{item.name}</h2>
-                    </div>
-                    <div className={style.search__content__list__item__info}>
-                      <h2 className={style.search__user__group}>
-                        {item.group.name}
-                      </h2>
-                    </div>
-                  </Link>
-                </li>
-              );
+							const lastOnline = new Date(item.lastOnline).getTime() / 1000;
+							const nowTime = new Date().getTime() / 1000;
+							if ((nowTime - lastOnline) <= 300) {
+              	return (
+									<li>
+										<Link
+											to={PROFILE_ROUTE + "/" + item.id}
+											className={style.search__content__list__item}
+										>
+											<div className={style.search__content__list__item__info}>
+												<div className={style.search__user}>
+													<img
+														src={
+															process.env.REACT_APP_API_URL + "/" + item.avatar
+														}
+														alt=""
+														className={style.search__user__img}
+													/>
+													<div className={style.search__userCircle}></div>
+												</div>
+												<h2 className={style.search__user__name}>{item.name}</h2>
+											</div>
+											<div className={style.search__content__list__item__info}>
+												<h2 className={style.search__user__group}>
+													{item.group.name}
+												</h2>
+											</div>
+										</Link>
+									</li>
+								);
+							} else {
+								return (
+									<li>
+										<Link
+											to={PROFILE_ROUTE + "/" + item.id}
+											className={style.search__content__list__item}
+										>
+											<div className={style.search__content__list__item__info}>
+												<div className={style.search__user}>
+													<img
+														src={
+															process.env.REACT_APP_API_URL + "/" + item.avatar
+														}
+														alt=""
+														className={style.search__user__img}
+													/>
+												</div>
+												<h2 className={style.search__user__name}>{item.name}</h2>
+											</div>
+											<div className={style.search__content__list__item__info}>
+												<h2 className={style.search__user__group}>
+													{item.group.name}
+												</h2>
+											</div>
+										</Link>
+									</li>
+								);
+							}
             })}
           </ul>
         )}
