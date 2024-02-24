@@ -418,7 +418,8 @@ const Profile = observer(() => {
 
 									<div className="profile__left-user-info">
 										<div className="profile__left-user-name">
-											<div className="profile__left-user-nickname">{userId.name}</div>
+
+											<div className="profile__left-user-nickname">{id === user.user.id ? user.user.name : userId.name}</div>
 											{/* <img
 											className="profile__left-user-achievement"
 											src={achievement}
@@ -426,12 +427,12 @@ const Profile = observer(() => {
 										/> */}
 										</div>
 										<div className="profile__left-user-more-info">
-											<div className="profile__left-user-full-name">{userId.full_name}</div>
-											<div className="profile__left-user-group">{group}</div>
+											<div className="profile__left-user-full-name">{id === user.user.id ? user.user.full_name : userId.full_name}</div>
+											<div className="profile__left-user-group">{id === user.user.id ? user.user.group.name : group}</div>
 										</div>
 										<div className="profile__left-user-description">
 											{/* 520 символов максимум  */}
-											{descr}
+											{id === user.user.id ? user.user.description ? user.user.description : "Расскажите о себе" : descr}
 										</div>
 									</div>
 								</>
