@@ -5,8 +5,10 @@
   flex-direction: column;
   color: $studio-white-text;
   width: 100%;
-  padding-left: 80px;
+	padding: 15px 15px 15px 95px;
   position: relative;
+	background-color: $studio-darker-element;
+	border-radius: 10px;
   &__avatar {
     max-width: 70px;
     width: 100%;
@@ -15,8 +17,8 @@
     border-radius: 50%;
     overflow: hidden;
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 15px;
+    top: 15px;
     &Img {
       position: absolute;
       width: 120%;

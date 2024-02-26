@@ -330,12 +330,8 @@
 				&_other {
 					border-radius: 0 ;
 					border: none;
-					border-bottom: 1px solid #fcfcfc;
 					color: #fcfcfc;
-					cursor: auto;
-					&:hover {
-						background-color: transparent;
-					}
+					pointer-events: none;
 				}
 
 				&-circle {

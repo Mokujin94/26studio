@@ -4,6 +4,7 @@
   width: 100%;
   height: 100px;
   background: $studio-darker-element;
+	border: 1px solid transparent;
   border-radius: 10px;
   display: flex;
   gap: 20px;
@@ -14,6 +15,9 @@
 		&::after {
 			opacity: 1;
 		}
+	}
+	&:hover {
+		border: 1px solid $studio-grey-border;
 	}
   &__avatar {
     position: relative;

@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    border: 2px solid transparent;
+    outline: 2px solid transparent;
     cursor: pointer;
     transition: $studio-transition-03;
     &:hover {
