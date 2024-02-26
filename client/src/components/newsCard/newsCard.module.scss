@@ -68,11 +68,12 @@
 .info {
   flex: 1 0 auto;
   width: 100%;
-  padding: 0 15px;
-  margin-top: 16px;
+  padding: 16px 15px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 34px;
+	border-bottom: 2px solid $studio-primary-border;
+	border-top: 2px solid $studio-primary-border;
+	margin-bottom: 16px;
 }
 
 .title {
@@ -80,7 +81,6 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
-  letter-spacing: 0.2em;
   margin-bottom: 5px;
 }
 
@@ -101,6 +101,7 @@
   -webkit-line-clamp: 8;
   -webkit-box-orient: vertical;
   overflow: hidden;
+	white-space: pre-wrap;
 }
 
 .stats {
