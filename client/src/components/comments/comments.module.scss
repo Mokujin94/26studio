@@ -26,6 +26,13 @@
 		padding: 20px;
 		background: $studio-dark-element;
 		border-radius: 5px;
+		&__text {
+			display: block;
+			width: 100%;
+			text-align: center;
+			color: $studio-white-text;
+			
+		}
     &::-webkit-scrollbar {
       width: 10px;
       background-color: rgba(37, 80, 126, 0.5);

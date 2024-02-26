@@ -45,7 +45,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 				<CommentsInput projectId={projectId} newsId={newsId} />
 			</div>
 			<div className={style.block__comments}>
-				{comments.map((item) => {
+				{comments.length ? comments.map((item) => {
 					return (
 						<NewsComment
 							id={item.userId}
@@ -56,7 +56,10 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 							key={item.id}
 						/>
 					);
-				})}
+				})
+					:
+					<span className={style.block__comments__text}>Нет комментариев</span>
+				}
 			</div>
 
 		</div>
