@@ -92,7 +92,7 @@ const ProjectCard = observer(({ id, img, title, name, date, like, view, comment,
 
 				<div className={profile.isOnSetting ? style.project__blur + " " + style.project__blur_onSetting : style.project__blur}></div>
 				<img
-					src={process.env.REACT_APP_API_URL + img}
+					src={process.env.REACT_APP_API_URL + '/' + img}
 					className={style.project__photo}
 					alt=""
 				/>

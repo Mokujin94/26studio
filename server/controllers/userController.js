@@ -3,11 +3,12 @@ const uuid = require("uuid");
 const path = require("path");
 require("dotenv").config();
 const mailer = require("../nodemailer");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const AdmZip = require("adm-zip");
 const fs = require("fs");
 const unzipper = require("unzipper");
+
 const { v4: uuidv4 } = require("uuid");
 const {
 	User,
@@ -298,7 +299,7 @@ class UserController {
 		}
 	}
 
-	async uploadProject(req, res) {
+	async uploadProject(req, res, next) {
 		try {
 			const uploadPath = path.join(__dirname, "..", "uploads");
 			const extractPath = path.join(__dirname, "..", "extracted");
@@ -306,12 +307,14 @@ class UserController {
 			if (!fs.existsSync(uploadPath)) {
 				fs.mkdirSync(uploadPath);
 			}
+			console.log(req.files);
 
 			if (!fs.existsSync(extractPath)) {
 				fs.mkdirSync(extractPath);
 			}
 
-			if (!req.files || Object.keys(req.files).length === 0) {
+
+			if (!req.files) {
 				return res.status(400).send("No files were uploaded.");
 			}
 
@@ -378,13 +381,12 @@ class UserController {
 				extractStream.on("finish", () => {
 					// Выводим список относительных путей файлов
 					console.log("Files in the archive:", filePaths);
-
 					res.json({ filePaths, normalPath, baseUrl });
 				});
 
 				extractStream.on("error", (err) => {
 					console.error("Error during extraction:", err);
-					res.status(500).send("Error during extraction");
+					res.status(500).send("Error during extractions");
 				});
 			});
 		} catch (error) {
@@ -411,7 +413,7 @@ class UserController {
 		}
 	}
 
-	async uploadFinishedProject(req, res) {
+	async uploadFinishedProject(req, res, next) {
 		try {
 			const {
 				name,
@@ -422,6 +424,12 @@ class UserController {
 				is_private_comments,
 				userId,
 			} = req.body;
+
+			const staticProjects = path.join(__dirname, "..", "static", "projects");
+
+			if (!fs.existsSync(staticProjects)) {
+				fs.mkdirSync(staticProjects);
+			}
 
 			const previewFile = uuid.v4() + ".jpg";
 			const { preview } = req.files;

@@ -1,10 +1,10 @@
 const {
-  News,
-  Likes,
-  Comments,
-  User,
-  View,
-  Project,
+	News,
+	Likes,
+	Comments,
+	User,
+	View,
+	Project,
 } = require("../models/models");
 const uuid = require("uuid");
 const path = require("path");
@@ -12,144 +12,149 @@ const ApiError = require("../error/ApiError");
 const { getIo } = require("../socket");
 
 class NewsController {
-  async create(req, res, next) {
-    try {
-      const { title, description } = req.body;
-      const { img } = req.files;
-      let fileName = uuid.v4() + ".jpg";
-      img.mv(path.resolve(__dirname, "..", "static/news", fileName));
-      const news = await News.create({ title, description, img: fileName });
-      return res.json(news);
-    } catch (e) {
-      next(ApiError.badRequest(e.message));
-    }
-  }
+	async create(req, res, next) {
+		try {
+			const { title, description } = req.body;
+			const { img } = req.files;
+			let fileName = uuid.v4() + ".jpg";
+			const staticNews = path.join(__dirname, "..", "static", "news");
 
-  async getAll(req, res, next) {
-    try {
-      let { limit, page } = req.query;
-      page = page || 1;
-      limit = limit || 12;
-      let offset = page * limit - limit;
+			if (!fs.existsSync(staticNews)) {
+				fs.mkdirSync(staticNews);
+			}
+			img.mv(path.resolve(__dirname, "..", "static/news", fileName));
+			const news = await News.create({ title, description, img: fileName });
+			return res.json(news);
+		} catch (e) {
+			next(ApiError.badRequest(e.message));
+		}
+	}
 
-      let news = await News.findAndCountAll({
-        include: [Comments, Likes, View],
-        limit,
-        offset,
-        where: {
-          isProposed: false,
-        },
-      });
-      return res.json(news);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async getAll(req, res, next) {
+		try {
+			let { limit, page } = req.query;
+			page = page || 1;
+			limit = limit || 12;
+			let offset = page * limit - limit;
 
-  async getAllProposed(req, res, next) {
-    try {
-      let { limit, page } = req.query;
-      page = page || 1;
-      limit = limit || 12;
-      let offset = page * limit - limit;
+			let news = await News.findAndCountAll({
+				include: [Comments, Likes, View],
+				limit,
+				offset,
+				where: {
+					isProposed: false,
+				},
+			});
+			return res.json(news);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      let news = await News.findAndCountAll({
-        include: [Comments, Likes, View],
-        limit,
-        offset,
-        where: {
-          isProposed: true,
-        },
-      });
-      return res.json(news);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async getAllProposed(req, res, next) {
+		try {
+			let { limit, page } = req.query;
+			page = page || 1;
+			limit = limit || 12;
+			let offset = page * limit - limit;
 
-  async getOne(req, res, next) {
-    try {
-      const { id } = req.params;
-      const news = await News.findOne({
-        where: { id },
-        include: [Comments, Likes, View],
-      });
-      return res.json(news);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			let news = await News.findAndCountAll({
+				include: [Comments, Likes, View],
+				limit,
+				offset,
+				where: {
+					isProposed: true,
+				},
+			});
+			return res.json(news);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-  async condidateLike(req, res, next) {
-    try {
-      const { newsId, userId } = req.query;
+	async getOne(req, res, next) {
+		try {
+			const { id } = req.params;
+			const news = await News.findOne({
+				where: { id },
+				include: [Comments, Likes, View],
+			});
+			return res.json(news);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      if (!userId) {
-        return next(ApiError.internal("Не авторизован"));
-      }
+	async condidateLike(req, res, next) {
+		try {
+			const { newsId, userId } = req.query;
 
-      const condidate = await Likes.findAll({
-        where: { userId, newsId },
-      });
+			if (!userId) {
+				return next(ApiError.internal("Не авторизован"));
+			}
 
-      return res.json(condidate);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			const condidate = await Likes.findAll({
+				where: { userId, newsId },
+			});
 
-  async setLike(req, res, next) {
-    try {
-      const { newsId, userId } = req.body;
+			return res.json(condidate);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      if (!userId) {
-        return next(ApiError.internal("Не авторизован"));
-      }
+	async setLike(req, res, next) {
+		try {
+			const { newsId, userId } = req.body;
 
-      const likes = await Likes.create({
-        newsId,
-        userId,
-      });
+			if (!userId) {
+				return next(ApiError.internal("Не авторизован"));
+			}
 
-      const newLikes = await Likes.findOne({
-        include: [User, Project],
-        where: { id: likes.id },
-      });
+			const likes = await Likes.create({
+				newsId,
+				userId,
+			});
 
-      const allLikes = await News.findAll({
-        include: [Likes, Comments, View],
-        where: { id: newsId },
-      });
-      const io = getIo();
-      io.emit("sendLikesToClients", allLikes);
-      // io.emit("notification", {newLikes, flag: "like"});
-      return res.json(likes);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+			const newLikes = await Likes.findOne({
+				include: [User, Project],
+				where: { id: likes.id },
+			});
 
-  async deleteLike(req, res, next) {
-    try {
-      const { newsId, userId } = req.query;
-      if (!userId) {
-        return next(ApiError.internal("Не авторизован"));
-      }
-      const likes = await Likes.destroy({
-        where: { newsId, userId },
-      });
+			const allLikes = await News.findAll({
+				include: [Likes, Comments, View],
+				where: { id: newsId },
+			});
+			const io = getIo();
+			io.emit("sendLikesToClients", allLikes);
+			// io.emit("notification", {newLikes, flag: "like"});
+			return res.json(likes);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 
-      const allLikes = await News.findAll({
-        include: [Likes, Comments, View],
-        where: { id: newsId },
-      });
-      const io = getIo();
-      io.emit("sendLikesNewsToClients", allLikes);
-      return res.json(likes);
-    } catch (error) {
-      next(ApiError.badRequest(error.message));
-    }
-  }
+	async deleteLike(req, res, next) {
+		try {
+			const { newsId, userId } = req.query;
+			if (!userId) {
+				return next(ApiError.internal("Не авторизован"));
+			}
+			const likes = await Likes.destroy({
+				where: { newsId, userId },
+			});
+
+			const allLikes = await News.findAll({
+				include: [Likes, Comments, View],
+				where: { id: newsId },
+			});
+			const io = getIo();
+			io.emit("sendLikesNewsToClients", allLikes);
+			return res.json(likes);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
 }
 
 module.exports = new NewsController();
