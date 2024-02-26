@@ -92,7 +92,7 @@
     // transform: translateY(20px);
     width: 100px;
     z-index: 3;
-    background: linear-gradient(90deg, $studio-background 0%, rgba(27, 34, 41, 0.5) 70%, transparent 100%);
+    background: linear-gradient(90deg, #202b35 0%, hsla(209, 25%, 17%, 0.5) 70%, transparent 100%);
   }
   &::after {
     content: "";
@@ -104,7 +104,7 @@
     // transform: translateY(20px);
     width: 100px;
     z-index: 3;
-		background: linear-gradient(-90deg, $studio-background 0%, rgba(27, 34, 41, 0.5) 70%, transparent 100%);
+		background: linear-gradient(-90deg, #202b35 0%, hsla(209, 25%, 17%, 0.5) 70%, transparent 100%);
   }
   &__track {
     padding: 20px !important;
