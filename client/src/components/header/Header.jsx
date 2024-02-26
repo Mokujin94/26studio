@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 
+import { Player } from '@lordicon/react'
+
 import style from "./header.module.scss";
 
 import logo from "../../resource/graphics/icons/footer/footer_logo.svg";
-import searchIcon from "../../resource/graphics/icons/header/search.svg";
+import searchIcon from '../../resource/graphics/icons/header/search.json';
 import CreateButtonPopUp from "../createButtonPopUp/CreateButtonPopUp";
 import burger from "../../resource/graphics/icons/burgerMenu/burger.svg";
 import { Context } from "../..";
@@ -29,6 +31,8 @@ function Header() {
 	const [searchOpen, setSearchOpen] = useState(false);
 
 	const [searchData, setSearchData] = useState({});
+	
+	const [isFocusSearch, setIsFocusSearch] = useState(false);
 
 	const useDebounced = useDebounce(search, 200);
 
@@ -36,10 +40,13 @@ function Header() {
 
 	const notificationsRef = useRef(null)
 
+	const searchIconRef = useRef(null)
 
 	const nodeRef = useRef(null);
+
 	useClickOutside(nodeRef, () => {
 		setSearchOpen(false);
+		setIsFocusSearch(false)
 	});
 
 	useClickOutside(createPopupRef, () => {
@@ -91,13 +98,18 @@ function Header() {
 							onFocus={(event) => {
 								event.target.setAttribute("autocomplete", "off");
 								setSearchOpen(true);
+								searchIconRef.current.playFromBeginning()
+								setIsFocusSearch(true)
 							}}
 						/>
-						<img
+						<div className={style.header__search__icon}>
+							<Player direction={1} colorize={isFocusSearch ? "#97bce6" : "#596470"} size={24} ref={searchIconRef} icon={searchIcon}/>
+						</div>
+						{/* <img
 							src={searchIcon}
 							alt="icon"
 							className={style.header__search__icon}
-						/>
+						/> */}
 						{searchOpen && (
 							<SearchAll
 								search={search}
