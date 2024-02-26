@@ -59,15 +59,15 @@ const EditModal = observer(() => {
 			<div className={style.editModal__content}>
 				<div className={style.editModal__input}>
 					<p className={style.editModal__input__title}>Никнейм</p>
-					<input type="text" placeholder={user.user.name} value={userName} onChange={(e) => setUserName(e.target.value)} className={style.editModal__input__item} />
+					<input autoComplete="new-password" type="text" placeholder={user.user.name} value={userName} onChange={(e) => setUserName(e.target.value)} className={style.editModal__input__item} />
 				</div>
 				<div className={style.editModal__input}>
 					<p className={style.editModal__input__title}>ФИО</p>
-					<input type="text" placeholder={user.user.full_name} value={userFullName} onChange={(e) => setUserFullName(e.target.value)} className={style.editModal__input__item} />
+					<input autoComplete="new-password" type="text" placeholder={user.user.full_name} value={userFullName} onChange={(e) => setUserFullName(e.target.value)} className={style.editModal__input__item} />
 				</div>
 				<div className={style.editModal__input}>
 					<p className={style.editModal__input__title}>Обо мне</p>
-					<textarea className={style.editModal__input__item} cols="30" rows="5" value={userAbout} onChange={(e) => setUserAbout(e.target.value)}>{userAbout}</textarea>
+					<textarea autoComplete="new-password" className={style.editModal__input__item} cols="30" rows="5" value={userAbout} onChange={(e) => setUserAbout(e.target.value)}>{userAbout}</textarea>
 					{/* <textarea type="text" placeholder={user.user.full_name} value={userAbout} onChange={(e) => setUserAbout(e.target.value)} className={style.editModal__input__item} /> */}
 				</div>
 				<div className={style.editModal__input}>
@@ -87,15 +87,15 @@ const EditModal = observer(() => {
 				</div>
 				<div className={style.editModal__input}>
 					<p className={style.editModal__input__title}>Старый пароль</p>
-					<input type="password" value={userOldPassword} onChange={(e) => setUserOldPassword(e.target.value)} className={style.editModal__input__item} />
+					<input autoComplete="new-password" type="password" value={userOldPassword} onChange={(e) => setUserOldPassword(e.target.value)} className={style.editModal__input__item} />
 				</div>
 				<div className={style.editModal__input}>
 					<p className={style.editModal__input__title}>Новый пароль</p>
-					<input type="password" value={userPassword} onChange={(e) => setUserPassword(e.target.value)} className={style.editModal__input__item} />
+					<input autoComplete="new-password" type="password" value={userPassword} onChange={(e) => setUserPassword(e.target.value)} className={style.editModal__input__item} />
 				</div>
 				<div className={style.editModal__input}>
 					<p className={style.editModal__input__title}>Почта</p>
-					<input type="text" placeholder={user.user.email} value={userEmail} onChange={(e) => setUserEmail(e.target.value)} className={style.editModal__input__item} />
+					<input autoComplete="new-password" type="text" placeholder={user.user.email} value={userEmail} onChange={(e) => setUserEmail(e.target.value)} className={style.editModal__input__item} />
 				</div>
 			</div>
 			<FunctionButton onClick={onButton}>Сохранить</FunctionButton>
