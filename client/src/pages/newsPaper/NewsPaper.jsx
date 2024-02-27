@@ -26,8 +26,8 @@ const NewsPaper = observer(() => {
 	const [views, setViews] = useState([]);
 	const [description, setDescription] = useState([]);
 	const [isLike, setIsLike] = useState(false);
+	const [likeLoading, setLikeLoading] = useState(false);
 
-	const formatedLikes = useCountFormatter(amountLike.length);
 	const formatedViews = useCountFormatter(views.length);
 
 	const { id } = useParams();
@@ -42,8 +42,13 @@ const NewsPaper = observer(() => {
 			setNewsData(data);
 			const lines = data.description.split('\r\n');
 			setDescription(lines)
-			setAmountLike(data.likes);
-			setViews(data.views);
+			setAmountLike(() => useCountFormatter(data.likes.length));
+			data.likes.filter((item) => {
+				if (item.userId === user.user.id && item.status) {
+					setIsLike(true);
+				}
+			});
+			setViews(() => useCountFormatter(data.length));
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
@@ -60,55 +65,46 @@ const NewsPaper = observer(() => {
 			}
 		});
 
-		socket.on("sendLikesNewsToClients", (updatedLikes) => {
-			console.log("Получены новые комментарии:", updatedLikes);
-			if (updatedLikes) {
-				updatedLikes.filter((item) => {
-					if (item.id == id) {
-						setAmountLike(updatedLikes[0].likes);
-					}
-				});
-			}
-		});
-
 		// Закрываем соединение при размонтировании компонента
 		return () => {
 			socket.disconnect();
 		};
-	}, []);
-
-	useEffect(() => {
-		if (amountLike) {
-			for (let i = 0; i < amountLike.length; i++) {
-				if (amountLike[i].userId === user.user.id) {
-					setIsLike(true);
-				}
-			}
-		}
-	}, [user, amountLike]);
+	}, [location.pathname, user.user.id]);
 
 	const setLike = async () => {
+		setLikeLoading(true);
 		await condidate(id, user.user.id)
 			.then(async (dataCondidate) => {
 				if (dataCondidate.length) {
 					await deleteLike(id, user.user.id)
-						.then(setIsLike(false))
+						.then(() => {
+							setIsLike(false);
+							setAmountLike((amountLike) => Number(amountLike) - 1);
+							setLikeLoading(false);
+						})
 						.catch((data) => {
 							console.log(data.response.data.message);
 							error.setNotAuthError(true);
+							setLikeLoading(false)
 						});
 				} else {
 					await like(id, user.user.id)
-						.then(setIsLike(true))
+						.then(() => {
+							setIsLike(true);
+							setAmountLike((amountLike) => Number(amountLike) + 1);
+							setLikeLoading(false);
+						})
 						.catch((data) => {
 							console.log(data.response.data.message);
 							error.setNotAuthError(true);
+							setLikeLoading(false)
 						});
 				}
 			})
 			.catch((data) => {
 				console.log(data.response.data.message);
 				error.setNotAuthError(true);
+				setLikeLoading(false)
 			});
 	};
 
@@ -159,8 +155,9 @@ const NewsPaper = observer(() => {
 					<div className="news-paper__activity">
 						<AmountComponent
 							img={likeIcon}
-							value={formatedLikes}
+							value={amountLike}
 							onClick={setLike}
+							likeLoading={likeLoading}
 						/>
 						<AmountComponent img={view} value={formatedViews} />
 					</div>
