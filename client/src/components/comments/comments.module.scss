@@ -18,8 +18,8 @@
   }
 
   &__comments {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column-reverse;
     grid-gap: 10px;
     overflow-y: auto;
     margin-top: 10px;

@@ -4,6 +4,7 @@ import CommentsInput from "../commentsInput/CommentsInput";
 import NewsComment from "../newsComment/NewsComment";
 
 import style from "./comments.module.scss";
+import { useDateFormatter } from "../../hooks/useDateFormatter";
 
 const Comments = ({ comments, setComments, projectId, newsId }) => {
 	useEffect(() => {
@@ -52,7 +53,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 							name={item.user.name}
 							avatar={item.user.avatar}
 							comment={item.message}
-							date="12:54 04.04.23"
+							date={useDateFormatter(item.createdAt)}
 							key={item.id}
 						/>
 					);
