@@ -338,7 +338,7 @@ class ProjectController {
     }
   }
 
-  async searchProject(req, res) {
+  async searchProject(req, res, next) {
     try {
       let { search, limit, page, filter } = req.query;
       page = page || 1;
