@@ -370,8 +370,7 @@ class UserController {
 
 						// Читаем буфер и преобразуем его в строку
 						const buffer = await entry.buffer();
-						const content = buffer.toString("utf-8");
-						fs.writeFileSync(entryPath, content, "utf-8");
+						fs.writeFileSync(entryPath, buffer);
 					}
 
 					// Пропускаем содержимое файла
