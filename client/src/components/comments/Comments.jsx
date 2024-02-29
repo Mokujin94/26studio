@@ -7,6 +7,9 @@ import style from "./comments.module.scss";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
 
 const Comments = ({ comments, setComments, projectId, newsId }) => {
+
+	const [lastReplyComment, setLastReplyComment] = useState({});
+
 	useEffect(() => {
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
 		const socket = socketIOClient(process.env.REACT_APP_API_URL);
@@ -33,6 +36,12 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 			});
 		}
 
+		socket.on("replyComment", (newComment) => {
+			if (newComment) {
+				setLastReplyComment(newComment);
+			}
+		})
+
 		// Закрываем соединение при размонтировании компонента
 		return () => {
 			socket.disconnect();
@@ -53,6 +62,9 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 							name={item.user.name}
 							avatar={item.user.avatar}
 							comment={item.message}
+							commentId={item.id}
+							replyes={item.replyes}
+							lastReplyComment={lastReplyComment}
 							date={useDateFormatter(item.createdAt)}
 							key={item.id}
 						/>

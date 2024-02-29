@@ -22,7 +22,6 @@ const authInterceptor = async (config) => {
 	config.headers.authorization = `Bearer ${token}`;
 	if (token) {
 		const decode = jwt_decode(token);
-		console.log(decode)
 		try {
 			await getUserOnline(decode.id)
 		} catch (error) {
@@ -37,7 +36,6 @@ const hostInterceptor = async (config) => {
 	const token = localStorage.getItem("token");
 	if (token) {
 		const decode = jwt_decode(token);
-		console.log(decode)
 		try {
 			await getUserOnline(decode.id)
 		} catch (error) {

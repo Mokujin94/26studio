@@ -126,6 +126,10 @@ const Comments = sequelize.define("comments", {
 	},
 });
 
+const ReplyComments = sequelize.define("reply_comments", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+})
+
 const Likes = sequelize.define("likes", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 	status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
@@ -205,6 +209,8 @@ Comments.belongsTo(News);
 User.hasMany(Comments);
 Comments.belongsTo(User, { foreignKey: "userId" });
 
+Comments.hasMany(Comments, { as: 'replyes', foreignKey: 'parentId' });
+
 Project.hasMany(Likes);
 Likes.belongsTo(Project, { foreignKey: "projectId" });
 
@@ -275,4 +281,5 @@ module.exports = {
 	View,
 	Notifications,
 	UserFriend,
+	ReplyComments
 };

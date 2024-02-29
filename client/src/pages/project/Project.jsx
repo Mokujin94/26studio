@@ -35,7 +35,6 @@ const Project = observer(() => {
 	useEffect(() => {
 		viewProject(id, user.user.id).catch((e) => console.log(e));
 		fetchProjectById(id).then((data) => {
-			console.log(data);
 			setDataProject(data);
 			const lines = data.description.split('\r\n');
 			setDescription(lines);
@@ -43,13 +42,13 @@ const Project = observer(() => {
 			data.likes.filter((item) => {
 				if (item.userId === user.user.id && item.status) {
 					setIsLike(true);
-					console.log(true);
 				}
 			});
 			setViews(data.views);
 		});
 		getAllCommentsProject(id).then((data) => {
 			setComments(data[0].comments)
+			console.log(data);
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");

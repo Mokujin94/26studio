@@ -5,20 +5,20 @@
   flex-direction: column;
   color: $studio-white-text;
   width: 100%;
-	padding: 15px 15px 15px 100px;
+	padding: 15px 15px 15px 65px;
   position: relative;
 	background-color: $studio-darker-element;
 	border-radius: 10px;
   transition: grid-template-rows 0.3s ease;
   &__avatar {
-    max-width: 70px;
+    max-width: 50px;
     width: 100%;
-    max-height: 70px;
+    max-height: 50px;
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
     position: absolute;
-    left: 15px;
+    left: 0px;
     top: 15px;
     &Img {
       position: absolute;
@@ -41,16 +41,15 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 10px;
     &Name {
       display: inline-block;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       margin-bottom: 5px;
       color: $studio-white-text;
     }
     &Comment {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 400;
     }
     &Bottom {
@@ -166,49 +165,6 @@
       }
     }
   }
-
-	&__replyes {
-		&__btn {
-			position: relative;
-			margin-top: 10px;
-			padding: 5px 10px 5px 30px;
-			background: $studio-dark-element;
-			border-radius: 10px;
-			color: $studio-white-text;
-			border: 1px solid $studio-white-border;
-			font-weight: 500;
-			font-size: 14px;
-			width: max-content;
-			cursor: pointer;
-			user-select: none;
-			transition: $studio-transition-03;
-			&::before {
-				content: ''; 
-				position: absolute; /* Абсолютное позиционирование */
-				left: 10px; top: 50%; /* Положение треугольника */
-				transform: translateY(calc(-50% + 3px));
-				border: 6px solid transparent; /* Прозрачные границы */
-				border-top: 6px solid $studio-white-element; /* Добавляем треугольник */
-				transition: $studio-transition-03;
-			 }
-			 &:hover {
-				background: $studio-white-element;
-				color: $studio-dark-text;
-				&::before {
-					border-top: 6px solid $studio-dark-element; /* Добавляем треугольник */
-				}
-			 }
-			 
-			 &_active {
-				background: $studio-white-element;
-				color: $studio-dark-text;
-				&::before {
-					border-top: 6px solid $studio-dark-element; /* Добавляем треугольник */
-					transform: translateY(calc(-50% + -3px)) rotateX(180deg);
-				}
-			 }
-		}
-	}
 }
 
 @keyframes unWrap {

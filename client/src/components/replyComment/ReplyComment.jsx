@@ -1,42 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import { CSSTransition } from 'react-transition-group';
+import style from './replyComment.module.scss'
+import { Link } from 'react-router-dom';
+import { PROFILE_ROUTE } from '../../utils/consts';
+import { useState } from 'react';
 
-import style from "./newsComment.module.scss";
-import { Link } from "react-router-dom";
-import { PROFILE_ROUTE } from "../../utils/consts";
-import FunctionButton from "../functionButton/FunctionButton";
-import { CSSTransition } from "react-transition-group";
-import { createReply } from "../../http/commentsAPI";
-import { observer } from "mobx-react-lite";
-import { Context } from "../..";
-import ReplyComment from "../replyComment/ReplyComment";
-import { useDateFormatter } from "../../hooks/useDateFormatter";
-
-const NewsComment = observer((props) => {
-	const { user } = useContext(Context);
+const ReplyComment = (props) => {
 
 	const [isReply, setIsReply] = useState(false);
-	const [isReplyOpen, setIsReplyOpen] = useState(false);
 	const [replyText, setReplyText] = useState('');
-	const [replyes, setReplyes] = useState([]);
 
 	const onReply = async () => {
-		await createReply(replyText, user.user.id, props.commentId).then(() => {
-			setIsReply(false)
-			setReplyText('')
-		}).catch(err => console.log(err))
+		await createReply(replyText, user.user.id, props.commentId).then(data => console.log(data)).catch(err => console.log(err))
 	}
-
-	useEffect(() => {
-		if (props.replyes) {
-			setReplyes(props.replyes)
-		}
-	}, [])
-
-	useEffect(() => {
-		if (props.lastReplyComment.parentId === props.commentId) {
-			setReplyes((item) => [...item, props.lastReplyComment]);
-		}
-	}, [props.lastReplyComment])
 
 	return (
 		<div className={style.block} >
@@ -92,33 +67,8 @@ const NewsComment = observer((props) => {
 					</div>
 				</CSSTransition>
 			</div>
-			{!!replyes.length &&
-				<div className={isReplyOpen ? style.block__replyes__btn + ' ' + style.block__replyes__btn_active : style.block__replyes__btn} onClick={() => setIsReplyOpen(prev => !prev)}>
-					<span>{replyes.length} ответа</span>
-				</div>
-			}
-			{
-				isReplyOpen &&
-				<div className={style.block__replyes__list}>
-					{replyes && replyes.map(item => {
-						console.log(item)
-						return (
-							<ReplyComment
-								id={item.userId}
-								name={item.user.name}
-								avatar={item.user.avatar}
-								comment={item.message}
-								commentId={item.id}
-								replyes={item.replyes}
-								date={useDateFormatter(item.createdAt)}
-								key={item.id}
-							/>
-						)
-					})}
-				</div>
-			}
 		</div>
 	);
-})
+};
 
-export default NewsComment;
+export default ReplyComment;

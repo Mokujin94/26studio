@@ -5,6 +5,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 router.post('/project', authMiddleware, CommentController.createCommentProject);
 router.post('/news', authMiddleware, CommentController.createCommentNews);
+router.post('/reply', authMiddleware, CommentController.createChildComment);
 router.get('/project/:id', CommentController.getAllCommentsProject);
 router.get('/news/:id', CommentController.getAllCommentsNews);
 
