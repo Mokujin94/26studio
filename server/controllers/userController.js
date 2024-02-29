@@ -69,6 +69,22 @@ class UserController {
 			next(ApiError.badRequest(error.message));
 		}
 	}
+
+	async getUserByEmail(req, res, next) {
+		try {
+			const { email } = req.query;
+			const condidateMail = await User.findOne({ where: { email } });
+			if (!condidateMail) {
+				return next(
+					ApiError.badRequest("Пользовательно с такой почтой не существует")
+				);
+			}
+			return res.json(condidateMail);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
+
 	async generateCode(req, res, next) {
 		try {
 			const { email, code } = req.body;
@@ -516,8 +532,6 @@ class UserController {
 					updateFields.groupId = groupId;
 				}
 			}
-
-
 
 			await user.update(updateFields);
 			const token = generateJwt(

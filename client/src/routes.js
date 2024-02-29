@@ -10,7 +10,6 @@ import Registration from './pages/registration/Registation';
 import NewsPaper from './pages/newsPaper/NewsPaper';
 import Admin from './pages/admin/Admin';
 
-
 import {
   GROUPS_ROUTE,
   GROUP_ROUTE,
@@ -23,9 +22,11 @@ import {
   PROJECT_ROUTE,
   REGISTRATION_ROUTE,
   ADMIN_ROUTE,
-  GROUP_MANAGEMENT_ROUTE
+  GROUP_MANAGEMENT_ROUTE,
+	PASSWORDRECOVERY_ROUTE
 } from './utils/consts';
 import GroupsManagement from './pages/groupsManagement/GroupsManagement';
+import PasswordRecovery from './pages/passwordRecovery/PasswordRecovery';
 
 
 export const authRoutes = [
@@ -82,4 +83,8 @@ export const publicRoutes = [
     path: REGISTRATION_ROUTE,
     Component: <Registration />,
   },
+	{
+		path: PASSWORDRECOVERY_ROUTE,
+		Component: <PasswordRecovery/>
+	}
 ];
