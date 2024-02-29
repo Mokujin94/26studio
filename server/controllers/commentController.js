@@ -21,7 +21,13 @@ class CommentController {
 						include: [User, {
 							model: Comments,
 							as: 'replyes',
-							include: User
+							include: [User, 
+								{
+									model: Comments,
+									as: 'replyUserId',
+									include: User
+								}
+							]
 						}],
 					},
 				],
@@ -155,7 +161,7 @@ class CommentController {
 	}
 
 	async createChildComment(req, res, next) {
-		const { message, userId, parentId } = req.body;
+		const { message, userId, parentId, replyUser } = req.body;
 		const io = getIo();
 
 		if (!userId) {
@@ -166,7 +172,8 @@ class CommentController {
 			const comment = await Comments.create({
 				message,
 				userId,
-				parentId
+				parentId,
+				replyUser
 			});
 
 			// const notification = await Notifications.create({

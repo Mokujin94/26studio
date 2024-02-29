@@ -14,7 +14,6 @@ import { deleteNotification } from '../../http/notificationAPI'
 
 const NotificationsModalItem = observer(({notification}) => {
   const { user } = useContext(Context)
-  console.log(notification);
 
   const notificationDate = useDateFormatter(notification.createdAt);
 
@@ -26,7 +25,6 @@ const NotificationsModalItem = observer(({notification}) => {
         }
       })
       user.setNotifications(updateNotification)
-      console.log(updateNotification)
     })
   }
 

@@ -47,8 +47,6 @@ const Projects = observer(() => {
 		});
 
 		searchProject(useDebounced, selectedItem, currentPage).then((data) => {
-			console.log(data);
-			console.log(data);
 			setProjectsData(data.rows);
 			setIsLoaded(false);
 		});
@@ -62,7 +60,6 @@ const Projects = observer(() => {
 					setProjectsData([...projectsData, ...data.rows]);
 					setCurrentPage((page) => page + 1);
 					setTotalCountSearch(data.countSearch);
-					console.log(data);
 					setIsLoadedSpinner(false);
 					setIsLoaded(false);
 				})
@@ -75,7 +72,6 @@ const Projects = observer(() => {
 		searchProject(useDebounced, selectedItem, 1)
 			.then((data) => {
 				setProjectsData(data.rows);
-				console.log(data);
 				setTotalCountSearch(data.countSearch);
 				setCurrentPage(2);
 				setIsLoaded(false);

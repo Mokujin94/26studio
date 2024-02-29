@@ -159,16 +159,13 @@ const Profile = observer(() => {
 							item.userId === user.user.id ||
 							item.friendId === user.user.id
 						) {
-							console.log("2");
 							return setTextButton("Удалить из друзей");
 						}
 					} else {
 						if (item.userId === user.user.id) {
-							console.log("3");
 							return setTextButton("Отменить заявку");
 						}
 						if (item.friendId === user.user.id) {
-							console.log("4");
 							return setTextButton("Принять заявку");
 						}
 					}
@@ -246,7 +243,6 @@ const Profile = observer(() => {
 					);
 
 					modal.setModalError(true);
-					console.log(modal.modalError);
 					setAvatarReader("");
 					return;
 				}
@@ -552,7 +548,6 @@ const Profile = observer(() => {
 								) : friendsRequest.length ? (
 									<>
 										{friendsRequest}
-										{console.log(friendsRequest)}
 									</>
 								) : (
 									"Нет заявок"

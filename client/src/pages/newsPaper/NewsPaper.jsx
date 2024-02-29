@@ -55,7 +55,6 @@ const NewsPaper = observer(() => {
 		const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
 		socket.on("sendViewsNewsToClients", (updatedViews) => {
-			console.log("Получены новые просмотры:", updatedViews);
 			if (updatedViews) {
 				updatedViews.filter((item) => {
 					if (item.id == id) {

@@ -38,7 +38,6 @@ const ProjectCard = observer(({ id, img, title, name, date, like, view, comment,
 			.then(e => {
 				const newDataProjects = dataProjects.filter((item) => item.id != id)
 				setDataProjects(newDataProjects)
-				console.log(e, 'Успешно удалено')
 			})
 			.catch(e => console.log(e, 'Ошибка при попытке удаления'))
 	}

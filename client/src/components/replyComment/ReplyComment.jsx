@@ -3,15 +3,25 @@ import style from './replyComment.module.scss'
 import { Link } from 'react-router-dom';
 import { PROFILE_ROUTE } from '../../utils/consts';
 import { useState } from 'react';
+import { createReply } from '../../http/commentsAPI';
+import { useContext } from 'react';
+import { Context } from '../..';
+import { observer } from 'mobx-react-lite';
 
-const ReplyComment = (props) => {
+const ReplyComment = observer((props) => {
+
+	const {user} = useContext(Context)
 
 	const [isReply, setIsReply] = useState(false);
+	const [replyUserId, setReplyUserId] = useState(props.replyId)
 	const [replyText, setReplyText] = useState('');
 
 	const onReply = async () => {
-		await createReply(replyText, user.user.id, props.commentId).then(data => console.log(data)).catch(err => console.log(err))
+		await createReply(replyText, user.user.id, props.commentId, replyUserId).then(data => console.log(data)).catch(err => console.log(err))
+
 	}
+
+	console.log(props)
 
 	return (
 		<div className={style.block} >
@@ -37,11 +47,13 @@ const ReplyComment = (props) => {
 
 				</div>
 
-				<h2 className={style.block__textComment}>{props.comment}</h2>
+				<h2 className={style.block__textComment}><Link to={PROFILE_ROUTE + '/' + props.id}>{props.replyUser}</Link> {props.comment}</h2>
 			</div>
 			<div className={style.block__textBottom}>
 				<div className={style.block__textBottomFeedback}>
-					<p onClick={() => setIsReply(true)} className={style.block__textBottomFeedbackItem}>Ответить</p>
+					<p onClick={() => {
+						setIsReply(true);
+						}} className={style.block__textBottomFeedbackItem}>Ответить</p>
 					<div className={style.block__textBottomFeedbackLike}>
 						<div className={style.block__textBottomFeedbackItemImage}>
 							<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 0C3.9875 0 2.64 0.741935 1.6225 1.90323C0.6325 3.06452 0 4.64516 0 6.45161C0 8.22581 0.6325 9.80645 1.6225 11L11 22L20.3775 11C21.3675 9.83871 22 8.25806 22 6.45161C22 4.67742 21.3675 3.09677 20.3775 1.90323C19.3875 0.741935 18.04 0 16.5 0C14.9875 0 13.64 0.741935 12.6225 1.90323C11.6325 3.06452 11 4.64516 11 6.45161C11 4.67742 10.3675 3.09677 9.3775 1.90323C8.3875 0.741935 7.04 0 5.5 0Z" fill="white"></path></svg>
@@ -59,7 +71,11 @@ const ReplyComment = (props) => {
 					unmountOnExit
 				>
 					<div className={style.block__input}>
-						<div className={replyText ? style.block__input__item + ' ' + style.block__input__item_notEmpty : style.block__input__item} contenteditable="true" onInput={(e) => setReplyText(e.target.textContent)}></div>
+						<div className={replyText ? style.block__input__item + ' ' + style.block__input__item_notEmpty : style.block__input__item} contentEditable="true" onInput={(e) => {
+								setReplyText(e.target.textContent);
+							}
+						}>
+						</div>
 						<div className={style.block__input__buttons}>
 							<button onClick={() => setIsReply(false)} className={style.block__input__buttons__item + ' ' + style.block__input__buttons__item_border}>Отменить</button>
 							<button onClick={onReply} className={style.block__input__buttons__item}>Отправить</button>
@@ -69,6 +85,6 @@ const ReplyComment = (props) => {
 			</div>
 		</div>
 	);
-};
+});
 
 export default ReplyComment;

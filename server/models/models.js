@@ -124,6 +124,7 @@ const Comments = sequelize.define("comments", {
 		type: DataTypes.INTEGER,
 		allowNull: false,
 	},
+	replyUser: {type: DataTypes.INTEGER }
 });
 
 const ReplyComments = sequelize.define("reply_comments", {
@@ -210,6 +211,7 @@ User.hasMany(Comments);
 Comments.belongsTo(User, { foreignKey: "userId" });
 
 Comments.hasMany(Comments, { as: 'replyes', foreignKey: 'parentId' });
+Comments.hasMany(Comments, { as: 'replyUserId', foreignKey: 'replyUser' });
 
 Project.hasMany(Likes);
 Likes.belongsTo(Project, { foreignKey: "projectId" });

@@ -48,14 +48,12 @@ const Project = observer(() => {
 		});
 		getAllCommentsProject(id).then((data) => {
 			setComments(data[0].comments)
-			console.log(data);
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
 		const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
 		socket.on("sendViewsToClients", (updatedViews) => {
-			console.log("Получены новые просмотры:", updatedViews);
 			if (updatedViews) {
 				updatedViews.filter((item) => {
 					if (item.id == id) {

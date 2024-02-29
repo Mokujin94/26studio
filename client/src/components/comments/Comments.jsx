@@ -13,11 +13,9 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 	useEffect(() => {
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
 		const socket = socketIOClient(process.env.REACT_APP_API_URL);
-		// console.log(socket);
 		// Подписываемся на событие обновления комментариев
 		if (projectId) {
 			socket.on("sendCommentsToClients", (updatedComments) => {
-				console.log("Получены новые комментарии:", updatedComments);
 				if (updatedComments) {
 					if (updatedComments.projectId == projectId) {
 						setComments((item) => [...item, updatedComments]);
@@ -27,7 +25,6 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 		}
 		if (newsId) {
 			socket.on("sendCommentsNewsToClients", (updatedComments) => {
-				console.log("Получены новые комментарии:", updatedComments);
 				if (updatedComments) {
 					if (updatedComments.newsId == newsId) {
 						setComments((item) => [...item, updatedComments]);
@@ -39,8 +36,12 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 		socket.on("replyComment", (newComment) => {
 			if (newComment) {
 				setLastReplyComment(newComment);
+				
 			}
 		})
+
+		console.log(comments)
+
 
 		// Закрываем соединение при размонтировании компонента
 		return () => {

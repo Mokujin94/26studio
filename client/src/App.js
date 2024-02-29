@@ -34,7 +34,6 @@ const App = observer(() => {
 
 	useEffect(() => {
 		check().then((data) => {
-			console.log(data)
 			user.setUser(data);
 			user.setAuth(true);
 		});
@@ -53,9 +52,6 @@ const App = observer(() => {
 				updateNotification.recipientId === user.user.id
 			) {
 				user.setNotifications([...user.notifications, updateNotification]);
-				console.log(updateNotification);
-				// console.log("Получены новые уведомления:", updateNotification);
-				console.log("почему 2");
 				new Audio(notificationAudio).play();
 			}
 		});

@@ -17,7 +17,6 @@ const ProfileFriends = observer(({status}) => {
 
   useEffect(() => {
     getFriends(id, status).then((data) => {
-      console.log(data);
       setFriendData(data);
     });
   }, [location.pathname, user.user.id]);
@@ -77,10 +76,8 @@ const ProfileFriends = observer(({status}) => {
                       </h2>
                   </div>
           } else if (Number(id) === id_recipient && status) {
-            console.log('sdfsdfsdf');
             return <FriendCard userId={id_sender} key={id} />;
           } else if (Number(id) === id_recipient && !status) {
-            console.log('sdfsdfsdf');
             return <FriendCard userId={id_sender} options={2} key={id} />;
           }
         })

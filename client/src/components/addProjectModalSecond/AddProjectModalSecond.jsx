@@ -98,7 +98,6 @@ const AddProjectModalSecond = observer(
 											</option>
 										);
 									}
-									console.log(item);
 								})}
 						</select>
 					</div>

@@ -22,7 +22,6 @@ const NotificationsModal = observer(() => {
         .then((data) => {
           setIsLoading(false);
           user.setNotifications(data);
-          console.log(user.notifications);
         })
         .catch(setIsLoading(false))
     );

@@ -14,18 +14,14 @@ const ModalNewsUpload = observer(() => {
   const [readerImg, setReaderImg] = useState(null);
 
   useEffect(() => {
-    console.log(file);
     if(!file) {
       return
     }
     const reader = new FileReader();
     reader.onload = () => {
       setReaderImg(reader.result)
-      console.log(reader.result);
     }
     reader.readAsDataURL(file)
-    // console.log(reader);
-    // console.log(reader.result);
   }, [file])
 
   const addNews = () => {

@@ -30,6 +30,7 @@ const NewsComment = observer((props) => {
 		if (props.replyes) {
 			setReplyes(props.replyes)
 		}
+		console.log(props)
 	}, [])
 
 	useEffect(() => {
@@ -101,15 +102,16 @@ const NewsComment = observer((props) => {
 				isReplyOpen &&
 				<div className={style.block__replyes__list}>
 					{replyes && replyes.map(item => {
-						console.log(item)
 						return (
 							<ReplyComment
 								id={item.userId}
 								name={item.user.name}
 								avatar={item.user.avatar}
 								comment={item.message}
-								commentId={item.id}
+								commentId={props.commentId}
 								replyes={item.replyes}
+								replyId={item.id}
+								replyUser={item.replyUser}
 								date={useDateFormatter(item.createdAt)}
 								key={item.id}
 							/>
