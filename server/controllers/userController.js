@@ -552,6 +552,35 @@ class UserController {
 		}
 	}
 
+	async recoveryPassword(req, res, next) {
+		try {
+			const { email, new_password } = req.body;
+			const user = await User.findOne({ where: { email } })
+			if (!user) {
+				return next(
+					ApiError.badRequest("Пользовательно с такой почтой не существует")
+				);
+			}
+			const hashNewPassword = await bcrypt.hash(new_password, 5);
+			await user.update({ password: hashNewPassword })
+			const token = generateJwt(
+				user.id,
+				user.name,
+				user.full_name,
+				user.email,
+				user.description,
+				user.avatar,
+				user.group,
+				user.groupId,
+				user.roleId,
+				user.lastOnline
+			);
+			return res.json({ token });
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
+
 	async checkOnline(req, res, next) {
 		const { id } = req.params;
 		if (!id) return next(ApiError.internal({ error: 'Internal server error' }))

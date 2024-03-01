@@ -3,16 +3,17 @@ import { createRef, useContext, useEffect, useState } from 'react';
 import './passwordRecovery.scss'
 
 import { Context } from '../..';
-import emailjs from "@emailjs/browser";
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import RegistrationStages from '../../components/registrationStages/RegistrationStages';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { LOGIN_ROUTE } from '../../utils/consts';
 import PrimaryButton from '../../components/primaryButton/PrimaryButton';
-import { fetchUserByEmail } from '../../http/userAPI';
+import { fetchUserByEmail, generateCode, recoveryPassword } from '../../http/userAPI';
 import ModalError from '../../components/modalError/ModalError';
 import InputPassword from '../../components/inputPassword/InputPassword';
 import { observer } from 'mobx-react-lite';
+import MainButton from '../../components/mainButton/MainButton';
+import ModalComplete from '../../components/modalComplete/ModalComplete';
 
 const PasswordRecovery = observer(() => {
 	const { user } = useContext(Context)
@@ -22,10 +23,25 @@ const PasswordRecovery = observer(() => {
 	const [email, setEmail] = useState("")
 	const [errorModal, setErrorModal] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
+	const [completeMessage, setCompleteMessage] = useState("");
+	const [completeModal, setCompleteModal] = useState(false);
 	const [incorrectMail, setIncorrectMail] = useState(false);
+	const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState(false)
+	const [isPasswordConfirmEyeOpen, setIsPasswordConfirmEyeOpen] = useState(false)
+	const [errorPasswordInput, setErrorPasswordInput] = useState([
+		{
+			id: 0,
+			error: ""
+		},
+		{
+			id: 1,
+			error: ""
+		}
+	])
 	const [code, setCode] = useState("");
 	const [valuePassword, setValuePassword] = useState("");
 	const [valuePasswordConfirm, setValuePasswordConfirm] = useState("");
+	const [isFinishRecovery, setIsFinishRecovery] = useState(false);
 
 	const [number1, setNumber1] = useState("");
 	const [number2, setNumber2] = useState("");
@@ -42,6 +58,7 @@ const PasswordRecovery = observer(() => {
 	const input6 = createRef();
 
 	const onStage1 = async () => {
+		setIsFinishRecovery(false);
 		setStages(1);
   };
 
@@ -60,9 +77,12 @@ const PasswordRecovery = observer(() => {
 			await fetchUserByEmail(email)
 				.then(() => {
 					setStages((item) => item + 1);
+					setErrorMessage('');
+					setErrorModal(false);
 					user.setCodeAuth(
 						Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
 					);
+					generateCode(email, user.codeAuth).then();
 				})
 				.catch((err) => {
 					if (err.response) {
@@ -91,6 +111,8 @@ const PasswordRecovery = observer(() => {
 			await fetchUserByEmail(email)
 				.then(() => {
 					setStages((item) => item + 1);
+					setErrorMessage('');
+					setErrorModal(false);
 					user.setCodeAuth(
 						Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
 					);
@@ -230,9 +252,12 @@ const PasswordRecovery = observer(() => {
 			await fetchUserByEmail(email)
 				.then(() => {
 					setStages((item) => item + 1);
+					setErrorMessage('');
+					setErrorModal(false);
 					user.setCodeAuth(
 						Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
 					);
+					generateCode(email, user.codeAuth).then();
 				})
 				.catch((err) => {
 					if (err.response) {
@@ -246,52 +271,99 @@ const PasswordRecovery = observer(() => {
 				});
 			setLoading(false)
 		} else if(stages === 3) {
+			if(errorPasswordInput[0].error || errorPasswordInput[1].error || !valuePassword || !valuePasswordConfirm || valuePassword !== valuePasswordConfirm) {
+				setErrorMessage("Введите новый пароль корректно")
+				setErrorModal(true)
+				setLoading(false)
+				return
+			}
+			await recoveryPassword(email, valuePassword)
+				.then((data) => {
+					console.log(data, location.pathname);
+					setIsFinishRecovery(true);
+					setErrorMessage("");
+					setErrorModal(false);
+					setCompleteModal(true);
+          setCompleteMessage("Вы успешно изменили пароль");
+				})
+				.catch((err) => {
+					if (err.response) {
+						setErrorMessage(err.response.data.message);
+						setErrorModal(true);
+						setLoading(false);
+					} else {
+						setErrorMessage(err.message);
+						setErrorModal(true);
+					}
+				});
 			setLoading(false)
 		}
 	}
 
 	const validationPassword = (e) => {
 		setValuePassword(e.target.value);
+		let newErrorPasswordInput = [];
 		if (e.target.value.length < 6) {
 			const newError = {
-				id: 3,
-				errors: [
-					{
-						id: 1,
-						name: "Длина пароля не менее 6 символов",
-					},
-				],
+				id: 0,
+				error: "Длина пароля не менее 6 символов",
 			};
-			user.setErrorAuth(newError);
+			newErrorPasswordInput = errorPasswordInput.map((item, i) => {
+				if (i === newError.id) {
+					return newError;
+				} else {
+					return item;
+				}
+				}
+			)
 		} else {
 			const newError = {
-				id: 3,
-				errors: [],
+				id: 0,
+				error: "",
 			};
-			user.setErrorAuth(newError);
+			newErrorPasswordInput = errorPasswordInput.map((item, i) => {
+				if (i === newError.id) {
+					return newError;
+				} else {
+					return item;
+				}
+				}
+			)
 		}
+		setErrorPasswordInput(newErrorPasswordInput);
 	};
 
 	const validationPasswordConfirm = (e) => {
 		setValuePasswordConfirm(e.target.value);
+		let newErrorPasswordInput = [];
 		if (e.target.value !== valuePassword) {
 			const newError = {
-				id: 4,
-				errors: [
-					{
-						id: 1,
-						name: "Пароли не совпадают",
-					},
-				],
+				id: 1,
+				error: "Пароли не совпадают",
 			};
-			user.setErrorAuth(newError);
+			newErrorPasswordInput = errorPasswordInput.map((item, i) => {
+				if (i === newError.id) {
+					return newError;
+				} else {
+					return item;
+				}
+				}
+			)
 		} else {
 			const newError = {
-				id: 4,
-				errors: [],
+				id: 1,
+				error: "",
 			};
-			user.setErrorAuth(newError);
+			newErrorPasswordInput = errorPasswordInput.map((item, i) => {
+				if (i === newError.id) {
+					return newError;
+				} else {
+					return item;
+				}
+				}
+			)
 		}
+		setErrorPasswordInput(newErrorPasswordInput);
 	};
 
 	useEffect(() => {
@@ -306,15 +378,19 @@ const PasswordRecovery = observer(() => {
 	}, [number1, number2, number3, number4, number5, number6]);
 
 	useEffect(() => {
-		console.log(user.codeAuth, code);
 		if (code == user.codeAuth) {
-			// registrationAccept();
+			setErrorMessage("");
+			setErrorModal(false);
 			setStages(3)
 		} else if (code.length === 6 && code !== user.codeAuth) {
 			setErrorMessage("Не верный код");
 			setErrorModal(true);
 		}
 	}, [code]);
+
+	useEffect(() => {
+		setStages(1)
+	}, [])
 
 	
 
@@ -328,6 +404,19 @@ const PasswordRecovery = observer(() => {
 				>
 					<div className="password-recovery__errors">
 						<ModalError error={errorMessage} setErrorModal={setErrorModal} />
+					</div>
+				</CSSTransition>
+				<CSSTransition
+					in={completeModal}
+					timeout={0}
+					classNames="node"
+					unmountOnExit
+				>
+					<div className="password-recovery__complete">
+						<ModalComplete
+							completeMessage={completeMessage}
+							setCompleteModal={setCompleteModal}
+						/>
 					</div>
 				</CSSTransition>
 				<Link to={LOGIN_ROUTE} className="password-recovery__back-page">
@@ -471,11 +560,82 @@ const PasswordRecovery = observer(() => {
 								<div className="password-recovery__stage-new-password">
 									<div className="password-recovery__stage-item">
 										<h2 className="password-recovery__stage-title">Новый пароль</h2>
-										<input type="text" className="password-recovery__stage-input" value={valuePassword} onChange={validationPassword}/>
+										<div className="password-recovery__stage-inner">
+											<input 
+												type={isPasswordEyeOpen ? "text" : "password"}
+												className="password-recovery__stage-input" 
+												value={valuePassword} 
+												onChange={validationPassword}
+												style={ 
+													errorPasswordInput[1].error 
+														&& valuePassword
+															? { border: "2px solid rgb(255, 149, 149)" }
+															: null
+												}
+											/>
+											<div className="password-recovery__stage-eye" onClick={() => setIsPasswordEyeOpen(prev => !prev)}>
+												{
+													isPasswordEyeOpen
+													?
+													<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<g id="SVGRepo_bgCarrier" stroke-width="0" />
+															<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+															<g id="SVGRepo_iconCarrier"> <path d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g>
+														</svg>
+														:
+														<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<g id="SVGRepo_bgCarrier" stroke-width="0" />
+															<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+															<g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g>
+														</svg>
+												}
+											</div>
+										</div>
+										<p className="password-recovery__stage-input-error-text">
+											{errorPasswordInput[0].error &&
+												valuePassword
+												? errorPasswordInput[0].error
+												: null}
+										</p>
 									</div>
 									<div className="password-recovery__stage-item">
 										<h2 className="password-recovery__stage-title">Повторите новый пароль</h2>
-										<input type="text" className="password-recovery__stage-input" value={valuePasswordConfirm} onChange={validationPasswordConfirm}/>
+										<div className="password-recovery__stage-inner">
+											<input 
+												type={isPasswordConfirmEyeOpen ? "text" : "password"}
+												className="password-recovery__stage-input" 
+												value={valuePasswordConfirm} 
+												onChange={validationPasswordConfirm}
+												style={
+														errorPasswordInput[1].error 
+															&& valuePasswordConfirm
+															? { border: "2px solid rgb(255, 149, 149)" }
+															: null
+												}
+											/>
+											<div className="password-recovery__stage-eye" onClick={() => setIsPasswordConfirmEyeOpen(prev => !prev)}>
+												{
+													isPasswordConfirmEyeOpen
+													?
+													<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<g id="SVGRepo_bgCarrier" stroke-width="0" />
+															<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+															<g id="SVGRepo_iconCarrier"> <path d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g>
+														</svg>
+														:
+														<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<g id="SVGRepo_bgCarrier" stroke-width="0" />
+															<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" />
+															<g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /> </g>
+														</svg>
+												}
+											</div>
+										</div>
+										<p className="password-recovery__stage-input-error-text">
+											{errorPasswordInput[1].error && valuePasswordConfirm
+												? errorPasswordInput[1].error
+												: null}
+										</p>
 									</div>
 								</div>
 							) : null}
@@ -483,18 +643,26 @@ const PasswordRecovery = observer(() => {
 					</CSSTransition>
 				</SwitchTransition>
 
-					<div className="password-recovery__stage-bottom" 
-						style={
-							stages == 2 ? {opacity: "0", pointerEvents: 'none', transitionDelay: "0s"} : null
-						}
-					>
-						<PrimaryButton
-							onButton={onButton}
-							loading={loading}
-						>
-							Далее
-						</PrimaryButton>
-					</div>
+				<div className="password-recovery__stage-bottom" 
+					style={
+						stages == 2
+								? {opacity: "0", pointerEvents: 'none', transitionDelay: "0s"} 
+								: null
+					}
+				>
+					{
+						isFinishRecovery
+							?
+							<MainButton title={"Войти в аккаунт"} path={LOGIN_ROUTE} />
+							:
+							<PrimaryButton
+								onButton={onButton}
+								loading={loading}
+							>
+								Далее
+							</PrimaryButton>
+					}
+				</div>
 				
 			</div>
 		
