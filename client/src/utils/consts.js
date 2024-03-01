@@ -1,5 +1,6 @@
 export const LOGIN_ROUTE = '/login';
 export const REGISTRATION_ROUTE = '/registration';
+export const PASSWORDRECOVERY_ROUTE = '/login/recovery';
 export const PROFILE_ROUTE = '/profile';
 export const PROJECTS_ROUTE = '/projects';
 export const PROJECT_ROUTE = '/project';

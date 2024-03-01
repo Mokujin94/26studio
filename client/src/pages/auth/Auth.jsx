@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import FunctionButton from "../../components/functionButton/FunctionButton";
 import { Context } from "../..";
 import { login } from "../../http/userAPI";
-import { NEWS_ROUTE } from "../../utils/consts";
+import { NEWS_ROUTE, PASSWORDRECOVERY_ROUTE } from "../../utils/consts";
 import Spinner from "../../components/spinner/Spinner";
 import ModalError from "../../components/modalError/ModalError";
 import { CSSTransition } from "react-transition-group";
@@ -107,7 +107,7 @@ function Auth() {
 						</div>
 					</div>
 				</div>
-				<Link to="/" className="auth__forget">
+				<Link to={PASSWORDRECOVERY_ROUTE} className="auth__forget">
 					Забыли пароль?
 				</Link>
 				<FunctionButton onClick={onLogin}>{loading ? <Spinner /> : 'Войти'}</FunctionButton>

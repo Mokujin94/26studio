@@ -35,6 +35,21 @@ export const fetchUserById = async (id) => {
 	return data;
 };
 
+export const fetchUserByEmail = async (email) => {
+	const config = {
+		params: {
+			email
+		},
+	};
+	const { data } = await $host.get("api/user/login/recovery", config);
+	return data;
+};
+
+export const recoveryPassword = async (email, new_password) => {
+	const { data } = await $host.patch("api/user/login/recovery", { email, new_password });
+	return data;
+};
+
 export const fetchOneUser = async (id) => {
 	const { data } = await $host.get("api/user/" + id);
 	return data;

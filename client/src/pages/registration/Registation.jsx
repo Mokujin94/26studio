@@ -12,18 +12,182 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { observer } from "mobx-react-lite";
 import ModalError from "../../components/modalError/ModalError";
 import ModalComplete from "../../components/modalComplete/ModalComplete";
+import { Context } from "../..";
+import { checkCondidate, generateCode } from "../../http/userAPI";
+import emailjs from "@emailjs/browser";
 
 const Registation = observer(() => {
+	const { user } = useContext(Context)
 	const [stages, setStages] = useState(1);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [errorModal, setErrorModal] = useState(false);
 	const [completeMessage, setCompleteMessage] = useState("");
 	const [completeModal, setCompleteModal] = useState(false);
+  const [errorValidation, setErrorValidation] = useState(false);
+	const [loading, setLoading] = useState(false);
+
 	const nodeRef = useRef(null);
 
 	useEffect(() => {
 		document.title = "Регистрация"
 	}, [])
+
+	const sendParams = {
+    email_to: user.dataAuth.email,
+    code: user.codeAuth,
+  };
+
+	const isErrorStage1 = async () => {
+    if (stages === 3) {
+    } else {
+      setStages(1);
+    }
+  };
+
+  const isErrorStage2 = async () => {
+    const response = await checkCondidate(
+      user.dataAuth.name,
+      user.dataAuth.email
+    )
+      .then(() => {
+        if (
+          (stages === 1 && !user.dataAuth.name) ||
+          !user.dataAuth.fullName ||
+          !user.dataAuth.email ||
+          !user.dataAuth.password ||
+          !user.dataAuth.passwordConfirm
+        ) {
+          setErrorMessage("Заполните все поля");
+          setErrorModal(true);
+          setErrorValidation(false);
+        } else if (
+          user.errorAuth[0].errors[0] ||
+          user.errorAuth[1].errors[0] ||
+          user.errorAuth[2].errors[0] ||
+          user.errorAuth[3].errors[0] ||
+          user.errorAuth[4].errors[0]
+        ) {
+          setErrorMessage("Заполните все поля верно");
+          setErrorModal(true);
+        } else if (stages === 3) {
+        } else {
+          setErrorMessage("");
+          setErrorModal(false);
+          setErrorValidation(false);
+          setStages(2);
+        }
+      })
+      .catch((err) => {
+				console.log(err);
+				setErrorMessage(err.response.data.message);
+        setErrorModal(true);
+      });
+  };
+
+  const isErrorStage3 = async () => {
+    const response = await checkCondidate(
+      user.dataAuth.name,
+      user.dataAuth.email
+    )
+      .then(() => {
+        if (
+          (stages === 1 && !user.dataAuth.name) ||
+          !user.dataAuth.fullName ||
+          !user.dataAuth.email ||
+          !user.dataAuth.password ||
+          !user.dataAuth.passwordConfirm
+        ) {
+          setErrorMessage("Заполните все поля");
+          setErrorModal(true);
+          setErrorValidation(false);
+        } else if (
+          user.errorAuth[0].errors[0] ||
+          user.errorAuth[1].errors[0] ||
+          user.errorAuth[2].errors[0] ||
+          user.errorAuth[3].errors[0] ||
+          user.errorAuth[4].errors[0]
+        ) {
+          setErrorMessage("Заполните все поля верно");
+          setErrorModal(true);
+        } else if (user.dataAuth.group === "Выберите группу") {
+          setStages(2);
+          setErrorMessage("Выберите группу");
+          setErrorModal(true);
+        } else {
+          emailjs.send(
+            "service_zv37r4m",
+            "template_miaq7kl",
+            sendParams,
+            "hHtBfqHv7BnJpnld_"
+          );
+          setErrorMessage("");
+          setErrorModal(false);
+          setErrorValidation(false);
+          setStages(3);
+        }
+      })
+      .catch((err) => {
+				console.log(err);
+				setErrorMessage(err.response.data.message);
+        setErrorModal(true);
+      });
+  };
+
+	const isError = async () => {
+		setLoading(true);
+		if (
+			stages === 1 &&
+			(!user.dataAuth.name ||
+				!user.dataAuth.fullName ||
+				!user.dataAuth.email ||
+				!user.dataAuth.password ||
+				!user.dataAuth.passwordConfirm)
+		) {
+			setErrorMessage("Заполните все поля");
+			setErrorModal(true);
+			setLoading(false);
+		} else if (
+			user.errorAuth[0].errors[0] ||
+			user.errorAuth[1].errors[0] ||
+			user.errorAuth[2].errors[0] ||
+			user.errorAuth[3].errors[0] ||
+			user.errorAuth[4].errors[0]
+		) {
+			setErrorMessage("Заполните все поля верно");
+			setErrorModal(true);
+			setLoading(false);
+		} else if (stages === 2 && user.dataAuth.group === "Выберите группу") {
+			setErrorMessage("Выберите группу");
+			setErrorModal(true);
+			setLoading(false);
+		} else {
+			const response = await checkCondidate(
+				user.dataAuth.name,
+				user.dataAuth.email
+			)
+				.then(() => {
+					setLoading(false);
+					setErrorMessage("");
+					setErrorModal(false);
+					if (stages === 2) {
+						generateCode(user.dataAuth.email, user.codeAuth).then();
+						setStages((item) => item + 1);
+					} else {
+						setStages((item) => item + 1);
+					}
+				})
+				.catch((err) => {
+					if (err.response) {
+						setErrorMessage(err.response.data.message);
+						setErrorModal(true);
+						setLoading(false);
+					} else {
+						setErrorMessage(err.message);
+						setErrorModal(true);
+					}
+				});
+		}
+	};
 
 	return (
 		<div className="registration">
@@ -73,6 +237,12 @@ const Registation = observer(() => {
 						setStages={setStages}
 						setErrorMessage={setErrorMessage}
 						setErrorModal={setErrorModal}
+						onStage1={isErrorStage1}
+						onStage2={isErrorStage2}
+						onStage3={isErrorStage3}
+						textStage1='Основная информация'
+						textStage2='Дополнительная информация'
+						textStage3='Завершение'
 					/>
 				</div>
 				<SwitchTransition mode="out-in">
@@ -103,10 +273,8 @@ const Registation = observer(() => {
 				>
 					<div ref={nodeRef} className="registration__bottom">
 						<PrimaryButton
-							stages={stages}
-							setStages={setStages}
-							setErrorMessage={setErrorMessage}
-							setErrorModal={setErrorModal}
+							onButton={isError}
+							loading={loading}
 						>
 							Далее
 						</PrimaryButton>
