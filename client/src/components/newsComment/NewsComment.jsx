@@ -111,7 +111,7 @@ const NewsComment = observer((props) => {
 								commentId={props.commentId}
 								replyes={item.replyes}
 								replyId={item.id}
-								replyUser={item.replyUser}
+								userReply={item.userReply}
 								date={useDateFormatter(item.createdAt)}
 								key={item.id}
 							/>

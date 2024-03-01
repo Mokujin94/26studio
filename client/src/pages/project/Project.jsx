@@ -48,6 +48,7 @@ const Project = observer(() => {
 		});
 		getAllCommentsProject(id).then((data) => {
 			setComments(data[0].comments)
+			console.log(data)
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");

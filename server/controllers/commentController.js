@@ -21,13 +21,10 @@ class CommentController {
 						include: [User, {
 							model: Comments,
 							as: 'replyes',
-							include: [User, 
-								{
-									model: Comments,
-									as: 'replyUserId',
-									include: User
-								}
-							]
+							include: [User, {
+								model: User,
+								as: "userReply"
+							}]
 						}],
 					},
 				],
@@ -173,7 +170,7 @@ class CommentController {
 				message,
 				userId,
 				parentId,
-				replyUser
+				replyUserId: replyUser
 			});
 
 			// const notification = await Notifications.create({
@@ -206,10 +203,14 @@ class CommentController {
 			// io.emit("notification", sendNotification);
 			const savedComment = await Comments.findOne({
 				where: { id: comment.id },
-				include: {
+				include: [{
 					model: User,
 					attributes: ["id", "name", "avatar"],
-				}
+				}, {
+					model: User,
+					as: "userReply"
+				}],
+
 			});
 
 			const io = getIo();
