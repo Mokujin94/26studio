@@ -10,6 +10,9 @@ const ProjectHeader = observer(
   ({ title, descr, onClick, likes, isLike, views, likeLoading }) => {
     const { user } = useContext(Context);
 
+		const [totalCharacters, setTotalCharacters] = useState(0);
+		const [isExpanded, setIsExpanded] = useState(false)
+
     const formatedLikes = useCountFormatter(likes);
     const formatedViews = useCountFormatter(views.length);
 
@@ -53,6 +56,19 @@ const ProjectHeader = observer(
       );
     };
 
+		useEffect(() => {
+			calculateTotalCharacters();
+		}, []);
+
+		const calculateTotalCharacters = () => {
+			let total = 0;
+			descr.forEach(word => {
+				total += word.length;
+			});
+			setTotalCharacters(total);
+			console.log(total);
+		};
+
     return (
       <div className={style.block}>
 				<div className={style.block__top}>
@@ -68,11 +84,24 @@ const ProjectHeader = observer(
 					<h2 className={style.block__title}>{title}</h2>
 				</div>
 				<div className={style.block__descr}>
-					{descr.map(item => {
+					{descr.map((item, i) => {
+						if (i > 2 && !isExpanded) return
 						return (
-							<p className={style.block__descr__item} key={item}>{item}</p>
+							<p className={style.block__descr__item} key={i}>{item}</p>
 						)
 					})}
+					{
+						descr.length > 3 || totalCharacters > 300 
+							? <div className={style.block__descrButton} onClick={() => setIsExpanded(prev => !prev)}>
+									{/* <div className={ isExpanded ? style.block__descrButtonIcon + " " + style.block__descrButtonIcon_active : style.block__descrButtonIcon}>
+										
+									</div> */}
+									<span className={style.block__descrButtonText}>
+										{isExpanded ? 'Свернуть' : 'Развернуть'}
+									</span>
+								</div>
+							: null
+					}
 				</div>
         
       </div>
