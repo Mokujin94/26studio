@@ -16,7 +16,7 @@ import MainButton from '../../components/mainButton/MainButton';
 import ModalComplete from '../../components/modalComplete/ModalComplete';
 
 const PasswordRecovery = observer(() => {
-	const { user } = useContext(Context)
+	const { user, modal } = useContext(Context)
 
 	const [stages, setStages] = useState(1);
 	const [loading, setLoading] = useState(false);
@@ -24,7 +24,6 @@ const PasswordRecovery = observer(() => {
 	const [errorModal, setErrorModal] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [completeMessage, setCompleteMessage] = useState("");
-	const [completeModal, setCompleteModal] = useState(false);
 	const [incorrectMail, setIncorrectMail] = useState(false);
 	const [isPasswordEyeOpen, setIsPasswordEyeOpen] = useState(false)
 	const [isPasswordConfirmEyeOpen, setIsPasswordConfirmEyeOpen] = useState(false)
@@ -76,13 +75,7 @@ const PasswordRecovery = observer(() => {
 			}
 			await fetchUserByEmail(email)
 				.then(() => {
-					setStages((item) => item + 1);
-					setErrorMessage('');
-					setErrorModal(false);
-					user.setCodeAuth(
-						Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
-					);
-					generateCode(email, user.codeAuth).then();
+					sendCode()
 				})
 				.catch((err) => {
 					if (err.response) {
@@ -110,12 +103,7 @@ const PasswordRecovery = observer(() => {
 			}
 			await fetchUserByEmail(email)
 				.then(() => {
-					setStages((item) => item + 1);
-					setErrorMessage('');
-					setErrorModal(false);
-					user.setCodeAuth(
-						Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
-					);
+					sendCode()
 				})
 				.catch((err) => {
 					if (err.response) {
@@ -128,6 +116,22 @@ const PasswordRecovery = observer(() => {
 				});
 		}
   };
+
+	const sendCode = async () => {
+		setStages((item) => item + 1);
+		setErrorMessage('');
+		setErrorModal(false);
+		setNumber1('')
+		setNumber2('')
+		setNumber3('')
+		setNumber4('')
+		setNumber5('')
+		setNumber6('')
+		user.setCodeAuth(
+			Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
+		);
+		generateCode(email, user.codeAuth).then();
+	}
 
 	const validationEmail = (e) => {
 		setEmail(e.target.value)
@@ -251,13 +255,7 @@ const PasswordRecovery = observer(() => {
 			}
 			await fetchUserByEmail(email)
 				.then(() => {
-					setStages((item) => item + 1);
-					setErrorMessage('');
-					setErrorModal(false);
-					user.setCodeAuth(
-						Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
-					);
-					generateCode(email, user.codeAuth).then();
+					sendCode()
 				})
 				.catch((err) => {
 					if (err.response) {
@@ -279,12 +277,12 @@ const PasswordRecovery = observer(() => {
 			}
 			await recoveryPassword(email, valuePassword)
 				.then((data) => {
-					console.log(data, location.pathname);
-					setIsFinishRecovery(true);
+					modal.setModalCompleteMessage("Вы успешно изменили пароль")
+    			modal.setModalComplete(true);
 					setErrorMessage("");
 					setErrorModal(false);
-					setCompleteModal(true);
-          setCompleteMessage("Вы успешно изменили пароль");
+					// setCompleteModal(true);
+          // setCompleteMessage("Вы успешно изменили пароль");
 				})
 				.catch((err) => {
 					if (err.response) {
@@ -378,7 +376,17 @@ const PasswordRecovery = observer(() => {
 	}, [number1, number2, number3, number4, number5, number6]);
 
 	useEffect(() => {
+		if(errorPasswordInput[0].error || errorPasswordInput[1].error || !valuePassword || !valuePasswordConfirm || valuePassword !== valuePasswordConfirm) {
+			setIsFinishRecovery(false)
+		} else {
+			setIsFinishRecovery(true)
+		}
+	}, [valuePassword, valuePasswordConfirm])
+
+	useEffect(() => {
 		if (code == user.codeAuth) {
+			setValuePassword("")
+			setValuePasswordConfirm("")
 			setErrorMessage("");
 			setErrorModal(false);
 			setStages(3)
@@ -406,7 +414,7 @@ const PasswordRecovery = observer(() => {
 						<ModalError error={errorMessage} setErrorModal={setErrorModal} />
 					</div>
 				</CSSTransition>
-				<CSSTransition
+				{/* <CSSTransition
 					in={completeModal}
 					timeout={0}
 					classNames="node"
@@ -418,7 +426,7 @@ const PasswordRecovery = observer(() => {
 							setCompleteModal={setCompleteModal}
 						/>
 					</div>
-				</CSSTransition>
+				</CSSTransition> */}
 				<Link to={LOGIN_ROUTE} className="password-recovery__back-page">
 					<svg
 						width="25"
@@ -653,7 +661,14 @@ const PasswordRecovery = observer(() => {
 					{
 						isFinishRecovery
 							?
-							<MainButton title={"Войти в аккаунт"} path={LOGIN_ROUTE} />
+							<Link to={LOGIN_ROUTE}>
+								<PrimaryButton
+									onButton={onButton}
+									loading={loading}
+								>
+									Далее
+								</PrimaryButton>
+							</Link>
 							:
 							<PrimaryButton
 								onButton={onButton}

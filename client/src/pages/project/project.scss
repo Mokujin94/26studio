@@ -1,16 +1,17 @@
 @import '../../resource/styles/variables';
 
 .project {
-    margin-top: 155px;
-    margin-bottom: 50px;
-    &__header {
-      margin-bottom: 25px;
-    }
-    &__content {
-      height: 560px;
-      display: flex;
-      justify-content: space-between;
-      gap: 30px;
-      margin-bottom: 30px;
-    }
-  }
+	max-width: 1000px;
+	margin: 0 auto;
+	margin-top: 155px;
+	&__header {
+		margin-bottom: 30px;
+	}
+	&__content {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 30px;
+		margin-bottom: 25px;
+	}
+}

@@ -108,22 +108,23 @@ const Project = observer(() => {
 	return (
 		<div className="container">
 			<div className="project">
+				<div className="project__content">
+					<ProjectContent
+						pathFromProject={dataProject.path_from_project}
+						baseURL={dataProject.baseURL}
+					/>
+					{/* <Description title="Описание" descr={description} /> */}
+				</div>
 				<div className="project__header">
 					<ProjectHeader
 						title={dataProject.name}
+						descr={description}
 						onClick={setLike}
 						likes={amountLike}
 						isLike={isLike}
 						views={views}
 						likeLoading={likeLoading}
 					/>
-				</div>
-				<div className="project__content">
-					<ProjectContent
-						pathFromProject={dataProject.path_from_project}
-						baseURL={dataProject.baseURL}
-					/>
-					<Description title="Описание" descr={description} />
 				</div>
 				<div className="project__info">
 					<Comments

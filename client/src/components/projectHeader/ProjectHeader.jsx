@@ -7,7 +7,7 @@ import { Context } from "../..";
 import { useCountFormatter } from "../../hooks/useCountFormatter";
 
 const ProjectHeader = observer(
-  ({ title, onClick, likes, isLike, views, likeLoading }) => {
+  ({ title, descr, onClick, likes, isLike, views, likeLoading }) => {
     const { user } = useContext(Context);
 
     const formatedLikes = useCountFormatter(likes);
@@ -55,16 +55,26 @@ const ProjectHeader = observer(
 
     return (
       <div className={style.block}>
-        <h2 className={style.block__title}>{title}</h2>
-        <div className={style.block__right}>
-          <AmountComponent
-            img={like}
-            value={formatedLikes}
-            onClick={onClick}
-            likeLoading={likeLoading}
-          />
-          <AmountComponent img={view} value={formatedViews} />
-        </div>
+				<div className={style.block__top}>
+					<div className={style.block__right}>
+						<AmountComponent
+							img={like}
+							value={formatedLikes}
+							onClick={onClick}
+							likeLoading={likeLoading}
+						/>
+						<AmountComponent img={view} value={formatedViews} />
+					</div>
+					<h2 className={style.block__title}>{title}</h2>
+				</div>
+				<div className={style.block__descr}>
+					{descr.map(item => {
+						return (
+							<p className={style.block__descr__item} key={item}>{item}</p>
+						)
+					})}
+				</div>
+        
       </div>
     );
   }

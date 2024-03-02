@@ -2,18 +2,45 @@
 
 .block {
   width: 100%;
-  color: $studio-white-element;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background-color: $studio-dark-element;
+  padding: 25px 35px;
+  border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	&__top {
+	}
+
   &__title {
-    font-weight: 400;
-    font-size: 40px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  &__right {
+    font-weight: 500;
+    font-size: 20px;
+    color: $studio-white-text;
+		line-height: 40px;
+  } 
+	
+	&__right {
+		float: right;
     display: flex;
     gap: 20px;
   }
+
+	&__descr {
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+		white-space: pre-wrap;
+    color: $studio-white-text;
+    text-align: justify;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		&__item {
+			padding: 4px 10px;
+			background: $studio-darker-element;
+			border-radius: 5px;
+		}
+  }
+
+ 
 }
