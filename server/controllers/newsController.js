@@ -6,6 +6,7 @@ const {
 	View,
 	Project,
 } = require("../models/models");
+const fs = require('fs');
 const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../error/ApiError");

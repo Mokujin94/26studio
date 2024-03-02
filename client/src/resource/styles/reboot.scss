@@ -21,3 +21,16 @@ input[type="password"]::-webkit-inner-spin-button,
 input[type="password"]::-webkit-outer-spin-button {
     display: none !important;
 }
+
+*::-webkit-scrollbar {
+	width: 7px;
+	&-track {
+		background: $studio-darker-element;
+		border-radius: 10px;
+	}
+
+	&-thumb {
+		background: $studio-primary-element;
+		border-radius: 10px;
+	}
+}
