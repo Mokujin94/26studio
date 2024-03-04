@@ -200,6 +200,7 @@ Notifications.belongsTo(User, { foreignKey: "senderId", as: "sender" });
 Notifications.belongsTo(User, { foreignKey: "recipientId", as: "recipient" });
 Notifications.belongsTo(Likes, { foreignKey: "likeId", as: "like" });
 Notifications.belongsTo(Comments, { foreignKey: "commentId", as: "comment" });
+Notifications.belongsTo(Comments, { foreignKey: "replyCommentId", as: "replyComment" });
 
 Project.hasMany(Comments);
 Comments.belongsTo(Project);

@@ -106,6 +106,10 @@ class CommentController {
 						as: "comment",
 					},
 					{
+						model: Comments,
+						as: "replyComment",
+					},
+					{
 						model: Likes,
 						as: "like",
 					},
@@ -173,34 +177,38 @@ class CommentController {
 				replyUserId: replyUser
 			});
 
-			// const notification = await Notifications.create({
-			//   commentId: comment.id,
-			//   senderId: userId,
-			//   recipientId: savedComment.project.user.id,
-			// });
+			const notification = await Notifications.create({
+				replyCommentId: comment.id,
+				senderId: userId,
+				recipientId: comment.replyUserId,
+			});
 
-			// const sendNotification = await Notifications.findOne({
-			//   where: { id: notification.id },
-			//   include: [
-			//     {
-			//       model: Comments,
-			//       as: "comment",
-			//     },
-			//     {
-			//       model: Likes,
-			//       as: "like",
-			//     },
-			//     {
-			//       model: User,
-			//       as: "sender",
-			//     },
-			//     {
-			//       model: User,
-			//       as: "recipient",
-			//     },
-			//   ],
-			// });
-			// io.emit("notification", sendNotification);
+			const sendNotification = await Notifications.findOne({
+				where: { id: notification.id },
+				include: [
+					{
+						model: Comments,
+						as: "comment",
+					},
+					{
+						model: Comments,
+						as: "replyComment",
+					},
+					{
+						model: Likes,
+						as: "like",
+					},
+					{
+						model: User,
+						as: "sender",
+					},
+					{
+						model: User,
+						as: "recipient",
+					},
+				],
+			});
+			io.emit("notification", sendNotification);
 			const savedComment = await Comments.findOne({
 				where: { id: comment.id },
 				include: [{
@@ -213,7 +221,6 @@ class CommentController {
 
 			});
 
-			const io = getIo();
 			io.emit("replyComment", savedComment);
 			return res.json(comment);
 		} catch (error) {

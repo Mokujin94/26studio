@@ -16,11 +16,12 @@ const NewsComment = observer((props) => {
 
 	const [isReply, setIsReply] = useState(false);
 	const [isReplyOpen, setIsReplyOpen] = useState(false);
+	const [replyUserId, setReplyUserId] = useState(props.id)
 	const [replyText, setReplyText] = useState('');
 	const [replyes, setReplyes] = useState([]);
 
 	const onReply = async () => {
-		await createReply(replyText, user.user.id, props.commentId).then(() => {
+		await createReply(replyText, user.user.id, props.commentId, replyUserId).then(() => {
 			setIsReply(false)
 			setReplyText('')
 		}).catch(err => console.log(err))
@@ -30,7 +31,6 @@ const NewsComment = observer((props) => {
 		if (props.replyes) {
 			setReplyes(props.replyes)
 		}
-		console.log(props)
 	}, [])
 
 	useEffect(() => {
