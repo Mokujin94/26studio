@@ -2,31 +2,94 @@
 
 .block {
   width: 100%;
-  background-color: $studio-dark-element;
-  padding: 25px 35px;
-  border-radius: 5px;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
 
 	&__top {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		background-color: $studio-dark-element;
+		padding: 20px;
+		border-radius: 5px;
+		&Content {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 20px;
+		}
+
+
+		&User {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			background-color: $studio-darker-element;
+			padding: 5px 10px;
+			border: 1px solid $studio-grey-border;
+			border-radius: 5px;
+			transition: .3s;
+			&:hover {
+				border-color: $studio-primary-border;
+			}
+
+			&Avatar {
+				width: 30px;
+				height: 30px;
+				border-radius: 100%;
+				overflow: hidden;
+				img {
+					width: inherit;
+					height: inherit;
+				}
+			}
+
+			&Text {
+
+			}
+
+			&Views {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				&Icon {
+					svg	{
+						width: auto;
+						max-height: 10px;
+					}
+				}
+				&Count {
+					font-size: 12px;
+					color: $studio-white-text;
+				}
+			}
+
+			
+
+			&Name {
+				color: $studio-primary-text;
+			}
+		}
 	}
 
   &__title {
     font-weight: 500;
     font-size: 20px;
     color: $studio-white-text;
-		line-height: 40px;
   } 
 	
 	&__right {
-		float: right;
     display: flex;
-    gap: 20px;
+    gap: 10px;
   }
 
 	&__descr {
-    font-weight: 300;
+		position: relative;
+		background-color: $studio-dark-element;
+		padding: 20px;
+		border-radius: 5px;
+		font-weight: 300;
     font-size: 16px;
     line-height: 24px;
 		white-space: pre-wrap;
@@ -36,20 +99,30 @@
 		flex-direction: column;
 		gap: 5px;
 		&Button {
-			width: max-content;
-			margin: 0 auto;
-			margin-top: 10px;
-			cursor: pointer;
+			position: absolute;
+			left: 0;
+			bottom: 20px;
+			width: 100%;
+			text-align: center;
+			padding-top: 70px;
+			background: linear-gradient(0deg, #27323e 0%, rgba(39, 50, 62, 0.90) 40%, transparent);
+			&_active {
+				position: static;
+				background: transparent;
+				padding: 0;
+				margin-top: 10px;
+			}
 			&Text {
-				color: $studio-white-text;
+				color: $studio-primary-text;
+				font-weight: 500;
+				cursor: pointer;
 			}
 		}
 		&__item {
 			padding: 4px 10px;
 			background: $studio-darker-element;
 			border-radius: 5px;
+			word-break: break-all;
 		}
   }
-
- 
 }

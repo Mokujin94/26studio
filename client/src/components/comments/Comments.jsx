@@ -9,6 +9,7 @@ import { useDateFormatter } from "../../hooks/useDateFormatter";
 const Comments = ({ comments, setComments, projectId, newsId }) => {
 
 	const [lastReplyComment, setLastReplyComment] = useState({});
+	const [commentsCout, setCommentsCout] = useState(0)
 
 	useEffect(() => {
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
@@ -49,9 +50,22 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 		};
 	}, []); // Пустой массив зависимостей гарантирует, что эффект будет вызван только при монтировании компонента
 
+	useEffect(() => {
+		let count = 0;
+		console.log(comments);
+		comments.map(item => {
+			if(item.replyes) {
+				count += item.replyes.length + 1;
+			} else {
+				count += 1
+			}
+		})
+		setCommentsCout(count);
+	}, [comments])
+
 	return (
 		<div className={style.block}>
-			<div className={style.block__title}>Комментарии</div>
+			<div className={style.block__title}>Комментарии ({commentsCout})</div>
 			<div className={style.block__input}>
 				<CommentsInput projectId={projectId} newsId={newsId} />
 			</div>

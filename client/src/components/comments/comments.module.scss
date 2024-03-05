@@ -5,12 +5,13 @@
   flex-direction: column;
   // padding: 30px 20px;
   border-radius: 5px;
-  &__title {
+	background: $studio-dark-element;
+	padding: 20px;
+	&__title {
     font-weight: 400;
-    font-size: 24px;
-    letter-spacing: 0.2em;
+    font-size: 20px;
     color: $studio-white-text;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   &__line {
     height: 1px;
@@ -22,15 +23,13 @@
     flex-direction: column-reverse;
     grid-gap: 10px;
     margin-top: 10px;
-		padding: 20px;
-		background: $studio-dark-element;
 		border-radius: 5px;
 		&__text {
 			display: block;
 			width: 100%;
 			text-align: center;
 			color: $studio-white-text;
-			
+			margin-top: 10px;
 		}
     &::-webkit-scrollbar {
       width: 10px;

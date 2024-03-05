@@ -5,7 +5,7 @@
   height: 50px;
   display: flex;
   align-items: center;
-  background-color: $studio-dark-element;
+  background-color: $studio-darker-element;
   border-radius: 5px;
   padding: 0 15px;
   &__input {
@@ -25,13 +25,14 @@
     }
   }
   &__btn {
-    cursor: pointer;
-    border: 0;
     color: $studio-dark-text;
+		font-weight: 500;
+		border: 0;
     border-radius: 5px;
     background-color: $studio-primary-button;
     padding: 7px 10px;
     transition: $studio-transition-03;
+    cursor: pointer;
     &:hover {
       background: $studio-primary-button-hover;
     }
