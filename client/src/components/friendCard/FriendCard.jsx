@@ -65,7 +65,12 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 								<>
 									<div
 										className={style.friendCard__buttons__item}
-										onClick={onClickTwo}
+										onClick={(e) => {
+											e.stopPropagation();
+											e.preventDefault();
+											onClickTwo();
+
+										}}
 									>
 										<svg
 											className={style.friendCard__buttons__item__icon}
@@ -88,7 +93,12 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 									<>
 										<div
 											className={style.friendCard__buttons__item}
-											onClick={onClickTwo}
+											onClick={(e) => {
+												e.stopPropagation();
+												e.preventDefault();
+												onClickTwo();
+
+											}}
 										>
 											<svg
 												className={style.friendCard__buttons__item__icon}
@@ -107,7 +117,12 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 										</div>
 										<div
 											className={style.friendCard__buttons__item}
-											onClick={onClickOne}
+											onClick={(e) => {
+												e.stopPropagation();
+												e.preventDefault();
+												onClickOne();
+
+											}}
 										>
 											<svg
 												className={style.friendCard__buttons__item__icon}

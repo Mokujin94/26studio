@@ -9,11 +9,19 @@ import { Context } from '../..';
 function Group() {
 	const { groups } = useContext(Context);
 	const [groupData, setGroupData] = useState({});
+	const [groupDataUsers, setGroupDataUsers] = useState([])
 
 	const { id } = useParams();
 
 	useEffect(() => {
-		fetchGroupById(id).then((data) => setGroupData((item) => (item = data)));
+		fetchGroupById(id).then((data) => {
+			console.log(data);
+			const dataUsers = data.users.filter(item => item.group_status)
+			console.log(dataUsers);
+			setGroupDataUsers(dataUsers)
+			setGroupData((item) => (item = data))
+		});
+		
 	}, []);
 
 	return (
@@ -28,7 +36,11 @@ function Group() {
 					<div className="group__content-students">
 						<h3 className="group__content-title">Студенты</h3>
 						<div className="group__content-wrapper">
-							{groupData.members && groupData.members.map(({ id }) => <FriendCard userId={id} key={id} />)}
+							{
+								groupDataUsers.length 
+									? groupDataUsers.map(({ id }) => <FriendCard userId={id} key={id} />)
+									: "В этой группе нет участников"
+							}
 						</div>
 					</div>
 				</div>

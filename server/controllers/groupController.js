@@ -19,7 +19,9 @@ class GroupController {
       // limit = limit || 12
       // let offset = page * limit - limit
 
-      let groups = await Group.findAndCountAll();
+      let groups = await Group.findAndCountAll({
+        include: [User]
+      });
       return res.json(groups);
     } catch (error) {
       next(ApiError.badRequest(error.message));
@@ -30,6 +32,7 @@ class GroupController {
     try {
       const { id } = req.params;
       const group = await Group.findOne({
+        include: [User],
         where: { id },
       });
       return res.json(group);
@@ -39,39 +42,15 @@ class GroupController {
   }
   async addMember(req, res, next) {
     try {
-      const { id } = req.params;
       const { id_user } = req.body;
-      const group = await Group.findOne({
-        where: { id },
-      });
-      const user = await User.findOne({
-        where: { id: id_user },
-      });
-      group.members.map(({ id }) => {
-        if (id === id_user) {
-          return next(ApiError.internal("Пользователь уже существует"));
-        }
-      });
-      let newMembers;
-      if (group.members === null) {
-        group.update({
-          members: [
-            {
-              id: id_user,
-            },
-          ],
-        });
-      } else {
-        user.update({
-          group_status: true,
-        });
-        newMembers = { id: id_user };
-        group.update({
-          members: [...group.members, newMembers],
-        });
-      }
+     
+      const user = await User.findOne({where: {id: id_user}})
 
-      return res.json(group);
+      if (user) {
+        await user.update({group_status: true})
+      }
+     
+      return res.json(user);
     } catch (error) {
       next(ApiError.badRequest(error.message));
     }
@@ -79,24 +58,16 @@ class GroupController {
 
   async deleteMember(req, res, next) {
     try {
-      const { id } = req.params;
       const { id_user } = req.body;
-      const group = await Group.findOne({
-        where: { id },
-      });
       const user = await User.findOne({
         where: { id: id_user },
       });
-      let newMembers = group.members.filter((item) => {
-        return item.id !== id_user;
-      });
-      user.update({
-        group_status: false,
-      });
-      group.update({
-        members: newMembers,
-      });
-      return res.json(group);
+      if (user) {
+        await user.update({
+          group_status: false,
+        });
+      }
+      return res.json(user);
     } catch (error) {
       next(ApiError.badRequest(error.message));
     }

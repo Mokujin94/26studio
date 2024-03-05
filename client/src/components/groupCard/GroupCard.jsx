@@ -12,7 +12,7 @@ const GroupCard = observer(({ group }) => {
     <Link to={GROUPS_ROUTE + '/' + group.id} className={style.groupCard}>
       <span className={style.groupCard__yourGroup}>{user.user.groupId === group.id && 'Ваша группа'}</span>
       <h2 className={style.groupCard__title}>{group.name}</h2>
-      <span className={style.groupCard__studentsCount}>Участников: {group.members.length}</span>
+      <span className={style.groupCard__studentsCount}>Участников: {group.users.filter(item => item.group_status).length}</span>
     </Link>
   );
 })

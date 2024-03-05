@@ -100,7 +100,7 @@ function GroupsManagement() {
     }
 
     const addStudent = async(id, id_user) => {
-        await fetchAddStudent(id, id_user);
+        await fetchAddStudent(id_user);
         const newData = usersData.filter(({id}) => id !== id_user)
         setUsersData(newData)
     }
