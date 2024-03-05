@@ -73,12 +73,16 @@
         gap: 20px;
         align-items: center;
         &Item {
+					z-index: 1;
           font-size: 14px;
           font-weight: 100;
-          cursor: pointer;
           display: flex;
           gap: 10px;
           align-items: center;
+					padding: 5px 10px;
+					background: #27323e;
+					border-radius: 5px;
+          cursor: pointer;
           &Image {
             width: 16px;
             svg {

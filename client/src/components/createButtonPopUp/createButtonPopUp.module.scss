@@ -1,17 +1,18 @@
 @import "../../resource/styles/variables";
 
 .button {
+  position: relative;
   width: 37px;
   height: 37px;
   border-radius: 10px;
-  border: 1px solid $studio-white-border;
-  cursor: pointer;
+  border: 1px solid $studio-grey-border;
+	background-color: $studio-dark-element;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  transition: 0.3s;
   user-select: none;
+  cursor: pointer;
+  transition: 0.3s;
   &_active {
     border: 1px solid $studio-primary-border-active;
     .button__cross {

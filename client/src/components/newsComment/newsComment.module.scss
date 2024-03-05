@@ -5,15 +5,15 @@
   flex-direction: column;
   color: $studio-white-text;
   width: 100%;
-	padding: 15px 15px 15px 100px;
+	padding: 15px 15px 15px 80px;
   position: relative;
 	background-color: $studio-darker-element;
 	border-radius: 10px;
   transition: grid-template-rows 0.3s ease;
   &__avatar {
-    max-width: 70px;
+    max-width: 50px;
     width: 100%;
-    max-height: 70px;
+    max-height: 50px;
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
@@ -62,12 +62,16 @@
         gap: 20px;
         align-items: center;
         &Item {
+					z-index: 1;
           font-size: 14px;
           font-weight: 100;
-          cursor: pointer;
           display: flex;
           gap: 10px;
           align-items: center;
+					padding: 5px 10px;
+					background: #27323e;
+					border-radius: 5px;
+          cursor: pointer;
           &Image {
             width: 16px;
             svg {
