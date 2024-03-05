@@ -19,6 +19,7 @@ import { Context } from "../..";
 import { useDebounce } from "../../hooks/useDebounce";
 import Spinner from "../../components/spinner/Spinner";
 import { CSSTransition } from "react-transition-group";
+import NewProjectCard from "../../components/newProjectCard/NewProjectCard";
 
 const Projects = observer(() => {
 	const { project } = useContext(Context);
@@ -49,6 +50,7 @@ const Projects = observer(() => {
 		searchProject(useDebounced, selectedItem, currentPage).then((data) => {
 			setProjectsData(data.rows);
 			setIsLoaded(false);
+			console.log(data)
 		});
 	}, []);
 
@@ -136,11 +138,11 @@ const Projects = observer(() => {
 
 	const sliderRenderer = isLoadingSlider
 		? newLastAddedSkeletonList
-		: sliderData.map((item) => {
+		: sliderData.map((item, i) => {
 			return (
-				<SplideSlide key={item.id}>
+				<SplideSlide key={item.id} tabIndex={i}>
 					<Link to={PROJECTS_ROUTE + "/" + item.id}>
-						<ProjectCard
+						{/* <ProjectCard
 							img={item.preview}
 							title={item.name}
 							name={item.user.name}
@@ -148,6 +150,18 @@ const Projects = observer(() => {
 							like={item.likes.length}
 							view={item.views.length}
 							comment={item.comments.length}
+						/> */}
+						<NewProjectCard
+							img={item.preview}
+							title={item.name}
+							name={item.user.name}
+							date={item.start_date}
+							like={item.likes.length}
+							view={item.views.length}
+							comment={item.comments.length}
+							user={item.user}
+							baseURL={item.baseURL}
+							pathFromProject={item.path_from_project}
 						/>
 					</Link>
 				</SplideSlide>
@@ -157,14 +171,15 @@ const Projects = observer(() => {
 	const projectLoading = isLoaded && newSkeletonList;
 	const projectLoaded =
 		!isLoaded &&
-		projectsData.map((item) => {
+		projectsData.map((item, i) => {
 			return (
 				<Link
 					className="projects__link"
 					to={PROJECTS_ROUTE + "/" + item.id}
 					key={item.id}
+					tabIndex={i}
 				>
-					<ProjectCard
+					{/* <ProjectCard
 						img={item.preview}
 						title={item.name}
 						name={item.user.name}
@@ -172,6 +187,18 @@ const Projects = observer(() => {
 						like={item.likes.length}
 						view={item.views.length}
 						comment={item.comments.length}
+					/> */}
+					<NewProjectCard
+						img={item.preview}
+						title={item.name}
+						name={item.user.name}
+						date={item.start_date}
+						like={item.likes.length}
+						view={item.views.length}
+						comment={item.comments.length}
+						user={item.user}
+						baseURL={item.baseURL}
+						pathFromProject={item.path_from_project}
 					/>
 				</Link>
 			);
@@ -195,7 +222,7 @@ const Projects = observer(() => {
 						options={{
 							type: "loop",
 							isNavigation: true,
-							perPage: 4,
+							perPage: 5,
 							cloneStatus: true,
 							gap: 20,
 							autoplay: true,
@@ -257,7 +284,7 @@ const Projects = observer(() => {
 					)}
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 });
 

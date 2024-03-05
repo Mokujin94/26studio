@@ -1,7 +1,7 @@
 // Original theme
 
 //background
-$studio-background: linear-gradient(180deg, #1f2933 0%, #242f3b 100%);
+$studio-background: #222c37;
 
 // header
 $studio-background-header: #1f2933;
@@ -25,7 +25,7 @@ $studio-primary-element: #97bce6;
 $studio-white-element: #fcfcfc;
 $studio-dark-element: #27323e;
 $studio-darker-element: #222c36;
-$studio-grey-element: #596470;
+$studio-grey-element: #3c4752;
 $studio-red-element: #ff9595;
 // hover
 @mixin studio-mixin-primary-element-hover {
@@ -77,7 +77,7 @@ $studio-blackout-element: linear-gradient(
 $studio-primary-text: #97bce6;
 $studio-white-text: #fcfcfc;
 $studio-dark-text: #27323e;
-$studio-grey-text: #596470;
+$studio-grey-text: #72818f;
 $studio-red-text: #ff9595;
 $studio-light-grey-text: #ffffff8c;
 // hover
@@ -92,7 +92,7 @@ $studio-primary-text-active: #97bce6;
 $studio-primary-button: #97bce6;
 $studio-white-button: #fcfcfc;
 $studio-dark-button: #27323e;
-$studio-grey-button: #596470;
+$studio-grey-button: #3c4752;
 $studio-red-button: #ff9595;
 // hover
 $studio-primary-button-hover: #acd3ff;
@@ -103,7 +103,7 @@ $studio-primary-button-hover-v2: #97bce6;
 $studio-primary-border: #97bce6;
 $studio-white-border: #fcfcfc;
 $studio-dark-border: #27323e;
-$studio-grey-border: #596470;
+$studio-grey-border: #3c4752;
 $studio-red-border: #ff9595;
 // hover
 
@@ -117,7 +117,7 @@ $studio-primary-input: #97bce6;
 $studio-white-input: #fcfcfc;
 $studio-dark-input: #27323e;
 $studio-darker-input: #222c36;
-$studio-grey-input: #596470;
+$studio-grey-input: #3c4752;
 $studio-black-input: #1d252e;
 // focus
 @mixin studio-primary-input-focus {
