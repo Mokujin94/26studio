@@ -19,6 +19,7 @@ import { Context } from "../..";
 import { useDebounce } from "../../hooks/useDebounce";
 import Spinner from "../../components/spinner/Spinner";
 import { CSSTransition } from "react-transition-group";
+import NewProjectCard from "../../components/newProjectCard/NewProjectCard";
 
 const Projects = observer(() => {
 	const { project } = useContext(Context);
@@ -164,7 +165,7 @@ const Projects = observer(() => {
 					to={PROJECTS_ROUTE + "/" + item.id}
 					key={item.id}
 				>
-					<ProjectCard
+					{/* <ProjectCard
 						img={item.preview}
 						title={item.name}
 						name={item.user.name}
@@ -172,6 +173,16 @@ const Projects = observer(() => {
 						like={item.likes.length}
 						view={item.views.length}
 						comment={item.comments.length}
+					/> */}
+					<NewProjectCard
+						img={item.preview}
+						title={item.name}
+						name={item.user.name}
+						date={item.start_date}
+						like={item.likes.length}
+						view={item.views.length}
+						comment={item.comments.length}
+						user={item.user}
 					/>
 				</Link>
 			);

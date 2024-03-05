@@ -17,24 +17,24 @@
   &__searchSettings {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     gap: 20px;
 
     &-search {
       grid-column-start: 1;
-      grid-column-end: 4;
+      grid-column-end: 5;
     }
 
     &-filter {
-      grid-column-start: 4;
-      grid-column-end: 5;
+      grid-column-start: 5;
+      grid-column-end: 6;
     }
   }
 
   &__wrapper {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     justify-items: center;
     gap: 20px;
     // overflow: hidden;
