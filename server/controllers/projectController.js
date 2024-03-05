@@ -37,7 +37,7 @@ class ProjectController {
 		try {
 			let { limit, page, filter } = req.query;
 			page = page || 1;
-			limit = limit || 12;
+			limit = limit || 10;
 			filter = filter || "0";
 			let offset = page * limit - limit;
 			let projects;
@@ -168,7 +168,7 @@ class ProjectController {
 				include: [
 					{
 						model: Project,
-						include: [Likes, Comments, View],
+						include: [Likes, Comments, View, User],
 					},
 				],
 				where: { id },
@@ -346,7 +346,7 @@ class ProjectController {
 		try {
 			let { search, limit, page, filter } = req.query;
 			page = page || 1;
-			limit = limit || 12;
+			limit = limit || 15;
 			let offset = page * limit - limit;
 			let whereCondition = {
 				[Op.or]: {
