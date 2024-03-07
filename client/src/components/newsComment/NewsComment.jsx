@@ -21,7 +21,7 @@ const NewsComment = observer((props) => {
 	const [replyes, setReplyes] = useState([]);
 
 	const onReply = async () => {
-		await createReply(replyText, user.user.id, props.commentId, replyUserId).then(() => {
+		await createReply(replyText, user.user.id, props.commentId, replyUserId, props.projectId).then(() => {
 			setIsReply(false)
 			setReplyText('')
 		}).catch(err => console.log(err))

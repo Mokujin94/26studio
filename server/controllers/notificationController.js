@@ -23,6 +23,10 @@ class NotificationController {
             model: Comments,
             as: "comment", // Укажите алиас, который соответствует вашей ассоциации
           },
+					{
+						model: Comments,
+						as: "replyComment",
+					},
           {
             model: User,
             as: "sender", // Укажите алиас, который соответствует вашей ассоциации
@@ -63,6 +67,10 @@ class NotificationController {
             model: Comments,
             as: "comment", // Укажите алиас, который соответствует вашей ассоциации
           },
+					{
+						model: Comments,
+						as: "replyComment",
+					},
           {
             model: User,
             as: "sender", // Укажите алиас, который соответствует вашей ассоциации

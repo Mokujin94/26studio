@@ -162,7 +162,7 @@ class CommentController {
 	}
 
 	async createChildComment(req, res, next) {
-		const { message, userId, parentId, replyUser } = req.body;
+		const { message, userId, parentId, replyUser, projectId } = req.body;
 		const io = getIo();
 
 		if (!userId) {
@@ -174,7 +174,8 @@ class CommentController {
 				message,
 				userId,
 				parentId,
-				replyUserId: replyUser
+				replyUserId: replyUser,
+				projectId
 			});
 
 			const notification = await Notifications.create({

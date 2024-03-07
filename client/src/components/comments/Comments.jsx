@@ -37,7 +37,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 		socket.on("replyComment", (newComment) => {
 			if (newComment) {
 				setLastReplyComment(newComment);
-				
+
 			}
 		})
 
@@ -54,7 +54,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 		let count = 0;
 		console.log(comments);
 		comments.map(item => {
-			if(item.replyes) {
+			if (item.replyes) {
 				count += item.replyes.length + 1;
 			} else {
 				count += 1
@@ -78,6 +78,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 							avatar={item.user.avatar}
 							comment={item.message}
 							commentId={item.id}
+							projectId={item.projectId}
 							replyes={item.replyes}
 							lastReplyComment={lastReplyComment}
 							date={useDateFormatter(item.createdAt)}
