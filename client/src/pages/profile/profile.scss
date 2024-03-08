@@ -356,6 +356,8 @@
 			display: flex;
 			flex-direction: column;
 			gap: 10px;
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
 
 		&-search {
@@ -371,12 +373,17 @@
 		}
 
 		&-content {
-			overflow: auto;
 			display: flex;
 			flex-direction: column;
 			gap: 10px;
 			&::-webkit-scrollbar {
 				width: 0;
+			}
+			&_center {
+				color: $studio-primary-text;
+				height: 100%;
+				align-items: center;
+				justify-content: center;
 			}
 		}
   }

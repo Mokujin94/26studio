@@ -109,7 +109,7 @@ const NotificationsModalItem = observer(({ notification }) => {
 						Принял вашу заявку
 					</p>
 				}
-				<Link className={style.item__contentTime}>{notificationDate}</Link>
+				<span className={style.item__contentTime}>{notificationDate}</span>
 			</div>
 		</div>
 	)

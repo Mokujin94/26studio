@@ -102,6 +102,8 @@
     display: flex;
     align-items: center;
     img {
+			width: 27px;
+			height: 27px;
       margin-right: 30px;
     }
     &__text {
@@ -148,9 +150,10 @@
   top: 0;
   left: 0;
   opacity: 0;
-  transition: opacity $studio-transition-03 ease;
+	transition: opacity 0.3s ease, z-index .3s .3s;
   &_active {
     z-index: 5;
     opacity: 1;
+		transition: opacity 0.3s ease;
   }
 }
