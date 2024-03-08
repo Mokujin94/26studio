@@ -2,17 +2,18 @@ import React from "react"
 import ContentLoader from "react-content-loader"
 
 const ProjectSkeleton = (props) => (
-  <ContentLoader 
-    speed={2}
-    width={390}
-    height={220}
-    viewBox="0 0 390 220"
-    backgroundColor="#27323e"
-    foregroundColor="#384756"
-    {...props}
-  >
-    <rect x="0" y="0" rx="5" ry="5" width="390" height="220" />
-  </ContentLoader>
+	<ContentLoader
+		speed={1}
+		width={308}
+		height={257}
+		viewBox="0 0 308 257"
+		backgroundColor="#27323e"
+		foregroundColor="#384756"
+		{...props}
+	>
+		<rect x="0" y="462" rx="0" ry="0" width="452" height="100" />
+		<rect x="0" y="0" rx="10" ry="10" width="308" height="257" />
+	</ContentLoader>
 )
 
 export default ProjectSkeleton

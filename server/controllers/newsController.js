@@ -15,7 +15,7 @@ const { getIo } = require("../socket");
 class NewsController {
 	async create(req, res, next) {
 		try {
-			const { title, description } = req.body;
+			const { title, description, userId } = req.body;
 			const { img } = req.files;
 			let fileName = uuid.v4() + ".jpg";
 			const staticNews = path.join(__dirname, "..", "static", "news");
@@ -24,7 +24,7 @@ class NewsController {
 				fs.mkdirSync(staticNews);
 			}
 			img.mv(path.resolve(__dirname, "..", "static/news", fileName));
-			const news = await News.create({ title, description, img: fileName });
+			const news = await News.create({ title, description, img: fileName, userId });
 			return res.json(news);
 		} catch (e) {
 			next(ApiError.badRequest(e.message));
@@ -39,7 +39,7 @@ class NewsController {
 			let offset = page * limit - limit;
 
 			let news = await News.findAndCountAll({
-				include: [Comments, Likes, View],
+				include: [Comments, Likes, View, User],
 				limit,
 				offset,
 				where: {
@@ -78,7 +78,7 @@ class NewsController {
 			const { id } = req.params;
 			const news = await News.findOne({
 				where: { id },
-				include: [Comments, Likes, View],
+				include: [Comments, Likes, View, User],
 			});
 			return res.json(news);
 		} catch (error) {

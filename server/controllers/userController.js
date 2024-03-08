@@ -336,11 +336,11 @@ class UserController {
 
 			const { projectFile } = req.files;
 			const maxFileSize = 100 * 1024 * 1024; // 100 МБ в байтах
-			if (projectFile.size > maxFileSize) {
-				return res
-					.status(400)
-					.send("File size exceeds the allowed limit (100 MB).");
-			}
+			// if (projectFile.size > maxFileSize) {
+			// 	return res
+			// 		.status(400)
+			// 		.send("File size exceeds the allowed limit (100 MB).");
+			// }
 
 			const zipFile = projectFile;
 

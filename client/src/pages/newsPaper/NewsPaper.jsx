@@ -48,7 +48,7 @@ const NewsPaper = observer(() => {
 					setIsLike(true);
 				}
 			});
-			setViews(() => useCountFormatter(data.length));
+			setViews(() => useCountFormatter(data.views.length));
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");

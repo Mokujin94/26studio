@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const ApiError = require("../error/ApiError");
 const {
 	Comments,
@@ -24,8 +25,8 @@ class CommentController {
 							include: [User, {
 								model: User,
 								as: "userReply"
-							}]
-						}],
+							}, Likes]
+						}, Likes],
 					},
 				],
 				where: {
@@ -49,9 +50,12 @@ class CommentController {
 						model: Comments,
 						include: [User, {
 							model: Comments,
-							as: 'parent',
-							include: User
-						}],
+							as: 'replyes',
+							include: [User, {
+								model: User,
+								as: "userReply"
+							}, Likes]
+						}, Likes],
 					},
 				],
 				where: {
@@ -86,9 +90,18 @@ class CommentController {
 				include: [
 					User,
 					{
+						model: Comments,
+						as: 'replyes',
+						include: [User, {
+							model: User,
+							as: "userReply"
+						}, Likes]
+					},
+					{
 						model: Project,
 						include: [User],
 					},
+					Likes
 				],
 			});
 
@@ -135,6 +148,11 @@ class CommentController {
 	async createCommentNews(req, res, next) {
 		try {
 			const { message, newsId, resendId, userId } = req.body;
+			const io = getIo();
+
+			if (!userId) {
+				return next(ApiError.internal("Вы не авторизованы"));
+			}
 
 			const comment = await Comments.create({
 				message,
@@ -146,16 +164,58 @@ class CommentController {
 			const savedComment = await Comments.findOne({
 				where: { id: comment.id },
 				include: [
+					User,
 					{
-						model: User,
-						attributes: ["id", "name", "avatar"],
+						model: Comments,
+						as: 'replyes',
+						include: [User, {
+							model: User,
+							as: "userReply"
+						}, Likes]
 					},
+					{
+						model: News,
+						include: [User],
+					},
+					Likes
 				],
 			});
 
-			const io = getIo();
+			const notification = await Notifications.create({
+				commentId: comment.id,
+				senderId: userId,
+				recipientId: savedComment.news.user.id,
+			});
+
+			const sendNotification = await Notifications.findOne({
+				where: { id: notification.id },
+				include: [
+					{
+						model: Comments,
+						as: "comment",
+					},
+					{
+						model: Comments,
+						as: "replyComment",
+					},
+					{
+						model: Likes,
+						as: "like",
+					},
+					{
+						model: User,
+						as: "sender",
+					},
+					{
+						model: User,
+						as: "recipient",
+					},
+				],
+			});
+			io.emit("notification", sendNotification);
+
 			io.emit("sendCommentsNewsToClients", savedComment);
-			return res.json(comment);
+			return res.json(savedComment);
 		} catch (error) {
 			next(ApiError.badRequest(error.message));
 		}
@@ -217,7 +277,7 @@ class CommentController {
 				}, {
 					model: User,
 					as: "userReply"
-				}],
+				}, Likes],
 
 			});
 
@@ -227,6 +287,64 @@ class CommentController {
 			next(ApiError.badRequest(error.message))
 		}
 
+	}
+
+	async createLike(req, res, next) {
+		const { commentId, userId } = req.body;
+
+		let likeData;
+
+		try {
+
+			if (!userId) {
+				return next(ApiError.internal("Вы не авторизованы"));
+			}
+
+			likeData = await Likes.findOne({
+				where: { commentId, userId }
+			})
+
+			if (likeData) {
+				if (likeData.status) {
+					return next(ApiError.badRequest("Лайк уже стоит"))
+				}
+				await likeData.update({ status: true })
+			} else {
+				likeData = await Likes.create({ commentId, userId })
+			}
+
+
+			return await res.json(likeData);
+		} catch (error) {
+			next(ApiError.badRequest(error.message))
+		}
+	}
+
+	async deleteLike(req, res, next) {
+		const { commentId, userId } = req.body;
+
+		let likeData;
+
+		try {
+
+			if (!userId) {
+				return next(ApiError.internal("Вы не авторизованы"));
+			}
+
+			likeData = await Likes.findOne({
+				where: { commentId, userId }
+			})
+
+			if (!likeData.status) {
+				return next(ApiError.badRequest("Нельзя поставить дизлайк"))
+			}
+
+			await likeData.update({ status: false });
+
+			return await res.json(likeData);
+		} catch (error) {
+			next(ApiError.badRequest(error.message))
+		}
 	}
 }
 

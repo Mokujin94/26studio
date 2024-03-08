@@ -81,13 +81,21 @@
           align-items: center;
 					padding: 5px 10px;
 					background: #27323e;
+					border: 1px solid $studio-grey-border;
 					border-radius: 5px;
+					user-select: none;
           cursor: pointer;
           &Image {
             width: 16px;
-            svg {
-              width: 100%;
+            &Icon {
+              width: auto;
+							height: 15px;
               display: block;
+							&_active {
+								path {
+									fill: $studio-red-element;
+								}
+							}
             }
           }
           &:last-child {
@@ -106,7 +114,9 @@
           align-items: center;
           padding: 5px 10px;
           background: $studio-dark-element;
+					border: 1px solid $studio-grey-border;
           border-radius: 5px;
+					user-select: none;
         }
       }
       &Date {

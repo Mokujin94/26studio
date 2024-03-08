@@ -35,7 +35,7 @@ const authInterceptor = async (config) => {
 const hostInterceptor = async (config) => {
 	const token = localStorage.getItem("token");
 	if (token) {
-		const decode = jwt_decode(token);
+		const decode = await jwt_decode(token);
 		try {
 			await getUserOnline(decode.id)
 		} catch (error) {

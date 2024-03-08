@@ -1,27 +1,31 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 import style from "./newsComment.module.scss";
 import { Link } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 import FunctionButton from "../functionButton/FunctionButton";
 import { CSSTransition } from "react-transition-group";
-import { createReply } from "../../http/commentsAPI";
+import { createReply, deleteLike, like } from "../../http/commentsAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import ReplyComment from "../replyComment/ReplyComment";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
+import { useCountFormatter } from "../../hooks/useCountFormatter";
 
 const NewsComment = observer((props) => {
 	const { user } = useContext(Context);
 
 	const [isReply, setIsReply] = useState(false);
 	const [isReplyOpen, setIsReplyOpen] = useState(false);
-	const [replyUserId, setReplyUserId] = useState(props.id)
 	const [replyText, setReplyText] = useState('');
 	const [replyes, setReplyes] = useState([]);
+	const [likesCount, setLikesCount] = useState(0);
+	const [isLike, setIsLike] = useState(false);
+
+	const likesFormated = useCountFormatter(likesCount)
 
 	const onReply = async () => {
-		await createReply(replyText, user.user.id, props.commentId, replyUserId).then(() => {
+		await createReply(replyText, user.user.id, props.commentId).then(() => {
 			setIsReply(false)
 			setReplyText('')
 		}).catch(err => console.log(err))
@@ -31,13 +35,52 @@ const NewsComment = observer((props) => {
 		if (props.replyes) {
 			setReplyes(props.replyes)
 		}
+
+		if (props.likes) {
+			const likes = props.likes.filter(item => item.status)
+			setLikesCount(likes.length)
+		}
 	}, [])
+
+	useEffect(() => {
+		props.likes.filter(item => {
+			if (item.userId === user.user.id && item.status && item.commentId === props.commentId) {
+				setIsLike(true)
+			}
+		})
+	}, [props.likes])
 
 	useEffect(() => {
 		if (props.lastReplyComment.parentId === props.commentId) {
 			setReplyes((item) => [...item, props.lastReplyComment]);
 		}
 	}, [props.lastReplyComment])
+
+	const onLike = useCallback(async () => {
+		setIsLike(prevIsLike => !prevIsLike); // Обновляем состояние isLike, используя предыдущее значение
+		console.log(isLike)
+		if (isLike) {
+			setLikesCount(prev => prev - 1);
+
+			try {
+				const data = await deleteLike(props.commentId, user.user.id);
+				// console.log(data);
+			} catch (err) {
+				// console.log(err);
+			}
+
+		} else {
+			setLikesCount(prev => prev + 1);
+
+			try {
+				const data = await like(props.commentId, user.user.id);
+				// console.log(data);
+			} catch (err) {
+				// console.log(err);
+			}
+		}
+	}, [isLike, props.commentId, user.user.id, setIsLike, setLikesCount]);
+
 
 	return (
 		<div className={style.block} >
@@ -68,11 +111,11 @@ const NewsComment = observer((props) => {
 			<div className={style.block__textBottom}>
 				<div className={style.block__textBottomFeedback}>
 					<p onClick={() => setIsReply(true)} className={style.block__textBottomFeedbackItem}>Ответить</p>
-					<div className={style.block__textBottomFeedbackLike}>
+					<div className={style.block__textBottomFeedbackLike} onClick={onLike}>
 						<div className={style.block__textBottomFeedbackItemImage}>
-							<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 0C3.9875 0 2.64 0.741935 1.6225 1.90323C0.6325 3.06452 0 4.64516 0 6.45161C0 8.22581 0.6325 9.80645 1.6225 11L11 22L20.3775 11C21.3675 9.83871 22 8.25806 22 6.45161C22 4.67742 21.3675 3.09677 20.3775 1.90323C19.3875 0.741935 18.04 0 16.5 0C14.9875 0 13.64 0.741935 12.6225 1.90323C11.6325 3.06452 11 4.64516 11 6.45161C11 4.67742 10.3675 3.09677 9.3775 1.90323C8.3875 0.741935 7.04 0 5.5 0Z" fill="white"></path></svg>
+							<svg className={isLike ? style.block__textBottomFeedbackItemImageIcon + ' ' + style.block__textBottomFeedbackItemImageIcon_active : style.block__textBottomFeedbackItemImageIcon} width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.5 0C3.9875 0 2.64 0.741935 1.6225 1.90323C0.6325 3.06452 0 4.64516 0 6.45161C0 8.22581 0.6325 9.80645 1.6225 11L11 22L20.3775 11C21.3675 9.83871 22 8.25806 22 6.45161C22 4.67742 21.3675 3.09677 20.3775 1.90323C19.3875 0.741935 18.04 0 16.5 0C14.9875 0 13.64 0.741935 12.6225 1.90323C11.6325 3.06452 11 4.64516 11 6.45161C11 4.67742 10.3675 3.09677 9.3775 1.90323C8.3875 0.741935 7.04 0 5.5 0Z" fill="white"></path></svg>
 						</div>
-						<p className={style.block__textBottomFeedbackItemCount}>123</p>
+						<p className={style.block__textBottomFeedbackItemCount}>{likesFormated}</p>
 					</div>
 
 				</div>
@@ -114,6 +157,7 @@ const NewsComment = observer((props) => {
 								userReply={item.userReply}
 								date={useDateFormatter(item.createdAt)}
 								key={item.id}
+								likes={item.likes}
 							/>
 						)
 					})}

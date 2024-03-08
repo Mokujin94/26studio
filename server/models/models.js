@@ -181,6 +181,9 @@ const UserFriend = sequelize.define("user_friend", {
 User.hasMany(Project);
 Project.belongsTo(User);
 
+User.hasMany(News);
+News.belongsTo(User);
+
 TeamAccess.hasMany(User);
 User.belongsTo(TeamAccess);
 
@@ -228,6 +231,9 @@ View.belongsTo(News);
 
 User.hasMany(Likes);
 Likes.belongsTo(User);
+
+Comments.hasMany(Likes);
+Likes.belongsTo(Comments);
 
 User.hasMany(View, { foreignKey: "userId" });
 View.belongsTo(User);

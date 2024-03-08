@@ -123,8 +123,8 @@ const NewProjectCard = observer(({ id, img, title, name, date, like, view, comme
 					<SwitchTransition mode="out-in">
 						<CSSTransition
 							key={viewState}
-							timeout={100}
-							classNames='create-anim'
+							timeout={200}
+							classNames='create-anim-update'
 						>
 							{viewState ?
 								<div style={{ height: '100%', pointerEvents: 'none' }}>

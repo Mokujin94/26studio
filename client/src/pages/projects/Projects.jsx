@@ -211,53 +211,110 @@ const Projects = observer(() => {
 	return (
 		<div className="container">
 			<div className="projects">
-				<h1 className="projects__title">Новые проекты</h1>
-				<div
-					className="projects__wrapper"
-					style={{ position: "relative", display: "block" }}
-					id="autoplay-example-heading"
-				>
-					<Splide
-						hasTrack={false}
-						options={{
-							type: "loop",
-							isNavigation: true,
-							perPage: 5,
-							cloneStatus: true,
-							gap: 20,
-							autoplay: true,
-							resetProgress: false,
-							pauseOnHover: true,
-							interval: 3000,
-							pagination: false,
-							speed: 800,
-							breakpoints: {
-								1200: {
-									perPage: 3,
-								},
-								1024: {
-									perPage: 2,
-								},
-								768: {
-									arrows: false,
-								},
-								576: {
-									perPage: 1,
-								},
-							},
-						}}
-						aria-labelledby="autoplay-example-heading"
-					>
-						<SplideTrack>{sliderRenderer}</SplideTrack>
-						<div className="splide__arrows">
-							<SliderButton
-								className="splide__arrow splide__arrow--prev"
-								styling={stylePrevArrow}
-							/>
-							<SliderButton className="splide__arrow splide__arrow--next" />
-						</div>
-					</Splide>
-				</div>
+				<h1 className="projects__title">{!isLoadingSlider ? sliderData.length > 4 ? "Новые проекты" : "Проекты" : "Новые проекты"}</h1>
+				{
+					!isLoadingSlider ? sliderData.length > 4 &&
+						<>
+							<div
+								className="projects__wrapper"
+								style={{ position: "relative", display: "block" }}
+								id="autoplay-example-heading"
+							>
+								<Splide
+									hasTrack={false}
+									options={{
+										type: "loop",
+										isNavigation: true,
+										perPage: 5,
+										cloneStatus: true,
+										gap: 20,
+										autoplay: true,
+										resetProgress: false,
+										pauseOnHover: true,
+										interval: 3000,
+										pagination: false,
+										speed: 800,
+										breakpoints: {
+											1200: {
+												perPage: 3,
+											},
+											1024: {
+												perPage: 2,
+											},
+											768: {
+												arrows: false,
+											},
+											576: {
+												perPage: 1,
+											},
+										},
+									}}
+									aria-labelledby="autoplay-example-heading"
+								>
+									<SplideTrack>{sliderRenderer}</SplideTrack>
+									<div className="splide__arrows">
+										<SliderButton
+											className="splide__arrow splide__arrow--prev"
+											styling={stylePrevArrow}
+										/>
+										<SliderButton className="splide__arrow splide__arrow--next" />
+									</div>
+								</Splide>
+							</div>
+
+						</>
+						:
+						<>
+							<div
+								className="projects__wrapper"
+								style={{ position: "relative", display: "block" }}
+								id="autoplay-example-heading"
+							>
+								<Splide
+									hasTrack={false}
+									options={{
+										type: "loop",
+										isNavigation: true,
+										perPage: 5,
+										cloneStatus: true,
+										gap: 20,
+										autoplay: true,
+										resetProgress: false,
+										pauseOnHover: true,
+										interval: 3000,
+										pagination: false,
+										speed: 800,
+										breakpoints: {
+											1200: {
+												perPage: 3,
+											},
+											1024: {
+												perPage: 2,
+											},
+											768: {
+												arrows: false,
+											},
+											576: {
+												perPage: 1,
+											},
+										},
+									}}
+									aria-labelledby="autoplay-example-heading"
+								>
+									<SplideTrack>{sliderRenderer}</SplideTrack>
+									<div className="splide__arrows">
+										<SliderButton
+											className="splide__arrow splide__arrow--prev"
+											styling={stylePrevArrow}
+										/>
+										<SliderButton className="splide__arrow splide__arrow--next" />
+									</div>
+								</Splide>
+							</div>
+
+						</>
+
+				}
 				<div className="projects__searchSettings">
 					<div className="projects__searchSettings-search">
 						<ProjectsSearch
