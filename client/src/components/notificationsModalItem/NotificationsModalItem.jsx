@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 
 import style from './notificationsModalItem.module.scss'
 
@@ -6,7 +6,7 @@ import avatar from '../../resource/graphics/images/profile/avatar.jpg'
 import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'react-router-dom'
-import { PROFILE_ROUTE } from '../../utils/consts'
+import { NEWS_ROUTE, PROFILE_ROUTE, PROJECTS_ROUTE } from '../../utils/consts'
 import { useDateFormatter } from '../../hooks/useDateFormatter'
 import { deleteNotification } from '../../http/notificationAPI'
 
@@ -28,6 +28,9 @@ const NotificationsModalItem = observer(({ notification }) => {
 		})
 	}
 
+	useEffect(() => {
+		console.log(notification);
+	}, [notification])
 
 	const add =
 		<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none">
@@ -79,19 +82,19 @@ const NotificationsModalItem = observer(({ notification }) => {
 				{
 					notification.likeId
 					&& <p className={style.item__contentText}>
-						Оценил ваш <span className={style.item__contentText_primary}>проект</span>
+						Оценил ваш <Link to={PROJECTS_ROUTE + '/' + notification.like.projectId} className={style.item__contentText_primary}>проект</Link>
 					</p>
 				}
 				{
 					notification.commentId
 					&& <p className={style.item__contentText}>
-						Оставил <span className={style.item__contentText_primary}>комментарий</span>
+						Оставил <Link to={notification.comment.projectId ? PROJECTS_ROUTE + '/' + notification.comment.projectId : NEWS_ROUTE + '/' + notification.comment.newsId} className={style.item__contentText_primary}>комментарий</Link>
 					</p>
 				}
 				{
 					notification.replyCommentId
 					&& <p className={style.item__contentText}>
-						Ответил(а) на ваш <span className={style.item__contentText_primary}>комментарий</span>
+						Ответил(а) на ваш <Link to={notification.replyComment.projectId ? PROJECTS_ROUTE + '/' + notification.replyComment.projectId : NEWS_ROUTE + '/' + notification.replyComment.newsId} className={style.item__contentText_primary}>комментарий</Link>
 					</p>
 				}
 				{

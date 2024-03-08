@@ -51,12 +51,15 @@ const Profile = observer(() => {
 	const nav = useNavigate();
 	const [avatarFile, setAvatarFile] = useState(null);
 	const [avatarReader, setAvatarReader] = useState(null);
+	const [searchFriendValue, setSearchFriendValue] = useState('');
+	const [foundFriends, setFoundFriends] = useState([]);
 	const [offsetMenuLineActive, setOffsetMenuLineActive] = useState(
 		100 / profile.menuItemsOtherUser.length
 	);
 
 	const [friendsRequest, setFriendsRequest] = useState([]);
 	const [friends, setFriends] = useState([]);
+	const [sortFriends, setSortFriends] = useState([]);
 	const [statusFriend, setStatusFriend] = useState(false);
 
 	const [isOnline, setIsOnline] = useState(false)
@@ -132,12 +135,22 @@ const Profile = observer(() => {
 								key={item.id}
 							/>
 						));
-
-					setFriends(friendsAll);
-					setFriendsRequest(requestsAll);
+					setFriends(friendsAll)
+					setFriendsRequest(requestsAll)
 				}
+				return dataUser;
 			})
-			.then(() => setIsLoadingProfile(false))
+			.then((dataUser) => {
+				setIsLoadingProfile(false)
+				const sortFriendsAllPromises = dataUser.friends.map(async item => {
+					return await fetchUserById(Number(item.user_friend.friendId))
+				})
+				Promise.all(sortFriendsAllPromises)
+					.then(sortedFriends => {
+						setSortFriends(sortedFriends)
+					})
+					.catch();
+			})
 			.catch((err) => {
 				nav(PROFILE_ROUTE + "/" + user.user.id);
 			});
@@ -286,6 +299,36 @@ const Profile = observer(() => {
 		}
 	};
 
+	const onSearchFriend = (e) => {
+		setSearchFriendValue(e.target.value)
+		if (e.target.value) {
+			const friendsFindAll = sortFriends.filter(item => {
+				// Приводим каждый элемент массива и запрос к нижнему регистру для регистронезависимого поиска
+				const itemNameLower = item.name.toLowerCase().replace(/\s/g, '');
+				const itemFullNameLower = item.full_name.toLowerCase().replace(/\s/g, '');
+				const queryLower = e.target.value.toLowerCase().replace(/\s/g, '');
+				// Используем метод includes() для проверки, содержится ли запрос в элементе массива
+				return itemNameLower.includes(queryLower) || itemFullNameLower.includes(queryLower);
+			});
+
+			console.log(friendsFindAll);
+
+			if (friendsFindAll.length) {
+				const friends = friendsFindAll.map((item) => (
+					<FriendCard
+						userId={item.id}
+						key={item.id}
+					/>
+				))
+				setFoundFriends(friends)
+			} else {
+				setFoundFriends([])
+			}
+		} else {
+			setFoundFriends([])
+		}
+	}
+
 	return (
 		<div className="profile">
 			<div className="container">
@@ -358,13 +401,13 @@ const Profile = observer(() => {
 													/>
 
 													{
-														isOnline 
-														? 
-														<div className="profile__left-user-avatar-online profile__left-user-avatar-online_true"></div> 
-														: 
-														<div className="profile__left-user-avatar-online profile__left-user-avatar-online_false">
-															{lastTimeOnline.replace(' назад', '')}
-														</div>
+														isOnline
+															?
+															<div className="profile__left-user-avatar-online profile__left-user-avatar-online_true"></div>
+															:
+															<div className="profile__left-user-avatar-online profile__left-user-avatar-online_false">
+																{lastTimeOnline.replace(' назад', '')}
+															</div>
 													}
 												</>
 
@@ -534,24 +577,28 @@ const Profile = observer(() => {
 									type="text"
 									className="profile__friends-search"
 									placeholder="Поиск друзей"
+									value={searchFriendValue}
+									onChange={onSearchFriend}
 								/>
 							)}
-							<div className="profile__friends-content">
-								{isLoadingProfile ? (
-									<ProfileFriendsSkeleton />
-								) : statusFriend ? (
-									friends.length ? (
-										friends
-									) : (
-										"Нет друзей"
+							<div className={((statusFriend && !friends.length) || (!statusFriend && !friendsRequest.length)) ? "profile__friends-content" + " " + "profile__friends-content_center" : "profile__friends-content"}>
+								{
+									(
+										isLoadingProfile ? (
+											<ProfileFriendsSkeleton />
+										) : statusFriend ? (
+											friends.length && !searchFriendValue ? (
+												friends
+											) : friends.length && foundFriends.length ? foundFriends : !friends.length && (
+												"Нет друзей"
+											)
+										) : friendsRequest.length ? (
+											friendsRequest
+										) : (
+											"Нет заявок"
+										)
 									)
-								) : friendsRequest.length ? (
-									<>
-										{friendsRequest}
-									</>
-								) : (
-									"Нет заявок"
-								)}
+								}
 							</div>
 						</div>
 					</div>

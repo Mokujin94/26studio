@@ -78,6 +78,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 							avatar={item.user.avatar}
 							comment={item.message}
 							commentId={item.id}
+							projectId={item.projectId}
 							replyes={item.replyes}
 							lastReplyComment={lastReplyComment}
 							date={useDateFormatter(item.createdAt)}
