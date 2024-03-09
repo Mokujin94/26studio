@@ -35,10 +35,10 @@ const corsOptions = {
 // app.use(cors(corsOptions));
 app.use(cors('*'));
 app.use(express.json());
-app.use(express.static(path.resolve(__dirname, "static/news")));
-app.use(express.static(path.resolve(__dirname, "static/avatars")));
-app.use(express.static(path.resolve(__dirname, "static/projects")));
-app.use(express.static(path.resolve(__dirname, "extracted")));
+app.use(express.static('/app/static/news'));
+app.use(express.static('/app/static/avatars'));
+app.use(express.static('/app/static/projects'));
+app.use(express.static('/app/extracted'));
 app.use(fileUpload({}));
 
 
