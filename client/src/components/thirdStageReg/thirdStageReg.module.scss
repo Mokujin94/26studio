@@ -43,6 +43,23 @@
       }
     }
   }
+
+	&__sendCodeAgain {
+		max-width: 400px;
+    width: 100%;
+		margin-top: 10px;
+		&Text {
+			font-size: 14px;
+			color: $studio-primary-text;
+			user-select: none;
+			cursor: pointer;
+			&_disabled {
+				opacity: .5;
+				cursor: default;
+			}
+		}
+	}
+
   &__activeAcc {
     margin-top: 50px;
   }
