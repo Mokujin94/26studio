@@ -30,6 +30,7 @@ services:
     volumes:
       - my_app_data:/app/static
       - my_app_data:/app/extracted
+      - my_app_data:/app/uploads
 
   frontend:
     build: ./client
