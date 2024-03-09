@@ -423,7 +423,7 @@ class UserController {
 			}
 
 			// Формируем полный путь к файлу, включая уникальную папку
-			const fullPath = path.join("../app/extracted/", filePath);
+			const fullPath = path.join("/app/extracted/", filePath);
 
 			// Отправляем файл клиенту
 			res.sendFile(fullPath);
