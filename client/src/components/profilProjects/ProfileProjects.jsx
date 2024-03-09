@@ -90,7 +90,7 @@ const ProfileProjects = observer(({ isOnSetting }) => {
 									<path d="M6.5,21l-3.9,3.6c-0.8,0.8-0.8,2,0,2.8l0,0c0.8,0.8,2,0.8,2.8,0l3.5-3.5" />
 								</svg>
 							</div>
-							<h2 className={style.projects__title}>У вас нет проектов</h2>
+							<h2 className={style.projects__title}>Нет проектов</h2>
 						</div>
 					)
 			}
