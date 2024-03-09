@@ -1,9 +1,6 @@
 # ипользуем образ линукс Alpine с версией node 14
 FROM node:20.10.0-alpine
 
-# Создание тома для хранения фотографий и других файлов
-VOLUME ["/static/avatars", "/static/projects", "/static/news", "/extracted"]
-
 # Указываем корневую папку
 WORKDIR /app
 
