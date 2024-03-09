@@ -37,7 +37,7 @@ const ReplyComment = observer((props) => {
 	}, [props.likes])
 
 	const onReply = async () => {
-		await createReply(replyText, user.user.id, props.commentId, replyUserId, props.projectId).then(data => {
+		await createReply(replyText, user.user.id, props.commentId, props.id, replyUserId, props.projectId).then(data => {
 			setIsReply(false)
 			setReplyText('')
 		}).catch(err => console.log(err))

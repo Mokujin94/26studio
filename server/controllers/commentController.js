@@ -222,7 +222,7 @@ class CommentController {
 	}
 
 	async createChildComment(req, res, next) {
-		const { message, userId, parentId, replyUser, projectId } = req.body;
+		const { message, userId, parentId, parentUserId, replyUser, projectId } = req.body;
 		const io = getIo();
 
 		if (!userId) {
@@ -259,7 +259,7 @@ class CommentController {
 			const notification = await Notifications.create({
 				replyCommentId: comment.id,
 				senderId: userId,
-				recipientId: savedComment.replyes.userId,
+				recipientId: parentUserId,
 			});
 
 			const sendNotification = await Notifications.findOne({
