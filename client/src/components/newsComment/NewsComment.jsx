@@ -25,7 +25,7 @@ const NewsComment = observer((props) => {
 	const likesFormated = useCountFormatter(likesCount)
 
 	const onReply = async () => {
-		await createReply(replyText, user.user.id, props.commentId, props.projectId).then(() => {
+		await createReply(replyText, user.user.id, props.commentId, null, props.projectId).then(() => {
 			setIsReply(false)
 			setReplyText('')
 		}).catch(err => console.log(err))
