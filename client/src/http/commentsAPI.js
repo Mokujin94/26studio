@@ -24,7 +24,7 @@ export const createNews = async (message, newsId, userId, resendId) => {
 	return data;
 };
 
-export const createReply = async (message, userId, parentId, replyUser, projectId) => {
+export const createReply = async (message, userId, parentId, parentUserId, replyUser, projectId) => {
 	const { data } = await $authHost.post("api/comment/reply", {
 		message,
 		userId,
