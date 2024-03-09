@@ -19,7 +19,10 @@ class ProjectController {
 			const { name, start_date, description, files } = req.body;
 			const { img } = req.files;
 			let fileName = uuid.v4() + ".jpg";
-			img.mv(path.resolve(__dirname, "..", "static/projects", fileName));
+			// Путь сохранения файла внутри тома Docker
+			const filePath = path.resolve('/app/static/projects', fileName);
+			// Сохранение файла внутри тома Docker
+			await img.mv(filePath);
 			const project = await Project.create({
 				name,
 				start_date,

@@ -120,7 +120,10 @@ class UserController {
 			if (req.files) {
 				fileName = uuid.v4() + ".jpg";
 				const { avatar } = req.files;
-				avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+				// Путь сохранения файла внутри тома Docker
+				const filePath = path.resolve('/app/static/avatars', fileName);
+				// Сохранение файла внутри тома Docker
+				await avatar.mv(filePath);
 			} else {
 				fileName = "avatar.jpg";
 			}
@@ -317,8 +320,10 @@ class UserController {
 
 	async uploadProject(req, res, next) {
 		try {
-			const uploadPath = path.join(__dirname, "..", "uploads");
-			const extractPath = path.join(__dirname, "..", "extracted");
+			// Путь для сохранения загруженных файлов
+			const uploadPath = '/app/uploads';
+			// Путь для сохранения извлеченных файлов
+			const extractPath = '/app/extracted';
 
 			if (!fs.existsSync(uploadPath)) {
 				fs.mkdirSync(uploadPath);
@@ -475,7 +480,10 @@ class UserController {
 			if (req.files) {
 				fileName = uuid.v4() + ".jpg";
 				const { avatar } = req.files;
-				avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+				// Путь сохранения файла внутри тома Docker
+				const filePath = path.resolve('/app/static/avatars', fileName);
+				// Сохранение файла внутри тома Docker
+				await avatar.mv(filePath);
 			} else {
 				fileName = "avatar.jpg";
 			}

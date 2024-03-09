@@ -18,12 +18,15 @@ class NewsController {
 			const { title, description, userId } = req.body;
 			const { img } = req.files;
 			let fileName = uuid.v4() + ".jpg";
-			const staticNews = path.join(__dirname, "..", "static", "news");
+			const staticNews = "/app/static/news";
 
 			if (!fs.existsSync(staticNews)) {
 				fs.mkdirSync(staticNews);
 			}
-			img.mv(path.resolve(__dirname, "..", "static/news", fileName));
+			// Путь сохранения файла внутри тома Docker
+			const filePath = path.resolve('/app/static/news', fileName);
+			// Сохранение файла внутри тома Docker
+			await img.mv(filePath);
 			const news = await News.create({ title, description, img: fileName, userId });
 			return res.json(news);
 		} catch (e) {
