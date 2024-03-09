@@ -238,10 +238,22 @@ class CommentController {
 				projectId
 			});
 
+			const savedComment = await Comments.findOne({
+				where: { id: comment.id },
+				include: [{
+					model: User,
+					attributes: ["id", "name", "avatar"],
+				}, {
+					model: User,
+					as: "userReply"
+				}, Likes],
+
+			});
+
 			const notification = await Notifications.create({
 				replyCommentId: comment.id,
 				senderId: userId,
-				recipientId: comment.replyUserId,
+				recipientId: savedComment.user.id,
 			});
 
 			const sendNotification = await Notifications.findOne({
@@ -270,18 +282,6 @@ class CommentController {
 				],
 			});
 			io.emit("notification", sendNotification);
-			const savedComment = await Comments.findOne({
-				where: { id: comment.id },
-				include: [{
-					model: User,
-					attributes: ["id", "name", "avatar"],
-				}, {
-					model: User,
-					as: "userReply"
-				}, Likes],
-
-			});
-
 			io.emit("replyComment", savedComment);
 			return res.json(comment);
 		} catch (error) {
