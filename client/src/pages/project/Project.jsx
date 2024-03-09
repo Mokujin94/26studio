@@ -45,7 +45,7 @@ const Project = observer(() => {
 				})
 				.catch((e) => console.log(e))
 			console.log(data);
-			if(data.description.length > 300) {
+			if (data.description.length > 300) {
 				const descrLimit = data.description.slice(0, 200)
 				const lines = descrLimit.split('\r\n');
 				setDescriptionLimit(lines);
@@ -61,8 +61,8 @@ const Project = observer(() => {
 			setViews(data.views);
 		});
 		getAllCommentsProject(id).then((data) => {
-			setComments(data[0].comments)
-			console.log(data)
+			const filterData = data[0].comments.filter(item => !item.parentId);
+			setComments(filterData)
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
