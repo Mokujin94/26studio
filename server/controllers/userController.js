@@ -423,7 +423,7 @@ class UserController {
 			}
 
 			// Формируем полный путь к файлу, включая уникальную папку
-			const fullPath = path.join(__dirname, "../extracted/", filePath);
+			const fullPath = path.join("../app/extracted/", filePath);
 
 			// Отправляем файл клиенту
 			res.sendFile(fullPath);
@@ -445,7 +445,7 @@ class UserController {
 				userId,
 			} = req.body;
 
-			const staticProjects = path.join(__dirname, "..", "static", "projects");
+			const staticProjects = "/app/static/projects";
 
 			if (!fs.existsSync(staticProjects)) {
 				fs.mkdirSync(staticProjects);
@@ -453,7 +453,10 @@ class UserController {
 
 			const previewFile = uuid.v4() + ".jpg";
 			const { preview } = req.files;
-			preview.mv(path.resolve(__dirname, "..", "static/projects", previewFile));
+			// Путь сохранения файла внутри тома Docker
+			const filePath = path.resolve('/app/static/projects', previewFile);
+			// Сохранение файла внутри тома Docker
+			await preview.mv(filePath);
 
 			const project = await Project.create({
 				name,
