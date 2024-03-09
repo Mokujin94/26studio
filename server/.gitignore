@@ -3,7 +3,7 @@
 # dependencies
 /node_modules
 /.pnp
-/extracted
+# /extracted
 /uploads
 /static
 # /static
