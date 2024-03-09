@@ -246,14 +246,20 @@ class CommentController {
 				}, {
 					model: User,
 					as: "userReply"
-				}, Likes],
+				},
+					Likes,
+				{
+					model: Comments,
+					as: "replyes",
+				}
+				],
 
 			});
 
 			const notification = await Notifications.create({
 				replyCommentId: comment.id,
 				senderId: userId,
-				recipientId: savedComment.user.id,
+				recipientId: savedComment.replyes.userId,
 			});
 
 			const sendNotification = await Notifications.findOne({
