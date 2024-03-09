@@ -48,14 +48,13 @@ const NewsPaper = observer(() => {
 					setIsLike(true);
 				}
 			});
-			setViews(() => useCountFormatter(data.length));
+			setViews(() => useCountFormatter(data.views.length));
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
 		const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
 		socket.on("sendViewsNewsToClients", (updatedViews) => {
-			console.log("Получены новые просмотры:", updatedViews);
 			if (updatedViews) {
 				updatedViews.filter((item) => {
 					if (item.id == id) {

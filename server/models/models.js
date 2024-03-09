@@ -124,6 +124,7 @@ const Comments = sequelize.define("comments", {
 		type: DataTypes.INTEGER,
 		allowNull: false,
 	},
+	replyUserId: { type: DataTypes.INTEGER }
 });
 
 const ReplyComments = sequelize.define("reply_comments", {
@@ -180,6 +181,9 @@ const UserFriend = sequelize.define("user_friend", {
 User.hasMany(Project);
 Project.belongsTo(User);
 
+User.hasMany(News);
+News.belongsTo(User);
+
 TeamAccess.hasMany(User);
 User.belongsTo(TeamAccess);
 
@@ -199,6 +203,7 @@ Notifications.belongsTo(User, { foreignKey: "senderId", as: "sender" });
 Notifications.belongsTo(User, { foreignKey: "recipientId", as: "recipient" });
 Notifications.belongsTo(Likes, { foreignKey: "likeId", as: "like" });
 Notifications.belongsTo(Comments, { foreignKey: "commentId", as: "comment" });
+Notifications.belongsTo(Comments, { foreignKey: "replyCommentId", as: "replyComment" });
 
 Project.hasMany(Comments);
 Comments.belongsTo(Project);
@@ -208,6 +213,7 @@ Comments.belongsTo(News);
 
 User.hasMany(Comments);
 Comments.belongsTo(User, { foreignKey: "userId" });
+Comments.belongsTo(User, { as: "userReply", foreignKey: "replyUserId" });
 
 Comments.hasMany(Comments, { as: 'replyes', foreignKey: 'parentId' });
 
@@ -225,6 +231,9 @@ View.belongsTo(News);
 
 User.hasMany(Likes);
 Likes.belongsTo(User);
+
+Comments.hasMany(Likes);
+Likes.belongsTo(Comments);
 
 User.hasMany(View, { foreignKey: "userId" });
 View.belongsTo(User);

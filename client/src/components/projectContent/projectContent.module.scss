@@ -2,9 +2,8 @@
 
 .block {
   position: relative;
-  max-width: 1000px;
   width: 100%;
-  max-height: 560px;
+	aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 5px;
   &:hover .fullscreen {
@@ -41,7 +40,7 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
-  z-index: 5;
+  z-index: 3;
   opacity: 0;
   transition: $studio-transition-03;
   svg {

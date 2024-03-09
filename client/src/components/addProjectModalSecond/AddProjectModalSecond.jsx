@@ -5,14 +5,29 @@ import { observer } from "mobx-react-lite";
 import style from "./addProjectModalSecond.module.scss";
 import ProjectViewer from "../ProjectViewer/ProjectViewer";
 import { Context } from "../..";
+import { useRef } from "react";
 
 const AddProjectModalSecond = observer(
 	({ projectPathes, setStages, uniqueFolder, baseURL }) => {
+
+
 		const { project, modal } = useContext(Context);
 		const onSelectPath = (e) => {
 			project.setProjectPath(uniqueFolder + "/" + e.target.value);
 			project.setProjectSelectedPath(e.target.value);
 		};
+
+		const styles = {
+			width: `calc((1 / (215 / 960)) * 100%)`,
+			height: `calc((1 / (215 / 960)) * 100%)`,
+			position: 'absolute',
+			transform: `scale(calc(215 / 960))`,
+			MozTransformStyle: `scale(calc(215 / 960))`,
+			OTransform: `scale(calc(215 / 960))`,
+			WebkitTransform: `scale(calc(215 / 960))`,
+		}
+
+		// console.log(projectRef.current.offsetHeight)
 
 		const selectPreviewFile = (e) => {
 			project.setProjectPreview(e.target.files[0]);
@@ -98,7 +113,6 @@ const AddProjectModalSecond = observer(
 											</option>
 										);
 									}
-									console.log(item);
 								})}
 						</select>
 					</div>
@@ -133,6 +147,7 @@ const AddProjectModalSecond = observer(
 						<ProjectViewer
 							pathFromProject={project.projectPath}
 							baseURL={baseURL}
+							styles={styles}
 						/>
 						<div className={style.block__previewText}>
 							<h2 className={style.block__previewTextTitle}>

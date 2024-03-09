@@ -127,6 +127,21 @@ body {
   transition: opacity 0.3s;
 }
 
+.create-anim-update-enter {
+  opacity: 0;
+}
+.create-anim-update-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.create-anim-update-exit {
+  opacity: 1;
+}
+.create-anim-update-exit-active {
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
 .popup-success-enter {
   opacity: 0;
   transform: translateY(300px);

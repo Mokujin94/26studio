@@ -4,6 +4,7 @@
   position: relative;
   z-index: 1;
   background-color: $studio-dark-element;
+  border-radius: 5px;
   &__arrow {
     position: absolute;
     z-index: 0;
@@ -22,10 +23,9 @@
   appearance: none;
   outline: none;
   border: none;
-  border-radius: 5px;
   color: $studio-white-text;
   font-size: 18px;
-  padding: 24px 20px;
+	padding: 15px 20px;
   width: 100%;
   display: flex;
   flex-direction: column;

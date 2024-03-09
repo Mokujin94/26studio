@@ -1,87 +1,87 @@
 const { Op } = require("sequelize");
 const {
-  Friend,
-  Subscriber,
-  User,
-  Likes,
-  Comments,
-  Notifications,
-  UserFriend,
+	Friend,
+	Subscriber,
+	User,
+	Likes,
+	Comments,
+	Notifications,
+	UserFriend,
 } = require("../models/models");
 const ApiError = require("../error/ApiError");
 const { getIo } = require("../socket");
 
 class FriendController {
-  async getFriends(req, res, next) {
-    try {
-      const { userId } = req.query;
+	async getFriends(req, res, next) {
+		try {
+			const { userId } = req.query;
 
-      const friends = User.findOne({
-        where: { id: userId },
-        include: [
-          {
-            model: Friend,
-            through: UserFriend,
-            as: "friends",
-          },
-        ],
-      });
+			const friends = User.findOne({
+				where: { id: userId },
+				include: [
+					{
+						model: Friend,
+						through: UserFriend,
+						as: "friends",
+					},
+				],
+			});
 
-      return res.json(friends);
-    } catch (error) {
-      next(ApiError.badRequest(error));
-    }
-  }
+			return res.json(friends);
+		} catch (error) {
+			next(ApiError.badRequest(error));
+		}
+	}
 
-  async getRequestFriends(req, res, next) {
-    try {
-      const { userId } = req.query;
+	async getRequestFriends(req, res, next) {
+		try {
+			const { userId } = req.query;
 
-      const friends = User.findOne({
-        where: { id: userId },
-        include: [
-          {
-            model: Friend,
-            through: UserFriend,
-            as: "friends",
-          },
-        ],
-      });
+			const friends = User.findOne({
+				where: { id: userId },
+				include: [
+					{
+						model: Friend,
+						through: UserFriend,
+						as: "friends",
+					},
+				],
+			});
 
-      return res.json(friends);
-    } catch (error) {
-      next(ApiError.badRequest(error));
-    }
-  }
+			return res.json(friends);
+		} catch (error) {
+			next(ApiError.badRequest(error));
+		}
+	}
 
-  async friendRequest(req, res, next) {
-    try {
-      const { userId, friendId } = req.body;
+	async friendRequest(req, res, next) {
+		try {
+			const { userId, friendId } = req.body;
 
-      const io = getIo();
+			const io = getIo();
 
-      const friend = await Friend.create({
-					userId,
-					friendId,
-					status: false
-      });
+			const friend = await Friend.create({
+				userId,
+				friendId,
+				status: false
+			});
 
-      await UserFriend.create({
-					userId,
-					friendId: friend.id,
-      });
+			await UserFriend.create({
+				userId,
+				friendId: friend.id,
+			});
 
-      await UserFriend.create({
-					userId: friendId,
-					friendId: friend.id,
-      });
+			await UserFriend.create({
+				userId: friendId,
+				friendId: friend.id,
+			});
 
-				const notification = await Notifications.create({
-					senderId: userId,
-					recipientId: friendId,
-					friend_status: false,
-				});
-	
+			const notification = await Notifications.create({
+				senderId: userId,
+				recipientId: friendId,
+				friend_status: false,
+			});
+
 			const sendNotification = await Notifications.findOne({
 				where: { id: notification.id },
 				include: [
@@ -92,6 +92,10 @@ class FriendController {
 					{
 						model: Comments,
 						as: "comment",
+					},
+					{
+						model: Comments,
+						as: "replyComment",
 					},
 					{
 						model: User,
@@ -105,89 +109,93 @@ class FriendController {
 			});
 			io.emit("notification", sendNotification);
 
-      
 
-      return res.json(friend);
-    } catch (error) {
-      next(ApiError.badRequest(error));
-    }
-  }
 
-  async friendAccept(req, res, next) {
-    try {
-      const { userId, friendId } = req.body;
+			return res.json(friend);
+		} catch (error) {
+			next(ApiError.badRequest(error));
+		}
+	}
 
-      const io = getIo();
+	async friendAccept(req, res, next) {
+		try {
+			const { userId, friendId } = req.body;
 
-      const friend = await Friend.findOne({
-        where: { userId, friendId, status: false },
-      });
+			const io = getIo();
 
-      if (!friend) {
-        next(ApiError.forbidden(userId));
-      }
+			const friend = await Friend.findOne({
+				where: { userId, friendId, status: false },
+			});
 
-      await friend.update({
-        status: true,
-      });
+			if (!friend) {
+				next(ApiError.forbidden(userId));
+			}
 
-      const notification = await Notifications.create({
-        senderId: friendId,
-        recipientId: userId,
-        friend_status: true,
-      });
+			await friend.update({
+				status: true,
+			});
 
-      const sendNotification = await Notifications.findOne({
-        where: { id: notification.id },
-        include: [
-          {
-            model: Likes,
-            as: "like",
-          },
-          {
-            model: Comments,
-            as: "comment",
-          },
-          {
-            model: User,
-            as: "sender",
-          },
-          {
-            model: User,
-            as: "recipient",
-          },
-        ],
-      });
-      io.emit("notification", sendNotification);
+			const notification = await Notifications.create({
+				senderId: friendId,
+				recipientId: userId,
+				friend_status: true,
+			});
 
-      return res.json(friend);
-    } catch (error) {
-      next(ApiError.badRequest(error));
-    }
-  }
+			const sendNotification = await Notifications.findOne({
+				where: { id: notification.id },
+				include: [
+					{
+						model: Likes,
+						as: "like",
+					},
+					{
+						model: Comments,
+						as: "comment",
+					},
+					{
+						model: Comments,
+						as: "replyComment",
+					},
+					{
+						model: User,
+						as: "sender",
+					},
+					{
+						model: User,
+						as: "recipient",
+					},
+				],
+			});
+			io.emit("notification", sendNotification);
 
-  async deleteFriend(req, res, next) {
-    try {
-      const { userId, friendId } = req.query;
+			return res.json(friend);
+		} catch (error) {
+			next(ApiError.badRequest(error));
+		}
+	}
 
-      const friend = Friend.destroy({
-        where: {
-          [Op.or]: [
-            { userId: userId, friendId: friendId },
-            { userId: friendId, friendId: userId },
-          ],
-        },
-      });
+	async deleteFriend(req, res, next) {
+		try {
+			const { userId, friendId } = req.query;
 
-      if (!friend) {
-        next(ApiError.forbidden("Вы не являетесь друзьями"));
-      }
+			const friend = Friend.destroy({
+				where: {
+					[Op.or]: [
+						{ userId: userId, friendId: friendId },
+						{ userId: friendId, friendId: userId },
+					],
+				},
+			});
 
-      return res.json(friend);
-    } catch (error) {
-      next(ApiError.badRequest(error));
-    }
-  }
+			if (!friend) {
+				next(ApiError.forbidden("Вы не являетесь друзьями"));
+			}
+
+			return res.json(friend);
+		} catch (error) {
+			next(ApiError.badRequest(error));
+		}
+	}
 }
 
 module.exports = new FriendController();

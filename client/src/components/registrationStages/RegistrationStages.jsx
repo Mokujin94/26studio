@@ -10,118 +10,24 @@ function RegistrationStages({
   setStages,
   setErrorMessage,
   setErrorModal,
+	onStage1,
+	onStage2,
+	onStage3,
+	textStage1,
+	textStage2,
+	textStage3
 }) {
   const { user } = useContext(Context);
-  const [errorValidation, setErrorValidation] = useState(false);
-
-  const sendParams = {
-    email_to: user.dataAuth.email,
-    code: user.codeAuth,
-  };
-
-  const isErrorStage1 = async () => {
-    if (stages === 3) {
-    } else {
-      setStages(1);
-    }
-  };
-
-  const isErrorStage2 = async () => {
-    const response = await checkCondidate(
-      user.dataAuth.name,
-      user.dataAuth.email
-    )
-      .then(() => {
-        if (
-          (stages === 1 && !user.dataAuth.name) ||
-          !user.dataAuth.fullName ||
-          !user.dataAuth.email ||
-          !user.dataAuth.password ||
-          !user.dataAuth.passwordConfirm
-        ) {
-          setErrorMessage("Заполните все поля");
-          setErrorModal(true);
-          setErrorValidation(false);
-        } else if (
-          user.errorAuth[0].errors[0] ||
-          user.errorAuth[1].errors[0] ||
-          user.errorAuth[2].errors[0] ||
-          user.errorAuth[3].errors[0] ||
-          user.errorAuth[4].errors[0]
-        ) {
-          setErrorMessage("Заполните все поля верно");
-          setErrorModal(true);
-        } else if (stages === 3) {
-        } else {
-          setErrorMessage("");
-          setErrorModal(false);
-          setErrorValidation(false);
-          setStages(2);
-        }
-      })
-      .catch((err) => {
-        setErrorMessage(err.response.data.message);
-        setErrorModal(true);
-      });
-  };
-
-  const isErrorStage3 = async () => {
-    const response = await checkCondidate(
-      user.dataAuth.name,
-      user.dataAuth.email
-    )
-      .then(() => {
-        if (
-          (stages === 1 && !user.dataAuth.name) ||
-          !user.dataAuth.fullName ||
-          !user.dataAuth.email ||
-          !user.dataAuth.password ||
-          !user.dataAuth.passwordConfirm
-        ) {
-          setErrorMessage("Заполните все поля");
-          setErrorModal(true);
-          setErrorValidation(false);
-        } else if (
-          user.errorAuth[0].errors[0] ||
-          user.errorAuth[1].errors[0] ||
-          user.errorAuth[2].errors[0] ||
-          user.errorAuth[3].errors[0] ||
-          user.errorAuth[4].errors[0]
-        ) {
-          setErrorMessage("Заполните все поля верно");
-          setErrorModal(true);
-        } else if (user.dataAuth.group === "Выберите группу") {
-          setStages(2);
-          setErrorMessage("Выберите группу");
-          setErrorModal(true);
-        } else {
-          emailjs.send(
-            "service_zv37r4m",
-            "template_miaq7kl",
-            sendParams,
-            "hHtBfqHv7BnJpnld_"
-          );
-          setErrorMessage("");
-          setErrorModal(false);
-          setErrorValidation(false);
-          setStages(3);
-        }
-      })
-      .catch((err) => {
-        setErrorMessage(err.response.data.message);
-        setErrorModal(true);
-      });
-  };
 
   return (
     <div className={style.stages}>
-      <div className={style.stages__item} onClick={isErrorStage1}>
+      <div className={style.stages__item} onClick={onStage1}>
         <div
           className={`${style.stages__itemNum} ${style.stages__itemNum_active}`}
         >
           1
         </div>
-        <span className={style.stages__itemText}>Основная информация</span>
+        <span className={style.stages__itemText}>{textStage1}</span>
       </div>
       <span
         className={`${
@@ -130,7 +36,7 @@ function RegistrationStages({
             : style.stages__line
         }`}
       ></span>
-      <div className={style.stages__item} onClick={isErrorStage2}>
+      <div className={style.stages__item} onClick={onStage2}>
         <div
           className={`${
             stages > 1
@@ -141,7 +47,7 @@ function RegistrationStages({
           2
         </div>
         <span className={style.stages__itemText}>
-          Дополнительная информация
+				{textStage2}
         </span>
       </div>
       <span
@@ -151,7 +57,7 @@ function RegistrationStages({
             : style.stages__line
         }`}
       ></span>
-      <div className={style.stages__item} onClick={isErrorStage3}>
+      <div className={style.stages__item} onClick={onStage3}>
         <div
           className={`${
             stages > 2
@@ -161,7 +67,7 @@ function RegistrationStages({
         >
           3
         </div>
-        <span className={style.stages__itemText}>Завершение</span>
+        <span className={style.stages__itemText}>{textStage3}</span>
       </div>
     </div>
   );

@@ -19,13 +19,16 @@ import { Context } from "../..";
 import { useCountFormatter } from "../../hooks/useCountFormatter";
 import { viewProject } from "../../http/viewAPI";
 import { observer } from "mobx-react-lite";
+import { fetchUserById } from "../../http/userAPI";
 
 const Project = observer(() => {
 	const { id } = useParams();
 	const { user, error } = useContext(Context);
 	const location = useLocation();
 	const [dataProject, setDataProject] = useState({});
+	const [dataUser, setDataUser] = useState({});
 	const [description, setDescription] = useState([]);
+	const [descriptionLimit, setDescriptionLimit] = useState([]);
 	const [amountLike, setAmountLike] = useState([]);
 	const [comments, setComments] = useState([]);
 	const [views, setViews] = useState([]);
@@ -36,6 +39,17 @@ const Project = observer(() => {
 		viewProject(id, user.user.id).catch((e) => console.log(e));
 		fetchProjectById(id).then((data) => {
 			setDataProject(data);
+			fetchUserById(data.userId)
+				.then((dataUser) => {
+					setDataUser(dataUser);
+				})
+				.catch((e) => console.log(e))
+			console.log(data);
+			if(data.description.length > 300) {
+				const descrLimit = data.description.slice(0, 200)
+				const lines = descrLimit.split('\r\n');
+				setDescriptionLimit(lines);
+			}
 			const lines = data.description.split('\r\n');
 			setDescription(lines);
 			setAmountLike(data.likes.length);
@@ -48,14 +62,13 @@ const Project = observer(() => {
 		});
 		getAllCommentsProject(id).then((data) => {
 			setComments(data[0].comments)
-			console.log(data);
+			console.log(data)
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
 		const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
 		socket.on("sendViewsToClients", (updatedViews) => {
-			console.log("Получены новые просмотры:", updatedViews);
 			if (updatedViews) {
 				updatedViews.filter((item) => {
 					if (item.id == id) {
@@ -109,22 +122,26 @@ const Project = observer(() => {
 	return (
 		<div className="container">
 			<div className="project">
-				<div className="project__header">
-					<ProjectHeader
-						title={dataProject.name}
-						onClick={setLike}
-						likes={amountLike}
-						isLike={isLike}
-						views={views}
-						likeLoading={likeLoading}
-					/>
-				</div>
 				<div className="project__content">
 					<ProjectContent
 						pathFromProject={dataProject.path_from_project}
 						baseURL={dataProject.baseURL}
 					/>
-					<Description title="Описание" descr={description} />
+					{/* <Description title="Описание" descr={description} /> */}
+				</div>
+				<div className="project__header">
+					<ProjectHeader
+						dataUser={dataUser}
+						title={dataProject.name}
+						descr={description}
+						descrLimit={descriptionLimit}
+						onClick={setLike}
+						likes={amountLike}
+						isLike={isLike}
+						views={views}
+						likeLoading={likeLoading}
+						date={dataProject.start_date}
+					/>
 				</div>
 				<div className="project__info">
 					<Comments

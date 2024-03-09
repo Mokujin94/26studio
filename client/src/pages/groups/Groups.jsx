@@ -12,6 +12,7 @@ const Groups = observer(() => {
 	useEffect(() => {
 		document.title = "Группы";
 		fetchGroups().then((data) => {
+			console.log(data);
 			groups.setGroups(data.rows.sort((a, b) => a.id > b.id ? 1 : -1));
 		});
 	}, []);

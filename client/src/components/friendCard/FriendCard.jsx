@@ -25,11 +25,8 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 		fetchOneUser(userId)
 			.then((data) => {
 				setUser(data);
-				console.log('data: ', data)
-				// console.log(data.lastOnline.getTime)
 				const lastOnline = new Date(data.lastOnline).getTime() / 1000;
 				const nowTime = new Date().getTime() / 1000;
-				console.log(nowTime - lastOnline)
 				if ((nowTime - lastOnline) <= 300) {
 					setIsOnline(true)
 				} else {
@@ -68,7 +65,12 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 								<>
 									<div
 										className={style.friendCard__buttons__item}
-										onClick={onClickTwo}
+										onClick={(e) => {
+											e.stopPropagation();
+											e.preventDefault();
+											onClickTwo();
+
+										}}
 									>
 										<svg
 											className={style.friendCard__buttons__item__icon}
@@ -91,7 +93,12 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 									<>
 										<div
 											className={style.friendCard__buttons__item}
-											onClick={onClickTwo}
+											onClick={(e) => {
+												e.stopPropagation();
+												e.preventDefault();
+												onClickTwo();
+
+											}}
 										>
 											<svg
 												className={style.friendCard__buttons__item__icon}
@@ -110,7 +117,12 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 										</div>
 										<div
 											className={style.friendCard__buttons__item}
-											onClick={onClickOne}
+											onClick={(e) => {
+												e.stopPropagation();
+												e.preventDefault();
+												onClickOne();
+
+											}}
 										>
 											<svg
 												className={style.friendCard__buttons__item__icon}

@@ -31,7 +31,7 @@ function Header() {
 	const [searchOpen, setSearchOpen] = useState(false);
 
 	const [searchData, setSearchData] = useState({});
-	
+
 	const [isFocusSearch, setIsFocusSearch] = useState(false);
 
 	const useDebounced = useDebounce(search, 200);
@@ -103,7 +103,7 @@ function Header() {
 							}}
 						/>
 						<div className={style.header__search__icon}>
-							<Player direction={1} colorize={isFocusSearch ? "#97bce6" : "#596470"} size={24} ref={searchIconRef} icon={searchIcon}/>
+							<Player direction={1} colorize={isFocusSearch ? "#97bce6" : "#596470"} size={24} ref={searchIconRef} icon={searchIcon} />
 						</div>
 						{/* <img
 							src={searchIcon}
@@ -119,17 +119,23 @@ function Header() {
 						)}
 					</div>
 					<div className={style.header__createButtonPopUp}>
-						<Notification
-							notificationsRef={notificationsRef}
-							setActiveNotifications={setActiveNotifications}
-							activeNotifications={activeNotifications}
-						/>
-						<CreateButtonPopUp
-							createPopupRef={createPopupRef}
-							setActiveCreatePopup={setActiveCreatePopup}
-							activeCreatePopup={activeCreatePopup}
-						/>
-						{/* <ThemeChangeButton /> */}
+						{
+							user.isAuth
+							&&
+							<>
+								<Notification
+									notificationsRef={notificationsRef}
+									setActiveNotifications={setActiveNotifications}
+									activeNotifications={activeNotifications}
+								/>
+								<CreateButtonPopUp
+									createPopupRef={createPopupRef}
+									setActiveCreatePopup={setActiveCreatePopup}
+									activeCreatePopup={activeCreatePopup}
+								/>
+								{/* <ThemeChangeButton /> */}
+							</>
+						}
 					</div>
 				</div>
 			</div>

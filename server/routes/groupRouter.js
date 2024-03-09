@@ -7,7 +7,7 @@ const checkRoleMiddleware = require("../middleware/checkRoleMiddleware");
 router.post("/",  GroupController.create);
 router.get("/", GroupController.getAll);
 router.get("/:id", GroupController.getOne);
-router.patch("/:id/add", checkRoleMiddleware(2), GroupController.addMember);
+router.patch("/add", checkRoleMiddleware(2), GroupController.addMember);
 router.patch(
   "/:id/delete",
   checkRoleMiddleware(2),

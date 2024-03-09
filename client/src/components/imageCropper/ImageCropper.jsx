@@ -64,9 +64,6 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
         imgRef.current.heigth
       )
     );
-    console.log("2");
-
-    console.log(previewCanvasRef.current.width);
   };
 
   const onCompletedCrop = (c) => {
@@ -80,8 +77,6 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
 
   const onButtonProfileMiniature = async () => {
     setIsLoading(true)
-    console.log(crop);
-    console.log(completedCrop);
     // setCanvasPreview(
     //   imgRef.current,
     //   previewCanvasRef.current,
@@ -89,8 +84,6 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
     // );
     const image = imgRef.current;
     const previewCanvas = previewCanvasRef.current;
-    console.log(previewCanvas);
-
     if (!image || !previewCanvas || !completedCrop) {
       throw new Error("Crop canvas does not exist");
     }
@@ -132,8 +125,6 @@ const ImageCropper = observer(({ imageSrc, setImageSrc, setAvatarFile }) => {
     }
     blobUrlRef.current = URL.createObjectURL(blob);
     const file = await blobToFile(blob, "avatarFile.jpg");
-    console.log(file);
-    console.log(blobUrlRef.current);
     const formData = new FormData();
     formData.append("id", user.user.id);
     formData.append("avatar", file);

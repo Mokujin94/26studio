@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const ApiError = require("../error/ApiError");
 const {
 	Comments,
@@ -21,8 +22,11 @@ class CommentController {
 						include: [User, {
 							model: Comments,
 							as: 'replyes',
-							include: User
-						}],
+							include: [User, {
+								model: User,
+								as: "userReply"
+							}, Likes]
+						}, Likes],
 					},
 				],
 				where: {
@@ -46,9 +50,12 @@ class CommentController {
 						model: Comments,
 						include: [User, {
 							model: Comments,
-							as: 'parent',
-							include: User
-						}],
+							as: 'replyes',
+							include: [User, {
+								model: User,
+								as: "userReply"
+							}, Likes]
+						}, Likes],
 					},
 				],
 				where: {
@@ -83,9 +90,18 @@ class CommentController {
 				include: [
 					User,
 					{
+						model: Comments,
+						as: 'replyes',
+						include: [User, {
+							model: User,
+							as: "userReply"
+						}, Likes]
+					},
+					{
 						model: Project,
 						include: [User],
 					},
+					Likes
 				],
 			});
 
@@ -101,6 +117,10 @@ class CommentController {
 					{
 						model: Comments,
 						as: "comment",
+					},
+					{
+						model: Comments,
+						as: "replyComment",
 					},
 					{
 						model: Likes,
@@ -128,6 +148,11 @@ class CommentController {
 	async createCommentNews(req, res, next) {
 		try {
 			const { message, newsId, resendId, userId } = req.body;
+			const io = getIo();
+
+			if (!userId) {
+				return next(ApiError.internal("Вы не авторизованы"));
+			}
 
 			const comment = await Comments.create({
 				message,
@@ -139,23 +164,65 @@ class CommentController {
 			const savedComment = await Comments.findOne({
 				where: { id: comment.id },
 				include: [
+					User,
 					{
-						model: User,
-						attributes: ["id", "name", "avatar"],
+						model: Comments,
+						as: 'replyes',
+						include: [User, {
+							model: User,
+							as: "userReply"
+						}, Likes]
 					},
+					{
+						model: News,
+						include: [User],
+					},
+					Likes
 				],
 			});
 
-			const io = getIo();
+			const notification = await Notifications.create({
+				commentId: comment.id,
+				senderId: userId,
+				recipientId: savedComment.news.user.id,
+			});
+
+			const sendNotification = await Notifications.findOne({
+				where: { id: notification.id },
+				include: [
+					{
+						model: Comments,
+						as: "comment",
+					},
+					{
+						model: Comments,
+						as: "replyComment",
+					},
+					{
+						model: Likes,
+						as: "like",
+					},
+					{
+						model: User,
+						as: "sender",
+					},
+					{
+						model: User,
+						as: "recipient",
+					},
+				],
+			});
+			io.emit("notification", sendNotification);
+
 			io.emit("sendCommentsNewsToClients", savedComment);
-			return res.json(comment);
+			return res.json(savedComment);
 		} catch (error) {
 			next(ApiError.badRequest(error.message));
 		}
 	}
 
 	async createChildComment(req, res, next) {
-		const { message, userId, parentId } = req.body;
+		const { message, userId, parentId, replyUser, projectId } = req.body;
 		const io = getIo();
 
 		if (!userId) {
@@ -166,52 +233,119 @@ class CommentController {
 			const comment = await Comments.create({
 				message,
 				userId,
-				parentId
+				parentId,
+				replyUserId: replyUser,
+				projectId
 			});
 
-			// const notification = await Notifications.create({
-			//   commentId: comment.id,
-			//   senderId: userId,
-			//   recipientId: savedComment.project.user.id,
-			// });
+			const notification = await Notifications.create({
+				replyCommentId: comment.id,
+				senderId: userId,
+				recipientId: comment.replyUserId,
+			});
 
-			// const sendNotification = await Notifications.findOne({
-			//   where: { id: notification.id },
-			//   include: [
-			//     {
-			//       model: Comments,
-			//       as: "comment",
-			//     },
-			//     {
-			//       model: Likes,
-			//       as: "like",
-			//     },
-			//     {
-			//       model: User,
-			//       as: "sender",
-			//     },
-			//     {
-			//       model: User,
-			//       as: "recipient",
-			//     },
-			//   ],
-			// });
-			// io.emit("notification", sendNotification);
+			const sendNotification = await Notifications.findOne({
+				where: { id: notification.id },
+				include: [
+					{
+						model: Comments,
+						as: "comment",
+					},
+					{
+						model: Comments,
+						as: "replyComment",
+					},
+					{
+						model: Likes,
+						as: "like",
+					},
+					{
+						model: User,
+						as: "sender",
+					},
+					{
+						model: User,
+						as: "recipient",
+					},
+				],
+			});
+			io.emit("notification", sendNotification);
 			const savedComment = await Comments.findOne({
 				where: { id: comment.id },
-				include: {
+				include: [{
 					model: User,
 					attributes: ["id", "name", "avatar"],
-				}
+				}, {
+					model: User,
+					as: "userReply"
+				}, Likes],
+
 			});
 
-			const io = getIo();
 			io.emit("replyComment", savedComment);
 			return res.json(comment);
 		} catch (error) {
 			next(ApiError.badRequest(error.message))
 		}
 
+	}
+
+	async createLike(req, res, next) {
+		const { commentId, userId } = req.body;
+
+		let likeData;
+
+		try {
+
+			if (!userId) {
+				return next(ApiError.internal("Вы не авторизованы"));
+			}
+
+			likeData = await Likes.findOne({
+				where: { commentId, userId }
+			})
+
+			if (likeData) {
+				if (likeData.status) {
+					return next(ApiError.badRequest("Лайк уже стоит"))
+				}
+				await likeData.update({ status: true })
+			} else {
+				likeData = await Likes.create({ commentId, userId })
+			}
+
+
+			return await res.json(likeData);
+		} catch (error) {
+			next(ApiError.badRequest(error.message))
+		}
+	}
+
+	async deleteLike(req, res, next) {
+		const { commentId, userId } = req.body;
+
+		let likeData;
+
+		try {
+
+			if (!userId) {
+				return next(ApiError.internal("Вы не авторизованы"));
+			}
+
+			likeData = await Likes.findOne({
+				where: { commentId, userId }
+			})
+
+			if (!likeData.status) {
+				return next(ApiError.badRequest("Нельзя поставить дизлайк"))
+			}
+
+			await likeData.update({ status: false });
+
+			return await res.json(likeData);
+		} catch (error) {
+			next(ApiError.badRequest(error.message))
+		}
 	}
 }
 

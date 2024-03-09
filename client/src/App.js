@@ -19,7 +19,7 @@ import { AuthProvider } from "./store/AuthStore";
 import { check } from "./http/userAPI";
 import { fetchGroups } from "./http/groupsAPI";
 import AddProjectModal from "./components/addProjectModal/AddProjectModal";
-import { LOGIN_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
+import { LOGIN_ROUTE, PASSWORDRECOVERY_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
 import { CSSTransition } from "react-transition-group";
 import ModalError from "./components/modalError/ModalError";
 import NotAuthPopup from "./components/notAuthPopup/NotAuthPopup";
@@ -34,7 +34,6 @@ const App = observer(() => {
 
 	useEffect(() => {
 		check().then((data) => {
-			console.log(data)
 			user.setUser(data);
 			user.setAuth(true);
 		});
@@ -53,9 +52,6 @@ const App = observer(() => {
 				updateNotification.recipientId === user.user.id
 			) {
 				user.setNotifications([...user.notifications, updateNotification]);
-				console.log(updateNotification);
-				// console.log("Получены новые уведомления:", updateNotification);
-				console.log("почему 2");
 				new Audio(notificationAudio).play();
 			}
 		});
@@ -143,18 +139,18 @@ const App = observer(() => {
 					</CSSTransition>
 
 					{user.path === REGISTRATION_ROUTE ||
-						user.path === LOGIN_ROUTE ? null : (
+						user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null : (
 						<BurgerMenu />
 					)}
 					{user.path === REGISTRATION_ROUTE ||
-						user.path === LOGIN_ROUTE ? null : (
+						user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null : (
 						<Header />
 					)}
 					<div className="App__inner">
 						<AppRouter />
 					</div>
 					{user.path === REGISTRATION_ROUTE ||
-						user.path === LOGIN_ROUTE ? null : (
+						user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null : (
 						<Footer />
 					)}
 				</AuthProvider>

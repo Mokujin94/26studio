@@ -1,11 +1,12 @@
 @import "../../resource/styles/variables";
 
 .block {
+	margin-top: 15px;
   display: flex;
   flex-direction: column;
   color: $studio-white-text;
   width: 100%;
-	padding: 15px 15px 15px 65px;
+	padding: 0px 15px 0px 65px;
   position: relative;
 	background-color: $studio-darker-element;
 	border-radius: 10px;
@@ -19,7 +20,7 @@
     overflow: hidden;
     position: absolute;
     left: 0px;
-    top: 15px;
+    top: 0px;
     &Img {
       position: absolute;
       width: 120%;
@@ -41,6 +42,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+		margin-bottom: 10px;
     &Name {
       display: inline-block;
       font-size: 14px;
@@ -51,6 +53,16 @@
     &Comment {
       font-size: 14px;
       font-weight: 400;
+			a {
+				padding: 2px 5px;
+				background: $studio-grey-element;
+				border-radius: 5px;
+				color: $studio-primary-text;
+				font-weight: 600;
+				&:hover {
+					color: $studio-primary-text-hover;
+				}
+			}
     }
     &Bottom {
       display: flex;
@@ -61,17 +73,29 @@
         gap: 20px;
         align-items: center;
         &Item {
+					z-index: 1;
           font-size: 14px;
           font-weight: 100;
-          cursor: pointer;
           display: flex;
           gap: 10px;
           align-items: center;
+					padding: 5px 10px;
+					background: #27323e;
+					border: 1px solid $studio-grey-border;
+					border-radius: 5px;
+					user-select: none;
+          cursor: pointer;
           &Image {
             width: 16px;
-            svg {
-              width: 100%;
+            &Icon {
+              width: auto;
+							height: 15px;
               display: block;
+							&_active {
+								path {
+									fill: $studio-red-element;
+								}
+							}
             }
           }
           &:last-child {
@@ -90,7 +114,9 @@
           align-items: center;
           padding: 5px 10px;
           background: $studio-dark-element;
+					border: 1px solid $studio-grey-border;
           border-radius: 5px;
+					user-select: none;
         }
       }
       &Date {

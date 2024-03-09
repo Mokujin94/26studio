@@ -19,6 +19,7 @@ import { Context } from "../..";
 import { useDebounce } from "../../hooks/useDebounce";
 import Spinner from "../../components/spinner/Spinner";
 import { CSSTransition } from "react-transition-group";
+import NewProjectCard from "../../components/newProjectCard/NewProjectCard";
 
 const Projects = observer(() => {
 	const { project } = useContext(Context);
@@ -47,10 +48,9 @@ const Projects = observer(() => {
 		});
 
 		searchProject(useDebounced, selectedItem, currentPage).then((data) => {
-			console.log(data);
-			console.log(data);
 			setProjectsData(data.rows);
 			setIsLoaded(false);
+			console.log(data)
 		});
 	}, []);
 
@@ -62,7 +62,6 @@ const Projects = observer(() => {
 					setProjectsData([...projectsData, ...data.rows]);
 					setCurrentPage((page) => page + 1);
 					setTotalCountSearch(data.countSearch);
-					console.log(data);
 					setIsLoadedSpinner(false);
 					setIsLoaded(false);
 				})
@@ -75,7 +74,6 @@ const Projects = observer(() => {
 		searchProject(useDebounced, selectedItem, 1)
 			.then((data) => {
 				setProjectsData(data.rows);
-				console.log(data);
 				setTotalCountSearch(data.countSearch);
 				setCurrentPage(2);
 				setIsLoaded(false);
@@ -140,11 +138,11 @@ const Projects = observer(() => {
 
 	const sliderRenderer = isLoadingSlider
 		? newLastAddedSkeletonList
-		: sliderData.map((item) => {
+		: sliderData.map((item, i) => {
 			return (
-				<SplideSlide key={item.id}>
+				<SplideSlide key={item.id} tabIndex={i}>
 					<Link to={PROJECTS_ROUTE + "/" + item.id}>
-						<ProjectCard
+						{/* <ProjectCard
 							img={item.preview}
 							title={item.name}
 							name={item.user.name}
@@ -152,6 +150,18 @@ const Projects = observer(() => {
 							like={item.likes.length}
 							view={item.views.length}
 							comment={item.comments.length}
+						/> */}
+						<NewProjectCard
+							img={item.preview}
+							title={item.name}
+							name={item.user.name}
+							date={item.start_date}
+							like={item.likes.length}
+							view={item.views.length}
+							comment={item.comments.length}
+							user={item.user}
+							baseURL={item.baseURL}
+							pathFromProject={item.path_from_project}
 						/>
 					</Link>
 				</SplideSlide>
@@ -161,14 +171,15 @@ const Projects = observer(() => {
 	const projectLoading = isLoaded && newSkeletonList;
 	const projectLoaded =
 		!isLoaded &&
-		projectsData.map((item) => {
+		projectsData.map((item, i) => {
 			return (
 				<Link
 					className="projects__link"
 					to={PROJECTS_ROUTE + "/" + item.id}
 					key={item.id}
+					tabIndex={i}
 				>
-					<ProjectCard
+					{/* <ProjectCard
 						img={item.preview}
 						title={item.name}
 						name={item.user.name}
@@ -176,6 +187,18 @@ const Projects = observer(() => {
 						like={item.likes.length}
 						view={item.views.length}
 						comment={item.comments.length}
+					/> */}
+					<NewProjectCard
+						img={item.preview}
+						title={item.name}
+						name={item.user.name}
+						date={item.start_date}
+						like={item.likes.length}
+						view={item.views.length}
+						comment={item.comments.length}
+						user={item.user}
+						baseURL={item.baseURL}
+						pathFromProject={item.path_from_project}
 					/>
 				</Link>
 			);
@@ -188,53 +211,110 @@ const Projects = observer(() => {
 	return (
 		<div className="container">
 			<div className="projects">
-				<h1 className="projects__title">Новые проекты</h1>
-				<div
-					className="projects__wrapper"
-					style={{ position: "relative", display: "block" }}
-					id="autoplay-example-heading"
-				>
-					<Splide
-						hasTrack={false}
-						options={{
-							type: "loop",
-							isNavigation: true,
-							perPage: 4,
-							cloneStatus: true,
-							gap: 20,
-							autoplay: true,
-							resetProgress: false,
-							pauseOnHover: true,
-							interval: 3000,
-							pagination: false,
-							speed: 800,
-							breakpoints: {
-								1200: {
-									perPage: 3,
-								},
-								1024: {
-									perPage: 2,
-								},
-								768: {
-									arrows: false,
-								},
-								576: {
-									perPage: 1,
-								},
-							},
-						}}
-						aria-labelledby="autoplay-example-heading"
-					>
-						<SplideTrack>{sliderRenderer}</SplideTrack>
-						<div className="splide__arrows">
-							<SliderButton
-								className="splide__arrow splide__arrow--prev"
-								styling={stylePrevArrow}
-							/>
-							<SliderButton className="splide__arrow splide__arrow--next" />
-						</div>
-					</Splide>
-				</div>
+				<h1 className="projects__title">{!isLoadingSlider ? sliderData.length > 4 ? "Новые проекты" : "Проекты" : "Новые проекты"}</h1>
+				{
+					!isLoadingSlider ? sliderData.length > 4 &&
+						<>
+							<div
+								className="projects__wrapper"
+								style={{ position: "relative", display: "block" }}
+								id="autoplay-example-heading"
+							>
+								<Splide
+									hasTrack={false}
+									options={{
+										type: "loop",
+										isNavigation: true,
+										perPage: 5,
+										cloneStatus: true,
+										gap: 20,
+										autoplay: true,
+										resetProgress: false,
+										pauseOnHover: true,
+										interval: 3000,
+										pagination: false,
+										speed: 800,
+										breakpoints: {
+											1200: {
+												perPage: 3,
+											},
+											1024: {
+												perPage: 2,
+											},
+											768: {
+												arrows: false,
+											},
+											576: {
+												perPage: 1,
+											},
+										},
+									}}
+									aria-labelledby="autoplay-example-heading"
+								>
+									<SplideTrack>{sliderRenderer}</SplideTrack>
+									<div className="splide__arrows">
+										<SliderButton
+											className="splide__arrow splide__arrow--prev"
+											styling={stylePrevArrow}
+										/>
+										<SliderButton className="splide__arrow splide__arrow--next" />
+									</div>
+								</Splide>
+							</div>
+
+						</>
+						:
+						<>
+							<div
+								className="projects__wrapper"
+								style={{ position: "relative", display: "block" }}
+								id="autoplay-example-heading"
+							>
+								<Splide
+									hasTrack={false}
+									options={{
+										type: "loop",
+										isNavigation: true,
+										perPage: 5,
+										cloneStatus: true,
+										gap: 20,
+										autoplay: true,
+										resetProgress: false,
+										pauseOnHover: true,
+										interval: 3000,
+										pagination: false,
+										speed: 800,
+										breakpoints: {
+											1200: {
+												perPage: 3,
+											},
+											1024: {
+												perPage: 2,
+											},
+											768: {
+												arrows: false,
+											},
+											576: {
+												perPage: 1,
+											},
+										},
+									}}
+									aria-labelledby="autoplay-example-heading"
+								>
+									<SplideTrack>{sliderRenderer}</SplideTrack>
+									<div className="splide__arrows">
+										<SliderButton
+											className="splide__arrow splide__arrow--prev"
+											styling={stylePrevArrow}
+										/>
+										<SliderButton className="splide__arrow splide__arrow--next" />
+									</div>
+								</Splide>
+							</div>
+
+						</>
+
+				}
 				<div className="projects__searchSettings">
 					<div className="projects__searchSettings-search">
 						<ProjectsSearch
@@ -261,7 +341,7 @@ const Projects = observer(() => {
 					)}
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 });
 

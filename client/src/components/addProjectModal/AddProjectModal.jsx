@@ -31,6 +31,7 @@ const AddProjectModal = observer(() => {
 					setUniqueFolder(data.normalPath);
 					setBaseURL(data.baseUrl);
 					project.setBaseURL(data.baseUrl);
+					setStages(2);
 				})
 				.catch((err) => console.log(err));
 		}
@@ -84,7 +85,7 @@ const AddProjectModal = observer(() => {
 			<SwitchTransition mode="out-in">
 				<CSSTransition key={stages} timeout={300} classNames="node">
 					<div className={style.block__content}>
-						{file ? (
+						{
 							stages === 2 ? (
 								<AddProjectModalSecond
 									projectPathes={projectPathes}
@@ -96,10 +97,7 @@ const AddProjectModal = observer(() => {
 								<AddProjectModalThird baseURL={baseURL} />
 							) : (
 								<AddProjectModalFirst setFile={setFile} file={file} setStages={setStages} />
-							)
-						) : (
-							<AddProjectModalFirst setFile={setFile} setStages={setStages} />
-						)}
+							)}
 					</div>
 				</CSSTransition>
 			</SwitchTransition>
