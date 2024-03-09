@@ -158,6 +158,7 @@ const NewsComment = observer((props) => {
 								date={useDateFormatter(item.createdAt)}
 								key={item.id}
 								likes={item.likes}
+								projectId={props.projectId}
 							/>
 						)
 					})}
