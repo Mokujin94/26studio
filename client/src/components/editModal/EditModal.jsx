@@ -74,7 +74,7 @@ const EditModal = observer(() => {
 					<p className={style.editModal__input__title}>Группа</p>
 					<select onChange={(e) => setUserGroupId(e.target.value)} className={style.editModal__input__item}>
 						{groups.map(item => {
-							if (item.id === user.user.groupId) {
+							if (item.id === user.user.group.id) {
 								return (
 									<option key={item.id} value={item.id} selected>{item.name}</option>
 								)
