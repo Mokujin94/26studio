@@ -95,7 +95,7 @@ const ReplyComment = observer((props) => {
 
 				</div>
 
-				<h2 className={style.block__textComment}> {props.userReply && <Link to={PROFILE_ROUTE + '/' + props.id}>@{props.userReply.name}</Link>} {props.comment}</h2>
+				<h2 className={style.block__textComment}> {props.userReply && <Link to={PROFILE_ROUTE + '/' + props.userReply.id}>@{props.userReply.name}</Link>} {props.comment}</h2>
 			</div>
 			<div className={style.block__textBottom}>
 				<div className={style.block__textBottomFeedback}>
