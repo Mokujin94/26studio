@@ -140,7 +140,7 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
 											</div>
 											<div className={style.search__content__list__item__info}>
 												<h2 className={style.search__user__group}>
-													{item.group.name}
+													{item.groups[0].name}
 												</h2>
 											</div>
 										</Link>
