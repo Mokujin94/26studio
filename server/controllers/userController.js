@@ -18,6 +18,7 @@ const {
 	Project,
 	Group,
 	UserFriend,
+	UserGroup,
 } = require("../models/models");
 const { Op, where } = require("sequelize");
 
@@ -29,12 +30,11 @@ const generateJwt = (
 	description,
 	avatar,
 	group,
-	groupId,
 	roleId,
 	lastOnline
 ) => {
 	return jwt.sign(
-		{ id, name, full_name, email, description, avatar, group, groupId, roleId, lastOnline },
+		{ id, name, full_name, email, description, avatar, group, roleId, lastOnline },
 		process.env.SECRET_KEY,
 		{
 			expiresIn: "24h",
@@ -132,12 +132,19 @@ class UserController {
 				password: hashPassword,
 				description,
 				avatar: fileName,
-				groupId,
 				roleId,
 			});
 
+			const userGroup = await UserGroup.create({
+				userId: user.id,
+				groupId: groupId
+			})
+
 			const findUser = await User.findOne({
-				include: [Group],
+				include: {
+					model: Group,
+					through: UserGroup
+				},
 				where: { id: user.id }
 			})
 			const achivment = await UserAchivment.create({ userId: user.id });
@@ -151,8 +158,7 @@ class UserController {
 				findUser.email,
 				findUser.description,
 				findUser.avatar,
-				findUser.group,
-				findUser.groupId,
+				findUser.groups[0],
 				findUser.roleId,
 				findUser.lastOnline
 			);
@@ -166,7 +172,10 @@ class UserController {
 		try {
 			const { email, password } = req.body;
 			const user = await User.findOne({
-				include: [Group],
+				include: {
+					model: Group,
+					through: UserGroup
+				},
 				where: { email }
 			});
 			if (!user) {
@@ -183,8 +192,7 @@ class UserController {
 				user.email,
 				user.description,
 				user.avatar,
-				user.group,
-				user.groupId,
+				user.groups[0],
 				user.roleId,
 				user.lastOnline
 			);
@@ -204,7 +212,6 @@ class UserController {
 				req.user.description,
 				req.user.avatar,
 				req.user.group,
-				req.user.groupId,
 				req.user.roleId,
 				req.user.lastOnline,
 			);
@@ -219,7 +226,10 @@ class UserController {
 			const { id } = req.params;
 			const user = await User.findOne({
 				include: [
-					Group,
+					{
+						model: Group,
+						through: UserGroup
+					},
 					{
 						model: Friend,
 						through: UserFriend,
@@ -241,20 +251,11 @@ class UserController {
 		try {
 			const { id } = req.params;
 			const user = await User.findOne({
-				include: [Group, Friend],
+				include: [{
+					model: Group,
+					through: UserGroup
+				}, Friend],
 				where: { id },
-			});
-			return res.json(user);
-		} catch (error) {
-			next(ApiError.badRequest(error.message));
-		}
-	}
-
-	async getAll(req, res, next) {
-		try {
-			const { groupId } = req.query;
-			const user = await User.findAll({
-				where: { group_status: false, groupId },
 			});
 			return res.json(user);
 		} catch (error) {
@@ -277,8 +278,12 @@ class UserController {
 						},
 					},
 					group_status,
-					groupId,
 				},
+				include: {
+					model: Group,
+					through: UserGroup,
+					where: { id: groupId }
+				}
 			});
 			return res.json(user);
 		} catch (error) {
@@ -292,9 +297,13 @@ class UserController {
 
 			const user = await User.findAll({
 				where: {
-					groupId,
 					group_status,
 				},
+				include: {
+					model: Group,
+					through: UserGroup,
+					where: { id: groupId }
+				}
 			});
 			return res.json(user);
 		} catch (error) {
@@ -471,7 +480,7 @@ class UserController {
 		try {
 			const { id } = req.body;
 			let fileName;
-			const user = await User.findOne({ where: { id } });
+			const user = await User.findOne({ where: { id }, include: { model: Group, through: UserGroup } });
 			if (req.files) {
 				fileName = uuid.v4() + ".jpg";
 				const { avatar } = req.files;
@@ -487,8 +496,7 @@ class UserController {
 				user.email,
 				user.description,
 				user.avatar,
-				user.group,
-				user.groupId,
+				user.groups[0],
 				user.roleId,
 				user.lastOnline
 			);
@@ -511,11 +519,19 @@ class UserController {
 
 		try {
 			user = await User.findOne({
-				include: [Group],
+				include: [{
+					model: Group,
+					through: UserGroup
+				}],
 				where: { id }
 			})
 
+			const groupUser = await UserGroup.findOne({
+				where: { userId: id, groupId: user.groups[0].id }
+			})
+
 			let updateFields = {}; // Объект для хранения обновляемых полей
+			let updateGroupUser = {}; // Объект для хранения обновляемых полей
 
 			// Проверяем, передано ли поле в req.body, и если да, добавляем его в объект обновления
 			if (name) updateFields.name = name;
@@ -534,13 +550,14 @@ class UserController {
 				updateFields.password = hashPassword;
 			}
 			if (groupId) {
-				if (groupId !== user.groupId) {
+				if (groupId !== user.groups[0].id) {
 					updateFields.group_status = false;
-					updateFields.groupId = groupId;
+					updateGroupUser.groupId = groupId;
 				}
 			}
 
 			await user.update(updateFields);
+			await groupUser.update(updateGroupUser);
 			const token = generateJwt(
 				user.id,
 				user.name,
@@ -548,8 +565,7 @@ class UserController {
 				user.email,
 				user.description,
 				user.avatar,
-				user.group,
-				user.groupId,
+				user.groups[0],
 				user.roleId,
 				user.lastOnline
 			);
@@ -562,7 +578,7 @@ class UserController {
 	async recoveryPassword(req, res, next) {
 		try {
 			const { email, new_password } = req.body;
-			const user = await User.findOne({ where: { email } })
+			const user = await User.findOne({ where: { email }, include: { model: Group, through: UserGroup } })
 			if (!user) {
 				return next(
 					ApiError.badRequest("Пользовательно с такой почтой не существует")
@@ -577,8 +593,7 @@ class UserController {
 				user.email,
 				user.description,
 				user.avatar,
-				user.group,
-				user.groupId,
+				user.groups[0],
 				user.roleId,
 				user.lastOnline
 			);
@@ -591,29 +606,33 @@ class UserController {
 	async checkOnline(req, res, next) {
 		const { id } = req.params;
 		if (!id) return next(ApiError.internal({ error: 'Internal server error' }))
-		try {
-			// const users = User.findOne({ where: { id } })
-			// if (users && id) {
-			// user.lastOnline = new Date(); // изменяем значение поля lastOnline
-			const user = await User.update({ lastOnline: new Date() }, { where: { id }, include: [Group] }); // сохраняем изменения в базе данных
-			// }
-
-			const token = generateJwt(
-				user.id,
-				user.name,
-				user.full_name,
-				user.email,
-				user.description,
-				user.avatar,
-				user.group,
-				user.groupId,
-				user.roleId,
-				user.lastOnline
-			);
-			return res.json({ token });
-		} catch (error) {
-			next(ApiError.badRequest(error.message));
-		}
+		// try {
+		// const users = User.findOne({ where: { id } })
+		// if (users && id) {
+		// user.lastOnline = new Date(); // изменяем значение поля lastOnline
+		const findUser = await User.findOne({
+			where: {
+				id
+			},
+			include: { model: Group, through: UserGroup }
+		})
+		const user = await findUser.update({ lastOnline: new Date() }); // сохраняем изменения в базе данных
+		// }
+		const token = generateJwt(
+			user.id,
+			user.name,
+			user.full_name,
+			user.email,
+			user.description,
+			user.avatar,
+			user.groups[0],
+			user.roleId,
+			user.lastOnline
+		);
+		return res.json({ token });
+		// } catch (error) {
+		// 	next(ApiError.badRequest(error.message));
+		// }
 	}
 }
 module.exports = new UserController();

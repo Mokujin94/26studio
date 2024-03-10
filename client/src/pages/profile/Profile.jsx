@@ -87,6 +87,7 @@ const Profile = observer(() => {
 		setStatusFriend(true);
 		fetchUserById(Number(id))
 			.then((dataUser) => {
+				console.log(dataUser)
 				const lastOnline = new Date(dataUser.lastOnline).getTime() / 1000;
 				const nowTime = new Date().getTime() / 1000;
 				if ((nowTime - lastOnline) <= 300) {
@@ -99,9 +100,9 @@ const Profile = observer(() => {
 				document.title = `${dataUser.name}`
 				setUserId(dataUser);
 				if (dataUser.group_status) {
-					setGroup(dataUser.group.name);
+					setGroup(dataUser.groups[0].name);
 				} else {
-					setGroup(`${dataUser.group.name} (Группа не подтверджена)`);
+					setGroup(`${dataUser.groups[0].name} (Группа не подтверджена)`);
 				}
 
 
