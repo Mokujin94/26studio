@@ -29,6 +29,7 @@ export const createReply = async (message, userId, parentId, parentUserId, reply
 		message,
 		userId,
 		parentId,
+		parentUserId,
 		replyUser,
 		projectId
 	});

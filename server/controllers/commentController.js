@@ -247,11 +247,7 @@ class CommentController {
 					model: User,
 					as: "userReply"
 				},
-					Likes,
-				{
-					model: Comments,
-					as: "replyes",
-				}
+					Likes
 				],
 
 			});
@@ -289,6 +285,7 @@ class CommentController {
 			});
 			io.emit("notification", sendNotification);
 			io.emit("replyComment", savedComment);
+			console.log(notification);
 			return res.json(comment);
 		} catch (error) {
 			next(ApiError.badRequest(error.message))
