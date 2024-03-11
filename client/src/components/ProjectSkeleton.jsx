@@ -3,12 +3,13 @@ import ContentLoader from "react-content-loader"
 
 const ProjectSkeleton = (props) => (
 	<ContentLoader
+		className="project-skeleton"
 		speed={1}
 		width={308}
 		height={257}
 		viewBox="0 0 308 257"
-		backgroundColor="#27323e"
-		foregroundColor="#384756"
+		backgroundColor={props.color || "#27323e"}
+		foregroundColor={props.foreignColor || "#384756"}
 		{...props}
 	>
 		<rect x="0" y="462" rx="0" ry="0" width="452" height="100" />

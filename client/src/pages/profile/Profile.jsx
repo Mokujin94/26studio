@@ -65,8 +65,6 @@ const Profile = observer(() => {
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
 
-	const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-
 	const miniatureRef = useRef(null);
 
 	useClickOutside(miniatureRef, () => {
@@ -78,7 +76,7 @@ const Profile = observer(() => {
 	});
 
 	useEffect(() => {
-		setIsLoadingProfile(true);
+		profile.setIsLoadingProfile(true);
 		setFriendsRequest([]);
 		setFriends([]);
 		setFoundFriends([])
@@ -152,7 +150,7 @@ const Profile = observer(() => {
 					.catch();
 			})
 			.then(() => {
-				setIsLoadingProfile(false)
+				profile.setIsLoadingProfile(false);
 			})
 			.catch((err) => {
 				nav(PROFILE_ROUTE + "/" + user.user.id);
@@ -361,9 +359,9 @@ const Profile = observer(() => {
 						</CSSTransition>
 						<div
 							className="profile__left-user"
-							style={isLoadingProfile ? { padding: "0px" } : null}
+							style={profile.isLoadingProfile ? { padding: "0px" } : null}
 						>
-							{isLoadingProfile ? (
+							{profile.isLoadingProfile ? (
 								<ProfileMainSkeleton />
 							) : (
 								<>
@@ -518,6 +516,8 @@ const Profile = observer(() => {
 									}
 								})}
 							</TransitionGroup>
+
+							
 						</div>
 					</div>
 					<div className="profile__friends">
@@ -585,9 +585,9 @@ const Profile = observer(() => {
 									onChange={onSearchFriend}
 								/>
 							)}
-							<div className={((statusFriend && !friends.length) || (!statusFriend && !friendsRequest.length)) ? "profile__friends-content" + " " + "profile__friends-content_center" : "profile__friends-content"}>
+							<div className={((statusFriend && !friends.length && !profile.isLoadingProfile) || (!statusFriend && !friendsRequest.length && !profile.isLoadingProfile)) ? "profile__friends-content" + " " + "profile__friends-content_center" : "profile__friends-content"}>
 								{
-									isLoadingProfile ? (
+									profile.isLoadingProfile ? (
 										<ProfileFriendsSkeleton />
 									) : statusFriend ? (
 										friends.length && !searchFriendValue ? (

@@ -11,6 +11,7 @@ import { PROJECTS_ROUTE } from "../../utils/consts";
 import style from './profileProjects.module.scss'
 import { Context } from "../..";
 import NewProjectCard from "../newProjectCard/NewProjectCard";
+import ProjectSkeleton from "../ProjectSkeleton";
 
 const ProfileProjects = observer(({ isOnSetting }) => {
 	const { profile, user } = useContext(Context)
@@ -20,8 +21,26 @@ const ProfileProjects = observer(({ isOnSetting }) => {
 	useEffect(() => {
 		fetchProjectsUser(id).then((data) => setDataProjects(data.projects));
 	}, [location.pathname]);
+
+	const skeletonList = [
+		{ id: 0 },
+		{ id: 1 },
+		{ id: 2 },
+		{ id: 3 },
+	];
+	
+	const newSkeletonList = skeletonList.map(({ id }) => (
+		<ProjectSkeleton key={id} color="#222c36" foreignColor="#27323e"/>
+	));
+
 	return (
 		<>
+		{
+			profile.isLoadingProfile 
+			? 
+			newSkeletonList
+			: 
+			<>
 			{
 				user.user.id == id && dataProjects.length
 					?
@@ -35,65 +54,67 @@ const ProfileProjects = observer(({ isOnSetting }) => {
 						</svg>
 					</div>
 					: null
-			}
+				}
 			{
 				dataProjects.length
-					?
-					(
-						dataProjects.map((item) => {
-							return (
-								<Link className={profile.isOnSetting ? style.projectCardLink + " " + style.projectCardLink_isOnSetting : style.projectCardLink}
-									to={PROJECTS_ROUTE + "/" + item.id}
-									key={item.id}
-								>
-									{/* <ProjectCard
-										id={item.id}
-										img={item.preview}
-										title={item.name}
-										date={item.start_date}
-										like={item.likes.length}
-										view={item.views.length}
-										comment={item.comments.length}
-										dataProjects={dataProjects}
-										setDataProjects={setDataProjects}
-									/> */}
+				?
+				(
+					dataProjects.map((item) => {
+						return (
+							<Link className={profile.isOnSetting ? style.projectCardLink + " " + style.projectCardLink_isOnSetting : style.projectCardLink}
+								to={PROJECTS_ROUTE + "/" + item.id}
+								key={item.id}
+							>
+								{/* <ProjectCard
+									id={item.id}
+									img={item.preview}
+									title={item.name}
+									date={item.start_date}
+									like={item.likes.length}
+									view={item.views.length}
+									comment={item.comments.length}
+									dataProjects={dataProjects}
+									setDataProjects={setDataProjects}
+								/> */}
 
-									<NewProjectCard
-										id={item.id}
-										img={item.preview}
-										title={item.name}
-										name={item.user.name}
-										date={item.start_date}
-										like={item.likes.length}
-										view={item.views.length}
-										comment={item.comments.length}
-										user={item.user}
-										baseURL={item.baseURL}
-										pathFromProject={item.path_from_project}
-										dataProjects={dataProjects}
-										setDataProjects={setDataProjects}
-									/>
-								</Link>
-							);
-						})
-					)
-					:
-					(
-						<div className={style.projects}>
-							<div className={style.projects__icon}>
-								<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-									viewBox="0 0 32 32" xmlSpace="preserve">
-									<path d="M6,27h21c1.1,0,2-0.9,2-2V11c0-1.1-0.9-2-2-2l-9.5,0" />
-									<path d="M28.5,26.3L17.5,9L15,5h-2.5H5C3.9,5,3,5.9,3,7v17" />
-									<path d="M7.5,15.5c-1.9,1.9-1.9,5.1,0,7c0.5,0.5,1,0.8,1.6,1.1c1.8,0.7,3.9,0.4,5.4-1.1c1.9-1.9,1.9-5.1,0-7
-									S9.5,13.6,7.5,15.5z"/>
-									<path d="M6.5,21l-3.9,3.6c-0.8,0.8-0.8,2,0,2.8l0,0c0.8,0.8,2,0.8,2.8,0l3.5-3.5" />
-								</svg>
-							</div>
-							<h2 className={style.projects__title}>Нет проектов</h2>
+								<NewProjectCard
+									id={item.id}
+									img={item.preview}
+									title={item.name}
+									name={item.user.name}
+									date={item.start_date}
+									like={item.likes.length}
+									view={item.views.length}
+									comment={item.comments.length}
+									user={item.user}
+									baseURL={item.baseURL}
+									pathFromProject={item.path_from_project}
+									dataProjects={dataProjects}
+									setDataProjects={setDataProjects}
+								/>
+							</Link>
+						);
+					})
+				)
+				:
+				(
+					<div className={style.projects}>
+						<div className={style.projects__icon}>
+							<svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								viewBox="0 0 32 32" xmlSpace="preserve">
+								<path d="M6,27h21c1.1,0,2-0.9,2-2V11c0-1.1-0.9-2-2-2l-9.5,0" />
+								<path d="M28.5,26.3L17.5,9L15,5h-2.5H5C3.9,5,3,5.9,3,7v17" />
+								<path d="M7.5,15.5c-1.9,1.9-1.9,5.1,0,7c0.5,0.5,1,0.8,1.6,1.1c1.8,0.7,3.9,0.4,5.4-1.1c1.9-1.9,1.9-5.1,0-7
+								S9.5,13.6,7.5,15.5z"/>
+								<path d="M6.5,21l-3.9,3.6c-0.8,0.8-0.8,2,0,2.8l0,0c0.8,0.8,2,0.8,2.8,0l3.5-3.5" />
+							</svg>
 						</div>
-					)
+						<h2 className={style.projects__title}>Нет проектов</h2>
+					</div>
+				)
 			}
+			</>
+		}
 		</>
 	);
 });

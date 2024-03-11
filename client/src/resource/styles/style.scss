@@ -70,6 +70,11 @@ body {
   }
 }
 
+.project-skeleton {
+  width: 100%;
+  height: 100%;
+}
+
 @media (max-width: $xxl) {
   .container {
     max-width: 1470px;

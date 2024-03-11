@@ -606,33 +606,35 @@ class UserController {
 	async checkOnline(req, res, next) {
 		const { id } = req.params;
 		if (!id) return next(ApiError.internal({ error: 'Internal server error' }))
-		// try {
-		// const users = User.findOne({ where: { id } })
-		// if (users && id) {
-		// user.lastOnline = new Date(); // изменяем значение поля lastOnline
-		const findUser = await User.findOne({
-			where: {
-				id
-			},
-			include: { model: Group, through: UserGroup }
-		})
-		const user = await findUser.update({ lastOnline: new Date() }); // сохраняем изменения в базе данных
-		// }
-		const token = generateJwt(
-			user.id,
-			user.name,
-			user.full_name,
-			user.email,
-			user.description,
-			user.avatar,
-			user.groups[0],
-			user.roleId,
-			user.lastOnline
-		);
-		return res.json({ token });
-		// } catch (error) {
-		// 	next(ApiError.badRequest(error.message));
-		// }
+		try {
+			// user.lastOnline = new Date(); // изменяем значение поля lastOnline
+			const findUser = await User.findOne({
+				where: {
+					id
+				},
+				include: { model: Group, through: UserGroup }
+			})
+			if(!findUser) {
+				return next(ApiError.badRequest("Не авторизован"))
+			}
+
+			const user = await findUser.update({ lastOnline: new Date() }); // сохраняем изменения в базе данных
+			const token = generateJwt(
+				user.id,
+				user.name,
+				user.full_name,
+				user.email,
+				user.description,
+				user.avatar,
+				user.groups[0],
+				user.roleId,
+				user.lastOnline
+			);
+			return res.json({ token });
+		
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
 	}
 }
 module.exports = new UserController();

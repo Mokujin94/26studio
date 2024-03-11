@@ -18,6 +18,8 @@ export default class ProfileStore {
 			{ id: 0, element: <ProfileProjects />, nodeRef: createRef(null) },
 		];
 
+    this._isLoadingProfile = true;
+
     this._menuItems = [
       { id: 0, title: "Проекты" },
     ];
@@ -45,6 +47,10 @@ export default class ProfileStore {
 
   setWrapperItems(wrapperItems) {
     this._wrapperItems = wrapperItems;
+  }
+
+  setIsLoadingProfile(isLoadingProfile) {
+    this._isLoadingProfile = isLoadingProfile;
   }
 
 	setEditModal(editModal) {
@@ -77,6 +83,10 @@ export default class ProfileStore {
 
   get wrapperItems() {
     return this._wrapperItems;
+  }
+
+  get isLoadingProfile() {
+    return this._isLoadingProfile;
   }
 
   get menuItems() {
