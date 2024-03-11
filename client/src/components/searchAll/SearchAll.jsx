@@ -78,10 +78,10 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
 							<path
 								d="M1.5 1.5L7.26263 7.93043C7.94318 8.68986 9.05682 8.68986 9.73737 7.93043L15.5 1.5"
 								stroke="#97BCE6"
-								stroke-width="1.5"
+								strokeWidth="1.5"
 								stroke-miterlimit="10"
-								stroke-linecap="round"
-								stroke-linejoin="round"
+								strokeLinecap="round"
+								strokeLinejoin="round"
 							/>
 						</svg>
 					</div>
@@ -172,10 +172,10 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
 								d="M9.125 22.1864H8.5C3.5 22.1864 1 20.9402 1 14.7089V8.47757C1 3.49252 3.5 1 8.5 1H18.5C23.5 1 26 3.49252 26 8.47757V14.7089C26 19.6939 23.5 22.1864 18.5 22.1864H17.875C17.4875 22.1864 17.1125 22.3734 16.875 22.6849L15 25.1775C14.175 26.2742 12.825 26.2742 12 25.1775L10.125 22.6849C9.925 22.4108 9.475 22.1864 9.125 22.1864Z"
 								fill="#FCFCFC"
 								stroke="#27323E"
-								stroke-width="1.5"
+								strokeWidth="1.5"
 								stroke-miterlimit="10"
-								stroke-linecap="round"
-								stroke-linejoin="round"
+								strokeLinecap="round"
+								strokeLinejoin="round"
 							/>
 							<path
 								d="M8.5 9.38783L6 11.8804L8.5 14.3729M18.5 9.38783L21 11.8804L18.5 14.3729M14.75 8.97656L12.25 14.7841L14.75 8.97656Z"
@@ -184,10 +184,10 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
 							<path
 								d="M8.5 9.38783L6 11.8804L8.5 14.3729M18.5 9.38783L21 11.8804L18.5 14.3729M14.75 8.97656L12.25 14.7841"
 								stroke="#27323E"
-								stroke-width="1.5"
+								strokeWidth="1.5"
 								stroke-miterlimit="10"
-								stroke-linecap="round"
-								stroke-linejoin="round"
+								strokeLinecap="round"
+								strokeLinejoin="round"
 							/>
 						</svg>
 						<h2 className={style.search__content__box__info__title}>
@@ -213,10 +213,10 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
 							<path
 								d="M1.5 1.5L7.26263 7.93043C7.94318 8.68986 9.05682 8.68986 9.73737 7.93043L15.5 1.5"
 								stroke="#97BCE6"
-								stroke-width="1.5"
+								strokeWidth="1.5"
 								stroke-miterlimit="10"
-								stroke-linecap="round"
-								stroke-linejoin="round"
+								strokeLinecap="round"
+								strokeLinejoin="round"
 							/>
 						</svg>
 					</div>
@@ -280,9 +280,9 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
 							<path
 								d="M19.7422 16.5481C21.4577 16.8355 23.3485 16.5356 24.6758 15.6482C26.4414 14.4733 26.4414 12.5486 24.6758 11.3737C23.336 10.4863 21.4201 10.1864 19.7046 10.4863M7.25783 16.5481C5.54232 16.8355 3.65152 16.5356 2.32419 15.6482C0.558603 14.4733 0.558603 12.5486 2.32419 11.3737C3.66404 10.4863 5.57989 10.1864 7.29539 10.4863M21.0319 7.44919C20.9531 7.43669 20.8728 7.43669 20.794 7.44919C19.9583 7.41903 19.1672 7.06575 18.5877 6.46402C18.0082 5.86229 17.6858 5.05924 17.6886 4.2246C17.6886 2.43732 19.1286 1 20.9192 1C21.7761 1 22.5978 1.33973 23.2036 1.94446C23.8095 2.54919 24.1499 3.36938 24.1499 4.2246C24.1476 5.05984 23.8218 5.86184 23.2407 6.46283C22.6596 7.06383 21.8681 7.41726 21.0319 7.44919ZM5.96807 7.44919C6.0432 7.43669 6.13085 7.43669 6.20599 7.44919C7.04166 7.41903 7.83284 7.06575 8.41234 6.46402C8.99184 5.86229 9.31424 5.05924 9.31142 4.2246C9.31142 2.43732 7.8714 1 6.08077 1C5.22394 1 4.40221 1.33973 3.79635 1.94446C3.19048 2.54919 2.85011 3.36938 2.85011 4.2246C2.86263 5.97438 4.24004 7.3867 5.96807 7.44919ZM13.5188 16.7855C13.44 16.773 13.3597 16.773 13.2809 16.7855C12.4452 16.7554 11.654 16.4021 11.0745 15.8004C10.495 15.1986 10.1726 14.3956 10.1754 13.5609C10.1754 11.7737 11.6155 10.3363 13.4061 10.3363C14.2629 10.3363 15.0846 10.6761 15.6905 11.2808C16.2964 11.8855 16.6367 12.7057 16.6367 13.5609C16.6242 15.3107 15.2468 16.7355 13.5188 16.7855ZM9.87491 20.7225C8.10932 21.8974 8.10932 23.8221 9.87491 24.997C11.8784 26.3343 15.1592 26.3343 17.1627 24.997C18.9282 23.8221 18.9282 21.8974 17.1627 20.7225C15.1717 19.3977 11.8784 19.3977 9.87491 20.7225Z"
 								stroke="#27323E"
-								stroke-width="1.5"
-								stroke-linecap="round"
-								stroke-linejoin="round"
+								strokeWidth="1.5"
+								strokeLinecap="round"
+								strokeLinejoin="round"
 							/>
 						</svg>
 						<h2 className={style.search__content__box__info__title}>
@@ -308,10 +308,10 @@ function SearchAll({ nodeRef, search, searchData, isLoading }) {
 							<path
 								d="M1.5 1.5L7.26263 7.93043C7.94318 8.68986 9.05682 8.68986 9.73737 7.93043L15.5 1.5"
 								stroke="#97BCE6"
-								stroke-width="1.5"
+								strokeWidth="1.5"
 								stroke-miterlimit="10"
-								stroke-linecap="round"
-								stroke-linejoin="round"
+								strokeLinecap="round"
+								strokeLinejoin="round"
 							/>
 						</svg>
 					</div>

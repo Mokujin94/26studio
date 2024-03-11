@@ -9,7 +9,7 @@ const ProjectSkeleton = (props) => (
 		height={257}
 		viewBox="0 0 308 257"
 		backgroundColor={props.color || "#27323e"}
-		foregroundColor={props.foreignColor || "#384756"}
+		foregroundColor={props.foregroundColor || "#384756"}
 		{...props}
 	>
 		<rect x="0" y="462" rx="0" ry="0" width="452" height="100" />

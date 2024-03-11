@@ -61,8 +61,8 @@ const ProjectCard = observer(({ id, img, title, name, date, like, view, comment,
 			<CSSTransition in={profile.isOnSetting} timeout={300} classNames="create-anim" unmountOnExit>
 				<div className={style.project__trash} onClick={onTrash}>
 					<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-						<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+						<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
 						<g id="SVGRepo_iconCarrier">
 							<path
 								d="M10 12L14 16M14 12L10 16M18 
@@ -79,9 +79,9 @@ const ProjectCard = observer(({ id, img, title, name, date, like, view, comment,
 									3 9.70951 3.13878C9.39792 3.26132 9.12208 3.46013 8.90729
 									3.71698C8.66405 4.00784 8.53292 4.40125 8.27064 5.18807L8 6"
 								stroke="#000000"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round">
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round">
 							</path>
 						</g>
 					</svg>

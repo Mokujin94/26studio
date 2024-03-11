@@ -39,6 +39,8 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 			.catch((err) => console.log(err));
 	}, []);
 
+	// console.log(<FriendCardSkeleton />);
+
 	return (
 		<>
 			{isLoadingFriend ? (

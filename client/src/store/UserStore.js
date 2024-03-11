@@ -59,10 +59,10 @@ export default class UserStore {
     this._menuAuth = [
       { id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
       { id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
-      { id: 1, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
-      { id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+      { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
+      { id: 3, title: 'Группы', icon: group, path: GROUPS_ROUTE },
       // { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
-      { id: 3, title: 'Управление', icon: control, path: ADMIN_ROUTE },
+      { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
     ];
     this._menu = [
       { id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
