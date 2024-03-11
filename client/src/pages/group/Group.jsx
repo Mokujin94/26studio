@@ -21,7 +21,7 @@ function Group() {
 			setGroupDataUsers(dataUsers)
 			setGroupData((item) => (item = data))
 		});
-		
+
 	}, []);
 
 	return (
@@ -31,14 +31,22 @@ function Group() {
 				<div className="group__content">
 					<div className="group__content-curator">
 						<h3 className="group__content-title group__content-title_color">Куратор</h3>
-						{/* <FriendCard /> */}
+						<div className="group__content-wrapper">
+							{
+								groupDataUsers.filter(({ roleId }) => {
+									return roleId === 2;
+								}).map(({ id }) => <FriendCard userId={id} key={id} />)
+							}
+						</div>
 					</div>
 					<div className="group__content-students">
 						<h3 className="group__content-title">Студенты</h3>
 						<div className="group__content-wrapper">
 							{
-								groupDataUsers.length 
-									? groupDataUsers.map(({ id }) => <FriendCard userId={id} key={id} />)
+								groupDataUsers.length
+									? groupDataUsers.filter(({ roleId }) => {
+										return roleId === 1;
+									}).map(({ id }) => <FriendCard userId={id} key={id} />)
 									: "В этой группе нет участников"
 							}
 						</div>
