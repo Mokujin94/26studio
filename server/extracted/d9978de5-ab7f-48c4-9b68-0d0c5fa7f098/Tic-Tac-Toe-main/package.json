@@ -1,0 +1,17 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "game tic-tac-toe",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "game",
+    "tic-tac-toe",
+    "site"
+  ],
+  "author": "souls_rex",
+  "license": "ISC",
+  "dependencies": {}
+}

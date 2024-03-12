@@ -141,7 +141,7 @@ const Profile = observer(() => {
 				}
 				console.log(dataUser.friends);
 				const sortFriendsAllPromises = dataUser.friends.map(async item => {
-					return await fetchUserById(Number(item.userId))
+					return await fetchUserById(Number(item.friendId == dataUser.id ? item.userId : item.friendId))
 				})
 				Promise.all(sortFriendsAllPromises)
 					.then(sortedFriends => {
@@ -319,7 +319,7 @@ const Profile = observer(() => {
 				const friends = friendsFindAll.map((item) => (
 					<FriendCard
 						userId={item.id}
-						key={item.name}
+						key={item.id}
 					/>
 				))
 				setFoundFriends(friends)

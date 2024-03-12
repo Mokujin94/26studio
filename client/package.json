@@ -35,7 +35,7 @@
     "yup": "^1.1.1"
   },
   "scripts": {
-    "start": "rsbuild dev",
+    "start": "rsbuild dev --open",
     "build": "rsbuild build",
     "test": "react-scripts test",
     "preview": "rsbuild preview"

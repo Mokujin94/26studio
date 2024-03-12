@@ -66,16 +66,28 @@ const BurgerMenu = observer(() => {
 				)}
 				<ul className={style.menu}>
 					{user.isAuth
-						? user.menuAuth.map(({ id, title, icon, path }) => {
-							return (
-								<Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
-									<li className={style.menu__item}>
-										<img src={icon} alt="icon" />
-										{title}
-									</li>
-								</Link>
-							);
-						})
+						?  user.user.roleId > 1 
+							? user.menuAdmin.map(({ id, title, icon, path }) => {
+								return (
+									<Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
+										<li className={style.menu__item}>
+											<img src={icon} alt="icon" />
+											{title}
+										</li>
+									</Link>
+								);
+							})
+							:
+							user.menuAuth.map(({ id, title, icon, path }) => {
+								return (
+									<Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
+										<li className={style.menu__item}>
+											<img src={icon} alt="icon" />
+											{title}
+										</li>
+									</Link>
+								);
+							})
 						: user.menu.map(({ id, title, icon, path }) => {
 							return (
 								<Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
