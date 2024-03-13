@@ -34,10 +34,13 @@ const authInterceptor = async (config) => {
 
 const hostInterceptor = async (config) => {
 	const token = localStorage.getItem("token");
+	const currentDateUnix = new Date().getTime() / 1000;
+	// console.log(currentDateUnix)
 	if (token) {
 		const decode = await jwt_decode(token);
+		if (currentDateUnix > decode.exp) return;
 		try {
-			await getUserOnline(decode.id)
+			getUserOnline(decode.id)
 		} catch (error) {
 			throw error
 		}
