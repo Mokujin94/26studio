@@ -37,8 +37,6 @@ const Subscriber = sequelize.define("subscriber", {
 const Group = sequelize.define("group", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 	name: { type: DataTypes.STRING },
-	members: { type: DataTypes.JSON, defaultValue: [] },
-	id_curator: { type: DataTypes.INTEGER },
 });
 
 const Role = sequelize.define("role", {
@@ -178,6 +176,10 @@ const UserFriend = sequelize.define("user_friend", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
+const UserGroup = sequelize.define("user_group", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+});
+
 User.hasMany(Project);
 Project.belongsTo(User);
 
@@ -255,8 +257,8 @@ UnpostedNews.belongsTo(User);
 User.hasMany(Message);
 Message.belongsTo(User);
 
-Group.hasMany(User);
-User.belongsTo(Group);
+Group.belongsToMany(User, { through: UserGroup });
+User.belongsToMany(Group, { through: UserGroup });
 
 Role.hasMany(User, { foreignKey: { defaultValue: 1 } });
 User.belongsTo(Role);
@@ -290,5 +292,6 @@ module.exports = {
 	View,
 	Notifications,
 	UserFriend,
-	ReplyComments
+	ReplyComments,
+	UserGroup
 };

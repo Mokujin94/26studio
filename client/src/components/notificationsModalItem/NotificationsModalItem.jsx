@@ -34,9 +34,9 @@ const NotificationsModalItem = observer(({ notification }) => {
 
 	const add =
 		<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none">
-			<path d="M6 11.5C9.03757 11.5 11.5 9.03757 11.5 6C11.5 2.96243 9.03757 0.5 6 0.5C2.96243 0.5 0.5 2.96243 0.5 6C0.5 9.03757 2.96243 11.5 6 11.5Z" fill="#97BCE6" stroke="#222C36" stroke-linecap="round" stroke-linejoin="round" />
+			<path d="M6 11.5C9.03757 11.5 11.5 9.03757 11.5 6C11.5 2.96243 9.03757 0.5 6 0.5C2.96243 0.5 0.5 2.96243 0.5 6C0.5 9.03757 2.96243 11.5 6 11.5Z" fill="#97BCE6" stroke="#222C36" strokeLinecap="round" strokeLinejoin="round" />
 			<path d="M3.21875 5.99995H5.99653ZM5.99653 5.99995H8.77431ZM5.99653 5.99995V3.22217ZM5.99653 5.99995V8.77772Z" fill="white" />
-			<path d="M3.21875 5.99995H5.99653M5.99653 5.99995H8.77431M5.99653 5.99995V3.22217M5.99653 5.99995V8.77772" stroke="#222C36" stroke-linecap="round" stroke-linejoin="round" />
+			<path d="M3.21875 5.99995H5.99653M5.99653 5.99995H8.77431M5.99653 5.99995V3.22217M5.99653 5.99995V8.77772" stroke="#222C36" strokeLinecap="round" strokeLinejoin="round" />
 		</svg>
 
 	const like =
@@ -47,13 +47,13 @@ const NotificationsModalItem = observer(({ notification }) => {
 	const comment =
 		<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none">
 			<path d="M3.77561 5.16667H8.22005ZM3.77561 7.38889H5.44227ZM11 6C11 8.76144 8.76144 11 6 11C4.86866 11 1.0004 11 1.0004 11C1.0004 11 1.86662 8.92006 1.51995 8.22267C1.18714 7.55311 1 6.79844 1 6C1 3.23858 3.23857 1 6 1C8.76144 1 11 3.23858 11 6Z" fill="#97BCE6" />
-			<path d="M3.77561 5.16667H8.22005M3.77561 7.38889H5.44227M11 6C11 8.76144 8.76144 11 6 11C4.86866 11 1.0004 11 1.0004 11C1.0004 11 1.86662 8.92006 1.51995 8.22267C1.18714 7.55311 1 6.79844 1 6C1 3.23858 3.23857 1 6 1C8.76144 1 11 3.23858 11 6Z" stroke="#222C36" stroke-linecap="round" stroke-linejoin="round" />
+			<path d="M3.77561 5.16667H8.22005M3.77561 7.38889H5.44227M11 6C11 8.76144 8.76144 11 6 11C4.86866 11 1.0004 11 1.0004 11C1.0004 11 1.86662 8.92006 1.51995 8.22267C1.18714 7.55311 1 6.79844 1 6C1 3.23858 3.23857 1 6 1C8.76144 1 11 3.23858 11 6Z" stroke="#222C36" strokeLinecap="round" strokeLinejoin="round" />
 		</svg>
 
 	return (
 		<div className={style.item}>
 			<div className={style.item__close} onClick={onRemove}>
-				<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><path d="M1 11.0901H21Z" fill="#27323E"></path><path d="M1 11.0901H21" stroke="#FCFCFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><path d="M11 21L11 1Z" fill="#27323E"></path><path d="M11 21L11 1" stroke="#FCFCFC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><path d="M1 11.0901H21Z" fill="#27323E"></path><path d="M1 11.0901H21" stroke="#FCFCFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path><path d="M11 21L11 1Z" fill="#27323E"></path><path d="M11 21L11 1" stroke="#FCFCFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>
 			</div>
 			<Link to={PROFILE_ROUTE + '/' + notification.senderId}>
 				<div className={style.item__avatar}>

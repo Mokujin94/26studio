@@ -34,6 +34,9 @@ export const authRoutes = [
     path: MESSENGER_ROUTE,
     Component: <Messenger />,
   },
+];
+
+export const adminRoutes = [
   {
     path: ADMIN_ROUTE,
     Component: <Admin />,

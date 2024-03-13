@@ -13,24 +13,24 @@ const Admin = () => {
 		},
 		{
 			id: 1, title: 'Новости', icon: <svg xmlns="http://www.w3.org/2000/svg" width="118" height="118" viewBox="0 0 24 24" fill="none">
-				<path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-				<path d="M17.5 17.0801H15.65" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-				<path d="M12.97 17.0801H6.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-				<path d="M17.5 13.3201H11.97" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-				<path d="M9.27 13.3201H6.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+				<path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+				<path d="M17.5 17.0801H15.65" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+				<path d="M12.97 17.0801H6.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+				<path d="M17.5 13.3201H11.97" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+				<path d="M9.27 13.3201H6.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
 			</svg>, disabled: true
 		},
 		{
 			id: 2, title: 'Проекты', icon: <svg xmlns="http://www.w3.org/2000/svg" width="114" height="118" viewBox="0 0 114 118" fill="none">
-				<path fill-rule="evenodd" clip-rule="evenodd" d="M57 2.95C57 1.32076 55.405 0 53.4375 0H28.5C12.7599 0 0 10.5661 0 23.6V94.4C0 107.434 12.7599 118 28.5 118H85.5C101.24 118 114 107.434 114 94.4V50.15C114 48.5208 112.405 47.2 110.438 47.2H92.625C72.9499 47.2 57 33.9924 57 17.7V2.95ZM108.439 35.4C110.808 35.4 112.51 33.5057 111.372 31.7851C110.406 30.3242 109.187 28.9709 107.739 27.7719L80.4619 5.18421C79.0139 3.98523 77.3797 2.97603 75.6155 2.17594C73.5376 1.23361 71.25 2.64347 71.25 4.60524V17.7C71.25 27.4754 80.8199 35.4 92.625 35.4H108.439ZM35.625 41.3C31.69 41.3 28.5 43.9415 28.5 47.2C28.5 50.4585 31.69 53.1 35.625 53.1H42.75C46.685 53.1 49.875 50.4585 49.875 47.2C49.875 43.9415 46.685 41.3 42.75 41.3H35.625ZM28.5 70.8C28.5 67.5415 31.69 64.9 35.625 64.9H78.375C82.31 64.9 85.5 67.5415 85.5 70.8C85.5 74.0585 82.31 76.7 78.375 76.7H35.625C31.69 76.7 28.5 74.0585 28.5 70.8ZM28.5 94.4C28.5 91.1415 31.69 88.5 35.625 88.5H78.375C82.31 88.5 85.5 91.1415 85.5 94.4C85.5 97.6585 82.31 100.3 78.375 100.3H35.625C31.69 100.3 28.5 97.6585 28.5 94.4Z" fill="white" />
+				<path fillRule="evenodd" clipRule="evenodd" d="M57 2.95C57 1.32076 55.405 0 53.4375 0H28.5C12.7599 0 0 10.5661 0 23.6V94.4C0 107.434 12.7599 118 28.5 118H85.5C101.24 118 114 107.434 114 94.4V50.15C114 48.5208 112.405 47.2 110.438 47.2H92.625C72.9499 47.2 57 33.9924 57 17.7V2.95ZM108.439 35.4C110.808 35.4 112.51 33.5057 111.372 31.7851C110.406 30.3242 109.187 28.9709 107.739 27.7719L80.4619 5.18421C79.0139 3.98523 77.3797 2.97603 75.6155 2.17594C73.5376 1.23361 71.25 2.64347 71.25 4.60524V17.7C71.25 27.4754 80.8199 35.4 92.625 35.4H108.439ZM35.625 41.3C31.69 41.3 28.5 43.9415 28.5 47.2C28.5 50.4585 31.69 53.1 35.625 53.1H42.75C46.685 53.1 49.875 50.4585 49.875 47.2C49.875 43.9415 46.685 41.3 42.75 41.3H35.625ZM28.5 70.8C28.5 67.5415 31.69 64.9 35.625 64.9H78.375C82.31 64.9 85.5 67.5415 85.5 70.8C85.5 74.0585 82.31 76.7 78.375 76.7H35.625C31.69 76.7 28.5 74.0585 28.5 70.8ZM28.5 94.4C28.5 91.1415 31.69 88.5 35.625 88.5H78.375C82.31 88.5 85.5 91.1415 85.5 94.4C85.5 97.6585 82.31 100.3 78.375 100.3H35.625C31.69 100.3 28.5 97.6585 28.5 94.4Z" fill="white" />
 			</svg>, disabled: true
 		},
 		{
 			id: 3, title: 'Роли', icon: <svg xmlns="http://www.w3.org/2000/svg" width="118" height="118" viewBox="0 0 24 24" fill="none">
-				<path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-				<path d="M19.2101 15.74L15.67 19.2801C15.53 19.4201 15.4 19.68 15.37 19.87L15.18 21.22C15.11 21.71 15.45 22.05 15.94 21.98L17.29 21.79C17.48 21.76 17.75 21.63 17.88 21.49L21.42 17.95C22.03 17.34 22.32 16.63 21.42 15.73C20.53 14.84 19.8201 15.13 19.2101 15.74Z" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-				<path d="M18.7001 16.25C19.0001 17.33 19.84 18.17 20.92 18.47" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-				<path d="M3.40991 22C3.40991 18.13 7.25994 15 11.9999 15C13.0399 15 14.0399 15.15 14.9699 15.43" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+				<path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+				<path d="M19.2101 15.74L15.67 19.2801C15.53 19.4201 15.4 19.68 15.37 19.87L15.18 21.22C15.11 21.71 15.45 22.05 15.94 21.98L17.29 21.79C17.48 21.76 17.75 21.63 17.88 21.49L21.42 17.95C22.03 17.34 22.32 16.63 21.42 15.73C20.53 14.84 19.8201 15.13 19.2101 15.74Z" stroke="white" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+				<path d="M18.7001 16.25C19.0001 17.33 19.84 18.17 20.92 18.47" stroke="white" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
+				<path d="M3.40991 22C3.40991 18.13 7.25994 15 11.9999 15C13.0399 15 14.0399 15.15 14.9699 15.43" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
 			</svg>, disabled: true
 		}
 	]

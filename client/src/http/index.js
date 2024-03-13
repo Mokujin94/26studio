@@ -19,8 +19,8 @@ const $adminHost = axios.create({
 
 const authInterceptor = async (config) => {
 	const token = localStorage.getItem("token");
-	config.headers.authorization = `Bearer ${token}`;
 	if (token) {
+		config.headers.authorization = `Bearer ${token}`;
 		const decode = jwt_decode(token);
 		try {
 			await getUserOnline(decode.id)
@@ -52,6 +52,7 @@ const hostInterceptor = async (config) => {
 
 const getUserOnline = async (id) => {
 	try {
+
 		await $checkOnlineHost.patch('api/user/' + id);
 
 	} catch (error) {

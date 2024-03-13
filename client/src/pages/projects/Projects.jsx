@@ -43,6 +43,7 @@ const Projects = observer(() => {
 		setIsLoaded(true);
 		setIsLoadingSlider(true);
 		getAll("2").then((data) => {
+			console.log(data.rows);
 			setSliderData(data.rows);
 			setIsLoadingSlider(false);
 		});
@@ -131,8 +132,8 @@ const Projects = observer(() => {
 		<ProjectSkeleton key={id} />
 	));
 	const newLastAddedSkeletonList = lastAddedSkeletonList.map(({ id }) => (
-		<SplideSlide>
-			<ProjectSkeleton key={id} />
+		<SplideSlide key={id}>
+			<ProjectSkeleton key={`skeleton-${id}`} />
 		</SplideSlide>
 	));
 

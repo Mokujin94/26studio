@@ -14,7 +14,6 @@ router.get('/auth', authMiddleware, userController.check);
 router.post('/upload_project', authMiddleware, userController.uploadProject);
 router.post('/upload_finished_project', authMiddleware, userController.uploadFinishedProject);
 router.get('/accept_project', userController.sendProjectViewer);
-router.get('/all', userController.getAll);
 router.get('/tutors', userController.getAllTutors);
 router.get('/group_manage', userController.getUsersByGroupStatus);
 router.get('/search/groups', userController.searchUsersByName);

@@ -55,16 +55,6 @@ export const fetchOneUser = async (id) => {
 	return data;
 };
 
-export const fetchAllUsers = async (id) => {
-	const config = {
-		params: {
-			groupId: id,
-		},
-	};
-	const { data } = await $host.get("api/user/all", config);
-	return data;
-};
-
 export const searchUsersOnGroup = async (search, groupId, group_status) => {
 	const config = {
 		params: {

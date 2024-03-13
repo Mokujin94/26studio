@@ -1,0 +1,89 @@
+/* 
+this file contains cosmetic styles for all elements of the page. For exemple: color,  fonts etc...
+*/
+
+/* ========== COMON STYLES ========== */
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    /* color: black; */
+}
+
+/* ============= HEADER ============ */
+header {
+    font-size: 5vh;
+    background-color: #6a1f2a;
+    color: whitesmoke;
+}
+
+/* =========== GAME-AREA =========== */
+main {
+    background-color: royalblue;
+    color: white;
+}
+
+.game-area table td{
+    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.8);
+}   
+
+.game-container .game-status {
+    background-color: #e6514c;
+    font-size: 2ch;
+}
+
+.game-container .legend {
+    background-color: #dea23a;
+    font-size: 2.5ch;
+}
+
+/* 1. game container (parent element for .game-area)*/
+.game-area table{
+    cursor: pointer;
+}
+
+.result-container {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.result-area {
+    background-color: whitesmoke;
+    color: tomato;
+    font-size: 4ch;
+    font-weight: bolder;
+}
+
+.result-container .icon {
+    font-size: 3.6ch;
+    cursor: pointer;
+}
+
+.game-icon {
+    /* margin-left: 1.2vw ; */
+    font-size: 6.87vw ;
+}
+
+.game-status i {
+    font-size: 1.1ch;
+} 
+
+.game-icon.ph-x{
+    color: #731f54;
+}
+
+.game-icon.ph-circle{
+    color: #5e9c41
+}
+
+/* ========== FOOTER =========== */
+footer {
+    background-color: #221757 ;
+}
+
+footer section, footer section a {
+    color: whitesmoke;
+    font-size: 1.8ch;
+}

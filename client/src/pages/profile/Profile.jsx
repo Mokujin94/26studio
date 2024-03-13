@@ -65,8 +65,6 @@ const Profile = observer(() => {
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
 
-	const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-
 	const miniatureRef = useRef(null);
 
 	useClickOutside(miniatureRef, () => {
@@ -78,7 +76,7 @@ const Profile = observer(() => {
 	});
 
 	useEffect(() => {
-		setIsLoadingProfile(true);
+		profile.setIsLoadingProfile(true);
 		setFriendsRequest([]);
 		setFriends([]);
 		setFoundFriends([])
@@ -87,6 +85,7 @@ const Profile = observer(() => {
 		setStatusFriend(true);
 		fetchUserById(Number(id))
 			.then((dataUser) => {
+				console.log(dataUser)
 				const lastOnline = new Date(dataUser.lastOnline).getTime() / 1000;
 				const nowTime = new Date().getTime() / 1000;
 				if ((nowTime - lastOnline) <= 300) {
@@ -99,9 +98,9 @@ const Profile = observer(() => {
 				document.title = `${dataUser.name}`
 				setUserId(dataUser);
 				if (dataUser.group_status) {
-					setGroup(dataUser.group.name);
+					setGroup(dataUser.groups[0].name);
 				} else {
-					setGroup(`${dataUser.group.name} (Группа не подтверджена)`);
+					setGroup(`${dataUser.groups[0].name} (Группа не подтверджена)`);
 				}
 
 
@@ -142,7 +141,7 @@ const Profile = observer(() => {
 				}
 				console.log(dataUser.friends);
 				const sortFriendsAllPromises = dataUser.friends.map(async item => {
-					return await fetchUserById(Number(item.userId))
+					return await fetchUserById(Number(item.friendId == dataUser.id ? item.userId : item.friendId))
 				})
 				Promise.all(sortFriendsAllPromises)
 					.then(sortedFriends => {
@@ -151,7 +150,7 @@ const Profile = observer(() => {
 					.catch();
 			})
 			.then(() => {
-				setIsLoadingProfile(false)
+				profile.setIsLoadingProfile(false);
 			})
 			.catch((err) => {
 				nav(PROFILE_ROUTE + "/" + user.user.id);
@@ -320,7 +319,7 @@ const Profile = observer(() => {
 				const friends = friendsFindAll.map((item) => (
 					<FriendCard
 						userId={item.id}
-						key={item.name}
+						key={item.id}
 					/>
 				))
 				setFoundFriends(friends)
@@ -360,9 +359,9 @@ const Profile = observer(() => {
 						</CSSTransition>
 						<div
 							className="profile__left-user"
-							style={isLoadingProfile ? { padding: "0px" } : null}
+							style={profile.isLoadingProfile ? { padding: "0px" } : null}
 						>
-							{isLoadingProfile ? (
+							{profile.isLoadingProfile ? (
 								<ProfileMainSkeleton />
 							) : (
 								<>
@@ -517,6 +516,8 @@ const Profile = observer(() => {
 									}
 								})}
 							</TransitionGroup>
+
+							
 						</div>
 					</div>
 					<div className="profile__friends">
@@ -584,9 +585,9 @@ const Profile = observer(() => {
 									onChange={onSearchFriend}
 								/>
 							)}
-							<div className={((statusFriend && !friends.length) || (!statusFriend && !friendsRequest.length)) ? "profile__friends-content" + " " + "profile__friends-content_center" : "profile__friends-content"}>
+							<div className={((statusFriend && !friends.length && !profile.isLoadingProfile) || (!statusFriend && !friendsRequest.length && !profile.isLoadingProfile)) ? "profile__friends-content" + " " + "profile__friends-content_center" : "profile__friends-content"}>
 								{
-									isLoadingProfile ? (
+									profile.isLoadingProfile ? (
 										<ProfileFriendsSkeleton />
 									) : statusFriend ? (
 										friends.length && !searchFriendValue ? (

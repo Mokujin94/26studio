@@ -7,14 +7,15 @@ import { Context } from '../..';
 import { observer } from 'mobx-react-lite';
 
 const GroupCard = observer(({ group }) => {
-  const { user } = useContext(Context)
-  return (
-    <Link to={GROUPS_ROUTE + '/' + group.id} className={style.groupCard}>
-      <span className={style.groupCard__yourGroup}>{user.user.groupId === group.id && 'Ваша группа'}</span>
-      <h2 className={style.groupCard__title}>{group.name}</h2>
-      <span className={style.groupCard__studentsCount}>Участников: {group.users.filter(item => item.group_status).length}</span>
-    </Link>
-  );
+	const { user } = useContext(Context)
+
+	return (
+		<Link to={GROUPS_ROUTE + '/' + group.id} className={style.groupCard}>
+			<span className={style.groupCard__yourGroup}>{user.user.group && user.user.group.id === group.id ? 'Ваша группа' : null}</span>
+			<h2 className={style.groupCard__title}>{group.name}</h2>
+			<span className={style.groupCard__studentsCount}>Участников: {group.users.filter(item => item.group_status).length}</span>
+		</Link>
+	);
 })
 
 export default GroupCard;
