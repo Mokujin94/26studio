@@ -11,6 +11,10 @@ export function useDateFormatter(inputDate) {
 	const differenceInSeconds = Math.floor(difference / 1000);
 
 	// Если разница менее 1 минуты, покажем "1 сек назад"
+	if (differenceInSeconds <= 0) {
+		return `Только что`;
+	}
+
 	if (differenceInSeconds < 60) {
 		return `${differenceInSeconds} сек назад`;
 	}
