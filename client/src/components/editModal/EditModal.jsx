@@ -20,6 +20,7 @@ const EditModal = observer(() => {
 	const [userEmail, setUserEmail] = useState('');
 	const [userGroupId, setUserGroupId] = useState('');
 	const [groups, setGroups] = useState([])
+	const [isDisabled, setIsDisabled] = useState(true);
 
 
 	useEffect(() => {
@@ -53,8 +54,16 @@ const EditModal = observer(() => {
 		})
 	}
 
+	useEffect(() => {
+		if (!userName && !userFullName && (!userAbout || userAbout === user.user.description) && !userOldPassword && !userPassword && !userEmail && !userGroupId) {
+			setIsDisabled(true)
+		} else {
+			setIsDisabled(false)
+		}
+	}, [userName, userFullName, userAbout, userOldPassword, userPassword, userEmail, userGroupId])
+
 	return (
-		<div className={style.editModal} onClick={(e) => e.stopPropagation()}>
+		<div className={style.editModal} onMouseDown={(e) => e.stopPropagation()}>
 			<h2 className={style.editModal__title}>Редактирование</h2>
 			<div className={style.editModal__content}>
 				<div className={style.editModal__input}>
@@ -98,7 +107,7 @@ const EditModal = observer(() => {
 					<input autoComplete="new-password" type="text" placeholder={user.user.email} value={userEmail} onChange={(e) => setUserEmail(e.target.value)} className={style.editModal__input__item} />
 				</div>
 			</div>
-			<FunctionButton onClick={onButton}>Сохранить</FunctionButton>
+			<FunctionButton disabled={isDisabled} onClick={onButton}>Сохранить</FunctionButton>
 		</div>
 	);
 });

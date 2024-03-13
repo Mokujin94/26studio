@@ -75,7 +75,7 @@ const App = observer(() => {
 					>
 						<div
 							className="modal__bg"
-							onClick={() => user.setModalProject(false)}
+							onMouseDown={() => user.setModalProject(false)}
 						>
 							<AddProjectModal />
 						</div>
@@ -87,7 +87,7 @@ const App = observer(() => {
 						mountOnEnter
 						unmountOnExit
 					>
-						<div className="modal__bg" onClick={() => user.setModalNews(false)}>
+						<div className="modal__bg" onMouseDown={() => user.setModalNews(false)}>
 							<ModalNewsUpload />;
 						</div>
 					</CSSTransition>
@@ -98,7 +98,7 @@ const App = observer(() => {
 						mountOnEnter
 						unmountOnExit
 					>
-						<div className="modal__bg" onClick={() => profile.setEditModal(false)}>
+						<div className="modal__bg" onMouseDown={() => profile.setEditModal(false)}>
 							<EditModal />;
 						</div>
 					</CSSTransition>
