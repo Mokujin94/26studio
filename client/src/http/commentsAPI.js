@@ -2,7 +2,6 @@ import axios from "axios";
 import { $authHost, $host } from "./index";
 
 const source = axios.CancelToken.source();
-let cancelTokenSource;
 
 export const createProject = async (message, projectId, userId, resendId) => {
 	const { data } = await $authHost.post("api/comment/project", {
@@ -38,12 +37,12 @@ export const createReply = async (message, userId, parentId, parentUserId, reply
 
 export const like = async (commentId, userId) => {
 	// Отменить предыдущий запрос, если он существует
-	if (cancelTokenSource) {
-		cancelTokenSource.cancel("Отмена предыдущего запроса");
+	if (source) {
+		source.cancel("Отмена предыдущего запроса");
 	}
 
 	// Создание нового экземпляра Cancel Token
-	cancelTokenSource = axios.CancelToken.source();
+	const cancelTokenSource = axios.CancelToken.source();
 
 	try {
 		// Отправка запроса с использованием нового Cancel Token
@@ -64,12 +63,12 @@ export const like = async (commentId, userId) => {
 
 export const deleteLike = async (commentId, userId) => {
 	// Отменить предыдущий запрос, если он существует
-	if (cancelTokenSource) {
-		cancelTokenSource.cancel("Отмена предыдущего запроса");
+	if (source) {
+		source.cancel("Отмена предыдущего запроса");
 	}
 
 	// Создание нового экземпляра Cancel Token
-	cancelTokenSource = axios.CancelToken.source();
+	const cancelTokenSource = axios.CancelToken.source();
 
 	try {
 		// Отправка запроса DELETE с использованием нового Cancel Token
