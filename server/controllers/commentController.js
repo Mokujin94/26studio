@@ -295,7 +295,7 @@ class CommentController {
 
 	async createLike(req, res, next) {
 		const { commentId, userId } = req.body;
-
+		const io = getIo();
 		let likeData;
 
 		try {
@@ -308,6 +308,10 @@ class CommentController {
 				where: { commentId, userId }
 			})
 
+			const comment = await Comments.findOne({
+				where: { id: commentId }
+			})
+
 			if (likeData) {
 				if (likeData.status) {
 					return next(ApiError.badRequest("Лайк уже стоит"))
@@ -315,9 +319,43 @@ class CommentController {
 				await likeData.update({ status: true })
 			} else {
 				likeData = await Likes.create({ commentId, userId })
+
+				const notification = await Notifications.create({
+					commentId: commentId,
+					senderId: userId,
+					recipientId: comment.userId,
+					likeId: likeData.id
+				});
+	
+				const sendNotification = await Notifications.findOne({
+					where: { id: notification.id },
+					include: [
+						{
+							model: Comments,
+							as: "comment",
+						},
+						{
+							model: Comments,
+							as: "replyComment",
+						},
+						{
+							model: Likes,
+							as: "like",
+						},
+						{
+							model: User,
+							as: "sender",
+						},
+						{
+							model: User,
+							as: "recipient",
+						},
+					],
+				});
+
+				io.emit("notification", sendNotification);
 			}
-
-
+			
 			return await res.json(likeData);
 		} catch (error) {
 			next(ApiError.badRequest(error.message))

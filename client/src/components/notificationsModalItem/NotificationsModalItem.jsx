@@ -60,10 +60,10 @@ const NotificationsModalItem = observer(({ notification }) => {
 					<img className={style.item__avatarImg} src={process.env.REACT_APP_API_URL + notification.sender.avatar} alt="" />
 					<div className={style.item__avatarIcon}>
 						{
-							notification.likeId && like
+							notification.likeId || notification.commentId && notification.likeId ? like : null
 						}
 						{
-							notification.commentId && comment
+							notification.commentId && !notification.likeId && comment
 						}
 						{
 							notification.replyCommentId && comment
@@ -80,13 +80,19 @@ const NotificationsModalItem = observer(({ notification }) => {
 			<div className={style.item__content}>
 				<Link to={PROFILE_ROUTE + '/' + notification.senderId} className={style.item__contentName}>{notification.sender.name}</Link>
 				{
-					notification.likeId
+					notification.likeId && !notification.commentId
 					&& <p className={style.item__contentText}>
 						Оценил ваш <Link to={PROJECTS_ROUTE + '/' + notification.like.projectId} className={style.item__contentText_primary}>проект</Link>
 					</p>
 				}
 				{
-					notification.commentId
+					notification.commentId && notification.likeId
+					&& <p className={style.item__contentText}>
+						Оценил ваш <Link to={notification.comment.projectId ? PROJECTS_ROUTE + '/' + notification.comment.projectId : NEWS_ROUTE + '/' + notification.comment.newsId} className={style.item__contentText_primary}>комментарий</Link>
+					</p>
+				}
+				{
+					notification.commentId && !notification.likeId
 					&& <p className={style.item__contentText}>
 						Оставил <Link to={notification.comment.projectId ? PROJECTS_ROUTE + '/' + notification.comment.projectId : NEWS_ROUTE + '/' + notification.comment.newsId} className={style.item__contentText_primary}>комментарий</Link>
 					</p>
