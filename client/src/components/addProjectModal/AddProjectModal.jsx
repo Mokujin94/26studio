@@ -39,7 +39,7 @@ const AddProjectModal = observer(() => {
 	}, [file]);
 
 	return (
-		<div className={style.block} onClick={(e) => e.stopPropagation()}>
+		<div className={style.block} onMouseDown={(e) => e.stopPropagation()}>
 			<div className={style.block__header}>
 				<h2 className={style.block__headerTitle}>Загрузка проекта</h2>
 				<div

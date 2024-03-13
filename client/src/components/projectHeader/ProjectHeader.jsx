@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import AmountComponent from "../amountComponent/AmountComponent";
 
 import style from "./projectHeader.module.scss";
@@ -17,7 +17,8 @@ const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, l
 
 	const formatedLikes = useCountFormatter(likes);
 	const formatedViews = useCountFormatter(views.length);
-	const formatedDate = useDateFormatter(date)
+	const formatedDate = useMemo(() => useDateFormatter(date), [date]);
+
 
 	const like = (style) => {
 		return (
@@ -75,7 +76,7 @@ const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, l
 		calculateTotalCharacters();
 	}, [descr]);
 
-	const calculateTotalCharacters = () => {
+	const calculateTotalCharacters = useCallback(() => {
 		let total = 0;
 		// if (Array.isArray(descr))
 		descr.forEach(word => {
@@ -84,7 +85,7 @@ const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, l
 		setTotalCharacters(total);
 		console.log(descr);
 		console.log(total);
-	};
+	}, [descr]);
 
 	return (
 		<div className={style.block}>

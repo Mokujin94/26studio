@@ -10,8 +10,9 @@ import viewsIcon from "../../resource/graphics/icons/newsCard/views.svg";
 import commentsIcon from "../../resource/graphics/icons/newsCard/comments.svg";
 
 function NewsCard({ news }) {
+	console.log(news);
 	return (
-		<div className={style.card + ' ' + style.card_special}>
+		<div className={news.user.roleId === 3 ? style.card + ' ' + style.card_special : style.card}>
 			<div className={style.preview}>
 				<img
 					src={process.env.REACT_APP_API_URL + news.img}
