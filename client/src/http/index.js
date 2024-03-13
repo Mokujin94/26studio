@@ -38,7 +38,7 @@ const hostInterceptor = async (config) => {
 	// console.log(currentDateUnix)
 	if (token) {
 		const decode = await jwt_decode(token);
-		if (currentDateUnix > decode.exp) return;
+		if (currentDateUnix > decode.exp) return config;
 		try {
 			getUserOnline(decode.id)
 		} catch (error) {
