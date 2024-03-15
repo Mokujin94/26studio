@@ -32,10 +32,9 @@ a {
   }
   &__cards {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(5, minmax(auto, 300px));
     justify-content: space-between;
-    column-gap: 20px;
-    row-gap: 50px;
+    gap: 20px;
   }
 }
 

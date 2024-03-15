@@ -12,7 +12,7 @@ import { CSSTransition } from "react-transition-group";
 
 function Auth() {
 	const { user } = useContext(Context);
-	const [email, setEmail] = useState();
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState();
 	const [errorMessage, setErrorMessage] = useState("");
 	const [errorModal, setErrorModal] = useState(false);
@@ -24,7 +24,7 @@ function Auth() {
 	const onLogin = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		await login(email, password).then((data) => {
+		await login(email.toLowerCase(), password).then((data) => {
 			setLoading(false);
 			user.setUser(data);
 			user.setAuth(true);
@@ -77,6 +77,7 @@ function Auth() {
 							onChange={(e) => setEmail(e.target.value)}
 							type="email"
 							className="auth__input-item"
+							value={email}
 						/>
 					</div>
 				</div>

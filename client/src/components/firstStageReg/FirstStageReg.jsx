@@ -23,7 +23,7 @@ const FirstStageReg = observer(() => {
 		setNewData({
 			name: valueName,
 			fullName: valueFullName,
-			email: valueMail,
+			email: valueMail.toLowerCase(),
 			password: valuePassword,
 			passwordConfirm: valuePasswordConfirm,
 		});

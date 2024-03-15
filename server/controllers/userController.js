@@ -37,7 +37,7 @@ const generateJwt = (
 		{ id, name, full_name, email, description, avatar, group, roleId, lastOnline },
 		process.env.SECRET_KEY,
 		{
-			expiresIn: "24h",
+			expiresIn: "14d",
 		}
 	);
 };
