@@ -66,9 +66,7 @@ const Comments = ({ comments, setComments, projectId, newsId }) => {
 	return (
 		<div className={style.block}>
 			<div className={style.block__title}>Комментарии ({commentsCout})</div>
-			<div className={style.block__input}>
-				<CommentsInput projectId={projectId} newsId={newsId} />
-			</div>
+			<CommentsInput projectId={projectId} newsId={newsId} />
 			<div className={style.block__comments}>
 				{comments.length ? comments.map((item) => {
 					return (

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 
 import style from "./commentsInput.module.scss";
 import { Context } from "../..";
@@ -10,6 +10,9 @@ function CommentsEnd({ projectId, newsId }) {
 
 	const [message, setMessage] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
+	const [notEmpty, setNotEmpty] = useState(false)
+
+	const inputRef = useRef(null)
 
 	const sendMessage = async (e) => {
 		e.preventDefault();
@@ -21,6 +24,8 @@ function CommentsEnd({ projectId, newsId }) {
 					.then(() => {
 						setMessage("");
 						setIsLoading(false);
+						inputRef.current.innerText = '';
+						setNotEmpty(false)
 					})
 					.catch((err) => {
 						console.log(err.response.data.message);
@@ -33,6 +38,8 @@ function CommentsEnd({ projectId, newsId }) {
 					.then(() => {
 						setMessage("");
 						setIsLoading(false);
+						inputRef.current.innerText = '';
+						setNotEmpty(false)
 					})
 					.catch((err) => {
 						console.log(err.response.data.message);
@@ -43,20 +50,53 @@ function CommentsEnd({ projectId, newsId }) {
 			}
 		}
 	};
+
+	const onInput = (e) => {
+		const content = e.target.innerText;
+		const formattedContent = content.replace(/^\s*[\r\n]/gm, '');
+		setMessage(formattedContent);
+		const regex = /<br>/g;
+		const matches = e.target.innerHTML.match(regex);
+		const hasLineBreaks = matches ? matches.length > 1 : false;
+		if (e.target.textContent.length > 0 || hasLineBreaks) {
+			setNotEmpty(true)
+		} else {
+			setNotEmpty(false)
+		}
+	}
+
+	const handleKeyPress = (e) => {
+		if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey) {
+			e.preventDefault(); // Предотвращает перевод строки
+			sendMessage(e)
+		}
+	};
+
 	return (
 		<form className={style.block}>
-			<input
+			{/* <input
 				className={style.block__input}
 				type="text"
 				placeholder="Напишите текст"
 				onChange={(e) => setMessage(e.target.value)}
 				value={message}
-			/>
+			/> */}
+			<div style={{ width: "100%", position: "relative" }}>
+				<div
+					className={notEmpty ? style.block__input + " " + style.block__input_notEmpty : style.block__input}
+					contentEditable={true}
+					onInput={onInput}
+					onKeyDown={handleKeyPress}
+					ref={inputRef}
+				>
+				</div>
+				<div className={style.block__input_line}></div>
+			</div>
 			<button
 				type="submit"
 				className={style.block__btn}
 				onClick={(e) => sendMessage(e)}
-				disabled={isLoading}
+				disabled={isLoading || message.length === 0}
 			>
 				{isLoading ? <Spinner /> : "Отправить"}
 			</button>
