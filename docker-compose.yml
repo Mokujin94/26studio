@@ -23,7 +23,7 @@ services:
       - DB_PASSWORD=studio26
       - DB_HOST=postgres
       - DB_PORT=5432
-      - CLIENTURL=http://26studio.ru
+      - CLIENTURL=https://26studio.ru
     depends_on:
       - postgres
       - frontend
