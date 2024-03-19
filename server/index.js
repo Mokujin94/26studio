@@ -42,7 +42,7 @@ app.use(express.static('/app/extracted'));
 app.use(fileUpload({}));
 
 
-
+app.get('/', (req, res) => res.json({ok: "work"}))
 app.use("/api", router);
 
 

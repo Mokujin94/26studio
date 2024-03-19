@@ -13,7 +13,6 @@ const ViewRouter = require("./viewRouter");
 const SearchRouter = require("./searchRouter");
 const NotificationRouter = require("./notificationsRouter")
 
-router.get('/', (req, res) => res.json({ok: "work"}))
 router.use("/user", UserRouter);
 router.use("/project", ProjectRouter);
 router.use("/news", NewsRouter);
