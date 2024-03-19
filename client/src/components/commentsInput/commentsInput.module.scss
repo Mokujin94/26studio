@@ -1,28 +1,64 @@
 @import "../../resource/styles/variables";
 
 .block {
-  max-width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  background-color: $studio-darker-element;
-  border-radius: 5px;
-  padding: 0 15px;
+	position: relative;
+	max-width: 100%;
+	display: flex;
+	align-items: flex-end;
+	border-radius: 5px;
+	gap: 15px;
+
   &__input {
+    position: relative;
     width: 100%;
     height: 100%;
-    padding-right: 15px;
+    padding: 5px 0;
     outline: 0;
     border: 0;
-    border-radius: 5px 0 0 5px;
-    font-weight: 200;
+    font-weight: 400;
     font-size: 16px;
-		background: none;
+    background: none;
     color: $studio-white-text;
+		border-bottom: 2px solid #5f7792;
+		&_line {
+			position: absolute;
+			display: block;
+			bottom: 0px;
+			width: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			height: 2px;
+			opacity: 0;
+			background: $studio-primary-border;
+			transition: $studio-transition-03;
+		}
+
+		&:focus {
+			~ .block__input_line {
+				width: 100%;
+				opacity: 1;
+			}
+		}
+		
     &::placeholder {
       color: $studio-white-text;
       opacity: 0.5;
     }
+
+		&::before {
+			content: 'Напишите комментарий';
+			position: absolute;
+			pointer-events: none; /* Не взаимодействовать событиями мыши */
+			color: $studio-grey-text;
+			// left: 0px;
+			// top: 5px;
+			font-size: 16px;
+			transition: opacity 0.2s ease; /* Добавляем плавный переход */
+		}
+		&_notEmpty::before {
+			opacity: 0; /* Скрываем placeholder если див не пустой */
+		}
+
   }
   &__btn {
     color: $studio-dark-text;

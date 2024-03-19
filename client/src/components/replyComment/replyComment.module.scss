@@ -51,14 +51,20 @@
       color: $studio-white-text;
     }
     &Comment {
-      font-size: 14px;
-      font-weight: 400;
+			display: inline-table;
+			font-size: 14px;
+			font-weight: 400;
+			white-space: pre-wrap;
+			word-break: break-all;
+			line-height: 20px;
+			
 			a {
 				padding: 2px 5px;
 				background: $studio-grey-element;
 				border-radius: 5px;
 				color: $studio-primary-text;
 				font-weight: 600;
+				margin-right: 5px;
 				&:hover {
 					color: $studio-primary-text-hover;
 				}
