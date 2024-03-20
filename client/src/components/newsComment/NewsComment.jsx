@@ -11,9 +11,10 @@ import { Context } from "../..";
 import ReplyComment from "../replyComment/ReplyComment";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
 import { useCountFormatter } from "../../hooks/useCountFormatter";
+import Spinner from "../spinner/Spinner";
 
 const NewsComment = observer((props) => {
-	const { user } = useContext(Context);
+	const { user, error } = useContext(Context);
 
 	const [isReply, setIsReply] = useState(false);
 	const [isReplyOpen, setIsReplyOpen] = useState(false);
@@ -67,6 +68,9 @@ const NewsComment = observer((props) => {
 	}, [props.lastReplyComment])
 
 	const onLike = useCallback(async () => {
+		if (!user.isAuth) {
+			return error.setNotAuthError(true);
+		}
 		setIsLike(prevIsLike => !prevIsLike); // Обновляем состояние isLike, используя предыдущее значение
 		console.log(isLike)
 		if (isLike) {
@@ -174,7 +178,7 @@ const NewsComment = observer((props) => {
 						/>
 						<div className={style.block__input__buttons}>
 							<button onClick={() => setIsReply(false)} className={style.block__input__buttons__item + ' ' + style.block__input__buttons__item_border}>Отменить</button>
-							<button onClick={onReply} disabled={isLoading || replyText.length === 0} className={style.block__input__buttons__item}>Отправить</button>
+							<button onClick={onReply} disabled={isLoading || replyText.length === 0} className={style.block__input__buttons__item}>{isLoading ? <Spinner /> : "Отправить"}</button>
 						</div>
 					</div>
 				</CSSTransition>

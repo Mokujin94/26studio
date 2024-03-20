@@ -269,6 +269,7 @@
 				padding: 40px;
 				background: $studio-dark-element;
 				border-radius: 10px;
+				min-height: 314px;
 				// overflow: hidden;
 				&-achievement {
 					grid-template-columns: 1fr;
@@ -289,7 +290,7 @@
 		border-radius: 10px;
 		grid-column-start: 10;
 		grid-column-end: 13;
-		max-height: 710px;
+		max-height: 724px;
 		overflow: hidden;
 		&-menu {
 			list-style: none;
