@@ -54,14 +54,19 @@ function CommentsEnd({ projectId, newsId }) {
 	const onInput = (e) => {
 		const content = e.target.innerText;
 		const formattedContent = content.replace(/^\s*[\r\n]/gm, '');
-		setMessage(formattedContent);
+		const filteredContent = formattedContent.replace(/[^\s\u0020-\u007E\u0400-\u04FF\u200B-\u200D\uFEFF]/g, ''); // Добавлен диапазон русских букв
+		
+		setMessage(filteredContent);
+	
 		const regex = /<br>/g;
 		const matches = e.target.innerHTML.match(regex);
 		const hasLineBreaks = matches ? matches.length > 1 : false;
-		if (e.target.textContent.length > 0 || hasLineBreaks) {
-			setNotEmpty(true)
+	
+		// Проверяем, что filteredContent содержит символы, отличные от пробелов
+		if (filteredContent.trim().length > 0 || hasLineBreaks) {
+			setNotEmpty(true);
 		} else {
-			setNotEmpty(false)
+			setNotEmpty(false);
 		}
 	}
 
@@ -96,7 +101,7 @@ function CommentsEnd({ projectId, newsId }) {
 				type="submit"
 				className={style.block__btn}
 				onClick={(e) => sendMessage(e)}
-				disabled={isLoading || message.length === 0}
+				disabled={isLoading || !notEmpty}
 			>
 				{isLoading ? <Spinner /> : "Отправить"}
 			</button>

@@ -94,14 +94,19 @@ const ReplyComment = observer((props) => {
 	const onInput = (e) => {
 		const content = e.target.innerText;
 		const formattedContent = content.replace(/^\s*[\r\n]/gm, '');
-		setReplyText(formattedContent);
+		const filteredContent = formattedContent.replace(/[^\s\u0020-\u007E\u0400-\u04FF\u200B-\u200D\uFEFF]/g, ''); // Добавлен диапазон русских букв
+		
+		setReplyText(filteredContent);
+	
 		const regex = /<br>/g;
 		const matches = e.target.innerHTML.match(regex);
 		const hasLineBreaks = matches ? matches.length > 1 : false;
-		if (e.target.textContent.length > 0 || hasLineBreaks) {
-			setNotEmpty(true)
+	
+		// Проверяем, что filteredContent содержит символы, отличные от пробелов
+		if (filteredContent.trim().length > 0 || hasLineBreaks) {
+			setNotEmpty(true);
 		} else {
-			setNotEmpty(false)
+			setNotEmpty(false);
 		}
 	}
 
@@ -166,7 +171,7 @@ const ReplyComment = observer((props) => {
 						/>
 						<div className={style.block__input__buttons}>
 							<button onClick={() => setIsReply(false)} className={style.block__input__buttons__item + ' ' + style.block__input__buttons__item_border}>Отменить</button>
-							<button onClick={onReply} disabled={isLoading || replyText.length === 0} className={style.block__input__buttons__item}>{isLoading ? <Spinner /> : "Отправить"}</button>
+							<button onClick={onReply} disabled={isLoading || !notEmpty } className={style.block__input__buttons__item}>{isLoading ? <Spinner /> : "Отправить"}</button>
 						</div>
 					</div>
 				</CSSTransition>
