@@ -20,11 +20,15 @@ const ReplyComment = observer((props) => {
 	const [likesCount, setLikesCount] = useState(0);
 	const [isLike, setIsLike] = useState(false);
 	const [notEmpty, setNotEmpty] = useState(false);
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(false);
+	const [commentIsExpand, setCommentIsExpand] = useState(false)
+	const [isHideContent, setIsHideContent] = useState(false);
 
 	const replyInputRef = useRef(null)
 
 	const likesFormated = useCountFormatter(likesCount)
+
+	const blockRef = useRef(null);
 
 	useEffect(() => {
 		if (props.likes) {
@@ -41,7 +45,21 @@ const ReplyComment = observer((props) => {
 		})
 	}, [props.likes])
 
+	useEffect(() => {
+		const blockElement = blockRef.current;
+		if (!blockElement) return;
+
+		const height = blockElement.clientHeight;
+		const hideHeight = blockElement.scrollHeight;
+		if (height < hideHeight) {
+			setIsHideContent(true);
+		}
+	}, [props.comment, blockRef.current]);
+
 	const onReply = async () => {
+		if (!user.isAuth) {
+			return error.setNotAuthError(true);
+		}
 		if (replyText.length > 0) {
 			setIsLoading(true)
 			await createReply(replyText, user.user.id, props.commentId, props.id, replyUserId, props.projectId).then(data => {
@@ -93,15 +111,15 @@ const ReplyComment = observer((props) => {
 
 	const onInput = (e) => {
 		const content = e.target.innerText;
-		const formattedContent = content.replace(/^\s*[\r\n]/gm, '');
-		const filteredContent = formattedContent.replace(/[^\s\u0020-\u007E\u0400-\u04FF\u200B-\u200D\uFEFF]/g, ''); // Добавлен диапазон русских букв
-		
+		const formattedContent = content.trim();
+		const filteredContent = formattedContent.normalize("NFD");
+
 		setReplyText(filteredContent);
-	
+
 		const regex = /<br>/g;
 		const matches = e.target.innerHTML.match(regex);
 		const hasLineBreaks = matches ? matches.length > 1 : false;
-	
+
 		// Проверяем, что filteredContent содержит символы, отличные от пробелов
 		if (filteredContent.trim().length > 0 || hasLineBreaks) {
 			setNotEmpty(true);
@@ -116,6 +134,12 @@ const ReplyComment = observer((props) => {
 			onReply(e)
 		}
 	};
+
+	const closeInput = () => {
+		setIsReply(false)
+		setReplyText('');
+		setNotEmpty(false)
+	}
 
 	return (
 		<div className={style.block} >
@@ -141,7 +165,10 @@ const ReplyComment = observer((props) => {
 
 				</div>
 
-				<span className={style.block__textComment}> {props.userReply && <Link to={PROFILE_ROUTE + '/' + props.userReply.id}>@{props.userReply.name}</Link>} {props.comment}</span>
+				<span ref={blockRef} className={commentIsExpand ? style.block__textComment : style.block__textComment + " " + style.block__textComment_expand}> {props.userReply && <Link to={PROFILE_ROUTE + '/' + props.userReply.id}>@{props.userReply.name}</Link>} {props.comment}</span>
+				{isHideContent ? <span className={style.block__textCommentExpand} onClick={() => setCommentIsExpand(prev => !prev)}>{commentIsExpand ? "Свернуть" : "Развернуть"}</span> : null}
+
+
 			</div>
 			<div className={style.block__textBottom}>
 				<div className={style.block__textBottomFeedback}>
@@ -170,8 +197,8 @@ const ReplyComment = observer((props) => {
 							onKeyDown={handleKeyPress}
 						/>
 						<div className={style.block__input__buttons}>
-							<button onClick={() => setIsReply(false)} className={style.block__input__buttons__item + ' ' + style.block__input__buttons__item_border}>Отменить</button>
-							<button onClick={onReply} disabled={isLoading || !notEmpty } className={style.block__input__buttons__item}>{isLoading ? <Spinner /> : "Отправить"}</button>
+							<button onClick={closeInput} className={style.block__input__buttons__item + ' ' + style.block__input__buttons__item_border}>Отменить</button>
+							<button onClick={onReply} disabled={isLoading || !notEmpty || replyText.length === 0} className={style.block__input__buttons__item}>{isLoading ? <Spinner /> : "Отправить"}</button>
 						</div>
 					</div>
 				</CSSTransition>
