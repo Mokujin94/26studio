@@ -51,7 +51,8 @@ const ReplyComment = observer((props) => {
 
 		const height = blockElement.clientHeight;
 		const hideHeight = blockElement.scrollHeight;
-		if (height < hideHeight) {
+		console.log(height, hideHeight)
+		if (height + 1 < hideHeight) {
 			setIsHideContent(true);
 		}
 	}, [props.comment, blockRef.current]);
