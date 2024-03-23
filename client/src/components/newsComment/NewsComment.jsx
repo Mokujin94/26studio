@@ -24,12 +24,19 @@ const NewsComment = observer((props) => {
 	const [isLike, setIsLike] = useState(false);
 	const [notEmpty, setNotEmpty] = useState(false);
 	const [isLoading, setIsLoading] = useState(false)
+	const [commentIsExpand, setCommentIsExpand] = useState(false)
+	const [isHideContent, setIsHideContent] = useState(false);
 
 	const replyInputRef = useRef(null)
 
 	const likesFormated = useCountFormatter(likesCount)
 
+	const blockRef = useRef(null);
+
 	const onReply = async () => {
+		if (!user.isAuth) {
+			return error.setNotAuthError(true);
+		}
 		if (replyText.length > 0) {
 			setIsLoading(true)
 			await createReply(replyText, user.user.id, props.commentId, props.id, null, props.projectId).then(() => {
@@ -41,6 +48,7 @@ const NewsComment = observer((props) => {
 			}).catch(err => console.log(err))
 		}
 	}
+
 
 	useEffect(() => {
 		if (props.replyes) {
@@ -66,6 +74,19 @@ const NewsComment = observer((props) => {
 			setReplyes((item) => [...item, props.lastReplyComment]);
 		}
 	}, [props.lastReplyComment])
+
+	useEffect(() => {
+		const blockElement = blockRef.current;
+		if (!blockElement) return;
+
+		const height = blockElement.clientHeight;
+		const hideHeight = blockElement.scrollHeight;
+		if (height < hideHeight) {
+			setIsHideContent(true);
+		}
+	}, [props.comment, blockRef.current]);
+
+
 
 	const onLike = useCallback(async () => {
 		if (!user.isAuth) {
@@ -104,15 +125,20 @@ const NewsComment = observer((props) => {
 
 	const onInput = (e) => {
 		const content = e.target.innerText;
-		const formattedContent = content.replace(/^\s*[\r\n]/gm, '');
-		setReplyText(formattedContent);
+		const formattedContent = content.trim();
+		const filteredContent = formattedContent.normalize("NFD");
+
+		setReplyText(filteredContent);
+
 		const regex = /<br>/g;
 		const matches = e.target.innerHTML.match(regex);
 		const hasLineBreaks = matches ? matches.length > 1 : false;
-		if (e.target.textContent.length > 0 || hasLineBreaks) {
-			setNotEmpty(true)
+
+		// Проверяем, что filteredContent содержит символы, отличные от пробелов
+		if (filteredContent.trim().length > 0 || hasLineBreaks) {
+			setNotEmpty(true);
 		} else {
-			setNotEmpty(false)
+			setNotEmpty(false);
 		}
 	}
 
@@ -122,6 +148,12 @@ const NewsComment = observer((props) => {
 			onReply(e)
 		}
 	};
+
+	const closeInput = () => {
+		setIsReply(false)
+		setReplyText('');
+		setNotEmpty(false)
+	}
 
 
 	return (
@@ -148,7 +180,10 @@ const NewsComment = observer((props) => {
 
 				</div>
 
-				<p className={style.block__textComment}>{props.comment}</p>
+
+
+				<p ref={blockRef} className={commentIsExpand ? style.block__textComment : style.block__textComment + " " + style.block__textComment_expand}>{props.comment}</p>
+				{isHideContent ? <span className={style.block__textCommentExpand} onClick={() => setCommentIsExpand(prev => !prev)}>{commentIsExpand ? "Свернуть" : "Развернуть"}</span> : null}
 			</div>
 			<div className={style.block__textBottom}>
 				<div className={style.block__textBottomFeedback}>
@@ -177,8 +212,8 @@ const NewsComment = observer((props) => {
 							onKeyDown={handleKeyPress}
 						/>
 						<div className={style.block__input__buttons}>
-							<button onClick={() => setIsReply(false)} className={style.block__input__buttons__item + ' ' + style.block__input__buttons__item_border}>Отменить</button>
-							<button onClick={onReply} disabled={isLoading || replyText.length === 0} className={style.block__input__buttons__item}>{isLoading ? <Spinner /> : "Отправить"}</button>
+							<button onClick={closeInput} className={style.block__input__buttons__item + ' ' + style.block__input__buttons__item_border}>Отменить</button>
+							<button onClick={onReply} disabled={isLoading || !notEmpty || replyText.length === 0} className={style.block__input__buttons__item}>{isLoading ? <Spinner /> : "Отправить"}</button>
 						</div>
 					</div>
 				</CSSTransition>

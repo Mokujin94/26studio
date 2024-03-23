@@ -16,6 +16,9 @@ function CommentsEnd({ projectId, newsId }) {
 
 	const sendMessage = async (e) => {
 		e.preventDefault();
+		if (!user.isAuth) {
+			return error.setNotAuthError(true);
+		}
 
 		if (message.replace(/\s/g, "")) {
 			setIsLoading(true);
@@ -53,15 +56,20 @@ function CommentsEnd({ projectId, newsId }) {
 
 	const onInput = (e) => {
 		const content = e.target.innerText;
-		const formattedContent = content.replace(/^\s*[\r\n]/gm, '');
-		setMessage(formattedContent);
+		const formattedContent = content.trim();
+		const filteredContent = formattedContent.normalize("NFD");
+
+		setMessage(filteredContent);
+
 		const regex = /<br>/g;
 		const matches = e.target.innerHTML.match(regex);
 		const hasLineBreaks = matches ? matches.length > 1 : false;
-		if (e.target.textContent.length > 0 || hasLineBreaks) {
-			setNotEmpty(true)
+
+		// Проверяем, что filteredContent содержит символы, отличные от пробелов
+		if (filteredContent.trim().length > 0 || hasLineBreaks) {
+			setNotEmpty(true);
 		} else {
-			setNotEmpty(false)
+			setNotEmpty(false);
 		}
 	}
 
@@ -96,7 +104,7 @@ function CommentsEnd({ projectId, newsId }) {
 				type="submit"
 				className={style.block__btn}
 				onClick={(e) => sendMessage(e)}
-				disabled={isLoading || message.length === 0}
+				disabled={isLoading || !notEmpty || message.length === 0}
 			>
 				{isLoading ? <Spinner /> : "Отправить"}
 			</button>
