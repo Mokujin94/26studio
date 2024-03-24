@@ -158,9 +158,8 @@ const EditModal = observer(() => {
 	};
 
 	const onUserAbout = (e) => {
-		if (e.target.value.length > 350) return;
 		setUserAbout(e.target.value.slice(0, 350));
-		setAboutCount(350 - e.target.value.length)
+		setAboutCount(350 - e.target.value.slice(0, 350).length)
 	}
 
 	const onPassword = (e) => {

@@ -59,6 +59,35 @@
       gap: 40px;
       max-width: 625px;
       width: 100%;
+
+    }
+
+		&Input {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+
+			&:last-child {
+				height: 100%;
+				.modal__contentInputItem {
+					&:last-child {
+						resize: none;
+						height: 100%;
+						line-height: 1.5em;
+					}
+				}
+			}
+
+			&Title {
+				color: $studio-white-text;
+        font-size: 18px;
+    		font-weight: 500;
+				&Count {
+					font-size: 14px;
+					color: $studio-grey-text;
+				}
+			}
+
       &Item {
         outline: none;
         width: 100%;
@@ -71,13 +100,8 @@
         &::placeholder {
           color: $studio-grey-text;
         }
-        &:last-child {
-          resize: none;
-          height: 100%;
-          line-height: 1.5em;
-        }
       }
-    }
+		}
 
     &Preview {
       position: relative;
@@ -153,6 +177,11 @@
         color: $studio-white-text;
         font-size: 16px;
         font-weight: 500;
+				word-break: break-all;
+				-webkit-line-clamp: 1;
+				-webkit-box-orient: vertical;
+				display: -webkit-box;
+				overflow: hidden;
       }
 
       &Descr {
@@ -217,5 +246,8 @@
     &Text {
       color: $studio-grey-text;
     }
+		&Btn {
+			min-width: 208px;
+		}
   }
 }
