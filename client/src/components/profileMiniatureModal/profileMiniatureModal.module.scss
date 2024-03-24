@@ -1,0 +1,19 @@
+@import "../../resource/styles/variables";
+
+.miniature {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $studio-dark-element;
+    padding: 50px;
+    border-radius: 20px;
+    &Img {
+      max-width: 500px;
+      max-height: 500px;
+    }
+
+    &Btn {
+      margin-top: 20px;
+    }
+  }

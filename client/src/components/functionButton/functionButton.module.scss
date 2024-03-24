@@ -1,16 +1,21 @@
 @import '../../resource/styles/variables';
 
 .button {
-    display: inline-block;
-    border-radius: 10px;
-    background-color: $studio-base-elements;
-    padding: 10px 15px;
-
-    &__text {
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.2em;
-        font-weight: 500;
-    }
+  display: inline-block;
+  border-radius: 10px;
+  background-color: $studio-primary-button;
+  padding: 10px 15px;
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  line-height: 20px;
+  
+  font-weight: 500;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  transition: all $studio-transition-03;
+  &:hover {
+    background-color: $studio-primary-button-hover;
+  }
 }
-

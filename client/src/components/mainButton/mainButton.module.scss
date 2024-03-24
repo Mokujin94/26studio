@@ -1,23 +1,23 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .btn {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btnText {
-    padding: 7px 16px;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
-    color: $studio-text-button;
-    background: $studio-base-elements;
-    border-radius: 10px;
-    text-decoration: none;
-    transition: 0.3s;
-    &:hover {
-        background: $studio-button-hover;
-    }
+  padding: 7px 16px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: $studio-dark-text;
+  background: $studio-primary-button;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: $studio-transition-03;
+  &:hover {
+    background: $studio-primary-button-hover;
+  }
 }

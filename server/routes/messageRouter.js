@@ -1,10 +1,9 @@
-const Router = require('express')
-const router = new Router()
-const newsController = require('../controllers/newsController')
+const Router = require("express");
+const router = new Router();
+const newsController = require("../controllers/newsController");
 
+router.post("/registration");
+router.post("/login");
+router.get("/auth");
 
-router.post('/registration', )
-router.post('/login', )
-router.get('/auth', )
-
-module.exports = router
+module.exports = router;

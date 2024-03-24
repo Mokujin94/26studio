@@ -1,0 +1,66 @@
+@import "../../resource/styles/variables";
+
+.button {
+  position: relative;
+  width: 37px;
+  height: 37px;
+  border-radius: 10px;
+  border: 1px solid $studio-grey-border;
+	background-color: $studio-dark-element;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  transition: 0.3s;
+  &_active {
+    border: 1px solid $studio-primary-border-active;
+    .button__cross {
+      rotate: 225deg;
+      path {
+        stroke: $studio-primary-element-active;
+      }
+    }
+  }
+
+  &__cross {
+    width: 20px;
+    height: 20px;
+    transition: $studio-transition-03;
+    user-select: none;
+  }
+
+  &__content {
+    position: absolute;
+    top: 150%;
+    right: 0;
+    display: flex;
+    cursor: default;
+    width: 225px;
+    border-radius: 15px;
+    border: 1px solid $studio-grey-border;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 15px;
+    padding: 10px 0;
+    background-color: $studio-dark-element;
+    &Item {
+      display: flex;
+      width: 100%;
+      padding: 10px 15px;
+      align-items: center;
+      color: $studio-primary-text;
+      cursor: pointer;
+      transition: $studio-transition-03;
+      &:hover {
+        background-color: $studio-dark-element-hover;
+      }
+      &Img {
+        width: 15px;
+        height: 15px;
+        margin-right: 10px;
+      }
+    }
+  }
+}

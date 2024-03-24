@@ -1,43 +1,158 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from "react";
+import socketIOClient from "socket.io-client";
+import ProjectHeader from "../../components/projectHeader/ProjectHeader";
+import ProjectContent from "../../components/projectContent/ProjectContent";
+import Comments from "../../components/comments/Comments";
+import Description from "../../components/description/Description";
 
-import ProjectHeader from '../../components/projectHeader/ProjectHeader'
-import ProjectContent from '../../components/projectContent/ProjectContent'
-import Comments from '../../components/comments/Comments'
-import Description from '../../components/description/Description'
+import "./project.scss";
+import {
+	condidate,
+	deleteLike,
+	fetchAllLikes,
+	fetchProjectById,
+	like,
+} from "../../http/projectAPI";
+import { useParams, useLocation } from "react-router";
+import { getAllCommentsProject } from "../../http/commentsAPI";
+import { Context } from "../..";
+import { useCountFormatter } from "../../hooks/useCountFormatter";
+import { viewProject } from "../../http/viewAPI";
+import { observer } from "mobx-react-lite";
+import { fetchUserById } from "../../http/userAPI";
 
-import "./project.scss"
+const Project = observer(() => {
+	const { id } = useParams();
+	const { user, error } = useContext(Context);
+	const location = useLocation();
+	const [dataProject, setDataProject] = useState({});
+	const [dataUser, setDataUser] = useState({});
+	const [description, setDescription] = useState([]);
+	const [descriptionLimit, setDescriptionLimit] = useState([]);
+	const [amountLike, setAmountLike] = useState([]);
+	const [comments, setComments] = useState([]);
+	const [views, setViews] = useState([]);
+	const [isLike, setIsLike] = useState(false);
+	const [likeLoading, setLikeLoading] = useState(false);
 
+	useEffect(() => {
+		viewProject(id, user.user.id).catch((e) => console.log(e));
+		fetchProjectById(id).then((data) => {
+			setDataProject(data);
+			fetchUserById(data.userId)
+				.then((dataUser) => {
+					setDataUser(dataUser);
+				})
+				.catch((e) => console.log(e))
+			console.log(data);
+			if (data.description.length > 300) {
+				const descrLimit = data.description.slice(0, 200)
+				const lines = descrLimit.split('\r\n');
+				setDescriptionLimit(lines);
+			}
+			const lines = data.description.split('\r\n');
+			setDescription(lines);
+			setAmountLike(data.likes.length);
+			data.likes.filter((item) => {
+				if (item.userId === user.user.id && item.status) {
+					setIsLike(true);
+				}
+			});
+			setViews(data.views);
+		});
+		getAllCommentsProject(id).then((data) => {
+			const filterData = data[0].comments.filter(item => !item.parentId);
+			setComments(filterData)
+		});
 
-function Project() {
-  return (
-    <div className="container">
-      <div className="project">
-        <div className="project__header">
-          <ProjectHeader title="Arkana"/>
-        </div>
-        <div className="project__content">
-          <ProjectContent/>
-          <Comments />
-        </div>
-        <div className="project__info">
-          <Description
-            title=""
-            descr='Давно выяснено, что при оценке дизайна и композиции читаемый текст
-        мешает сосредоточиться. Lorem Ipsum используют потому, что тот
-        обеспечивает более или менее стандартное заполнение шаблона, а также
-        реальное распределение букв и пробелов в абзацах, которое не получается
-        при простой дубликации "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш
-        текст.." Многие программы электронной вёрстки и редакторы HTML
-        используют Lorem Ipsum в качестве текста по умолчанию, так что поиск по
-        ключевым словам "lorem ipsum" сразу показывает, как много веб-страниц
-        всё ещё дожидаются своего настоящего рождения. За прошедшие годы текст
-        Lorem Ipsum получил много версий. Некоторые версии появились по ошибке,
-        некоторые - намеренно (например, юмористические варианты).'
-          />
-        </div>
-      </div>
-    </div>
-  )
-}
+		// const socket = socketIOClient("https://26studio-production.up.railway.app");
+		const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
-export default Project
+		socket.on("sendViewsToClients", (updatedViews) => {
+			if (updatedViews) {
+				updatedViews.filter((item) => {
+					if (item.id == id) {
+						setViews(updatedViews[0].views);
+					}
+				});
+			}
+		});
+
+		return () => {
+			socket.disconnect();
+		};
+	}, [location.pathname, user.user.id]);
+
+	const setLike = async () => {
+		setLikeLoading(true);
+		await condidate(id, user.user.id)
+			.then(async (dataCondidate) => {
+				if (dataCondidate.length) {
+					await deleteLike(id, user.user.id)
+						.then(() => {
+							setIsLike(false);
+							setAmountLike((amountLike) => amountLike - 1);
+							setLikeLoading(false);
+						})
+						.catch((data) => {
+							console.log(data.response.data.message);
+							error.setNotAuthError(true);
+							setLikeLoading(false)
+						});
+				} else {
+					await like(id, user.user.id)
+						.then(() => {
+							setIsLike(true);
+							setAmountLike((amountLike) => amountLike + 1);
+							setLikeLoading(false);
+						})
+						.catch((data) => {
+							console.log(data.response.data.message);
+							error.setNotAuthError(true);
+							setLikeLoading(false)
+						});
+				}
+			})
+			.catch((data) => {
+				console.log(data.response.data.message);
+				error.setNotAuthError(true);
+				setLikeLoading(false)
+			});
+	};
+	return (
+		<div className="container">
+			<div className="project">
+				<div className="project__content">
+					<ProjectContent
+						pathFromProject={dataProject.path_from_project}
+						baseURL={dataProject.baseURL}
+					/>
+					{/* <Description title="Описание" descr={description} /> */}
+				</div>
+				<div className="project__header">
+					<ProjectHeader
+						dataUser={dataUser}
+						title={dataProject.name}
+						descr={description}
+						descrLimit={descriptionLimit}
+						onClick={setLike}
+						likes={amountLike}
+						isLike={isLike}
+						views={views}
+						likeLoading={likeLoading}
+						date={dataProject.start_date}
+					/>
+				</div>
+				<div className="project__info">
+					<Comments
+						comments={comments}
+						setComments={setComments}
+						projectId={id}
+					/>
+				</div>
+			</div>
+		</div>
+	);
+})
+
+export default Project;

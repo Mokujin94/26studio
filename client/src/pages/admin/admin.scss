@@ -1,0 +1,24 @@
+.admin {
+    margin-top: 180px;
+    &__title {
+        text-align: center;
+        color: $studio-white-text;
+        font-size: 24px;
+        margin-bottom: 150px;
+    }
+    &__wrapper {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(auto, 360px)) ;
+        justify-content: space-between;
+        column-gap: 10px;
+        row-gap: 30px;
+    }
+
+    &__card {
+        &__disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+    }
+}
+

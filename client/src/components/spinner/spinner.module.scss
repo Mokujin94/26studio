@@ -1,0 +1,23 @@
+@import "../../resource/styles/variables";
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  padding: 0 23px;
+  &::after {
+    content: "";
+    width: 15px;
+    height: 15px;
+    border: 2px solid $studio-primary-border;
+    border-top-color: $studio-dark-border;
+    border-right-color: $studio-dark-border;
+    border-radius: 50%;
+    animation: loading 1s ease infinite;
+  }
+}
+
+@keyframes loading {
+  to {
+    transform: rotate(1turn);
+  }
+}

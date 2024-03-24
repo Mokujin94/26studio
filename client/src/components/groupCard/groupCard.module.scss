@@ -1,48 +1,48 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .groupCard {
-    position: relative;
-    width: 390px;
-    height: 220px;
-    border: 1px solid $studio-white-text;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 5px;
-    color: $studio-white-text;
-    cursor: pointer;
-    transition: 0.3s;
-    &:hover {
-        border: 1px solid $studio-base-elements;
-        -webkit-box-shadow: 0px 0px 16px 7px rgba(114, 255, 247, 0.2);
-        -moz-box-shadow: 0px 0px 16px 7px rgba(114, 255, 247, 0.2);
-        box-shadow: 0px 0px 16px 7px rgba(114, 255, 247, 0.2);
-        transform: scale(1.02);
-    }
-}
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: $studio-white-text;
+  background-color: $studio-dark-element;
+  outline: 2px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: $studio-transition-03;
+  &:hover {
+    @include studio-mixin-primary-element-hover;
+  }
 
-.yourGroup {
-    font-weight: 400;
+  &__yourGroup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: $studio-primary-text;
     font-size: 14px;
-    line-height: 17px;
-    margin-left: 252px;
-    margin-top: 15px;
-    color: $studio-base-elements;
-    letter-spacing: 0.2em;
-}
-
-.groupName {
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 44px;
-    letter-spacing: 0.2em;
-}
-
-.studentsCount {
-    margin-bottom: 20px;
     font-weight: 400;
-    font-size: 13px;
-    line-height: 16px;
-    letter-spacing: 0.2em;
+    
+  }
+
+  &__title {
+    color: $studio-white-text;
+    font-size: 36px;
+    font-weight: 700;
+    
+    padding: 85px 0;
+  }
+
+  &__studentsCount {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    color: $studio-white-text;
+    font-size: 14px;
+    font-weight: 400;
+    
+    text-align: center;
+  }
 }

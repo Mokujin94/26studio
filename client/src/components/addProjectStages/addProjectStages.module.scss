@@ -1,0 +1,72 @@
+@import "../../resource/styles/variables";
+
+.block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  max-width: 270px;
+  width: 100%;
+  margin: 0 auto;
+  &__item {
+    position: relative;
+    &Circle {
+      position: relative;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      border: 1px solid $studio-primary-border;
+      overflow: hidden;
+      cursor: pointer;
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background-color: $studio-primary-element;
+        width: 0;
+        transition: $studio-transition-03;
+      }
+      &_active {
+        &:before {
+          width: 100%;
+          transition: $studio-transition-03 .3s;
+        }
+      }
+    }
+
+    &Title {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 10px);
+      font-size: 18px;
+      font-weight: 500;
+      color: $studio-white-text;
+    }
+  }
+
+  &__line {
+    position: relative;
+    width: 100%;
+    box-sizing: content-box;
+    height: 3px;
+    border: 1px solid $studio-primary-border;
+    border-radius: 20px;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background-color: $studio-primary-element;
+      transition: $studio-transition-03;
+    }
+    &_active {
+      &:before {
+        width: 100%;
+      }
+    }
+  }
+}

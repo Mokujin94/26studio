@@ -1,1 +1,122 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
+
+.registration {
+  position: relative;
+  height: calc(100vh - 100px);
+  transform: translateY(50px);
+  display: flex;
+  align-items: center;
+  &__errors {
+    position: absolute;
+    right: 100px;
+    top: 0px;
+    z-index: 99;
+  }
+  &__complete {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -20px;
+    z-index: 99;
+  }
+  &__back-page {
+    position: absolute;
+    top: 0;
+    left: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: $studio-transition-03;
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &:hover {
+      @include studio-mixin-white-element-hover;
+    }
+    &:active {
+      @include studio-mixin-white-element-active;
+    }
+  }
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 210px;
+  }
+  &__stages {
+    position: absolute;
+    top: 100px;
+  }
+  &__stage {
+    max-width: 600px;
+    width: 100%;
+  }
+  &__bottom {
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &-sign {
+      display: flex;
+      gap: 7px;
+      &-text {
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: $studio-white-text;
+      }
+      &-link {
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: $studio-primary-text;
+        transition: all $studio-transition-03;
+        &:hover {
+          color: $studio-primary-text-hover;
+        }
+      }
+    }
+  }
+}
+
+.node-enter {
+  opacity: 0;
+}
+.node-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.node-exit {
+  opacity: 1;
+}
+.node-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.buttonBye-enter-active {
+  opacity: 0;
+}
+.buttonBye-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.buttonBye-enter-done {
+  opacity: 1;
+  transition: 0.3s;
+}
+
+// .buttonHi-enter-active {
+//   opacity: 0;
+// }
+
+// .buttonHi-enter-done {
+//   opacity: 1;
+//   transition: opacity 0.3s;
+// }

@@ -1,39 +1,45 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
 .spSelect {
-    width: 1620px;
-    height: 163px;
-    border: 1px solid $studio-white-text;
-    border-radius: 5px;
-    margin-bottom: 80px;
-    padding-left: 45px;
-    padding-right: 45px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.title {
-    font-weight: 400;
-    font-size: 36px;
-    line-height: 44px;
-    letter-spacing: 0.2em;
-}
-
-.sp__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  background-color: $studio-dark-element;
+  border-radius: 5px;
+  padding: 30px 45px;
+  &__title {
+		color: $studio-white-text;
+    font-size: 26px;
+    font-weight: 500;
+    
+  }
+  &__wrapper {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  &__item {
+    color: $studio-white-text;
+		background: none;
+		outline: none;
+		border: none;
+    font-size: 24px;
+    font-weight: 400;
+    
+    cursor: pointer;
+    transition: $studio-transition-03 ease;
+    &:hover {
+      color: $studio-primary-text-hover;
+    }
+  }
 }
 
-.sp {
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 29px;
-    letter-spacing: 0.2em;
-    cursor: pointer;
-    transition: 0.3s;
-    &:hover {
-        color: $studio-base-elements;
-        
+@media (max-width: $lg) {
+  .spSelect {
+    &__wrapper {
+      justify-content: start;
     }
+  }
 }

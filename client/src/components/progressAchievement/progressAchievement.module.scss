@@ -1,0 +1,33 @@
+@import '../../resource/styles/variables';
+
+.progressAchievement {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  background-color: $studio-dark-element;
+  box-shadow: $studio-box-shadow-element;
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    color: $studio-white-text;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 18px;
+    
+    padding: 10px;
+  }
+  &__achievement {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 55px;
+  }
+}
+
+.mr30 {
+  margin-right: 30px;
+  &:last-child {
+    margin-right: 0;
+  }
+}

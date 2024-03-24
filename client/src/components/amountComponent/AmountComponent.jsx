@@ -2,13 +2,13 @@ import React from "react";
 
 import style from "./amountComponent.module.scss";
 
-function amountComponent(props) {
+function AmountComponent({ img, value, onClick, likeLoading }) {
   return (
-    <div className={style.block}>
-      <img src={props.img} alt="" className={style.block__img} />
-      <div className={style.block__amount}>{props.value}</div>
-    </div>
+    <button disabled={likeLoading} className={onClick ? style.block : style.block + " " + style.block_noClicked} onClick={onClick}>
+      {img(style)}
+      <div className={style.block__amount}>{value}</div>
+    </button>
   );
 }
 
-export default amountComponent;
+export default AmountComponent;

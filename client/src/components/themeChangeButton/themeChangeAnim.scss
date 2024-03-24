@@ -1,0 +1,16 @@
+@import "../../resource/styles/variables";
+
+.themeChange-anim-enter {
+  opacity: 0;
+}
+.themeChange-anim-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.themeChange-anim-exit {
+  opacity: 1;
+}
+.themeChange-anim-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s;
+}

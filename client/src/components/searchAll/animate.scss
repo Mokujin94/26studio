@@ -1,0 +1,24 @@
+.animate {
+  &__list {
+    &-enter {
+      opacity: 0;
+      height: 0;
+    }
+    &-enter-active {
+      opacity: 1;
+      height: 100px;
+      transition: 300ms;
+    }
+    &-exit {
+      opacity: 1;
+      height: 0;
+      //   transform: scaleY(1);
+    }
+    &-exit-active {
+      opacity: 0;
+      height: 0;
+      //   transform: scaleY(0);
+      transition: 100ms;
+    }
+  }
+}

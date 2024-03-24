@@ -1,56 +1,56 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
+
+.block {
+  position: relative;
+  z-index: 1;
+  background-color: $studio-dark-element;
+  border-radius: 5px;
+  &__arrow {
+    position: absolute;
+    z-index: 0;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    path {
+      stroke: $studio-white-element;
+    }
+  }
+}
 
 .filter {
-    max-width: 390px;
+  position: relative;
+  z-index: 1;
+  appearance: none;
+  outline: none;
+  border: none;
+  color: $studio-white-text;
+  font-size: 18px;
+	padding: 15px 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  cursor: pointer;
+  &:active {
+    outline: none;
+    border: none;
+  }
+
+  &:focus {
+    outline: none;
+    border: none;
+  }
+  &__item {
     width: 100%;
-    height: 220px;
-    display: flex;
-    flex-direction: column;
-    background-color: $studio-text-button;
-    border-radius: 5px;
-    overflow: hidden;
-    &__inner {
-        margin-top: 15px;
+    background-color: $studio-dark-element;
+    &:active {
+      outline: none;
+      border: none;
     }
 
-    &__item {
-        width: 100%;
-        height: 40px;
-        padding-left: 30px;
-        color: $studio-white-text;
-
-        font-size: 18px;
-        line-height: 22px;
-        letter-spacing: 0.2em;
-
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-
-        transition: 0.1s;
-        &:hover {
-            background: $studio-base-elements;
-            color: $studio-text-button;
-        }
+    &:focus {
+      outline: none;
+      border: none;
     }
-
-    &__selected {
-        background: $studio-base-elements;
-        color: $studio-text-button;
-    }
+  }
 }
-
-.title {
-    margin: 15px 0 0 30px;
-    
-    color: $studio-white-text;
-
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 29px;
-    letter-spacing: 0.2em;
-
-}
-
-
-
