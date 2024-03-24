@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 
 import style from './modalNewsUpload.module.scss';
 import FunctionButton from '../functionButton/FunctionButton';
 import { Context } from '../..';
 import { createNews } from '../../http/newsAPI';
 import { observer } from 'mobx-react-lite';
+import Spinner from '../spinner/Spinner';
 
 const ModalNewsUpload = observer(() => {
 	const { user, modal } = useContext(Context);
@@ -12,6 +13,11 @@ const ModalNewsUpload = observer(() => {
 	const [descr, setDescr] = useState('');
 	const [file, setFile] = useState(null);
 	const [readerImg, setReaderImg] = useState(null);
+
+	const [titleCount, setTitleCount] = useState(100 - title.length)
+	const [descrCount, setDescrCount] = useState(500 - descr.length)
+
+	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
 		if (!file) {
@@ -25,6 +31,7 @@ const ModalNewsUpload = observer(() => {
 	}, [file])
 
 	const addNews = () => {
+		setIsLoading(true);
 		let message = []
 		if (!title || !descr || !file) {
 			if (!title) {
@@ -38,8 +45,9 @@ const ModalNewsUpload = observer(() => {
 			if (!file) {
 				message.push('Превью не заполнено')
 			}
-			modal.setModalComplete(true)
-			modal.setModalCompleteMessage(message.join(`\n \n`))
+			modal.setModalError(true)
+			modal.setModalErrorMessage(message.join(`\n \n`))
+			setIsLoading(false)
 			return
 		}
 		const formdata = new FormData();
@@ -51,8 +59,21 @@ const ModalNewsUpload = observer(() => {
 			modal.setModalCompleteMessage('Новость отправлена на проверку!');
 			modal.setModalComplete(true);
 			user.setModalNews(false);
+			setIsLoading(false)
 		});
 	};
+
+	const onTitle = (e) => {
+		// if (e.target.value.length > 100) return
+		setTitle(e.target.value.slice(0, 100));
+		setTitleCount(100 - e.target.value.slice(0, 100).length);
+	}
+
+	const onDescr = (e) => {
+		// if (e.target.value.length > 500) return
+		setDescr(e.target.value.slice(0, 500));
+		setDescrCount(500 - e.target.value.slice(0, 500).length);
+	}
 
 	return (
 		<div className={style.modal} onMouseDown={(e) => e.stopPropagation()}>
@@ -67,22 +88,27 @@ const ModalNewsUpload = observer(() => {
 			<h3 className={style.modal__title}>Предложить новость</h3>
 			<div className={style.modal__content}>
 				<div className={style.modal__contentInputs}>
-					<input
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						type="text"
-						className={style.modal__contentInputsItem}
-						placeholder="Название"
-					/>
-					<textarea
-						value={descr}
-						onChange={(e) => setDescr(e.target.value)}
+					<div className={style.modal__contentInput}>
+						<h3 className={style.modal__contentInputTitle}>Название <span className={style.modal__contentInputTitleCount}>({titleCount})</span></h3>
+						<input
+							value={title}
+							onChange={onTitle}
+							type="text"
+							className={style.modal__contentInputItem}
+						/>
+					</div>
+					<div className={style.modal__contentInput}>
+						<h3 className={style.modal__contentInputTitle}>Описание <span className={style.modal__contentInputTitleCount}>({descrCount})</span></h3>
+						<textarea
+							value={descr}
+							onChange={onDescr}
 
-						name=""
-						id=""
-						className={style.modal__contentInputsItem}
-						placeholder="Описание"
-					></textarea>
+							name=""
+							id=""
+							className={style.modal__contentInputItem}
+						></textarea>
+					</div>
+
 				</div>
 				<div className={style.modal__contentPreview}>
 					<label htmlFor="modalImage" className={style.modal__contentPreviewFile}>
@@ -137,7 +163,7 @@ const ModalNewsUpload = observer(() => {
 			</div>
 			<div className={style.modal__bottom}>
 				<div className={style.modal__bottomBtn}>
-					<FunctionButton onClick={addNews}>Предложить новость</FunctionButton>
+					<FunctionButton disabled={isLoading} onClick={addNews}>{isLoading ? <Spinner /> : "Предложить новость"}</FunctionButton>
 				</div>
 				<span className={style.modal__bottomText}>
 					*Каждая новость проходит проверку. После модерации новость появится на сайте

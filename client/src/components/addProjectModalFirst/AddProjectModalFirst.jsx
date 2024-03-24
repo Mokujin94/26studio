@@ -42,7 +42,7 @@ function AddProjectModalFirst({ setFile, file, setStages }) {
 				onChange={onChangeStages}
 				accept=".zip"
 			/>
-			<span className={style.descr_file}>Загрузите архив с проектом</span>
+			<span className={style.descr_file}>Загрузите ZIP-архив</span>
 			<label htmlFor="input_file" className={style.block__button}>
 				Выбрать файлы
 			</label>
