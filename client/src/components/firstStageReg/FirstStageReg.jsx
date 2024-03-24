@@ -41,7 +41,7 @@ const FirstStageReg = observer(() => {
 
 	const validationName = (e) => {
 		setValueName(e.target.value);
-		let match = /^[a-z]*$/i.test(e.target.value.replaceAll(" ", ""));
+		let match = /^[a-z0-9]*$/i.test(e.target.value.replaceAll(" ", ""));
 		if (e.target.value.length < 4) {
 			const newError = {
 				id: 0,

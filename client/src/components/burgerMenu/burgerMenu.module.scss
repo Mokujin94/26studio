@@ -72,6 +72,7 @@
   font-size: 22px;
   line-height: 27px;
   color: $studio-white-text;
+	overflow: hidden;
 }
 
 .notAuth {
@@ -101,6 +102,7 @@
   &__item {
     display: flex;
     align-items: center;
+		text-transform: uppercase;
     img {
 			width: 27px;
 			height: 27px;
@@ -111,7 +113,7 @@
       font-size: 12px;
       line-height: 15px;
       text-align: center;
-      letter-spacing: 0.2em;
+      
       color: $studio-white-text;
       text-decoration: none;
       padding: 10px 0;
