@@ -473,7 +473,7 @@ const Profile = observer(() => {
 										</div>
 										<div className="profile__left-user-description">
 											{/* 520 символов максимум  */}
-											{id === user.user.id ? user.user.description ? user.user.description : "Расскажите о себе" : descr}
+											<p className={Number(id) === user.user.id ? "profile__left-user-description-text profile__left-user-description-text_edit" : "profile__left-user-description-text"} onClick={() => profile.setEditModal(true)}>{descr}</p>
 										</div>
 									</div>
 								</>
@@ -517,7 +517,7 @@ const Profile = observer(() => {
 								})}
 							</TransitionGroup>
 
-							
+
 						</div>
 					</div>
 					<div className="profile__friends">

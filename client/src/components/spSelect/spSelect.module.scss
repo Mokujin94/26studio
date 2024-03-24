@@ -9,10 +9,10 @@
   border-radius: 5px;
   padding: 30px 45px;
   &__title {
-    color: $studio-white-text;
-    font-size: 36px;
-    font-weight: 400;
-    letter-spacing: 0.2em;
+		color: $studio-white-text;
+    font-size: 26px;
+    font-weight: 500;
+    
   }
   &__wrapper {
     display: flex;
@@ -27,7 +27,7 @@
 		border: none;
     font-size: 24px;
     font-weight: 400;
-    letter-spacing: 0.2em;
+    
     cursor: pointer;
     transition: $studio-transition-03 ease;
     &:hover {

@@ -11,7 +11,7 @@ const AddProjectModalSecond = observer(
 	({ projectPathes, setStages, uniqueFolder, baseURL }) => {
 		const { project, modal } = useContext(Context);
 
-		const [countName, setCountName] = useState(70 - project.projectName.length)
+		const [countName, setCountName] = useState(50 - project.projectName.length)
 		const [countDescr, setCountDescr] = useState(500 - project.projectDescr)
 
 		const onSelectPath = (e) => {
@@ -51,7 +51,7 @@ const AddProjectModalSecond = observer(
 					message.push(`Описание не заполнено`);
 				}
 
-				if (!project.projectSelectedPath) {
+				if (!project.projectPath) {
 					message.push(`Файл не выбран`);
 				}
 

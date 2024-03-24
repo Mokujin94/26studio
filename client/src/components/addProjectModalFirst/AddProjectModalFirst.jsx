@@ -2,18 +2,34 @@ import React, { useContext, useState } from "react";
 
 import style from "./addProjectModalFirst.module.scss";
 import { Context } from "../..";
+import { uploadProject } from "../../http/userAPI";
 
-function AddProjectModalFirst({ setFile, file, setStages }) {
-	const { modal } = useContext(Context)
-	const onChangeStages = (e) => {
+function AddProjectModalFirst({ setFile, file, setStages, setProjectPathes, setUniqueFolder, setBaseURL }) {
+	const { modal, project } = useContext(Context)
+
+
+	const onChangeStages = async (e) => {
 		let fileExt = e.target.files[0].name.split('.').at(-1);
 		if (fileExt !== 'zip') {
 			modal.setModalComplete(true)
 			modal.setModalCompleteMessage('Доступные расширения: .zip')
 			return
 		}
-		setStages(2);
-		setFile(e.target.files[0]);
+		const formData = new FormData();
+		formData.append("projectFile", e.target.files[0]);
+		await uploadProject(formData)
+			.then((data) => {
+				setFile(e.target.files[0]);
+				setProjectPathes(data.filePaths);
+				setUniqueFolder(data.normalPath);
+				setBaseURL(data.baseUrl);
+				project.setBaseURL(data.baseUrl);
+				setStages(2);
+			}).catch((err) => {
+				modal.setModalErrorMessage(err.response.data.message);
+				modal.setModalError(true)
+				e.target.value = ''
+			});
 	};
 	return (
 		<div className={style.block}>
@@ -42,7 +58,7 @@ function AddProjectModalFirst({ setFile, file, setStages }) {
 				onChange={onChangeStages}
 				accept=".zip"
 			/>
-			<span className={style.descr_file}>Загрузите архив с проектом</span>
+			<span className={style.descr_file}>Загрузите ZIP-архив</span>
 			<label htmlFor="input_file" className={style.block__button}>
 				Выбрать файлы
 			</label>

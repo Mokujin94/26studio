@@ -5,7 +5,7 @@ import style from './spSelect.module.scss';
 function SpSelect() {
 	return (
 		<div className={style.spSelect}>
-			<div className={style.spSelect__title}>Выбор СП</div>
+			<div className={style.spSelect__title}>Структурные подразделения</div>
 			<div className={style.spSelect__wrapper}>
 				<button disabled className={style.spSelect__item}>СП1</button>
 				<button disabled className={style.spSelect__item}>СП2</button>

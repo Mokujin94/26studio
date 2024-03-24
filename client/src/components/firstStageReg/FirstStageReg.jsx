@@ -15,6 +15,12 @@ const FirstStageReg = observer(() => {
 	const [valuePasswordConfirm, setValuePasswordConfirm] = useState(
 		user.dataAuth.passwordConfirm
 	);
+
+	const [valueNameError, setValueNameError] = useState('');
+	const [valueFullNameError, setValueFullNameError] = useState('');
+	const [valueMailError, setValueMailError] = useState('');
+	const [valuePasswordError, setValuePasswordError] = useState('');
+	const [valuePasswordConfirmError, setValuePasswordConfirmError] = useState('');
 	const [isEyeOpen, setIsEyeOpen] = useState(false)
 
 	const [newData, setNewData] = useState({});
@@ -41,18 +47,20 @@ const FirstStageReg = observer(() => {
 
 	const validationName = (e) => {
 		setValueName(e.target.value);
-		let match = /^[a-z]*$/i.test(e.target.value.replaceAll(" ", ""));
+		let match = /^[a-z0-9]*$/i.test(e.target.value.replaceAll(" ", ""));
 		if (e.target.value.length < 4) {
 			const newError = {
 				id: 0,
 				errors: [{ id: 0, name: "Никнейм должен содержать минимум 4 символа" }],
 			};
+			setValueNameError("Никнейм должен содержать минимум 4 символа")
 			user.setErrorAuth(newError);
 		} else if (!match) {
 			const newError = {
 				id: 0,
 				errors: [{ id: 0, name: "Никнейм должен содержать латинские буквы" }],
 			};
+			setValueNameError("Никнейм должен содержать латинские буквы")
 			user.setErrorAuth(newError);
 		} else {
 			const newError = {
@@ -103,6 +111,7 @@ const FirstStageReg = observer(() => {
 					},
 				],
 			};
+			setValueFullNameError("ФИО не должно содержать пробелы в начале или в конце")
 			user.setErrorAuth(newError);
 		} else if (!secondWord || !match || checkSpaceFristWord === -1) {
 			const newError = {
@@ -114,6 +123,7 @@ const FirstStageReg = observer(() => {
 					},
 				],
 			};
+			setValueFullNameError("Фамилия и имя обязательны для заполнения (киррилица)")
 			user.setErrorAuth(newError);
 		} else if (firstWord.length < 3 || (secondWord && secondWord.length < 2)) {
 			const newError = {
@@ -125,6 +135,7 @@ const FirstStageReg = observer(() => {
 					},
 				],
 			};
+			setValueFullNameError("Некорректное ФИО")
 			user.setErrorAuth(newError);
 		} else {
 			const newError = {
@@ -172,6 +183,7 @@ const FirstStageReg = observer(() => {
 					},
 				],
 			};
+			setValueMailError("Не корректная почта")
 			user.setErrorAuth(newError);
 		} else {
 			const newError = {
@@ -194,6 +206,7 @@ const FirstStageReg = observer(() => {
 					},
 				],
 			};
+			setValuePasswordError("Длина пароля не менее 6 символов")
 			user.setErrorAuth(newError);
 		} else {
 			const newError = {
@@ -216,8 +229,10 @@ const FirstStageReg = observer(() => {
 					},
 				],
 			};
+			setValuePasswordConfirmError("Пароли не совпадают")
 			user.setErrorAuth(newError);
 		} else {
+
 			const newError = {
 				id: 4,
 				errors: [],
@@ -244,11 +259,11 @@ const FirstStageReg = observer(() => {
 										: null
 								}
 							/>
-							<p className={style.error_message}>
-								{user.errorAuth[0].errors.length && user.dataAuth.name
-									? user.errorAuth[0].errors[0].name
-									: null}
-							</p>
+							<div className={user.errorAuth[0].errors.length && user.dataAuth.name ? style.error + " " + style.error_active : style.error}>
+								<p className={style.error_message}>
+									{valueNameError}
+								</p>
+							</div>
 						</label>
 						<label className={style.first__item}>
 							<h3 className={style.first__itemTitle}>ФИО</h3>
@@ -263,11 +278,11 @@ const FirstStageReg = observer(() => {
 										: null
 								}
 							/>
-							<p className={style.error_message}>
-								{user.errorAuth[1].errors.length && user.dataAuth.fullName
-									? user.errorAuth[1].errors[0].name
-									: null}
-							</p>
+							<div className={user.errorAuth[1].errors.length && user.dataAuth.fullName ? style.error + " " + style.error_active : style.error}>
+								<p className={style.error_message}>
+									{valueFullNameError}
+								</p>
+							</div>
 						</label>
 					</div>
 					<label className={`${style.first__item} ${style.first__itemEmail}`}>
@@ -283,34 +298,33 @@ const FirstStageReg = observer(() => {
 									: null
 							}
 						/>
-						<p className={style.error_message}>
-							{user.errorAuth[2].errors.length && user.dataAuth.email
-								? user.errorAuth[2].errors[0].name
-								: null}
-						</p>
+						<div className={user.errorAuth[2].errors.length && user.dataAuth.email ? style.error + " " + style.error_active : style.error}>
+							<p className={style.error_message}>
+								{valueMailError}
+							</p>
+						</div>
 					</label>
 					<div className={style.first__row}>
 						<label className={style.first__item}>
 							<h3 className={style.first__itemTitle}>Пароль</h3>
 							<div className={style.first__itemBottom}>
 								<InputPassword value={valuePassword} onChange={validationPassword} isPassword={true} />
-								<p className={style.error_message}>
-									{user.errorAuth[3].errors.length && user.dataAuth.password
-										? user.errorAuth[3].errors[0].name
-										: null}
-								</p>
+								<div className={user.errorAuth[3].errors.length && user.dataAuth.password ? style.error + " " + style.error_active : style.error}>
+									<p className={style.error_message}>
+										{valuePasswordError}
+									</p>
+								</div>
 							</div>
 						</label>
 						<label className={style.first__item}>
 							<h3 className={style.first__itemTitle}>Повтор пароля</h3>
 							<div className={style.first__itemBottom}>
 								<InputPassword value={valuePasswordConfirm} onChange={validationPasswordConfirm} isPassword={false} />
-								<p className={style.error_message}>
-									{user.errorAuth[4].errors.length &&
-										user.dataAuth.passwordConfirm
-										? user.errorAuth[4].errors[0].name
-										: null}
-								</p>
+								<div className={user.errorAuth[4].errors.length && user.dataAuth.passwordConfirm ? style.error + " " + style.error_active : style.error}>
+									<p className={style.error_message}>
+										{valuePasswordConfirmError}
+									</p>
+								</div>
 							</div>
 						</label>
 					</div>

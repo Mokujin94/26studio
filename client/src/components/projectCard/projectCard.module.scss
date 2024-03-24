@@ -126,7 +126,7 @@
       font-weight: 600;
       font-size: 24px;
       line-height: 29px;
-      letter-spacing: 0.2em;
+      
       text-transform: uppercase;
       color: $studio-white-text;
       text-align: center;
@@ -134,7 +134,7 @@
     &__name {
       font-weight: 300;
       font-size: 16px;
-      letter-spacing: 0.2em;
+      
       color: $studio-white-text;
     }
   }
@@ -173,7 +173,7 @@
   &__date {
     font-weight: 300;
     font-size: 16px;
-    letter-spacing: 0.2em;
+    
     color: $studio-white-text;
   }
 }

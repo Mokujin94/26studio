@@ -182,8 +182,9 @@
 
 			&-nickname {
 				font-weight: 500;
-				font-size: 48px;
+				font-size: 32px;
 				color: $studio-white-text;
+				overflow: hidden;
 			}
 
 			&-achievement {
@@ -202,17 +203,32 @@
 
 			&-full-name {
 				margin-bottom: 5px;
+				overflow: hidden;
 			}
 
 			&-description {
 				font-weight: 400;
 				font-size: 18px;
-				text-align: justify;
 				color: $studio-white-text;
+				max-height: 142px;
 				height: 100%;
 				background-color: $studio-darker-element;
 				border-radius: 5px;
 				padding: 10px;
+				overflow-y: auto;
+				&-text {
+					display: inline-block;
+					word-break: break-word;
+					white-space: pre-line;
+					overflow: hidden;
+					&_edit {
+						transition: $studio-transition-03;
+						cursor: pointer;
+						&:hover {
+							color: $studio-primary-text;
+						}
+					}
+				}
 			}
 		}
 		
@@ -308,7 +324,7 @@
 				color: $studio-primary-text;
 				font-size: 16px;
 				line-height: 20px;
-				letter-spacing: 0.1em;
+				
 				font-weight: 600;
 				border-radius: 10px;
 				text-transform: uppercase;

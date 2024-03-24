@@ -21,22 +21,7 @@ const AddProjectModal = observer(() => {
 	const [uniqueFolder, setUniqueFolder] = useState("");
 	const [baseURL, setBaseURL] = useState("");
 
-	useEffect(() => {
-		if (file) {
-			const formData = new FormData();
-			formData.append("projectFile", file);
-			uploadProject(formData)
-				.then((data) => {
-					setProjectPathes(data.filePaths);
-					setUniqueFolder(data.normalPath);
-					setBaseURL(data.baseUrl);
-					project.setBaseURL(data.baseUrl);
-					setStages(2);
-				})
-				.catch((err) => console.log(err));
-		}
 
-	}, [file]);
 
 	return (
 		<div className={style.block} onMouseDown={(e) => e.stopPropagation()}>
@@ -96,7 +81,14 @@ const AddProjectModal = observer(() => {
 							) : stages === 3 ? (
 								<AddProjectModalThird baseURL={baseURL} />
 							) : (
-								<AddProjectModalFirst setFile={setFile} file={file} setStages={setStages} />
+								<AddProjectModalFirst
+									setFile={setFile}
+									file={file}
+									setStages={setStages}
+									setProjectPathes={setProjectPathes}
+									setUniqueFolder={setUniqueFolder}
+									setBaseURL={setBaseURL}
+								/>
 							)}
 					</div>
 				</CSSTransition>
