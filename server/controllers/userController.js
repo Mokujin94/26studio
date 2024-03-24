@@ -21,6 +21,7 @@ const {
 	UserGroup,
 } = require("../models/models");
 const { Op, where } = require("sequelize");
+const hasHtmlFile = require("../helpers/hasHtmlFile");
 
 const generateJwt = (
 	id,
@@ -324,8 +325,11 @@ class UserController {
 		}
 	}
 
+
+
 	async uploadProject(req, res, next) {
 		try {
+
 			const uploadPath = path.join(__dirname, "..", "uploads");
 			const extractPath = path.join(__dirname, "..", "extracted");
 
@@ -403,6 +407,13 @@ class UserController {
 				});
 
 				extractStream.on("finish", () => {
+					if (!hasHtmlFile(filePaths)) {
+						// Удаляем zip-архив с сервера
+						const zipFilePath = path.join(uploadPath, zipFile.name);
+						fs.unlinkSync(zipFilePath);
+
+						return res.status(400).send("В архиве нет HTML-файлов");
+					}
 					// Выводим список относительных путей файлов
 					console.log("Files in the archive:", filePaths);
 					res.json({ filePaths, normalPath, baseUrl });
@@ -614,7 +625,7 @@ class UserController {
 				},
 				include: { model: Group, through: UserGroup }
 			})
-			if(!findUser) {
+			if (!findUser) {
 				return next(ApiError.badRequest("Не авторизован"))
 			}
 
@@ -631,7 +642,7 @@ class UserController {
 				user.lastOnline
 			);
 			return res.json({ token });
-		
+
 		} catch (error) {
 			next(ApiError.badRequest(error.message));
 		}
