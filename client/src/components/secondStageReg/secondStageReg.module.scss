@@ -9,7 +9,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     &:last-child {
       margin-bottom: 0;
     }
@@ -23,14 +23,17 @@
     color: $studio-white-text;
     font-size: 16px;
     font-weight: 500;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+		span {
+			color: $studio-grey-text;
+		}
   }
 
   &__itemInput {
     width: 600px;
     height: 120px;
     background-color: $studio-dark-element;
-    border-radius: 20px;
+    border-radius: 10px;
     border: 2px solid $studio-primary-border;
     color: $studio-white-text;
     font-size: 16px;
@@ -40,7 +43,7 @@
       padding-right: 45px;
     }
     &Area {
-      height: 125px;
+      height: 140px;
       padding: 10px 20px;
       resize: none;
 
@@ -54,7 +57,7 @@
     position: relative;
     width: 280px;
     height: 40px;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: $studio-dark-element;
     color: $studio-white-text;
     padding: 0 20px;
@@ -79,7 +82,7 @@
     align-items: center;
     width: 280px;
     height: 40px;
-    border-radius: 15px;
+    border-radius: 10px;
     background-color: $studio-dark-button;
     color: $studio-white-text;
     padding: 0 50px;

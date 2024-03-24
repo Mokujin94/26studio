@@ -45,7 +45,8 @@
       font-size: 16px;
       font-weight: 700;
       color: $studio-primary-text;
-			transition: .3s;
+			overflow: hidden;
+			transition: $studio-transition-03;
 			&:hover {
 				color: $studio-primary-text-hover;
 			}

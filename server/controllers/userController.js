@@ -412,7 +412,7 @@ class UserController {
 						const zipFilePath = path.join(uploadPath, zipFile.name);
 						fs.unlinkSync(zipFilePath);
 
-						return res.status(400).send("В архиве нет HTML-файлов");
+						return next(ApiError.badRequest("В архиве нет HTML-файлов"));
 					}
 					// Выводим список относительных путей файлов
 					console.log("Files in the archive:", filePaths);
