@@ -5,9 +5,10 @@ import messeges from '../resource/graphics/icons/burgerMenu/messegesIcon.svg';
 import control from '../resource/graphics/icons/burgerMenu/controlIcon.svg';
 import project from '../resource/graphics/icons/burgerMenu/projectIcon.svg';
 import group from '../resource/graphics/icons/burgerMenu/groupIcon.svg';
+import mygroup from '../resource/graphics/icons/burgerMenu/mygroupicon.svg';
 import about from '../resource/graphics/icons/burgerMenu/aboutIcon.svg';
 
-import { ADMIN_ROUTE, GROUPS_ROUTE, MESSENGER_ROUTE, NEWS_ROUTE, PROJECTS_ROUTE } from '../utils/consts';
+import { ADMIN_ROUTE, GROUPS_ROUTE, MESSENGER_ROUTE, MY_GROUP_ROUTE, NEWS_ROUTE, PROJECTS_ROUTE } from '../utils/consts';
 
 export default class UserStore {
   constructor() {
@@ -61,6 +62,7 @@ export default class UserStore {
       { id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
       // { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
       { id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+      { id: 3, title: 'Моя группа', icon: mygroup, path: GROUPS_ROUTE},
       // { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
       // { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
     ];

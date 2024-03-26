@@ -15,9 +15,11 @@ module.exports = function (req, res, next) {
 		const decoded = jwt.verify(token, process.env.SECRET_KEY);
 		req.user = decoded;
 
+
+
 		// Проверка userId
-		if (req.body.userId && req.user.id !== req.body.userId) {
-			return res.status(403).json({ message: "Запрещено. Невозможно выполнить запрос от имени другого пользователя." });
+		if (req.body.userId && req.user.id !== Number(req.body.userId)) {
+			return res.status(403).json({ message: "Запрещено. Невозможно выполнить запрос от имени другого пользователя."});
 		}
 
 		next();
@@ -25,3 +27,4 @@ module.exports = function (req, res, next) {
 		res.status(403).json({ message: "Не авторизован" });
 	}
 };
+

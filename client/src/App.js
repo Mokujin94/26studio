@@ -19,7 +19,7 @@ import { AuthProvider } from "./store/AuthStore";
 import { check } from "./http/userAPI";
 import { fetchGroups } from "./http/groupsAPI";
 import AddProjectModal from "./components/addProjectModal/AddProjectModal";
-import { LOGIN_ROUTE, PASSWORDRECOVERY_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
+import { ADMIN_ROUTE, GROUPS_ROUTE, LOGIN_ROUTE, MY_GROUP_ROUTE, NEWS_ROUTE, PASSWORDRECOVERY_ROUTE, PROJECTS_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
 import { CSSTransition } from "react-transition-group";
 import ModalError from "./components/modalError/ModalError";
 import NotAuthPopup from "./components/notAuthPopup/NotAuthPopup";
@@ -30,6 +30,14 @@ import { fetchNotifications } from "./http/notificationAPI";
 import EditModal from "./components/editModal/EditModal";
 import { isMobile, isTablet, isBrowser } from 'react-device-detect';
 
+import news from './resource/graphics/icons/burgerMenu/newsIcon.svg';
+import messeges from './resource/graphics/icons/burgerMenu/messegesIcon.svg';
+import control from './resource/graphics/icons/burgerMenu/controlIcon.svg';
+import project from './resource/graphics/icons/burgerMenu/projectIcon.svg';
+import group from './resource/graphics/icons/burgerMenu/groupIcon.svg';
+import mygroup from './resource/graphics/icons/burgerMenu/mygroupicon.svg';
+import about from './resource/graphics/icons/burgerMenu/aboutIcon.svg';
+
 
 const App = observer(() => {
 	const { user, error, modal, profile } = useContext(Context);
@@ -38,6 +46,28 @@ const App = observer(() => {
 		check().then((data) => {
 			user.setUser(data);
 			user.setAuth(true);
+			const menuAuth = [
+				{ id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
+				{ id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
+				// { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
+				{ id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+				{ id: 3, title: 'Моя группа', icon: mygroup, path: GROUPS_ROUTE + "/" + user.user.group.id},
+				// { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
+				// { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
+			]
+			const menuAdmin = [
+				{ id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
+				{ id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
+				// { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
+				{ id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+				{ id: 3, title: 'Моя группа', icon: mygroup, path: GROUPS_ROUTE + "/" + user.user.group.id},
+
+				// { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
+				{ id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
+			  ];
+			user.setMenuAuth(menuAuth)
+			user.setMenuAdmin(menuAdmin)
+			console.log(data)
 		});
 	}, []);
 

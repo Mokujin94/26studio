@@ -11,6 +11,8 @@ import ModalStore from './store/ModalStore';
 
 export const Context = createContext(null);
 
+import { MY_GROUP_ROUTE } from './utils/consts';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Context.Provider

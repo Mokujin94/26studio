@@ -449,16 +449,16 @@ class UserController {
 	}
 
 	async uploadFinishedProject(req, res, next) {
+		const {
+			name,
+			description,
+			path_from_project,
+			baseURL,
+			is_private,
+			is_private_comments,
+			userId,
+		} = req.body;
 		try {
-			const {
-				name,
-				description,
-				path_from_project,
-				baseURL,
-				is_private,
-				is_private_comments,
-				userId,
-			} = req.body;
 
 			const staticProjects = path.join(__dirname, "..", "static", "projects");
 
