@@ -1,0 +1,25 @@
+@import "../../resource/styles/variables";
+
+.news-edit {
+	max-width: 1000px;
+	min-height: 650px;
+	margin: 0 auto;
+	margin-top: 120px;
+	background-color: $studio-dark-element;
+	border-radius: 20px;
+
+	&__wrapper {
+		height: 100%;
+		padding: 40px;
+	}
+
+	&__content {
+		font-size: 18px;
+		color: $studio-white-text;
+	}
+
+	&__title {
+		font-size: 24px;
+		
+	}
+}

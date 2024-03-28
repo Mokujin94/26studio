@@ -10,6 +10,7 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { uploadProject } from "../../http/userAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
+import Cross from "../cross/Cross";
 
 const AddProjectModal = observer(() => {
 	const { project, user } = useContext(Context);
@@ -23,37 +24,13 @@ const AddProjectModal = observer(() => {
 
 
 
+
 	return (
 		<div className={style.block} onMouseDown={(e) => e.stopPropagation()}>
 			<div className={style.block__header}>
 				<h2 className={style.block__headerTitle}>Загрузка проекта</h2>
-				<div
-					onClick={() => user.setModalProject(false)}
-					className={style.block__headerClose}
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="22"
-						height="22"
-						viewBox="0 0 22 22"
-					>
-						<path d="M1 11.0901H21Z" fill="#27323E" />
-						<path
-							d="M1 11.0901H21"
-							stroke="#FCFCFC"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						/>
-						<path d="M11 21L11 1Z" fill="#27323E" />
-						<path
-							d="M11 21L11 1"
-							stroke="#FCFCFC"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						/>
-					</svg>
+				<div className={style.block__headerClose}>
+					<Cross onClick={() => user.setModalProject(false)} />
 				</div>
 			</div>
 			<div

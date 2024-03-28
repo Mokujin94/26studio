@@ -13,31 +13,8 @@
   border-radius: 15px;
   &__close {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    border-radius: 10px;
     top: 25px;
     right: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: $studio-transition-03;
-    &:hover {
-      background-color: $studio-white-element;
-      path {
-        stroke: $studio-dark-element;
-      }
-    }
-
-    svg {
-      transform: rotate(45deg);
-      width: 18px;
-      height: 18px;
-      path {
-        transition: $studio-transition-03;
-      }
-    }
   }
 
   &__title {

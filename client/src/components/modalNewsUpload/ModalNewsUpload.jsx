@@ -6,6 +6,7 @@ import { Context } from '../..';
 import { createNews } from '../../http/newsAPI';
 import { observer } from 'mobx-react-lite';
 import Spinner from '../spinner/Spinner';
+import Cross from '../cross/Cross';
 
 const ModalNewsUpload = observer(() => {
 	const { user, modal } = useContext(Context);
@@ -77,13 +78,8 @@ const ModalNewsUpload = observer(() => {
 
 	return (
 		<div className={style.modal} onMouseDown={(e) => e.stopPropagation()}>
-			<div className={style.modal__close} onClick={() => user.setModalNews(false)}>
-				<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
-					<path d="M1 11.0901H21Z" fill="#27323E" />
-					<path d="M1 11.0901H21" stroke="#FCFCFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-					<path d="M11 21L11 1Z" fill="#27323E" />
-					<path d="M11 21L11 1" stroke="#FCFCFC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-				</svg>
+			<div className={style.modal__close} >
+				<Cross onClick={() => user.setModalNews(false)} />
 			</div>
 			<h3 className={style.modal__title}>Предложить новость</h3>
 			<div className={style.modal__content}>
