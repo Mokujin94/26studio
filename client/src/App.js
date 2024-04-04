@@ -44,6 +44,7 @@ const App = observer(() => {
 
 	useEffect(() => {
 		check().then((data) => {
+
 			user.setUser(data);
 			user.setAuth(true);
 			const menuAuth = [
@@ -51,7 +52,7 @@ const App = observer(() => {
 				{ id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
 				// { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
 				{ id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
-				{ id: 3, title: 'Моя группа', groupName: user.user.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + user.user.group.id},
+				{ id: 3, title: 'Моя группа', groupName: data.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + data.group.id },
 				// { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
 				// { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
 			]
@@ -60,11 +61,11 @@ const App = observer(() => {
 				{ id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
 				// { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
 				{ id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
-				{ id: 3, title: 'Моя группа', groupName: user.user.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + user.user.group.id},
+				{ id: 3, title: 'Моя группа ', groupName: data.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + data.group.id },
 
 				// { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
 				{ id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
-			  ];
+			];
 			user.setMenuAuth(menuAuth)
 			user.setMenuAdmin(menuAdmin)
 			console.log(data)

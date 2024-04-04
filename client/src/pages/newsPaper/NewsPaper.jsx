@@ -19,58 +19,60 @@ import { viewNews } from "../../http/viewAPI";
 import image1 from '../../resource/graphics/images/newsCard/preview.jpg'
 
 const NewsPaper = observer(() => {
-	// const { user, error } = useContext(Context);
+	const { user, error } = useContext(Context);
 
-	// const [newsData, setNewsData] = useState({});
+	const [newsData, setNewsData] = useState({});
 
-	// const [amountLike, setAmountLike] = useState([]);
-	// const [comments, setComments] = useState([]);
-	// const [views, setViews] = useState([]);
-	// const [description, setDescription] = useState([]);
-	// const [isLike, setIsLike] = useState(false);
-	// const [likeLoading, setLikeLoading] = useState(false);
+	const [amountLike, setAmountLike] = useState([]);
+	const [comments, setComments] = useState([]);
+	const [views, setViews] = useState([]);
+	const [content, setContent] = useState([]);
+	const [isLike, setIsLike] = useState(false);
+	const [likeLoading, setLikeLoading] = useState(false);
 
-	// const formatedViews = useCountFormatter(views.length);
+	const formatedViews = useCountFormatter(views.length);
 
-	// const { id } = useParams();
+	const { id } = useParams();
 
-	// useEffect(() => {
-	// 	viewNews(id, user.user.id).catch((e) => console.log(e));
-	// 	getAllCommentsNews(id).then((data) => {
-	// 		setComments(data[0].comments);
-	// 	});
+	useEffect(() => {
+		if (user.user.id) {
+			viewNews(id, user.user.id).catch((e) => console.log(e));
+		}
+		getAllCommentsNews(id).then((data) => {
+			setComments(data[0].comments);
+		});
 
-	// 	fetchNewsById(id).then((data) => {
-	// 		setNewsData(data);
-	// 		const lines = data.description.split('\r\n');
-	// 		setDescription(lines)
-	// 		setAmountLike(() => useCountFormatter(data.likes.length));
-	// 		data.likes.filter((item) => {
-	// 			if (item.userId === user.user.id && item.status) {
-	// 				setIsLike(true);
-	// 			}
-	// 		});
-	// 		setViews(() => useCountFormatter(data.views.length));
-	// 	});
+		fetchNewsById(id).then((data) => {
+			setNewsData(data);
+			console.log(JSON.parse(data.description))
+			setContent(JSON.parse(data.description))
+			setAmountLike(() => useCountFormatter(data.likes.length));
+			data.likes.filter((item) => {
+				if (item.userId === user.user.id && item.status) {
+					setIsLike(true);
+				}
+			});
+			setViews(() => useCountFormatter(data.views.length));
+		});
 
-	// 	// const socket = socketIOClient("https://26studio-production.up.railway.app");
-	// 	const socket = socketIOClient(process.env.REACT_APP_API_URL);
+		// const socket = socketIOClient("https://26studio-production.up.railway.app");
+		const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
-	// 	socket.on("sendViewsNewsToClients", (updatedViews) => {
-	// 		if (updatedViews) {
-	// 			updatedViews.filter((item) => {
-	// 				if (item.id == id) {
-	// 					setViews(updatedViews[0].views);
-	// 				}
-	// 			});
-	// 		}
-	// 	});
+		socket.on("sendViewsNewsToClients", (updatedViews) => {
+			if (updatedViews) {
+				updatedViews.filter((item) => {
+					if (item.id == id) {
+						setViews(updatedViews[0].views);
+					}
+				});
+			}
+		});
 
-	// 	// Закрываем соединение при размонтировании компонента
-	// 	return () => {
-	// 		socket.disconnect();
-	// 	};
-	// }, [location.pathname, user.user.id]);
+		// Закрываем соединение при размонтировании компонента
+		return () => {
+			socket.disconnect();
+		};
+	}, [location.pathname, user.user.id]);
 
 	// const setLike = async () => {
 	// 	setLikeLoading(true);
@@ -131,37 +133,51 @@ const NewsPaper = observer(() => {
 	// 	);
 	// };
 
-	// const view = (style) => {
-	// 	return (
-	// 		<svg
-	// 			className={style.block__img}
-	// 			width="22"
-	// 			height="15"
-	// 			viewBox="0 0 22 15"
-	// 			fill="none"
-	// 			xmlns="http://www.w3.org/2000/svg"
-	// 		>
-	// 			<path
-	// 				d="M11.0825 0C4.125 0 0 7.5 0 7.5C0 7.5 4.125 15 11.0825 15C17.875 15 22 7.5 22 7.5C22 7.5 17.875 0 11.0825 0ZM11 2.5C14.0525 2.5 16.5 4.75 16.5 7.5C16.5 10.275 14.0525 12.5 11 12.5C7.975 12.5 5.5 10.275 5.5 7.5C5.5 4.75 7.975 2.5 11 2.5ZM11 5C9.4875 5 8.25 6.125 8.25 7.5C8.25 8.875 9.4875 10 11 10C12.5125 10 13.75 8.875 13.75 7.5C13.75 7.25 13.64 7.025 13.585 6.8C13.365 7.2 12.925 7.5 12.375 7.5C11.605 7.5 11 6.95 11 6.25C11 5.75 11.33 5.35 11.77 5.15C11.5225 5.075 11.275 5 11 5Z"
-	// 				fill="white"
-	// 			/>
-	// 		</svg>
-	// 	);
-	// };
+	const view = (style) => {
+		return (
+			<svg
+				className={style.block__img}
+				width="22"
+				height="15"
+				viewBox="0 0 22 15"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					d="M11.0825 0C4.125 0 0 7.5 0 7.5C0 7.5 4.125 15 11.0825 15C17.875 15 22 7.5 22 7.5C22 7.5 17.875 0 11.0825 0ZM11 2.5C14.0525 2.5 16.5 4.75 16.5 7.5C16.5 10.275 14.0525 12.5 11 12.5C7.975 12.5 5.5 10.275 5.5 7.5C5.5 4.75 7.975 2.5 11 2.5ZM11 5C9.4875 5 8.25 6.125 8.25 7.5C8.25 8.875 9.4875 10 11 10C12.5125 10 13.75 8.875 13.75 7.5C13.75 7.25 13.64 7.025 13.585 6.8C13.365 7.2 12.925 7.5 12.375 7.5C11.605 7.5 11 6.95 11 6.25C11 5.75 11.33 5.35 11.77 5.15C11.5225 5.075 11.275 5 11 5Z"
+					fill="white"
+				/>
+			</svg>
+		);
+	};
 
-	
+
 	return (
 		<div className="container">
 			<div className="news-paper">
-				<h1 className="news-paper__title">Заголовок</h1>
-				<p className="news-paper__descr">Описание ОписаниеОписание Описание Описание Описание Описание Описание ОписаниеОписание Описание Описание ОписаниеОписание Описание Описание    </p>
+				<h1 className="news-paper__title">{newsData.title}</h1>
+				{content.map(item => {
+					if (item.type === "paragraph") {
+						return (
+							<p
+								key={item.id}
+								className="news-paper__descr"
+								dangerouslySetInnerHTML={{ __html: item.data.text }}
+							/>
+						)
+					}
+					if (item.type === "image") {
+						return <img key={item.id} className="news-paper__image" src={item.data.file.url} alt="" />
+					}
+				})}
+				{/* <p className="news-paper__descr">Описание ОписаниеОписание Описание Описание Описание Описание Описание ОписаниеОписание Описание Описание ОписаниеОписание Описание Описание    </p>
 
 				<img className="news-paper__image" src={image1} alt="" />
 
 				<div className="news-paper__images">
 					<img className="news-paper__image" src={image1} alt="" />
 					<img className="news-paper__image" src={image1} alt="" />
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);

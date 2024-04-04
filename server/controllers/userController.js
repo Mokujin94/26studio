@@ -204,17 +204,23 @@ class UserController {
 	}
 
 	async check(req, res, next) {
+
 		try {
+			const user = await User.findOne({
+				include: [Group],
+				where: { id: req.user.id },
+			})
+			console.log(user)
 			const token = generateJwt(
-				req.user.id,
-				req.user.name,
-				req.user.full_name,
-				req.user.email,
-				req.user.description,
-				req.user.avatar,
-				req.user.group,
-				req.user.roleId,
-				req.user.lastOnline,
+				user.id,
+				user.name,
+				user.full_name,
+				user.email,
+				user.description,
+				user.avatar,
+				user.groups[0],
+				user.roleId,
+				user.lastOnline,
 			);
 			return res.json({ token });
 		} catch (error) {

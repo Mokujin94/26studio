@@ -1,80 +1,119 @@
-import { useRef, useState } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import './newsEdit.scss'
+import EditorText from '../../components/editor/EditorText';
+import FunctionButton from '../../components/functionButton/FunctionButton';
+import { createNews } from '../../http/newsAPI';
+import { observer } from 'mobx-react-lite';
+import { Context } from '../..';
 
-const NewsEdit = () => {
-	const [newsContent, setNewsContent] = useState([
-		{ order: 1, content: '1', isImage: false },
-		{ order: 2, content: 'Текст', isImage: false },
-	])
-	const [heading, setHeading] = useState('sdf')
-	const [paragraph, setParagraph] = useState('')
+const NewsEdit = observer(() => {
 
-	const [isContentEditTitle, setIsContentEditTitle] = useState(true)
+	const { user } = useContext(Context)
 
-	const contentRef = useRef(null)
-	const titleRef = useRef(null)
+	const editorInstanceRef = useRef(null);
+	const editorContainerRef = useRef(null);
+	const titleRef = useRef(null);
+
+	const [preview, setPreview] = useState(null)
+	const [title, setTitle] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
 
 
-	const handleInput = (e) => {
-		const focusedElement = document.activeElement;
-		const nodeName = focusedElement.nodeName;
-		console.log(newsContent[0].content);
 
-		if (titleRef.current.onFocus) {
-			setNewsContent(prev => [...prev, { order: 1, content: e.target.innerText, isImage: false }])
-		}
+	const handleEditorChange = useCallback((content) => {
+		console.log('Content changed! Current content:', content);
+	}, []);
 
-		if
-			(
-			e.key === 'Backspace' && !newsContent[0].content == <br />
-		) {
+	const handleTitle = (e) => {
+		if (e.key === "Enter") {
 			e.preventDefault()
 		}
-	};
+	}
 
-	const handleTitleBlur = () => {
-		// Проверить, если заголовок пустой, то вернуть его исходное значение
-		if (titleRef.current.innerText.trim() === '') {
-			setNewsContent(prev => {
-				return prev.map(item => {
-					if (item.order === 1) {
-						return { ...item, content: 'Заголовок' };
+	const onTitle = (e) => {
+		setTitle(e.target.innerText);
+	}
+
+	const saveContent = async () => {
+
+		try {
+			const outputData = await editorInstanceRef.current.save();
+			console.log('Data to save:', outputData);
+			let titleEmpty = true;
+			let contentEmpty = true;
+
+			if (outputData.blocks.length === 0) {
+				contentEmpty = true
+				const paragraphs = editorContainerRef.current.querySelectorAll('.ce-paragraph');
+				for (const paragraph of paragraphs) {
+					console.log('fdsfsd')
+					if (!paragraph.textContent.trim()) {
+						// Если параграф пустой, подсвечиваем его
+						paragraph.classList.add('editor-empty-highlight');
+						// Удаляем подсветку через 1 секунду
+						setTimeout(() => {
+							paragraph.classList.remove('editor-empty-highlight');
+						}, 1000);
 					}
-					return item;
-				});
-			});
+				}
+			} else {
+				contentEmpty = false
+			}
+			if (titleRef.current.innerText === '') {
+				titleEmpty = true
+				titleRef.current.classList.add('editor-empty-highlight')
+				setTimeout(() => {
+					titleRef.current.classList.remove('editor-empty-highlight');
+				}, 1000);
+			} else {
+				titleEmpty = false
+			}
+
+			if (!titleEmpty && !contentEmpty && preview) {
+				setIsLoading(true)
+				const formData = new FormData();
+				formData.append('img', preview)
+				formData.append('title', title)
+				formData.append('description', JSON.stringify(outputData.blocks))
+				formData.append('userId', user.user.id)
+				createNews(formData).then((data) => {
+					console.log("Опубликовано")
+				}).catch(error => {
+					console.log(error)
+				}).finally(() => {
+					setIsLoading(false)
+				})
+			}
+
+
+		} catch (error) {
+			console.error('Ошибка при сохранении', error);
 		}
 	};
+
 
 	return (
 		<div className="container">
 			<div className='news-edit'>
 				<div className="news-edit__wrapper">
-					<div className="news-edit__content" contentEditable onInput={handleInput} ref={contentRef}>
-						{
-							newsContent.map(({ order, content, isImage }) => {
-								if (order === 1) {
-									return (
-										<h1 ref={titleRef} className="news-edit__title" onBlur={handleTitleBlur}>{content}</h1>
-									)
-								} else if (isImage) {
-									return (
-										<img src={content} alt="" />
-									)
-								} else {
-									return (
-										<p className="news-edit__paragraph">{content}</p>
-									)
-								}
-
-							})
-						}
+					<div className="news-edit__wrapper-title">
+						<div className="news-edit__dowload-preview">
+							<input type="file" id='input-preview' className='news-edit__dowload-preview-input' onChange={(e) => setPreview(e.target.files[0])} />
+							<label htmlFor="input-preview" className='news-edit__dowload-preview-btn'>
+								{preview ? preview.name.length > 10 ? preview.name.slice(0, 15) + '...' : preview.name : "Добавить превью"}
+							</label>
+						</div>
+						<h1 ref={titleRef} className="news-edit__title" contentEditable onKeyDown={handleTitle} onInput={onTitle}></h1>
+					</div>
+					<EditorText onChange={handleEditorChange} editorInstanceRef={editorInstanceRef} editorContainerRef={editorContainerRef} />
+					<div className='news-edit__save'>
+						<FunctionButton onClick={saveContent}>Опубликовать</FunctionButton>
 					</div>
 				</div>
 			</div>
 		</div>
 
 	);
-};
+});
 
 export default NewsEdit;

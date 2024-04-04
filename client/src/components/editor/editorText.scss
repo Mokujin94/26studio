@@ -1,0 +1,107 @@
+@import "../../resource/styles/variables";
+/* editorStyles.css */
+.editor {
+  padding: 0px 20px;
+	min-height: 600px;
+}
+
+.editor img {
+	margin: 0 auto;
+	max-height: 300px;
+	object-fit: cover;
+}
+
+/* Стилизация конкретных блоков редактора */
+.editor .ce-block__content {
+  margin: 0 !important;
+	max-width: 100%;
+}
+
+.editor .image-tool__caption {
+	text-align: center;
+	color: $studio-grey-text;
+	font-weight: 600;
+}
+
+.editor .image-tool__caption[contentEditable=true][data-placeholder]:empty:before {
+	left: 50%;
+	width: 100%;
+	transform: translateX(-50%);
+}
+
+.editor .codex-editor__redactor {
+	padding-bottom: 20px !important;
+}
+
+.editor .cdx-input {
+	border: none;
+}
+
+.editor .ce-paragraph {
+  color: $studio-white-text;
+	font-size: 18px;
+	font-weight: 400;
+	overflow: hidden;
+	a {
+		color: $studio-primary-text;
+		font-weight: 500;
+	}
+}
+
+.editor .codex-editor--empty .ce-block:first-child .ce-paragraph[data-placeholder]:empty:before {
+	color: $studio-grey-text;
+	cursor: text;
+}
+
+.editor .ce-header {
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.editor .ce-toolbar__content {
+	max-width: 100%;
+}
+.editor .ce-toolbar__actions {
+
+}
+
+.editor .ce-toolbar__plus, .editor .ce-toolbar__settings-btn {
+	color: $studio-primary-element;
+	// border: 1px solid $studio-grey-border;
+	&:hover {
+		background: $studio-darker-element;
+	}
+}
+
+.editor .ce-popover {
+	background: $studio-darker-element;
+	&:hover {
+		background: $studio-darker-element;
+	}
+	&-item {
+		&:hover {
+			background: $studio-dark-element;
+		}
+		&__title {
+			color: $studio-white-text;
+		}
+	}
+
+	&__search {
+		background: $studio-grey-element;
+		input {
+			color: $studio-white-text;
+		}
+	}
+}
+
+.editor-empty-highlight {
+  // border: 2px solid red; /* или использовать outline, если не хотите изменять размеры */
+  animation: flashRed 1s;
+	background-color: rgba(255, 0, 0, 0.247);
+}
+
+@keyframes flashRed {
+  0% { background-color: rgba(255, 0, 0, 0.247); }
+  100% { background-color: rgba(255, 0, 0, 0); }
+}

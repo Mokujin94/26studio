@@ -53,7 +53,7 @@ function CreateButtonPopUp({ createPopupRef, setActiveCreatePopup, activeCreateP
 						<img className={style.button__contentItemImg} src={addProject} alt="" />
 						Добавить проект
 					</div>
-					<Link to={NEWS_CREATE_ROUTE} className={style.button__contentItem}>
+					<Link to={NEWS_CREATE_ROUTE} className={style.button__contentItem} onClick={() => setActiveCreatePopup(false)}>
 						<img className={style.button__contentItemImg} src={addNews} alt="" />
 						Предложить новость
 					</Link>
