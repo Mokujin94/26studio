@@ -22,7 +22,7 @@ const News = observer(() => {
 				news.setNews(data.rows);
 				setNewsCollection(
 					news.news.map((item) => (
-						<Link key={item.id} to={NEWSPAPER_ROUTE + "/" + item.id}>
+						<Link key={item.id} to={NEWSPAPER_ROUTE + "/" + item.id} rel="noopener noreferrer">
 							<NewsCard news={item} />
 						</Link>
 					))

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import socketIOClient from "socket.io-client";
-import ProjectHeader from "../../components/projectHeader/ProjectHeader";
+import ContentStats from "../../components/contentStats/ContentStats";
 import ProjectContent from "../../components/projectContent/ProjectContent";
 import Comments from "../../components/comments/Comments";
 import Description from "../../components/description/Description";
@@ -130,7 +130,7 @@ const Project = observer(() => {
 					{/* <Description title="Описание" descr={description} /> */}
 				</div>
 				<div className="project__header">
-					<ProjectHeader
+					<ContentStats
 						dataUser={dataUser}
 						title={dataProject.name}
 						descr={description}

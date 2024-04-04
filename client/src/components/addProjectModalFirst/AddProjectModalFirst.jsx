@@ -14,8 +14,9 @@ function AddProjectModalFirst({ setFile, file, setStages, setProjectPathes, setU
 		setIsLoading(true);
 		let fileExt = e.target.files[0].name.split('.').at(-1);
 		if (fileExt !== 'zip') {
-			modal.setModalComplete(true)
-			modal.setModalCompleteMessage('Доступные расширения: .zip')
+			modal.setModalErrorMessage('Доступные расширения: .zip')
+			modal.setModalError(true)
+			setIsLoading(false);
 			return
 		}
 		const formData = new FormData();

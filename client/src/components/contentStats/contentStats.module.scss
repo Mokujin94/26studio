@@ -27,21 +27,21 @@
 			gap: 10px;
 			background-color: $studio-darker-element;
 			padding: 5px 10px;
-			border: 1px solid $studio-grey-border;
+			border: 1px solid transparent;
 			border-radius: 10px;
 			transition: .3s;
-			&:hover {
-				border-color: $studio-primary-border;
-			}
 
 			&Avatar {
 				width: 30px;
 				height: 30px;
 				border-radius: 100%;
 				overflow: hidden;
-				img {
+				img, svg {
 					width: inherit;
 					height: inherit;
+				}
+				svg {
+					padding: 3px;
 				}
 			}
 
@@ -129,4 +129,10 @@
 			overflow: hidden;
 		}
   }
+}
+
+a.block__topUser {
+	&:hover {
+		border-color: $studio-primary-border;
+	}
 }

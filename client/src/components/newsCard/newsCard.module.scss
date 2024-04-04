@@ -98,6 +98,12 @@
 			overflow: hidden;
 			white-space: pre-wrap;
 			word-break: break-all;
+			a {
+				color: $studio-primary-text;
+				&:hover {
+					text-decoration: underline;
+				}
+			}
 		}
 	}
 
