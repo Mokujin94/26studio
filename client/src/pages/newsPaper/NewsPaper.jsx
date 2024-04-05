@@ -35,6 +35,8 @@ const NewsPaper = observer(() => {
 	const [isLike, setIsLike] = useState(false);
 	const [likeLoading, setLikeLoading] = useState(false);
 	const [isProposed, setIsProposed] = useState(false)
+	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingComments, setIsLoadingComments] = useState(true);
 
 	const { id } = useParams();
 
@@ -52,6 +54,7 @@ const NewsPaper = observer(() => {
 	// }, [userStore.user.user, navigate]);
 
 	useEffect(() => {
+		setIsLoading(true)
 		if (user.user.id) {
 			viewNews(id, user.user.id).catch((e) => console.log(e));
 		}
@@ -89,6 +92,8 @@ const NewsPaper = observer(() => {
 				}
 			});
 			setViews(data.views);
+		}).then(() => {
+			setIsLoading(false)
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
@@ -203,8 +208,8 @@ const NewsPaper = observer(() => {
 
 						<div className="news-paper__header">
 							{
-								newsData.user
-								&&
+								// newsData.user
+								// &&
 								<ContentStats
 									dataUser={newsData.user}
 									onClick={setLike}
@@ -213,6 +218,7 @@ const NewsPaper = observer(() => {
 									views={views}
 									likeLoading={likeLoading}
 									date={newsData.createdAt}
+									isLoading={isLoading}
 									isNews={true}
 								/>
 							}
@@ -223,6 +229,7 @@ const NewsPaper = observer(() => {
 								comments={comments}
 								setComments={setComments}
 								newsId={id}
+								isLoading={isLoadingComments}
 							/>
 						</div>
 					</div>

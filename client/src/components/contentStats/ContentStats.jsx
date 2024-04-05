@@ -7,8 +7,10 @@ import { useCountFormatter } from "../../hooks/useCountFormatter";
 import { Link } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
+import ContentStatsTitleSkeleton from "../Skeletons/ContentStatsTitleSkeleton";
+import Skeleton from "../Skeletons/Skeleton";
 
-const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, likes, isLike, views, likeLoading, date, isNews }) => {
+const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, likes, isLike, views, likeLoading, date, isNews, isLoading }) => {
 	const { user } = useContext(Context);
 
 	const [totalCharacters, setTotalCharacters] = useState(0);
@@ -91,39 +93,44 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 		<div className={style.block}>
 			<div className={style.block__top}>
 				{
-					title
+					!isNews
 					&&
-					<h2 className={style.block__title}>{title}</h2>
+					<h2 className={style.block__title}>{isLoading ? <Skeleton width={960} height={24} backgroundColor={"#222c36"} /> : title}</h2>
 				}
 				<div className={style.block__topContent}>
 
+
 					{
-						(dataUser.roleId === 4 && isNews)
+						isLoading
 							?
-							<div className={style.block__topUser}>
-								<div className={style.block__topUserAvatar}>
-									<svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M24.5 17.9747C27.5518 16.0885 31.1488 15 35 15C46.0457 15 55 23.9543 55 35C55 46.0457 46.0457 55 35 55C27.2998 55 20.616 50.6484 17.2736 44.2703L15.0829 50.1122C19.6488 56.1206 26.8713 60 35 60C48.8071 60 60 48.8071 60 35C60 21.1929 48.8071 10 35 10C31.2498 10 27.6925 10.8257 24.5 12.3053V17.9747Z" fill="#97BCE6" />
-										<path d="M49.2268 61.4187C44.9933 63.7033 40.1481 65 35 65C18.4315 65 5 51.5685 5 35C5 18.4315 18.4315 5 35 5C51.5685 5 65 18.4315 65 35C65 36.1839 64.9314 37.3519 64.798 38.5H69.8272C69.9415 37.3488 70 36.1812 70 35C70 15.67 54.33 0 35 0C15.67 0 0 15.67 0 35C0 54.33 15.67 70 35 70C41.439 70 47.4719 68.2612 52.6548 65.2275L49.2268 61.4187Z" fill="#97BCE6" />
-									</svg>
-								</div>
-								<div className={style.block__topUserText}>
-									<span className={style.block__topUserName}>
-										26Studio
-									</span>
-								</div>
-							</div>
+							<Skeleton width={150} height={42} backgroundColor={"#222c36"} />
 							:
-							<Link to={PROFILE_ROUTE + "/" + dataUser.id} className={style.block__topUser}>
-								<div className={style.block__topUserAvatar}>
-									<img src={process.env.REACT_APP_API_URL + "/" + dataUser.avatar} alt="" />
+							(dataUser.roleId === 4 && isNews)
+								?
+								<div className={style.block__topUser}>
+									<div className={style.block__topUserAvatar}>
+										<svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<path d="M24.5 17.9747C27.5518 16.0885 31.1488 15 35 15C46.0457 15 55 23.9543 55 35C55 46.0457 46.0457 55 35 55C27.2998 55 20.616 50.6484 17.2736 44.2703L15.0829 50.1122C19.6488 56.1206 26.8713 60 35 60C48.8071 60 60 48.8071 60 35C60 21.1929 48.8071 10 35 10C31.2498 10 27.6925 10.8257 24.5 12.3053V17.9747Z" fill="#97BCE6" />
+											<path d="M49.2268 61.4187C44.9933 63.7033 40.1481 65 35 65C18.4315 65 5 51.5685 5 35C5 18.4315 18.4315 5 35 5C51.5685 5 65 18.4315 65 35C65 36.1839 64.9314 37.3519 64.798 38.5H69.8272C69.9415 37.3488 70 36.1812 70 35C70 15.67 54.33 0 35 0C15.67 0 0 15.67 0 35C0 54.33 15.67 70 35 70C41.439 70 47.4719 68.2612 52.6548 65.2275L49.2268 61.4187Z" fill="#97BCE6" />
+										</svg>
+									</div>
+									<div className={style.block__topUserText}>
+										<span className={style.block__topUserName}>
+											26Studio
+										</span>
+									</div>
 								</div>
-								<div className={style.block__topUserText}>
-									<span className={style.block__topUserName}>
-										{dataUser.name}
-									</span>
-								</div>
-							</Link>
+								:
+								<Link to={PROFILE_ROUTE + "/" + dataUser.id} className={style.block__topUser}>
+									<div className={style.block__topUserAvatar}>
+										<img src={process.env.REACT_APP_API_URL + "/" + dataUser.avatar} alt="" />
+									</div>
+									<div className={style.block__topUserText}>
+										<span className={style.block__topUserName}>
+											{dataUser.name}
+										</span>
+									</div>
+								</Link>
 					}
 
 
@@ -133,9 +140,10 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 							value={formatedLikes}
 							onClick={onClick}
 							likeLoading={likeLoading}
+							isLoading={isLoading}
 						/>
-						<AmountComponent img={view} value={formatedViews} />
-						<AmountComponent img={calendar} value={formatedDate} />
+						<AmountComponent img={view} value={formatedViews} isLoading={isLoading} />
+						<AmountComponent img={calendar} value={formatedDate} isLoading={isLoading} />
 					</div>
 				</div>
 			</div>
