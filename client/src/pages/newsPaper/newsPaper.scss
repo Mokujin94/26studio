@@ -16,6 +16,9 @@
 		background-color: $studio-dark-element;
 		border-radius: 5px;
 		padding: 40px 60px;
+		&_isProposed {
+			align-items: center;
+		}
 	}
   
   &__title {

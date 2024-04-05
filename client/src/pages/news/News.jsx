@@ -41,6 +41,8 @@ const News = observer(() => {
 		{ id: 5 },
 		{ id: 6 },
 		{ id: 7 },
+		{ id: 8 },
+		{ id: 9 },
 	];
 
 	const newSkeletonList = skeletonList.map(({ id }) => (

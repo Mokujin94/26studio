@@ -8,7 +8,7 @@ import AmountComponent from "../../components/amountComponent/AmountComponent";
 import socketIOClient from "socket.io-client";
 
 import "./newsPaper.scss";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Context } from "../..";
 import { condidate, deleteLike, fetchNewsById, like } from "../../http/newsAPI";
 import { getAllCommentsNews } from "../../http/commentsAPI";
@@ -18,9 +18,13 @@ import { viewNews } from "../../http/viewAPI";
 
 import image1 from '../../resource/graphics/images/newsCard/preview.jpg'
 import ContentStats from "../../components/contentStats/ContentStats";
+import { NEWS_ROUTE } from "../../utils/consts";
 
 const NewsPaper = observer(() => {
 	const { user, error } = useContext(Context);
+	const navigate = useNavigate()
+
+	console.log(user);
 
 	const [newsData, setNewsData] = useState({});
 
@@ -30,8 +34,22 @@ const NewsPaper = observer(() => {
 	const [content, setContent] = useState([]);
 	const [isLike, setIsLike] = useState(false);
 	const [likeLoading, setLikeLoading] = useState(false);
+	const [isProposed, setIsProposed] = useState(false)
 
 	const { id } = useParams();
+
+
+	// useEffect(() => {
+	// 	console.log(userStore.user.user);
+	// 	console.log(user.user);
+	// 	// Проверяем, что пользователь загружен в UserStore
+	// 	if (!userStore.user || !userStore.user.id) {
+	// 		console.log(userStore.user.user);
+	// 		console.log(user.user);
+	// 		// Если пользователя нет, перенаправляем на страницу входа
+	// 		navigate(NEWS_ROUTE);
+	// 	}
+	// }, [userStore.user.user, navigate]);
 
 	useEffect(() => {
 		if (user.user.id) {
@@ -42,6 +60,16 @@ const NewsPaper = observer(() => {
 		});
 
 		fetchNewsById(id).then((data) => {
+			console.log(user.user.isAuth);
+			if (data.isProposed) {
+				if ((user.user.id && user.user.roleId !== 4) || !user.user.id) {
+					setIsProposed(true)
+					return
+				} else {
+					setIsProposed(false)
+				}
+			}
+
 			setNewsData(data);
 			console.log(JSON.parse(data.description))
 			const filteredDescription = JSON.parse(data.description)
@@ -121,77 +149,84 @@ const NewsPaper = observer(() => {
 
 	return (
 		<div className="container">
-			<div className="news-paper">
-				<div className="news-paper__inner">
-					<h1 className="news-paper__title">{newsData.title}</h1>
-					{content.map(item => {
-						if (item.type === "paragraph") {
-							return (
-								<p
-									key={item.id}
-									className="news-paper__descr"
-									dangerouslySetInnerHTML={{ __html: item.data.text }}
+			{
+				isProposed
+					?
+					<div className="news-paper ">
+						<div className="news-paper__inner news-paper__inner_isProposed">
+							<h1 className="news-paper__title">Доступ запрещен</h1>
+						</div>
+					</div>
+					:
+					<div className="news-paper">
+						<div className="news-paper__inner">
+							<h1 className="news-paper__title">{newsData.title}</h1>
+							{content.map(item => {
+								if (item.type === "paragraph") {
+									return (
+										<p
+											key={item.id}
+											className="news-paper__descr"
+											dangerouslySetInnerHTML={{ __html: item.data.text }}
+										/>
+									)
+								}
+								if (item.type === "image") {
+									if (!item.data.caption.length) {
+										return (
+											<div className={
+												`news-paper__image-item 
+											${item.data.stretched ? "news-paper__image-item_stretched" : ''} 
+											${item.data.withBackground ? "news-paper__image-item_bg" : ''} 
+											${item.data.withBorder ? "news-paper__image-item_border" : ''}`}
+											>
+												<img src={item.data.file.url} alt="" />
+											</div>
+										)
+									}
+									return (
+										<figure key={item.id} className="news-paper__image">
+											<div className={
+												`news-paper__image-item 
+											${item.data.stretched ? "news-paper__image-item_stretched" : ''} 
+											${item.data.withBackground ? "news-paper__image-item_bg" : ''} 
+											${item.data.withBorder ? "news-paper__image-item_border" : ''}`}
+											>
+												<img src={item.data.file.url} alt="" />
+											</div>
+											<caption className="news-paper__image-caption">{item.data.caption}</caption>
+										</figure>
+									)
+								}
+							})}
+						</div>
+
+						<div className="news-paper__header">
+							{
+								newsData.user
+								&&
+								<ContentStats
+									dataUser={newsData.user}
+									onClick={setLike}
+									likes={amountLike}
+									isLike={isLike}
+									views={views}
+									likeLoading={likeLoading}
+									date={newsData.createdAt}
+									isNews={true}
 								/>
-							)
-						}
-						if (item.type === "image") {
-							if (!item.data.caption.length) {
-								return (
-									<div className={
-										`news-paper__image-item 
-										${item.data.stretched ? "news-paper__image-item_stretched" : ''} 
-										${item.data.withBackground ? "news-paper__image-item_bg" : ''} 
-										${item.data.withBorder ? "news-paper__image-item_border" : ''}`}
-									>
-										<img src={item.data.file.url} alt="" />
-									</div>
-								)
 							}
-							return (
-								<figure key={item.id} className="news-paper__image">
-									<div className={
-										`news-paper__image-item 
-										${item.data.stretched ? "news-paper__image-item_stretched" : ''} 
-										${item.data.withBackground ? "news-paper__image-item_bg" : ''} 
-										${item.data.withBorder ? "news-paper__image-item_border" : ''}`}
-									>
-										<img src={item.data.file.url} alt="" />
-									</div>
-									<caption className="news-paper__image-caption">{item.data.caption}</caption>
-								</figure>
-							)
-						}
-					})}
-				</div>
+						</div>
 
-
-				<div className="news-paper__header">
-					{
-						newsData.user
-						&&
-						<ContentStats
-							dataUser={newsData.user}
-							onClick={setLike}
-							likes={amountLike}
-							isLike={isLike}
-							views={views}
-							likeLoading={likeLoading}
-							date={newsData.createdAt}
-							isNews={true}
-						/>
-					}
-				</div>
-
-				<div className="news-paper__comments">
-					<Comments
-						comments={comments}
-						setComments={setComments}
-						newsId={id}
-					/>
-				</div>
-			</div>
-
-
+						<div className="news-paper__comments">
+							<Comments
+								comments={comments}
+								setComments={setComments}
+								newsId={id}
+							/>
+						</div>
+					</div>
+			}
 		</div>
 	);
 });

@@ -114,8 +114,6 @@ const Projects = observer(() => {
 		{ id: 7 },
 		{ id: 8 },
 		{ id: 9 },
-		{ id: 10 },
-		{ id: 11 },
 	];
 	const lastAddedSkeletonList = [
 		{ id: 0 },
