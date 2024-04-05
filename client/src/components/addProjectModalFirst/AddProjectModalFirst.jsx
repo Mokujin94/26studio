@@ -3,16 +3,20 @@ import React, { useContext, useState } from "react";
 import style from "./addProjectModalFirst.module.scss";
 import { Context } from "../..";
 import { uploadProject } from "../../http/userAPI";
+import Spinner from "../spinner/Spinner";
 
 function AddProjectModalFirst({ setFile, file, setStages, setProjectPathes, setUniqueFolder, setBaseURL }) {
 	const { modal, project } = useContext(Context)
+	const [isLoading, setIsLoading] = useState(false);
 
 
 	const onChangeStages = async (e) => {
+		setIsLoading(true);
 		let fileExt = e.target.files[0].name.split('.').at(-1);
 		if (fileExt !== 'zip') {
-			modal.setModalComplete(true)
-			modal.setModalCompleteMessage('Доступные расширения: .zip')
+			modal.setModalErrorMessage('Доступные расширения: .zip')
+			modal.setModalError(true)
+			setIsLoading(false);
 			return
 		}
 		const formData = new FormData();
@@ -24,11 +28,13 @@ function AddProjectModalFirst({ setFile, file, setStages, setProjectPathes, setU
 				setUniqueFolder(data.normalPath);
 				setBaseURL(data.baseUrl);
 				project.setBaseURL(data.baseUrl);
+				setIsLoading(false);
 				setStages(2);
 			}).catch((err) => {
 				modal.setModalErrorMessage(err.response.data.message);
 				modal.setModalError(true)
 				e.target.value = ''
+				setIsLoading(false);
 			});
 	};
 	return (
@@ -57,10 +63,13 @@ function AddProjectModalFirst({ setFile, file, setStages, setProjectPathes, setU
 				value={file}
 				onChange={onChangeStages}
 				accept=".zip"
+				disabled={isLoading}
 			/>
 			<span className={style.descr_file}>Загрузите ZIP-архив</span>
 			<label htmlFor="input_file" className={style.block__button}>
-				Выбрать файлы
+				{
+					isLoading ? <Spinner /> : 'Выбрать файлы'
+				}
 			</label>
 		</div>
 	);

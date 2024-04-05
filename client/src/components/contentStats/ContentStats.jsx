@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import AmountComponent from "../amountComponent/AmountComponent";
-
-import style from "./projectHeader.module.scss";
+import style from "./contentStats.module.scss";
 import { observer } from "mobx-react-lite";
 import { Context } from "../..";
 import { useCountFormatter } from "../../hooks/useCountFormatter";
@@ -9,7 +8,7 @@ import { Link } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
 
-const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, likes, isLike, views, likeLoading, date }) => {
+const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, likes, isLike, views, likeLoading, date, isNews }) => {
 	const { user } = useContext(Context);
 
 	const [totalCharacters, setTotalCharacters] = useState(0);
@@ -19,7 +18,7 @@ const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, l
 	const formatedViews = useCountFormatter(views.length);
 	const formatedDate = useMemo(() => useDateFormatter(date), [date]);
 
-
+	console.log(dataUser);
 	const like = (style) => {
 		return (
 			<svg
@@ -77,6 +76,7 @@ const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, l
 	}, [descr]);
 
 	const calculateTotalCharacters = useCallback(() => {
+		if (!descr) return
 		let total = 0;
 		// if (Array.isArray(descr))
 		descr.forEach(word => {
@@ -90,18 +90,43 @@ const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, l
 	return (
 		<div className={style.block}>
 			<div className={style.block__top}>
-				<h2 className={style.block__title}>{title}</h2>
+				{
+					title
+					&&
+					<h2 className={style.block__title}>{title}</h2>
+				}
 				<div className={style.block__topContent}>
-					<Link to={PROFILE_ROUTE + "/" + dataUser.id} className={style.block__topUser}>
-						<div className={style.block__topUserAvatar}>
-							<img src={process.env.REACT_APP_API_URL + "/" + dataUser.avatar} alt="" />
-						</div>
-						<div className={style.block__topUserText}>
-							<span className={style.block__topUserName}>
-								{dataUser.name}
-							</span>
-						</div>
-					</Link>
+
+					{
+						(dataUser.roleId === 4 && isNews)
+							?
+							<div className={style.block__topUser}>
+								<div className={style.block__topUserAvatar}>
+									<svg width="70" height="70" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path d="M24.5 17.9747C27.5518 16.0885 31.1488 15 35 15C46.0457 15 55 23.9543 55 35C55 46.0457 46.0457 55 35 55C27.2998 55 20.616 50.6484 17.2736 44.2703L15.0829 50.1122C19.6488 56.1206 26.8713 60 35 60C48.8071 60 60 48.8071 60 35C60 21.1929 48.8071 10 35 10C31.2498 10 27.6925 10.8257 24.5 12.3053V17.9747Z" fill="#97BCE6" />
+										<path d="M49.2268 61.4187C44.9933 63.7033 40.1481 65 35 65C18.4315 65 5 51.5685 5 35C5 18.4315 18.4315 5 35 5C51.5685 5 65 18.4315 65 35C65 36.1839 64.9314 37.3519 64.798 38.5H69.8272C69.9415 37.3488 70 36.1812 70 35C70 15.67 54.33 0 35 0C15.67 0 0 15.67 0 35C0 54.33 15.67 70 35 70C41.439 70 47.4719 68.2612 52.6548 65.2275L49.2268 61.4187Z" fill="#97BCE6" />
+									</svg>
+								</div>
+								<div className={style.block__topUserText}>
+									<span className={style.block__topUserName}>
+										26Studio
+									</span>
+								</div>
+							</div>
+							:
+							<Link to={PROFILE_ROUTE + "/" + dataUser.id} className={style.block__topUser}>
+								<div className={style.block__topUserAvatar}>
+									<img src={process.env.REACT_APP_API_URL + "/" + dataUser.avatar} alt="" />
+								</div>
+								<div className={style.block__topUserText}>
+									<span className={style.block__topUserName}>
+										{dataUser.name}
+									</span>
+								</div>
+							</Link>
+					}
+
+
 					<div className={style.block__right}>
 						<AmountComponent
 							img={like}
@@ -114,39 +139,44 @@ const ProjectHeader = observer(({ dataUser, title, descr, descrLimit, onClick, l
 					</div>
 				</div>
 			</div>
-			<div className={style.block__descr}>
-				{
-					descrLimit.length && !isExpanded
-						? descrLimit.map((item, i) => {
-							if (i > 2 && !isExpanded) return
-							return (
-								<p className={style.block__descr__item} key={i}>{item}</p>
-							)
-						})
-						: descr.map((item, i) => {
-							if (i > 2 && !isExpanded) return
-							return (
-								<p className={style.block__descr__item} key={i}>{item}</p>
-							)
-						})
-				}
-				{
-					descr.length > 3 || totalCharacters > 300
-						? <div className={isExpanded ? style.block__descrButton + " " + style.block__descrButton_active : style.block__descrButton}>
-							{/* <div className={ isExpanded ? style.block__descrButtonIcon + " " + style.block__descrButtonIcon_active : style.block__descrButtonIcon}>
+			{
+				descr
+				&&
+				<div className={style.block__descr}>
+					{
+						descrLimit.length && !isExpanded
+							? descrLimit.map((item, i) => {
+								if (i > 2 && !isExpanded) return
+								return (
+									<p className={style.block__descr__item} key={i}>{item}</p>
+								)
+							})
+							: descr.map((item, i) => {
+								if (i > 2 && !isExpanded) return
+								return (
+									<p className={style.block__descr__item} key={i}>{item}</p>
+								)
+							})
+					}
+					{
+						descr.length > 3 || totalCharacters > 300
+							? <div className={isExpanded ? style.block__descrButton + " " + style.block__descrButton_active : style.block__descrButton}>
+								{/* <div className={ isExpanded ? style.block__descrButtonIcon + " " + style.block__descrButtonIcon_active : style.block__descrButtonIcon}>
 										
 									</div> */}
-							<span className={style.block__descrButtonText} onClick={() => setIsExpanded(prev => !prev)}>
-								{isExpanded ? 'Свернуть' : 'Развернуть'}
-							</span>
-						</div>
-						: null
-				}
-			</div>
+								<span className={style.block__descrButtonText} onClick={() => setIsExpanded(prev => !prev)}>
+									{isExpanded ? 'Свернуть' : 'Развернуть'}
+								</span>
+							</div>
+							: null
+					}
+				</div>
+			}
+
 
 		</div>
 	);
 }
 );
 
-export default ProjectHeader;
+export default ContentStats;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { Link } from "react-router-dom";
 import { NEWSPAPER_ROUTE } from "../../utils/consts";
@@ -16,6 +16,41 @@ const NewsCard = ({ news }) => {
 	const formatedComments = useCountFormatter(news.comments.length);
 	const formatedViews = useCountFormatter(news.views.length);
 
+	const description = JSON.parse(news.description);
+
+	const descriptionRef = useRef(null)
+
+	const filteredDescription = description
+		.filter((item) => item.type === "paragraph") // Оставляем только элементы типа "paragraph"
+		.map((item) => item.data.text); // Извлекаем текст из каждого элемента
+
+	// Объединяем текст в одну строку, разделенную пробелами
+	let descriptionText = filteredDescription
+		.join(" ")
+		.replace(
+			/<a\b/g,
+			`<a target="_blank"`
+		);
+
+	useEffect(() => {
+		const links = descriptionRef.current.querySelectorAll('a');
+
+		links.forEach(link => {
+			link.addEventListener('click', (e) => {
+				e.stopPropagation()
+			})
+		});
+
+		return () => {
+			links.forEach(link => {
+				link.removeEventListener('click', (e) => {
+					e.stopPropagation();
+				})
+			})
+		}
+
+	}, [description])
+
 	return (
 		<div className={news.user.roleId === 4 ? style.card + ' ' + style.card_special : style.card}>
 			<div className={style.card__preview}>
@@ -28,7 +63,7 @@ const NewsCard = ({ news }) => {
 			<div className={style.card__content}>
 				<div className={style.card__info}>
 					<h2 className={style.card__info__title}>{news.title}</h2>
-					<p className={style.card__info__description}>{news.description}</p>
+					<p className={style.card__info__description} ref={descriptionRef} dangerouslySetInnerHTML={{ __html: descriptionText }} />
 				</div>
 				<div className={style.card__activity}>
 					<div className={style.card__activity__item}>
@@ -69,7 +104,7 @@ const NewsCard = ({ news }) => {
 					</span>
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 }
 

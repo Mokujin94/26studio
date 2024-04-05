@@ -95,7 +95,7 @@ const UserAchivment = sequelize.define("user_achivment", {
 const News = sequelize.define("news", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 	title: { type: DataTypes.STRING, allowNull: false },
-	description: { type: DataTypes.TEXT, allowNull: false },
+	description: { type: DataTypes.JSON, allowNull: false },
 	img: { type: DataTypes.STRING },
 	isProposed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
 });

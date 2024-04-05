@@ -17,6 +17,7 @@ import close from '../../resource/graphics/icons/burgerMenu/closeIcon.svg';
 import avatar from '../../resource/graphics/images/burgerMenu/avatar.jpg';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../..';
+import Cross from '../cross/Cross';
 
 const BurgerMenu = observer(() => {
 	const { user } = useContext(Context);
@@ -32,8 +33,8 @@ const BurgerMenu = observer(() => {
 	return (
 		<>
 			<div className={user.burgerActive ? style.burgerActive : style.burger}>
-				<div className={style.close} onClick={() => burgerTrigger()}>
-					<img src={close} alt="icon" className={style.closeIcon} />
+				<div className={style.close}>
+					<Cross onClick={() => burgerTrigger()} />
 				</div>
 				<div className={style.avatarBlock}>
 					<img
@@ -66,24 +67,30 @@ const BurgerMenu = observer(() => {
 				)}
 				<ul className={style.menu}>
 					{user.isAuth
-						?  user.user.roleId > 1 
-							? user.menuAdmin.map(({ id, title, icon, path }) => {
+						? user.user.roleId > 1
+							? user.menuAdmin.map(({ id, title, groupName, icon, path }) => {
 								return (
 									<Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
 										<li className={style.menu__item}>
 											<img src={icon} alt="icon" />
 											{title}
+											{
+												groupName && <span className={style.menu__itemGroupName}>({groupName})</span>
+											}
 										</li>
 									</Link>
 								);
 							})
 							:
-							user.menuAuth.map(({ id, title, icon, path }) => {
+							user.menuAuth.map(({ id, title, groupName, icon, path }) => {
 								return (
 									<Link className={style.menu__item__text} to={path} onClick={() => burgerTrigger()} key={id}>
 										<li className={style.menu__item}>
 											<img src={icon} alt="icon" />
 											{title}
+											{
+												groupName && <span className={style.menu__itemGroupName}>({groupName})</span>
+											}
 										</li>
 									</Link>
 								);

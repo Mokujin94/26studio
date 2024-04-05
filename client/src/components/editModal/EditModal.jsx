@@ -7,6 +7,7 @@ import photo from '../../resource/graphics/images/profile/avatar.jpg'
 import FunctionButton from "../functionButton/FunctionButton";
 import { fetchGroups } from "../../http/groupsAPI";
 import { updateUser } from "../../http/userAPI";
+import Cross from "../cross/Cross";
 
 
 const EditModal = observer(() => {
@@ -217,6 +218,9 @@ const EditModal = observer(() => {
 
 	return (
 		<div className={style.editModal} onMouseDown={(e) => e.stopPropagation()}>
+			<div className={style.editModal__close}>
+				<Cross onClick={() => profile.setEditModal(false)} />
+			</div>
 			<h2 className={style.editModal__title}>Редактирование</h2>
 			<div className={style.editModal__content}>
 				<div className={style.editModal__input}>

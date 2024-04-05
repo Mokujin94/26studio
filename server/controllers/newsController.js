@@ -17,6 +17,11 @@ class NewsController {
 		try {
 			const { title, description, userId } = req.body;
 			const { img } = req.files;
+
+			if (!title || !description || !userId || !img) {
+				return next(ApiError.badRequest('Заполните все поля'))
+			}
+
 			let fileName = uuid.v4() + ".jpg";
 			const staticNews = "/app/static/news";
 
@@ -155,6 +160,21 @@ class NewsController {
 			const io = getIo();
 			io.emit("sendLikesNewsToClients", allLikes);
 			return res.json(likes);
+		} catch (error) {
+			next(ApiError.badRequest(error.message));
+		}
+	}
+
+	async uploadPhoto(req, res, next) {
+		const { img } = req.files;
+		let fileName;
+		try {
+
+			fileName = uuid.v4() + ".jpg";
+			img.mv(path.resolve(__dirname, "..", "static/news", fileName));
+
+			return res.json(fileName);
+
 		} catch (error) {
 			next(ApiError.badRequest(error.message));
 		}

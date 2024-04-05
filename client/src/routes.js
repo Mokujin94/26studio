@@ -17,6 +17,7 @@ import {
   MESSENGER_ROUTE,
   NEWSPAPER_ROUTE,
   NEWS_ROUTE,
+  NEWS_CREATE_ROUTE,
   PROFILE_ROUTE,
   PROJECTS_ROUTE,
   PROJECT_ROUTE,
@@ -27,12 +28,17 @@ import {
 } from './utils/consts';
 import GroupsManagement from './pages/groupsManagement/GroupsManagement';
 import PasswordRecovery from './pages/passwordRecovery/PasswordRecovery';
+import NewsEdit from './pages/newsEdit/NewsEdit';
 
 
 export const authRoutes = [
   {
     path: MESSENGER_ROUTE,
     Component: <Messenger />,
+  },
+	{
+    path: NEWS_CREATE_ROUTE,
+    Component: <NewsEdit />,
   },
 ];
 
