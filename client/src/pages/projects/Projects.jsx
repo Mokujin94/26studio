@@ -20,6 +20,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 import Spinner from "../../components/spinner/Spinner";
 import { CSSTransition } from "react-transition-group";
 import NewProjectCard from "../../components/newProjectCard/NewProjectCard";
+import Skeleton from "../../components/Skeletons/Skeleton";
 
 const Projects = observer(() => {
 	const { project } = useContext(Context);
@@ -114,8 +115,6 @@ const Projects = observer(() => {
 		{ id: 7 },
 		{ id: 8 },
 		{ id: 9 },
-		{ id: 10 },
-		{ id: 11 },
 	];
 	const lastAddedSkeletonList = [
 		{ id: 0 },
@@ -129,11 +128,11 @@ const Projects = observer(() => {
 	];
 
 	const newSkeletonList = skeletonList.map(({ id }) => (
-		<ProjectSkeleton key={id} />
+		<Skeleton key={id} width={308} height={257} />
 	));
 	const newLastAddedSkeletonList = lastAddedSkeletonList.map(({ id }) => (
 		<SplideSlide key={id}>
-			<ProjectSkeleton key={`skeleton-${id}`} />
+			<Skeleton key={`skeleton-${id}`} width={308} height={257} />
 		</SplideSlide>
 	));
 
