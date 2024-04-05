@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import AmountComponent from "../amountComponent/AmountComponent";
 import style from "./contentStats.module.scss";
 import { observer } from "mobx-react-lite";
@@ -8,15 +8,45 @@ import { Link } from "react-router-dom";
 import { PROFILE_ROUTE } from "../../utils/consts";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
 
-const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, likes, isLike, views, likeLoading, date, isNews }) => {
+const ContentStats = observer(({ dataUser, title, descr, onClick, likes, isLike, views, likeLoading, date, isNews }) => {
 	const { user } = useContext(Context);
 
-	const [totalCharacters, setTotalCharacters] = useState(0);
 	const [isExpanded, setIsExpanded] = useState(false)
+	const [isHideContent, setIsHideContent] = useState(false);
+	const [heightDescr, setHeightDescr] = useState(0);
+	const [hideHeightDescr, setHideHeightDescr] = useState(0);
 
 	const formatedLikes = useCountFormatter(likes);
 	const formatedViews = useCountFormatter(views.length);
 	const formatedDate = useMemo(() => useDateFormatter(date), [date]);
+
+	const blockRef = useRef(null)
+	console.log(descr);
+
+	useEffect(() => {
+		const blockElement = blockRef.current;
+		if (!blockElement) return;
+
+		const height = blockElement.clientHeight;
+		const hideHeight = blockElement.scrollHeight;
+		console.log(height, hideHeight)
+		setHeightDescr(height);
+		setHideHeightDescr(hideHeight);
+		if (height < hideHeight) {
+			setIsHideContent(true);
+		}
+	}, [descr, blockRef.current]);
+
+	useEffect(() => {
+		console.log(heightDescr);
+		if (heightDescr !== 0 && hideHeightDescr !== 0) {
+			if (isExpanded) {
+				blockRef.current.style.height = hideHeightDescr + 'px'
+			} else {
+				blockRef.current.style.height = heightDescr + 'px'
+			}
+		}
+	}, [isExpanded, descr])
 
 	console.log(dataUser);
 	const like = (style) => {
@@ -70,22 +100,6 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 			</svg>
 		);
 	};
-
-	useEffect(() => {
-		calculateTotalCharacters();
-	}, [descr]);
-
-	const calculateTotalCharacters = useCallback(() => {
-		if (!descr) return
-		let total = 0;
-		// if (Array.isArray(descr))
-		descr.forEach(word => {
-			total += word.length;
-		});
-		setTotalCharacters(total);
-		console.log(descr);
-		console.log(total);
-	}, [descr]);
 
 	return (
 		<div className={style.block}>
@@ -143,31 +157,16 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 				descr
 				&&
 				<div className={style.block__descr}>
+					<p className={isExpanded ? style.block__descr__item : style.block__descr__item + " " + style.block__descr__item_expand} ref={blockRef}>
+						{descr}
+					</p>
+
 					{
-						descrLimit.length && !isExpanded
-							? descrLimit.map((item, i) => {
-								if (i > 2 && !isExpanded) return
-								return (
-									<p className={style.block__descr__item} key={i}>{item}</p>
-								)
-							})
-							: descr.map((item, i) => {
-								if (i > 2 && !isExpanded) return
-								return (
-									<p className={style.block__descr__item} key={i}>{item}</p>
-								)
-							})
-					}
-					{
-						descr.length > 3 || totalCharacters > 300
-							? <div className={isExpanded ? style.block__descrButton + " " + style.block__descrButton_active : style.block__descrButton}>
-								{/* <div className={ isExpanded ? style.block__descrButtonIcon + " " + style.block__descrButtonIcon_active : style.block__descrButtonIcon}>
-										
-									</div> */}
-								<span className={style.block__descrButtonText} onClick={() => setIsExpanded(prev => !prev)}>
-									{isExpanded ? 'Свернуть' : 'Развернуть'}
-								</span>
-							</div>
+						isHideContent
+							?
+							<span className={style.block__descrButton} onClick={() => setIsExpanded(prev => !prev)}>
+								{isExpanded ? 'Свернуть' : 'Развернуть'}
+							</span>
 							: null
 					}
 				</div>

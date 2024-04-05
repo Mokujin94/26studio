@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
 import ContentStats from "../../components/contentStats/ContentStats";
 import ProjectContent from "../../components/projectContent/ProjectContent";
@@ -28,7 +28,6 @@ const Project = observer(() => {
 	const [dataProject, setDataProject] = useState({});
 	const [dataUser, setDataUser] = useState({});
 	const [description, setDescription] = useState([]);
-	const [descriptionLimit, setDescriptionLimit] = useState([]);
 	const [amountLike, setAmountLike] = useState([]);
 	const [comments, setComments] = useState([]);
 	const [views, setViews] = useState([]);
@@ -44,14 +43,7 @@ const Project = observer(() => {
 					setDataUser(dataUser);
 				})
 				.catch((e) => console.log(e))
-			console.log(data);
-			if (data.description.length > 300) {
-				const descrLimit = data.description.slice(0, 200)
-				const lines = descrLimit.split('\r\n');
-				setDescriptionLimit(lines);
-			}
-			const lines = data.description.split('\r\n');
-			setDescription(lines);
+			setDescription(data.description);
 			setAmountLike(data.likes.length);
 			data.likes.filter((item) => {
 				if (item.userId === user.user.id && item.status) {
@@ -134,7 +126,6 @@ const Project = observer(() => {
 						dataUser={dataUser}
 						title={dataProject.name}
 						descr={description}
-						descrLimit={descriptionLimit}
 						onClick={setLike}
 						likes={amountLike}
 						isLike={isLike}
