@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import NewsSkeleton from "../../components/newsSkeleton/NewsSkeleton";
 import { fetchNews } from "../../http/newsAPI";
 import { observer } from "mobx-react-lite";
+import Skeleton from "../../components/Skeletons/Skeleton";
 
 const News = observer(() => {
 	const { news } = useContext(Context);
@@ -46,7 +47,7 @@ const News = observer(() => {
 	];
 
 	const newSkeletonList = skeletonList.map(({ id }) => (
-		<NewsSkeleton key={id} />
+		<Skeleton key={id} width={308} height={257} />
 	));
 
 	return (

@@ -129,6 +129,7 @@ class ProjectController {
 			const project = await Project.findOne({
 				where: { id },
 				include: [
+					User,
 					{
 						model: Likes,
 						where: { status: true },

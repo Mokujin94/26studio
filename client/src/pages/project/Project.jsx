@@ -33,16 +33,17 @@ const Project = observer(() => {
 	const [views, setViews] = useState([]);
 	const [isLike, setIsLike] = useState(false);
 	const [likeLoading, setLikeLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingComments, setIsLoadingComments] = useState(true);
 
 	useEffect(() => {
+		setIsLoading(true);
+		setIsLoadingComments(true)
 		viewProject(id, user.user.id).catch((e) => console.log(e));
 		fetchProjectById(id).then((data) => {
+			console.log(data)
 			setDataProject(data);
-			fetchUserById(data.userId)
-				.then((dataUser) => {
-					setDataUser(dataUser);
-				})
-				.catch((e) => console.log(e))
+			setDataUser(data.user);
 			setDescription(data.description);
 			setAmountLike(data.likes.length);
 			data.likes.filter((item) => {
@@ -51,10 +52,14 @@ const Project = observer(() => {
 				}
 			});
 			setViews(data.views);
+		}).finally(() => {
+			setIsLoading(false)
 		});
 		getAllCommentsProject(id).then((data) => {
 			const filterData = data[0].comments.filter(item => !item.parentId);
 			setComments(filterData)
+		}).finally(() => {
+			setIsLoadingComments(false)
 		});
 
 		// const socket = socketIOClient("https://26studio-production.up.railway.app");
@@ -131,6 +136,7 @@ const Project = observer(() => {
 						isLike={isLike}
 						views={views}
 						likeLoading={likeLoading}
+						isLoading={isLoading}
 						date={dataProject.start_date}
 					/>
 				</div>
@@ -139,6 +145,7 @@ const Project = observer(() => {
 						comments={comments}
 						setComments={setComments}
 						projectId={id}
+						isLoading={isLoadingComments}
 					/>
 				</div>
 			</div>
