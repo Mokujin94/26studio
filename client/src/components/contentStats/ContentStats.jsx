@@ -27,20 +27,23 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 
 	useEffect(() => {
 		const blockElement = blockRef.current;
+		console.log(descr)
 		if (!blockElement) return;
+		if (descr.length) {
+			const height = blockElement.clientHeight;
+			const hideHeight = blockElement.scrollHeight;
+			setHeightDescr(height);
+			setHideHeightDescr(hideHeight);
+			console.log(height, hideHeight)
 
-		const height = blockElement.clientHeight;
-		const hideHeight = blockElement.scrollHeight;
-		console.log(height, hideHeight)
-		setHeightDescr(height);
-		setHideHeightDescr(hideHeight);
-		if (height < hideHeight) {
-			setIsHideContent(true);
+			if (height < hideHeight) {
+				setIsHideContent(true);
+			}
 		}
+
 	}, [descr, blockRef.current]);
 
 	useEffect(() => {
-		console.log(heightDescr);
 		if (heightDescr !== 0 && hideHeightDescr !== 0) {
 			if (isExpanded) {
 				blockRef.current.style.height = hideHeightDescr + 'px'
@@ -48,7 +51,7 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 				blockRef.current.style.height = heightDescr + 'px'
 			}
 		}
-	}, [isExpanded, descr])
+	}, [isExpanded, heightDescr, hideHeightDescr])
 
 	console.log(dataUser);
 	const like = (style) => {
@@ -165,7 +168,7 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 				descr
 				&&
 				<div className={style.block__descr}>
-					<p className={isExpanded ? style.block__descr__item : style.block__descr__item + " " + style.block__descr__item_expand} ref={blockRef}>
+					<p className={isExpanded ? style.block__descr__item : style.block__descr__item + " " + style.block__descr__item_expand} ref={blockRef} >
 						{descr}
 					</p>
 
