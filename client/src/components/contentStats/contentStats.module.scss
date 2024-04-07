@@ -99,16 +99,21 @@
     color: $studio-white-text;
     text-align: justify;
 		display: flex;
+		align-items: center;
 		flex-direction: column;
 		gap: 5px;
 
 		&__item {
 			position: relative;
+			width: 100%;
 			padding: 4px 10px;
 			background: $studio-darker-element;
 			border-radius: 5px;
 			word-break: break-all;
 			overflow: hidden;
+			display: -webkit-box;
+			-webkit-line-clamp: 4;
+			-webkit-box-orient: vertical;
 			transition: .3s;
 			&::before {
 				content: '';
@@ -121,10 +126,6 @@
 				transition: .3s;
 			}
 			&_expand {
-				display: -webkit-box;
-				-webkit-line-clamp: 4;
-				-webkit-box-orient: vertical;
-				
 				&::before {
 					height: 100%;
 				}
@@ -133,10 +134,14 @@
 
 		&Button {
 			position: relative;
-				text-align: center;
-				color: $studio-primary-text;
-				font-weight: 500;
-				cursor: pointer;
+			text-align: center;
+			color: $studio-primary-text;
+			font-weight: 500;
+			cursor: pointer;
+			transition: .3s;
+			&:hover {
+				color: $studio-primary-text-hover;
+			}
 		}
 
   }

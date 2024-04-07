@@ -168,7 +168,8 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 				descr
 				&&
 				<div className={style.block__descr}>
-					<p className={isExpanded ? style.block__descr__item : style.block__descr__item + " " + style.block__descr__item_expand} ref={blockRef} >
+
+					<p className={isExpanded || (!isExpanded && !isHideContent) ? style.block__descr__item : style.block__descr__item + " " + style.block__descr__item_expand} ref={blockRef} >
 						{descr}
 					</p>
 
