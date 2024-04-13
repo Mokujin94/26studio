@@ -12,6 +12,7 @@ import ReplyComment from "../replyComment/ReplyComment";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
 import { useCountFormatter } from "../../hooks/useCountFormatter";
 import Spinner from "../spinner/Spinner";
+import useFormatResponses from "../../hooks/useFormatResponses";
 
 const NewsComment = observer((props) => {
 	const { user, error } = useContext(Context);
@@ -30,6 +31,8 @@ const NewsComment = observer((props) => {
 	const replyInputRef = useRef(null)
 
 	const likesFormated = useCountFormatter(likesCount)
+
+	const responseText = useFormatResponses(replyes.length)
 
 	const blockRef = useRef(null);
 
@@ -220,7 +223,7 @@ const NewsComment = observer((props) => {
 			</div>
 			{!!replyes.length &&
 				<div className={isReplyOpen ? style.block__replyes__btn + ' ' + style.block__replyes__btn_active : style.block__replyes__btn} onClick={() => setIsReplyOpen(prev => !prev)}>
-					<span>{replyes.length} ответа</span>
+					<span>{responseText}</span>
 				</div>
 			}
 			{

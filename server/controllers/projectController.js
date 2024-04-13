@@ -59,7 +59,7 @@ class ProjectController {
 					order: [
 						[
 							Sequelize.literal(
-								'(SELECT COUNT(*) FROM "likes" WHERE "likes"."projectId" = "project"."id")'
+								'(SELECT COUNT(*) FROM "likes" WHERE "likes"."projectId" = "project"."id" AND "likes"."status" = true)'
 							),
 							"DESC",
 						],
@@ -394,7 +394,7 @@ class ProjectController {
 					order: [
 						[
 							Sequelize.literal(
-								'(SELECT COUNT(*) FROM "likes" WHERE "likes"."projectId" = "project"."id")'
+								'(SELECT COUNT(*) FROM "likes" WHERE "likes"."projectId" = "project"."id" AND "likes"."status" = true)'
 							),
 							"DESC",
 						],

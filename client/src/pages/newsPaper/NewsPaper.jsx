@@ -19,6 +19,7 @@ import { viewNews } from "../../http/viewAPI";
 import image1 from '../../resource/graphics/images/newsCard/preview.jpg'
 import ContentStats from "../../components/contentStats/ContentStats";
 import { NEWS_ROUTE } from "../../utils/consts";
+import NewsPaperSkeleton from "../../components/Skeletons/newsPaperSkeleton";
 
 const NewsPaper = observer(() => {
 	const { user, error } = useContext(Context);
@@ -165,45 +166,53 @@ const NewsPaper = observer(() => {
 					:
 					<div className="news-paper">
 						<div className="news-paper__inner">
-							<h1 className="news-paper__title">{newsData.title}</h1>
-							{content.map(item => {
-								if (item.type === "paragraph") {
-									return (
-										<p
-											key={item.id}
-											className="news-paper__descr"
-											dangerouslySetInnerHTML={{ __html: item.data.text }}
-										/>
-									)
-								}
-								if (item.type === "image") {
-									if (!item.data.caption.length) {
-										return (
-											<div className={
-												`news-paper__image-item 
+							{
+								isLoading
+									?
+									<NewsPaperSkeleton />
+									:
+									<>
+										<h1 className="news-paper__title">{newsData.title}</h1>
+										{content.map(item => {
+											if (item.type === "paragraph") {
+												return (
+													<p
+														key={item.id}
+														className="news-paper__descr"
+														dangerouslySetInnerHTML={{ __html: item.data.text }}
+													/>
+												)
+											}
+											if (item.type === "image") {
+												if (!item.data.caption.length) {
+													return (
+														<div className={
+															`news-paper__image-item 
 											${item.data.stretched ? "news-paper__image-item_stretched" : ''} 
 											${item.data.withBackground ? "news-paper__image-item_bg" : ''} 
 											${item.data.withBorder ? "news-paper__image-item_border" : ''}`}
-											>
-												<img src={item.data.file.url} alt="" />
-											</div>
-										)
-									}
-									return (
-										<figure key={item.id} className="news-paper__image">
-											<div className={
-												`news-paper__image-item 
+														>
+															<img src={item.data.file.url} alt="" />
+														</div>
+													)
+												}
+												return (
+													<figure key={item.id} className="news-paper__image">
+														<div className={
+															`news-paper__image-item 
 											${item.data.stretched ? "news-paper__image-item_stretched" : ''} 
 											${item.data.withBackground ? "news-paper__image-item_bg" : ''} 
 											${item.data.withBorder ? "news-paper__image-item_border" : ''}`}
-											>
-												<img src={item.data.file.url} alt="" />
-											</div>
-											<caption className="news-paper__image-caption">{item.data.caption}</caption>
-										</figure>
-									)
-								}
-							})}
+														>
+															<img src={item.data.file.url} alt="" />
+														</div>
+														<caption className="news-paper__image-caption">{item.data.caption}</caption>
+													</figure>
+												)
+											}
+										})}
+									</>
+							}
 						</div>
 
 						<div className="news-paper__header">

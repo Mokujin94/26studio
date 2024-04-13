@@ -60,6 +60,50 @@ class FriendController {
 
 			const io = getIo();
 
+			const findFriend = await Friend.findOne({
+				where: { userId: friendId, friendId: userId, status: false }
+			})
+
+			if (findFriend) {
+				await findFriend.update({
+					status: true
+				})
+
+				const notification = await Notifications.create({
+					senderId: userId,
+					recipientId: friendId,
+					friend_status: true,
+				});
+
+				const sendNotification = await Notifications.findOne({
+					where: { id: notification.id },
+					include: [
+						{
+							model: Likes,
+							as: "like",
+						},
+						{
+							model: Comments,
+							as: "comment",
+						},
+						{
+							model: Comments,
+							as: "replyComment",
+						},
+						{
+							model: User,
+							as: "sender",
+						},
+						{
+							model: User,
+							as: "recipient",
+						},
+					],
+				});
+				io.emit("notification", sendNotification);
+				return next(ApiError.badRequest("Пользователь добавлен в друзья"));
+			}
+
 			const friend = await Friend.create({
 				userId,
 				friendId,
