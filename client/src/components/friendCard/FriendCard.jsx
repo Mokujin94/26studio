@@ -12,6 +12,7 @@ import { PROFILE_ROUTE } from "../../utils/consts";
 
 import FriendCardSkeleton from "../../components/Skeletons/FriendCardSkeleton";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
+import Skeleton from "../Skeletons/Skeleton";
 
 const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 	const [user, setUser] = useState({});
@@ -44,7 +45,7 @@ const FriendCard = ({ userId, options, onClickOne, onClickTwo }) => {
 	return (
 		<>
 			{isLoadingFriend ? (
-				<FriendCardSkeleton />
+				<Skeleton width={370} height={100} backgroundColor={"#222c36"} />
 			) : (
 				<Link to={PROFILE_ROUTE + "/" + userId} className={isOnline ? style.friendCard + " " + style.friendCard_online : style.friendCard}>
 					<div className={style.friendCard__avatar}>

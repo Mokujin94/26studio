@@ -3,6 +3,7 @@ import ContentLoader from "react-content-loader"
 
 const Skeleton = (props) => (
 	<ContentLoader
+		className="project-skeleton"
 		speed={1}
 		width={props.width}
 		height={props.height}
