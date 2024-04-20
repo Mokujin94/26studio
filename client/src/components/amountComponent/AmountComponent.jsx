@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import style from "./amountComponent.module.scss";
 import Skeleton from "../Skeletons/Skeleton";
@@ -13,7 +13,7 @@ function AmountComponent({ img, value, onClick, likeLoading, isLoading }) {
 					:
 					<button disabled={likeLoading} className={onClick ? style.block : style.block + " " + style.block_noClicked} onClick={onClick}>
 						{img(style)}
-						<div className={style.block__amount}>{value}</div>
+						<div className={style.block__amount} style={{ minWidth: value.length <= 4 && value.length * 11 }}>{value}</div>
 					</button>
 			}
 		</>
