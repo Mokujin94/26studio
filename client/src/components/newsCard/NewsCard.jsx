@@ -59,6 +59,11 @@ const NewsCard = ({ news }) => {
 					alt="img"
 					className={style.card__preview__img}
 				/>
+				<img
+					src={process.env.REACT_APP_API_URL + news.img}
+					alt="img"
+					className={style.card__preview__img}
+				/>
 			</div>
 			<div className={style.card__content}>
 				<div className={style.card__info}>
