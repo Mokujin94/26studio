@@ -59,10 +59,15 @@ const NewsCard = ({ news }) => {
 					alt="img"
 					className={style.card__preview__img}
 				/>
+				<img
+					src={process.env.REACT_APP_API_URL + news.img}
+					alt="img"
+					className={style.card__preview__img}
+				/>
 			</div>
 			<div className={style.card__content}>
 				<div className={style.card__info}>
-					<h2 className={style.card__info__title}>{news.title}</h2>
+					<h2 className={style.card__info__title} title={news.title}>{news.title}</h2>
 					<p className={style.card__info__description} ref={descriptionRef} dangerouslySetInnerHTML={{ __html: descriptionText }} />
 				</div>
 				<div className={style.card__activity}>

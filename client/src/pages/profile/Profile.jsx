@@ -37,6 +37,7 @@ import FriendCard from "../../components/friendCard/FriendCard";
 import ProfileMainSkeleton from "../../components/Skeletons/ProfileMainSkeleton";
 import ProfileFriendsSkeleton from "../../components/Skeletons/ProfileFriendsSkeleton";
 import { useDateFormatter } from "../../hooks/useDateFormatter";
+import Skeleton from "../../components/Skeletons/Skeleton";
 
 const Profile = observer(() => {
 	const { profile, user, modal } = useContext(Context);
@@ -273,6 +274,14 @@ const Profile = observer(() => {
 				modal.setModalComplete(true);
 				modal.setModalCompleteMessage("Заявка отправлена");
 				setTextButton("Отменить заявку");
+			}).catch(err => {
+				if (err.response.data.message === "Пользователь добавлен в друзья") {
+					modal.setModalComplete(true);
+					modal.setModalCompleteMessage(
+						`Пользователь ${userId.name} теперь у вас в друзьях`
+					);
+					setTextButton("Удалить из друзей");
+				}
 			});
 		}
 		if (textButton === "Отменить заявку") {
@@ -473,7 +482,7 @@ const Profile = observer(() => {
 										</div>
 										<div className="profile__left-user-description">
 											{/* 520 символов максимум  */}
-											<p className={Number(id) === user.user.id ? "profile__left-user-description-text profile__left-user-description-text_edit" : "profile__left-user-description-text"} onClick={() => profile.setEditModal(true)}>{descr}</p>
+											<p className={Number(id) === user.user.id ? "profile__left-user-description-text profile__left-user-description-text_edit" : "profile__left-user-description-text"} onClick={Number(id) === user.user.id ? () => profile.setEditModal(true) : null}>{descr === 'Нет описания' && Number(id) === user.user.id ? "Расскажите о себе" : descr}</p>
 										</div>
 									</div>
 								</>
@@ -588,7 +597,13 @@ const Profile = observer(() => {
 							<div className={((statusFriend && !friends.length && !profile.isLoadingProfile) || (!statusFriend && !friendsRequest.length && !profile.isLoadingProfile)) ? "profile__friends-content" + " " + "profile__friends-content_center" : "profile__friends-content"}>
 								{
 									profile.isLoadingProfile ? (
-										<ProfileFriendsSkeleton />
+										<div className="profile__friends-content">
+											<Skeleton key={id} width={370} height={100} backgroundColor={"#222c36"} />
+											<Skeleton key={id} width={370} height={100} backgroundColor={"#222c36"} />
+											<Skeleton key={id} width={370} height={100} backgroundColor={"#222c36"} />
+											<Skeleton key={id} width={370} height={100} backgroundColor={"#222c36"} />
+											<Skeleton key={id} width={370} height={100} backgroundColor={"#222c36"} />
+										</div>
 									) : statusFriend ? (
 										friends.length && !searchFriendValue ? (
 											friends

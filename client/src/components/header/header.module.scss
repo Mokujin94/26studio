@@ -44,6 +44,27 @@
       display: block;
 			width: 100%;
     }
+		&Circle {
+			transform-box: fill-box;
+			&:nth-child(3) {
+				transform-origin: 45% 50%;
+			}
+			&:nth-child(4) {
+				transform-origin: 50% 50%;
+
+			}
+		}
+
+		&_onHover {
+			.header__logoCircle {
+				&:nth-child(3) {
+					animation: animation-header-circle 1.3s ease-out .7s;
+				}
+				&:nth-child(4) {
+					animation: animation-header-circle 1.3s ease-out;
+				}
+			}
+		}
   }
   &__search {
     position: relative;
@@ -90,6 +111,12 @@
     display: flex;
     gap: 20px;
   }
+}
+
+@keyframes animation-header-circle {
+	0% { transform: rotate(0deg); }
+	50% { transform: rotate(360deg); }
+	100% { transform: rotate(720deg); }
 }
 
 @media (max-width: $lg) {

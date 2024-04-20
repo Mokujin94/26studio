@@ -214,11 +214,9 @@
 		&__btn {
 			position: relative;
 			margin-top: 10px;
-			padding: 5px 10px 5px 30px;
-			background: $studio-dark-element;
+			padding-left: 20px;
 			border-radius: 10px;
-			color: $studio-white-text;
-			border: 1px solid $studio-white-border;
+			color: $studio-grey-text;
 			font-weight: 500;
 			font-size: 14px;
 			width: max-content;
@@ -228,25 +226,24 @@
 			&::before {
 				content: ''; 
 				position: absolute; /* Абсолютное позиционирование */
-				left: 10px; top: 50%; /* Положение треугольника */
+				left: 0px; 
+				top: 50%; /* Положение треугольника */
 				transform: translateY(calc(-50% + 3px));
 				border: 6px solid transparent; /* Прозрачные границы */
-				border-top: 6px solid $studio-white-element; /* Добавляем треугольник */
+				border-top: 6px solid $studio-grey-element; /* Добавляем треугольник */
 				transition: $studio-transition-03;
 			 }
 			 &:hover {
-				background: $studio-white-element;
-				color: $studio-dark-text;
+				color: $studio-white-text;
 				&::before {
-					border-top: 6px solid $studio-dark-element; /* Добавляем треугольник */
+					border-top: 6px solid $studio-white-element; /* Добавляем треугольник */
 				}
 			 }
 			 
 			 &_active {
-				background: $studio-white-element;
-				color: $studio-dark-text;
+				color: $studio-white-text;
 				&::before {
-					border-top: 6px solid $studio-dark-element; /* Добавляем треугольник */
+					border-top: 6px solid $studio-white-element; /* Добавляем треугольник */
 					transform: translateY(calc(-50% + -3px)) rotateX(180deg);
 				}
 			 }
