@@ -32,7 +32,7 @@ const ProfileProjects = observer(({ isOnSetting }) => {
 
 	const newSkeletonList = skeletonList.map(({ id }) => (
 		// <ProjectSkeleton key={id} color="#222c36" foregroundColor="#27323e" />
-		<Skeleton key={id} width={276} height={234} backgroundColor={"#222c36"} />
+		<Skeleton key={id} width={267} height={234} backgroundColor={"#222c36"} />
 	));
 
 	return (

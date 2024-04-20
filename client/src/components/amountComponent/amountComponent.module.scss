@@ -36,5 +36,7 @@
     font-weight: 500;
     font-size: 16px;
     color: $studio-white-text;
+		min-width: 11px;
+		transition:  0.3s ease;
   }
 }
