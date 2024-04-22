@@ -10,7 +10,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 6;
+  z-index: 7;
   position: fixed;
   left: -285px;
   top: 0;
@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 6;
+  z-index: 7;
   position: fixed;
   left: 0px;
   top: 0;
@@ -156,7 +156,7 @@
   opacity: 0;
 	transition: opacity 0.3s ease, z-index .3s .3s;
   &_active {
-    z-index: 5;
+    z-index: 6;
     opacity: 1;
 		transition: opacity 0.3s ease;
   }

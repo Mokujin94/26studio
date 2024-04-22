@@ -19,7 +19,7 @@ import { AuthProvider } from "./store/AuthStore";
 import { check } from "./http/userAPI";
 import { fetchGroups } from "./http/groupsAPI";
 import AddProjectModal from "./components/addProjectModal/AddProjectModal";
-import { ADMIN_ROUTE, GROUPS_ROUTE, LOGIN_ROUTE, MY_GROUP_ROUTE, NEWS_ROUTE, PASSWORDRECOVERY_ROUTE, PROJECTS_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
+import { ADMIN_ROUTE, GROUPS_ROUTE, LOGIN_ROUTE, MESSENGER_ROUTE, MY_GROUP_ROUTE, NEWS_ROUTE, PASSWORDRECOVERY_ROUTE, PROJECTS_ROUTE, REGISTRATION_ROUTE } from "./utils/consts";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import ModalError from "./components/modalError/ModalError";
 import NotAuthPopup from "./components/notAuthPopup/NotAuthPopup";
@@ -38,6 +38,7 @@ import group from './resource/graphics/icons/burgerMenu/groupIcon.svg';
 import mygroup from './resource/graphics/icons/burgerMenu/mygroupicon.svg';
 import about from './resource/graphics/icons/burgerMenu/aboutIcon.svg';
 import Preloader from "./components/preloader/Preloader";
+import HeaderMessenger from "./components/headerMessenger/HeaderMessenger";
 
 
 const App = observer(() => {
@@ -53,21 +54,21 @@ const App = observer(() => {
             const menuAuth = [
                 { id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
                 { id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
-                // { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
-                { id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
-                { id: 3, title: 'Моя группа', groupName: data.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + data.group.id },
+                { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
+                { id: 3, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+                { id: 4, title: 'Моя группа', groupName: data.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + data.group.id },
                 // { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
                 // { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
             ]
             const menuAdmin = [
                 { id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
                 { id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
-                // { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
-                { id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
-                { id: 3, title: 'Моя группа ', groupName: data.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + data.group.id },
+                { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
+                { id: 3, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+                { id: 4, title: 'Моя группа ', groupName: data.group.name, icon: mygroup, path: GROUPS_ROUTE + "/" + data.group.id },
 
                 // { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
-                { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
+                { id: 5, title: 'Управление', icon: control, path: ADMIN_ROUTE },
             ];
             user.setMenuAuth(menuAuth)
             user.setMenuAdmin(menuAdmin)
@@ -187,18 +188,19 @@ const App = observer(() => {
                                         </CSSTransition>
 
                                         {user.path === REGISTRATION_ROUTE ||
-                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null : (
+                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null :																				(
                                             <BurgerMenu />
                                         )}
                                         {user.path === REGISTRATION_ROUTE ||
-                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null : (
+                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null :  user.path === MESSENGER_ROUTE ?
+																						<HeaderMessenger/> : (
                                             <Header />
                                         )}
                                         <div className="App__inner">
                                             <AppRouter />
                                         </div>
                                         {user.path === REGISTRATION_ROUTE ||
-                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null : (
+                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE || user.path === MESSENGER_ROUTE ? null : (
                                             <Footer />
                                         )}
                                     </AuthProvider>

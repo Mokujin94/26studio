@@ -14,7 +14,7 @@ import SearchAll from "../searchAll/SearchAll";
 import { useDebounce } from "../../hooks/useDebounce";
 import { searchAll } from "../../http/searchAPI";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { NEWS_ROUTE } from "../../utils/consts";
 import Notification from "../notification/Notification";
 
@@ -22,6 +22,8 @@ function Header() {
 	const { user } = useContext(Context);
 
 	const [search, setSearch] = useState("");
+
+	const path = useLocation();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [activeCreatePopup, setActiveCreatePopup] = useState(false);
@@ -45,6 +47,8 @@ function Header() {
 	const searchIconRef = useRef(null)
 
 	const nodeRef = useRef(null);
+
+	console.log(path.pathname);
 
 	useClickOutside(nodeRef, () => {
 		setSearchOpen(false);
