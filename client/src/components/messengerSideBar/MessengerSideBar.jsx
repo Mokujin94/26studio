@@ -16,6 +16,25 @@ const MessengerSideBar = () => {
 			</div>
 			<div className={style.sideBar__chats}>
 				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
+				<Chat />
 			</div>
 		</div>
 	);

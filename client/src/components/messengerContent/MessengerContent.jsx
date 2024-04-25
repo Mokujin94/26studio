@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom'
 import { fetchChat } from '../../http/chatsAPI'
 const MessengerContent = () => {
 	const [chatData, setChatData] = useState({})
-	const {id} = useParams();
+	const { id } = useParams();
 
 	useEffect(() => {
 		if (id) {
@@ -14,7 +14,7 @@ const MessengerContent = () => {
 			fetchChat(id).then(data => {
 				setChatData(data);
 				console.log(data)
-				
+
 			})
 		}
 	}, [id])
@@ -35,11 +35,17 @@ const MessengerContent = () => {
 				<Message isOther={true} count={4} />
 				<Message isOther={false} count={1} />
 				<Message isOther={true} count={4} />
+				<Message isOther={false} count={4} />
 				<Message isOther={true} count={4} />
 				<Message isOther={false} count={4} />
 				<Message isOther={true} count={4} />
+				<Message isOther={false} count={4} />
 				<Message isOther={true} count={4} />
+				<Message isOther={false} count={4} />
 				<Message isOther={true} count={4} />
+				<Message isOther={false} count={4} />
+				<Message isOther={true} count={4} />
+				<Message isOther={false} count={4} />
 
 
 			</div>
