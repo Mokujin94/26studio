@@ -192,7 +192,7 @@ const App = observer(() => {
                                             <BurgerMenu />
                                         )}
                                         {user.path === REGISTRATION_ROUTE ||
-                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null :  user.path === MESSENGER_ROUTE ?
+                                            user.path === LOGIN_ROUTE || user.path === PASSWORDRECOVERY_ROUTE ? null :  user.path === MESSENGER_ROUTE || user.path === MESSENGER_ROUTE + '/:id' ?
 																						<HeaderMessenger/> : (
                                             <Header />
                                         )}

@@ -36,6 +36,11 @@ export const authRoutes = [
     path: MESSENGER_ROUTE,
     Component: <Messenger />,
   },
+
+  {
+    path: MESSENGER_ROUTE + '/:id',
+    Component: <Messenger />,
+  },
 	{
     path: NEWS_CREATE_ROUTE,
     Component: <NewsEdit />,

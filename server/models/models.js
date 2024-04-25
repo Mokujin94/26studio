@@ -20,7 +20,6 @@ const User = sequelize.define("user", {
 });
 
 
-
 const Friend = sequelize.define("friend", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 	userId: { type: DataTypes.INTEGER },
@@ -28,11 +27,6 @@ const Friend = sequelize.define("friend", {
 	status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 });
 
-const Subscriber = sequelize.define("subscriber", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	id_sender: { type: DataTypes.INTEGER },
-	id_recipient: { type: DataTypes.INTEGER },
-});
 
 const Group = sequelize.define("group", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -56,42 +50,6 @@ const Project = sequelize.define("project", {
 	is_private_comments: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
-const TeamAccess = sequelize.define("team_access", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	role: { type: DataTypes.STRING },
-	give_privileges: { type: DataTypes.BOOLEAN },
-	read_privileges: { type: DataTypes.BOOLEAN },
-	insert_privileges: { type: DataTypes.BOOLEAN },
-	update_privileges: { type: DataTypes.BOOLEAN },
-	invite_privileges: { type: DataTypes.BOOLEAN },
-	kick_privileges: { type: DataTypes.BOOLEAN },
-});
-
-const Team = sequelize.define("team", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	name: { type: DataTypes.STRING },
-});
-
-const WhiteListUser = sequelize.define("white_list_user", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-});
-
-const Achivment = sequelize.define("achivment", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	name: { type: DataTypes.STRING },
-	rule: { type: DataTypes.STRING },
-	icon: { type: DataTypes.STRING },
-});
-
-const GettingAchivment = sequelize.define("getting_achivment", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-});
-
-const UserAchivment = sequelize.define("user_achivment", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	amount: { type: DataTypes.INTEGER },
-});
-
 const News = sequelize.define("news", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 	title: { type: DataTypes.STRING, allowNull: false },
@@ -100,19 +58,6 @@ const News = sequelize.define("news", {
 	isProposed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
 });
 
-const ProposedNews = sequelize.define("proposed_news", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	img: { type: DataTypes.STRING },
-	title: { type: DataTypes.STRING },
-	description: { type: DataTypes.STRING },
-});
-
-const UnpostedNews = sequelize.define("unposted_news", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	title: { type: DataTypes.STRING },
-	img: { type: DataTypes.STRING },
-	description: { type: DataTypes.STRING },
-});
 
 const Comments = sequelize.define("comments", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -138,27 +83,20 @@ const View = sequelize.define("views", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
-const Message = sequelize.define("message", {
+const Chats = sequelize.define("chats", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	files: { type: DataTypes.STRING },
-	is_updated: { type: DataTypes.BOOLEAN },
-	is_deleted_all: { type: DataTypes.BOOLEAN },
-	is_deleted: { type: DataTypes.BOOLEAN },
-	is_read: { type: DataTypes.BOOLEAN },
-	resended: { type: DataTypes.JSON },
+	name: {type: DataTypes.STRING, allowNull: true},
+	is_group: {type: DataTypes.BOOLEAN, defaultValue: false}
 });
 
-const Chat = sequelize.define("chat", {
+const ChatParticipants = sequelize.define("chat_participants", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	name: { type: DataTypes.STRING, allowNull: false },
-	avatar: { type: DataTypes.STRING },
-	members: { type: DataTypes.JSON },
-});
+})
 
-const TypeOfAttachment = sequelize.define("type_of_attachment", {
+const Messages = sequelize.define("messages", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	name: { type: DataTypes.STRING },
-});
+	content: {type: DataTypes.TEXT, allowNull: false},
+})
 
 const Notifications = sequelize.define("notifications", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -185,21 +123,6 @@ Project.belongsTo(User);
 
 User.hasMany(News);
 News.belongsTo(User);
-
-TeamAccess.hasMany(User);
-User.belongsTo(TeamAccess);
-
-User.hasMany(WhiteListUser);
-WhiteListUser.belongsTo(User);
-
-Team.hasMany(User);
-User.belongsTo(Team);
-
-Team.hasMany(Project);
-Project.belongsTo(Team);
-
-Team.hasMany(TeamAccess);
-TeamAccess.belongsTo(Team);
 
 Notifications.belongsTo(User, { foreignKey: "senderId", as: "sender" });
 Notifications.belongsTo(User, { foreignKey: "recipientId", as: "recipient" });
@@ -242,51 +165,31 @@ View.belongsTo(User);
 
 User.belongsToMany(Friend, { through: UserFriend, as: "friends" });
 
-User.hasMany(Subscriber);
-Subscriber.belongsTo(User);
-
-User.belongsToMany(Achivment, { through: UserAchivment, GettingAchivment });
-Achivment.belongsToMany(User, { through: UserAchivment, GettingAchivment });
-
-User.hasMany(ProposedNews);
-ProposedNews.belongsTo(User);
-
-User.hasMany(UnpostedNews);
-UnpostedNews.belongsTo(User);
-
-User.hasMany(Message);
-Message.belongsTo(User);
-
 Group.belongsToMany(User, { through: UserGroup });
 User.belongsToMany(Group, { through: UserGroup });
 
 Role.hasMany(User, { foreignKey: { defaultValue: 1 } });
 User.belongsTo(Role);
 
-Chat.hasMany(Message);
-Message.belongsTo(Chat);
+User.hasMany(Messages);
+Messages.belongsTo(User);
 
-TypeOfAttachment.hasMany(Message);
-Message.belongsTo(TypeOfAttachment);
+Chats.hasMany(Messages);
+Messages.belongsTo(Chats);
+
+Chats.belongsToMany(User, {through: ChatParticipants});
+User.belongsToMany(Chats, {through: ChatParticipants});
 
 module.exports = {
 	User,
 	Friend,
-	Subscriber,
 	Group,
 	Role,
 	Project,
-	Team,
-	TeamAccess,
-	WhiteListUser,
-	Achivment,
-	GettingAchivment,
-	UserAchivment,
 	News,
-	ProposedNews,
-	UnpostedNews,
-	Message,
-	Chat,
+	Messages,
+	Chats,
+	ChatParticipants,
 	Comments,
 	Likes,
 	View,

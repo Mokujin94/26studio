@@ -13,12 +13,12 @@ const { v4: uuidv4 } = require("uuid");
 const {
 	User,
 	Friend,
-	UserAchivment,
-	GettingAchivment,
 	Project,
 	Group,
 	UserFriend,
 	UserGroup,
+	Chats,
+	ChatParticipants,
 } = require("../models/models");
 const { Op, where } = require("sequelize");
 const hasHtmlFile = require("../helpers/hasHtmlFile");
@@ -103,7 +103,7 @@ class UserController {
 		}
 	}
 	async registration(req, res, next) {
-		try {
+		// try {
 			const { name, full_name, email, password, description, groupId, roleId } =
 				req.body;
 
@@ -136,6 +136,15 @@ class UserController {
 				roleId,
 			});
 
+			const newChat = await Chats.create({
+				name: `${user.name}'s Chat`
+			})
+
+			await ChatParticipants.create({
+				userId: user.id,
+				chatId: newChat.id
+			  });
+
 			const userGroup = await UserGroup.create({
 				userId: user.id,
 				groupId: groupId
@@ -148,10 +157,7 @@ class UserController {
 				},
 				where: { id: user.id }
 			})
-			const achivment = await UserAchivment.create({ userId: user.id });
-			const gettingAchivment = await GettingAchivment.create({
-				userId: user.id,
-			});
+
 			const token = generateJwt(
 				findUser.id,
 				findUser.name,
@@ -164,9 +170,9 @@ class UserController {
 				findUser.lastOnline
 			);
 			return res.json({ token });
-		} catch (error) {
-			next(ApiError.badRequest(error.message));
-		}
+		// } catch (error) {
+		// 	next(ApiError.badRequest(error.message));
+		// }
 	}
 
 	async login(req, res, next) {
