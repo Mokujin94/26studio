@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import style from './messageContent.module.scss'
 
-const MessageContent = ({ isOther }) => {
+const MessageContent = ({ content, isOther }) => {
 	const [isRead, setIsRead] = useState(false)
 	return (
 		<div className={isOther ? style.messageContent + " " + style.messageContent_other : style.messageContent}>
-			<p className={style.messageContent__text}>Сообщение</p>
+			<p className={style.messageContent__text}>{content}</p>
 			<div className={style.messageContent__info}>
 				<span className={style.messageContent__infoTime}>15:44</span>
 				{

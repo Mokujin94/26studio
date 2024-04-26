@@ -167,6 +167,52 @@
 				}
 			}
 
+			&-button {
+				position: relative;
+				display: flex;
+				max-height: 40px;
+				&_other {
+					button {
+						border-radius: 10px 0 0 10px;
+					}
+				}
+				
+				&-message {
+					width: min-content;
+					display: inline-block;
+					border-radius: 0 10px 10px 0;
+					background-color: $studio-primary-button;
+					padding: 10px 15px;
+					text-align: center;
+					font-size: 16px;
+					line-height: 20px;
+					font-weight: 500;
+					border: 0;
+					border-left: 1px solid $studio-dark-border;
+					outline: 0;
+					cursor: pointer;
+					transition: all $studio-transition-03;
+					&::before {
+						position: absolute;
+						left: 0;
+						content: 'Написать';
+						color: $studio-dark-text;
+					}
+					&:hover {
+						background-color: $studio-primary-button-hover;
+					}
+					svg {
+						display: block;
+						width: auto;
+						height: 100%;
+						path {
+							fill: $studio-dark-element;
+						}
+					}
+				}
+
+			}
+
 			&-info {
 				width: 100%;
 				height: auto;

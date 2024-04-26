@@ -96,6 +96,7 @@ const ChatParticipants = sequelize.define("chat_participants", {
 const Messages = sequelize.define("messages", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 	content: {type: DataTypes.TEXT, allowNull: false},
+	isRead: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false}
 })
 
 const Notifications = sequelize.define("notifications", {

@@ -1,7 +1,11 @@
+import { useContext } from 'react';
 import Chat from '../chat/Chat';
 import style from './messengerSideBar.module.scss'
+import { Context } from '../..';
+import { observer } from 'mobx-react-lite';
 
-const MessengerSideBar = () => {
+const MessengerSideBar = observer(() => {
+	const { user } = useContext(Context)
 	return (
 		<div className={style.sideBar}>
 			<div className={style.sideBar__header}>
@@ -15,29 +19,11 @@ const MessengerSideBar = () => {
 				</div>
 			</div>
 			<div className={style.sideBar__chats}>
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
-				<Chat />
+				<Chat chatId={user.user.id} />
+				<Chat chatId={2} />
 			</div>
 		</div>
 	);
-};
+});
 
 export default MessengerSideBar;

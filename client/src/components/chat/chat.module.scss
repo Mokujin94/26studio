@@ -8,9 +8,11 @@
 	color: $studio-white-text;
 	cursor: pointer;
 	transition: .3s;
+
 	&:hover {
 		background-color: $studio-grey-element;
 	}
+	
 	&__avatar {
 		max-width: 40px;
 		width: 100%;
@@ -65,6 +67,14 @@
 				font-size: 12px;
 				font-weight: 500;
 			}
+		}
+	}
+
+	&_active {
+		background-color: $studio-primary-element;
+		color: $studio-dark-text;
+		&:hover {
+			background-color: $studio-primary-element;
 		}
 	}
 }
