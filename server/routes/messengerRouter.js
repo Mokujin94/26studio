@@ -6,6 +6,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 router.post('/', authMiddleware, messengerController.getOnePersonal);
 router.get('/chats', authMiddleware, messengerController.getAllChats);
+router.post('/sendMessage', messengerController.createMessages);
 // router.get('/group/:id', chatController.getOneGroup);
 
 module.exports = router;

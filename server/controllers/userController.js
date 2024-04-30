@@ -217,7 +217,6 @@ class UserController {
 				include: [Group],
 				where: { id: req.user.id },
 			})
-			console.log(user)
 			const token = generateJwt(
 				user.id,
 				user.name,
@@ -349,7 +348,6 @@ class UserController {
 			if (!fs.existsSync(uploadPath)) {
 				fs.mkdirSync(uploadPath);
 			}
-			console.log(req.files);
 
 			if (!fs.existsSync(extractPath)) {
 				fs.mkdirSync(extractPath);
