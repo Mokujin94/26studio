@@ -1,11 +1,27 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Chat from '../chat/Chat';
 import style from './messengerSideBar.module.scss'
 import { Context } from '../..';
 import { observer } from 'mobx-react-lite';
+import { fetchAllChats } from '../../http/messengerAPI';
 
 const MessengerSideBar = observer(() => {
-	const { user } = useContext(Context)
+	const { user } = useContext(Context);
+
+	const [chats, setChats] = useState([])
+
+	useEffect(() => {
+		fetchAllChats(user.user.id).then(data => {
+			setChats(data.chats)
+			console.log(data.chats)
+		})
+	}, [])
+
+	const renderChats = chats.filter(item => item.messages.length > 0).map(chat => {
+		return (
+			<Chat chat={chat} />
+		)
+	})
 	return (
 		<div className={style.sideBar}>
 			<div className={style.sideBar__header}>
@@ -19,8 +35,7 @@ const MessengerSideBar = observer(() => {
 				</div>
 			</div>
 			<div className={style.sideBar__chats}>
-				<Chat chatId={user.user.id} />
-				<Chat chatId={2} />
+				{renderChats}
 			</div>
 		</div>
 	);

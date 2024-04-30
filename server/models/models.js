@@ -85,18 +85,18 @@ const View = sequelize.define("views", {
 
 const Chats = sequelize.define("chats", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	name: {type: DataTypes.STRING, allowNull: true},
-	is_group: {type: DataTypes.BOOLEAN, defaultValue: false}
+	name: { type: DataTypes.STRING, allowNull: true },
+	is_group: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
-const ChatParticipants = sequelize.define("chat_participants", {
+const ChatMembers = sequelize.define("chat_members", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 })
 
 const Messages = sequelize.define("messages", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	content: {type: DataTypes.TEXT, allowNull: false},
-	isRead: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false}
+	text: { type: DataTypes.TEXT, allowNull: false },
+	isRead: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 })
 
 const Notifications = sequelize.define("notifications", {
@@ -178,8 +178,8 @@ Messages.belongsTo(User);
 Chats.hasMany(Messages);
 Messages.belongsTo(Chats);
 
-Chats.belongsToMany(User, {through: ChatParticipants});
-User.belongsToMany(Chats, {through: ChatParticipants});
+Chats.belongsToMany(User, { through: ChatMembers, as: 'members' });
+User.belongsToMany(Chats, { through: ChatMembers, as: 'chats' });
 
 module.exports = {
 	User,
@@ -190,7 +190,7 @@ module.exports = {
 	News,
 	Messages,
 	Chats,
-	ChatParticipants,
+	ChatMembers,
 	Comments,
 	Likes,
 	View,

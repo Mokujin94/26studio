@@ -19,6 +19,7 @@ const {
 	UserGroup,
 	Chats,
 	ChatParticipants,
+	ChatMembers,
 } = require("../models/models");
 const { Op, where } = require("sequelize");
 const hasHtmlFile = require("../helpers/hasHtmlFile");
@@ -140,7 +141,7 @@ class UserController {
 			name: `${user.name}'s Chat`
 		})
 
-		await ChatParticipants.create({
+		await ChatMembers.create({
 			userId: user.id,
 			chatId: newChat.id
 		});

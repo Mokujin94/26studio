@@ -9,13 +9,14 @@ const router = require("./routes/index");
 const errorHandler = require("./middleware/ErroeHandlingMiddleware");
 const http = require("http");
 const socketIo = require("socket.io");
+const redis = require("redis");
 
 const { initSocket } = require("./socket"); // Подключаем функцию инициализации Socket.IO
+const clientRedis = require("./redis");
 
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-
 
 
 const corsOptions = {
@@ -40,7 +41,6 @@ app.use(express.static(path.resolve(__dirname, "static/avatars")));
 app.use(express.static(path.resolve(__dirname, "static/projects")));
 app.use(express.static(path.resolve(__dirname, "extracted")));
 app.use(fileUpload({}));
-
 
 
 app.use("/api", router);
@@ -78,7 +78,9 @@ const start = async () => {
 			})
 			.catch((e) => console.log(e));
 		// console.log(path.resolve(__dirname, "static"));
+		// clientRedis.connect();
 		httpServer.listen(PORT, () =>
+
 			console.log(`сервер стартанул на порте ${PORT}`)
 		);
 	} catch (e) {

@@ -5,7 +5,7 @@ const UserRouter = require("./userRouter");
 const ProjectRouter = require("./projectRouter");
 const NewsRouter = require("./newsRouter");
 const GroupRouter = require("./groupRouter");
-const ChatRouter = require("./chatRouter");
+const MessengerRouter = require("./messengerRouter");
 const RolesRouter = require("./rolesRouter");
 const FriendRouter = require("./friendRouter");
 const CommentRouter = require("./commentRouter");
@@ -16,7 +16,7 @@ const NotificationRouter = require("./notificationsRouter")
 router.use("/user", UserRouter);
 router.use("/project", ProjectRouter);
 router.use("/news", NewsRouter);
-router.use("/chat", ChatRouter);
+router.use("/messenger", MessengerRouter);
 router.use("/group", GroupRouter);
 router.use("/roles", RolesRouter);
 router.use("/friend", FriendRouter);
