@@ -2,7 +2,6 @@ const { Op, json } = require("sequelize");
 const ApiError = require("../error/ApiError");
 const { Chats, User, Messages, ChatMembers } = require("../models/models");
 const { sequelize } = require("../db");
-const clientRedis = require("../redis");
 const { getIo } = require("../socket");
 require("dotenv").config();
 

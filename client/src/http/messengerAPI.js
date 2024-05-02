@@ -22,3 +22,9 @@ export const fetchPersonalChat = async (otherUserId, userId) => {
 	const { data } = await $authHost.get('api/messenger/', config);
 	return data;
 };
+
+export const sendMessage = async (otherUserId, userId, text) => {
+
+	const { data } = await $host.post('api/messenger/sendMessage', { otherUserId, userId, text });
+	return data;
+};
