@@ -59,7 +59,7 @@ const Chat = observer(({ chat }) => {
 							<span className={style.chat__textName}>
 								{chat.members.length < 2 ? "Избранное" : otherUserData.name}
 							</span>
-							<p className={style.chat__textMessage}>{chat.messages[0].text}</p>
+							<p className={style.chat__textMessage}>{chat.messages.length ? chat.messages[0].text : 'избранное'}</p>
 						</div>
 						<div className={style.chat__info}>
 							<span className={style.chat__infoTime}>15:43</span>

@@ -17,7 +17,7 @@ const MessengerSideBar = observer(() => {
 		})
 	}, [])
 
-	const renderChats = chats.filter(item => item.messages.length > 0).map(chat => {
+	const renderChats = chats.map(chat => {
 		return (
 			<Chat chat={chat} />
 		)

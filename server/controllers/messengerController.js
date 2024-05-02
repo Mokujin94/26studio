@@ -3,63 +3,75 @@ const ApiError = require("../error/ApiError");
 const { Chats, User, Messages, ChatMembers } = require("../models/models");
 const { sequelize } = require("../db");
 const clientRedis = require("../redis");
+const { getIo } = require("../socket");
 require("dotenv").config();
 
 
 class MessengerController {
 	async getOnePersonal(req, res, next) {
-		const { otherUserId, userId } = req.body;
-		let user = await clientRedis.get(`user${otherUserId}`)
-		let chat = await clientRedis.get(`chatPersonal${otherUserId}${userId}`)
-
-		if(!user) {
-			user = await User.findOne({
-				where: { id: otherUserId }
-			})
-			await clientRedis.set(`user${otherUserId}`, JSON.stringify(user));
-		}
-		if(!chat) {
-			const user1ChatIds = await ChatMembers.findAll({
-				where: { userId: otherUserId },
-				attributes: ['chatId'],
-				raw: true
-			});
-			const chatIds = user1ChatIds.map(cm => cm.chatId);
-			// Теперь найдем чат, в котором участвуют оба пользователя
-			const commonChat = await Chats.findOne({
-				where: {
-					id: { [Op.in]: chatIds }, // Фильтр по чату, где участвует первый пользователь
-					is_group: false
+		const { otherUserId, userId } = req.query;
+		let chat;
+		const user = await User.findOne({
+			where: { id: otherUserId }
+		})
+		const user1ChatIds = await ChatMembers.findAll({
+			where: { userId: otherUserId },
+			attributes: ['chatId'],
+			raw: true
+		});
+		const chatIds = user1ChatIds.map(cm => cm.chatId);
+		// Теперь найдем чат, в котором участвуют оба пользователя
+		const commonChat = await Chats.findOne({
+			where: {
+				id: { [Op.in]: chatIds }, // Фильтр по чату, где участвует первый пользователь
+				is_group: false
+			},
+			include: [
+				{
+					model: User,
+					as: 'members',
+					where: { id: userId }, // Второй пользователь должен быть участником
+					attributes: [],
+					required: true
 				},
-				include: [
-					{
-						model: User,
-						as: 'members',
-						where: { id: userId }, // Второй пользователь должен быть участником
-						attributes: [],
-						required: true
-					},
-					{
-						model: Messages
-					}
-				],
-			});
-
-			if (!commonChat) {
-				chat = {
-					is_group: false,
-					member: JSON.parse(user),
-					messages: []
+				{
+					model: Messages
 				}
-			} else {
-				chat = commonChat ? commonChat.get({ plain: true }) : {}; // Если нужно получить "чистый" объект
-				chat.member = user; // Добавляем свойство
-				await clientRedis.set(`chatPersonal${otherUserId}${userId}`, JSON.stringify(chat));
+			],
+		});
+
+		if (!commonChat) {
+			chat = {
+				is_group: false,
+				member: user,
+				messages: []
 			}
-			return res.json(chat)
 		} else {
-			return res.json(JSON.parse(chat))
+			chat = commonChat ? commonChat.get({ plain: true }) : {}; // Если нужно получить "чистый" объект
+			chat.member = user; // Добавляем свойство
 		}
+
+
+
+		chat.messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+
+		function groupMessagesByUser(messages) {
+			return messages.reduce((acc, message) => {
+				const lastGroup = acc[acc.length - 1];
+				if (lastGroup && lastGroup[0].userId === message.userId) {
+					lastGroup.push(message);
+				} else {
+					acc.push([message]);
+				}
+				return acc;
+			}, []);
+		}
+
+		const groupedMessages = groupMessagesByUser(chat.messages);
+		groupedMessages.map(item => item.sort((a, b) => a.id - b.id))
+		chat.messages = groupedMessages
+		return res.json(chat)
+
 	}
 
 	async getAllChats(req, res, next) {
@@ -100,111 +112,62 @@ class MessengerController {
 		return res.json(userChats)
 	}
 
+
+
 	async createMessages(req, res, next) {
 		const { otherUserId, userId, text } = req.body;
-
-		let user = await clientRedis.get(`user${otherUserId}`)
-		let chat = await clientRedis.get(`chatPersonal${otherUserId}${userId}`)
-		let parseChat = JSON.parse(chat);
-		if(!user) {
-			user = await User.findOne({
-				where: { id: otherUserId }
-			})
-			await clientRedis.set(`user${otherUserId}`, JSON.stringify(user));
-		}
-		if(!chat) {
-			const user1ChatIds = await ChatMembers.findAll({
-				where: { userId: otherUserId },
-				attributes: ['chatId'],
-				raw: true
-			});
-			const chatIds = user1ChatIds.map(cm => cm.chatId);
-			// Теперь найдем чат, в котором участвуют оба пользователя
-			const commonChat = await Chats.findOne({
-				where: {
-					id: { [Op.in]: chatIds }, // Фильтр по чату, где участвует первый пользователь
-					is_group: false
+		const io = getIo();
+		let chat
+		const user1ChatIds = await ChatMembers.findAll({
+			where: { userId: otherUserId },
+			attributes: ['chatId'],
+			raw: true
+		});
+		const chatIds = user1ChatIds.map(cm => cm.chatId);
+		// Теперь найдем чат, в котором участвуют оба пользователя
+		chat = await Chats.findOne({
+			where: {
+				id: { [Op.in]: chatIds }, // Фильтр по чату, где участвует первый пользователь
+				is_group: false
+			},
+			include: [
+				{
+					model: User,
+					as: 'members',
+					where: { id: userId }, // Второй пользователь должен быть участником
+					attributes: [],
+					required: true
 				},
-				include: [
-					{
-						model: User,
-						as: 'members',
-						where: { id: userId }, // Второй пользователь должен быть участником
-						attributes: [],
-						required: true
-					},
-					{
-						model: Messages
-					}
-				],
-			});
+				{
+					model: Messages
+				}
+			],
+		});
 
-			if (!commonChat) {
-				chat = await Chats.create({
-					name: `chatPersonal${otherUserId}${userId}`
-				})
-				await ChatMembers.create({
-					userId: otherUserId,
-					chatId: chat.id
-				})
-				await ChatMembers.create({
-					userId,
-					chatId: chat.id
-				})
-			}
-			const message = await Messages.create({
+		if (!chat) {
+			chat = await Chats.create({
+				name: `chatPersonal${otherUserId}${userId}`
+			})
+			await ChatMembers.create({
+				userId: otherUserId,
+				chatId: chat.id
+			})
+			await ChatMembers.create({
 				userId,
-				chatId: chat.id,
-				text
+				chatId: chat.id
 			})
-			const currentChat = await Chats.findOne({
-				where: { id: chat.id },
-				include: [
-					{
-						model: User,
-						as: 'members',
-						where: { id: userId }, // Второй пользователь должен быть участником
-						attributes: [],
-						required: true
-					},
-					{
-						model: Messages
-					}
-				],
-			})
-	
-			chat = currentChat ? currentChat.get({ plain: true }) : {}; // Если нужно получить "чистый" объект
-			chat.member = JSON.parse(user); // Добавляем свойство
-			await clientRedis.set(`chatPersonal${otherUserId}${userId}`, JSON.stringify(chat));
-			return res.json(message)
-		} else {
-			const message = await Messages.create({
-				userId,
-				chatId: parseChat.id,
-				text
-			})
-			const currentChat = await Chats.findOne({
-				where: { id: parseChat.id },
-				include: [
-					{
-						model: User,
-						as: 'members',
-						where: { id: userId }, // Второй пользователь должен быть участником
-						attributes: [],
-						required: true
-					},
-					{
-						model: Messages
-					}
-				],
-			})
-	
-			chat = currentChat ? currentChat.get({ plain: true }) : {}; // Если нужно получить "чистый" объект
-			chat.member = JSON.parse(user); // Добавляем свойство
-			await clientRedis.set(`chatPersonal${otherUserId}${userId}`, JSON.stringify(chat));
-			return res.json(message)
-
 		}
+
+		const message = await Messages.create({
+			userId,
+			chatId: chat.id,
+			text
+		})
+		io.to(`chat_${chat.id}`).emit('newMessage', message);
+
+		return res.json(message)
+
+
 	}
 }
 

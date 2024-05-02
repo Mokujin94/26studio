@@ -13,7 +13,12 @@ export const fetchAllChats = async (userId) => {
 };
 
 export const fetchPersonalChat = async (otherUserId, userId) => {
-
-	const { data } = await $authHost.post('api/messenger/', { otherUserId, userId });
+	const config = {
+		params: {
+			otherUserId,
+			userId
+		}
+	}
+	const { data } = await $authHost.get('api/messenger/', config);
 	return data;
 };

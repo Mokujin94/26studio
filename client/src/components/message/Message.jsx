@@ -3,8 +3,9 @@ import style from './message.module.scss'
 import MessageContent from '../messageContent/MessageContent'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
-const Message = observer(() => {
+const Message = observer(({ messages }) => {
 	const { user } = useContext(Context)
+	console.log(messages)
 	return (
 		// <div className={style.message}>
 		<div className={style.message}>
@@ -12,9 +13,17 @@ const Message = observer(() => {
 				<img src={process.env.REACT_APP_API_URL + "/" + 'avatar.jpg'} alt="" />
 			</div>
 			<div className={style.message__list}>
+				{
+					messages.map(message => {
+						if (message.userId == user.user.id) {
 
-				<MessageContent content={'dsfsdf'} isOther={false} />
-				<MessageContent content={'dsfsdf'} isOther={false} />
+							return <MessageContent content={message.text} isOther={false} />
+						} else {
+							return <MessageContent content={message.text} isOther={true} />
+						}
+						console.log(message)
+					})
+				}
 			</div>
 		</div >
 	)
