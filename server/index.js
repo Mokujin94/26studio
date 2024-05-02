@@ -9,10 +9,8 @@ const router = require("./routes/index");
 const errorHandler = require("./middleware/ErroeHandlingMiddleware");
 const http = require("http");
 const socketIo = require("socket.io");
-const redis = require("redis");
 
-const { initSocket } = require("./socket"); // Подключаем функцию инициализации Socket.IO
-const clientRedis = require("./redis");
+const { initSocket } = require("./socket");
 
 const PORT = process.env.PORT || 5000;
 

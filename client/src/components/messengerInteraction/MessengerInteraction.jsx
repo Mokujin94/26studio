@@ -1,16 +1,17 @@
 import React, { useContext, useState } from 'react'
 import style from './messengerInteraction.module.scss'
-import { sendMessage } from '../../http/chatsAPI'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
+import { sendMessage } from '../../http/messengerAPI'
 const MessengerInteraction = observer(() => {
 	const [messageContent, setMessageContent] = useState('');
 
 	const { user } = useContext(Context)
-
+	const location = useLocation();
+	const hash = location.hash.replace("#", "")
 	const onSend = () => {
-
+		sendMessage(Number(hash), user.user.id, messageContent)
 	}
 
 	return (
