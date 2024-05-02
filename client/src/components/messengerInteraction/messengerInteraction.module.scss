@@ -1,0 +1,47 @@
+@import '../../resource/styles/variables';
+
+.interaction {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    background-color: $studio-darker-element;
+    
+
+    &__input {
+				width: 100%;
+				max-height: 100%;
+				font-size: 14px;
+				color: #fcfcfc;
+				border: none;
+				outline: none;
+				padding: 16px 0;
+				overflow: auto;
+				&::-webkit-scrollbar {
+					width: 0;
+				}
+        // &::before {
+				// 		content: 'Написать сообщение';
+        //     color: $studio-grey-text;
+        // }
+    }
+
+    &__clip, &__send {
+			background: $studio-darker-element;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			max-width: 50px;
+			width: 100%;
+			aspect-ratio: 1 / 1;
+			margin-top: auto;
+			cursor: pointer;
+			transition: .3s;
+			&:hover {
+				filter: brightness(1.1);
+			}
+			svg {
+					display: block;
+			}
+    }
+}

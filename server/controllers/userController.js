@@ -13,12 +13,13 @@ const { v4: uuidv4 } = require("uuid");
 const {
 	User,
 	Friend,
-	UserAchivment,
-	GettingAchivment,
 	Project,
 	Group,
 	UserFriend,
 	UserGroup,
+	Chats,
+	ChatParticipants,
+	ChatMembers,
 } = require("../models/models");
 const { Op, where } = require("sequelize");
 const hasHtmlFile = require("../helpers/hasHtmlFile");
@@ -103,73 +104,76 @@ class UserController {
 		}
 	}
 	async registration(req, res, next) {
-		try {
-			const { name, full_name, email, password, description, groupId, roleId } =
-				req.body;
+		// try {
+		const { name, full_name, email, password, description, groupId, roleId } =
+			req.body;
 
-			let fileName;
+		let fileName;
+		if (!email || !password) {
+			return next(ApiError.badRequest("Неверная почта или пароль"));
 
-			if (!email || !password) {
-				return next(ApiError.badRequest("Неверная почта или пароль"));
-			}
-			const condidate = await User.findOne({ where: { email } });
-			if (condidate) {
-				return next(
-					ApiError.badRequest("Пользовательно с такой почтой существует")
-				);
-			}
-			if (req.files) {
-				fileName = uuid.v4() + ".jpg";
-				const { avatar } = req.files;
-				// Путь сохранения файла внутри тома Docker
-				const filePath = path.resolve('/app/static/avatars', fileName);
-				// Сохранение файла внутри тома Docker
-				await avatar.mv(filePath);
-			} else {
-				fileName = "avatar.jpg";
-			}
-			const hashPassword = await bcrypt.hash(password, 5);
-			const user = await User.create({
-				name,
-				full_name,
-				email,
-				password: hashPassword,
-				description,
-				avatar: fileName,
-				roleId,
-			});
-
-			const userGroup = await UserGroup.create({
-				userId: user.id,
-				groupId: groupId
-			})
-
-			const findUser = await User.findOne({
-				include: {
-					model: Group,
-					through: UserGroup
-				},
-				where: { id: user.id }
-			})
-			const achivment = await UserAchivment.create({ userId: user.id });
-			const gettingAchivment = await GettingAchivment.create({
-				userId: user.id,
-			});
-			const token = generateJwt(
-				findUser.id,
-				findUser.name,
-				findUser.full_name,
-				findUser.email,
-				findUser.description,
-				findUser.avatar,
-				findUser.groups[0],
-				findUser.roleId,
-				findUser.lastOnline
-			);
-			return res.json({ token });
-		} catch (error) {
-			next(ApiError.badRequest(error.message));
 		}
+		const condidate = await User.findOne({ where: { email } });
+		if (condidate) {
+			return next(
+				ApiError.badRequest("Пользовательно с такой почтой существует")
+			);
+		}
+		if (req.files) {
+			fileName = uuid.v4() + ".jpg";
+			const { avatar } = req.files;
+			avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
+		} else {
+			fileName = "avatar.jpg";
+		}
+		const hashPassword = await bcrypt.hash(password, 5);
+		const user = await User.create({
+			name,
+			full_name,
+			email,
+			password: hashPassword,
+			description,
+			avatar: fileName,
+			roleId,
+		});
+
+		const newChat = await Chats.create({
+			name: `${user.name}'s Chat`
+		})
+
+		await ChatMembers.create({
+			userId: user.id,
+			chatId: newChat.id
+		});
+
+		const userGroup = await UserGroup.create({
+			userId: user.id,
+			groupId: groupId
+		})
+
+		const findUser = await User.findOne({
+			include: {
+				model: Group,
+				through: UserGroup
+			},
+			where: { id: user.id }
+		})
+
+		const token = generateJwt(
+			findUser.id,
+			findUser.name,
+			findUser.full_name,
+			findUser.email,
+			findUser.description,
+			findUser.avatar,
+			findUser.groups[0],
+			findUser.roleId,
+			findUser.lastOnline
+		);
+		return res.json({ token });
+		// } catch (error) {
+		// 	next(ApiError.badRequest(error.message));
+		// }
 	}
 
 	async login(req, res, next) {
@@ -213,7 +217,6 @@ class UserController {
 				include: [Group],
 				where: { id: req.user.id },
 			})
-			console.log(user)
 			const token = generateJwt(
 				user.id,
 				user.name,
@@ -346,7 +349,6 @@ class UserController {
 			if (!fs.existsSync(uploadPath)) {
 				fs.mkdirSync(uploadPath);
 			}
-			console.log(req.files);
 
 			if (!fs.existsSync(extractPath)) {
 				fs.mkdirSync(extractPath);

@@ -12,6 +12,8 @@ function initSocket(httpServer) {
 		},
 	});
 
+	// События подключения и отключения
+
 	io.on("connection", (socket) => {
 		console.log("Пользователь подключен");
 
@@ -62,6 +64,18 @@ function initSocket(httpServer) {
 		socket.on("notification", (notification) => {
 			console.log("Отправка уведомления : ", notification);
 			io.emit("receiveNotification", notification);
+		});
+
+		// Обработка подписки на чат
+		socket.on('joinChat', (chatId) => {
+			socket.join(`chat_${chatId}`); // Подключение к комнате чата
+			console.log(`User ${socket.id} joined chat ${chatId}`);
+		});
+
+		// Обработка выхода из чата
+		socket.on('leaveChat', (chatId) => {
+			socket.leave(`chat_${chatId}`); // Отключение от комнаты чата
+			console.log(`User ${socket.id} left chat ${chatId}`);
 		});
 	});
 
