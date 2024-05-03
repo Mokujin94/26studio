@@ -1,31 +1,15 @@
 @import '../../resource/styles/variables';
 
 .messageContent {
-	min-height: 40px;
 	max-width: 450px;
 	position: relative;
 	display: flex;
 	align-items: center;
 	gap: 10px;
 	color: $studio-dark-text;
-	background-color: $studio-primary-element;
-	border-radius: 10px 10px 10px 0;
-	padding: 5px 10px;
-	&::before {
-		content: '';
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		transform: translate(-95%, 0);
-		clip-path: polygon(90% 37%, 96% 20%, 100% 0, 100% 100%, 0 100%, 20% 96%, 35% 89%, 50% 81%, 65% 70%, 80% 54%);
-		// clip-path: polygon(91% 34%, 96% 19%, 100% 0, 100% 100%, 0 100%, 19% 96%, 32% 92%, 54% 81%, 71% 66%, 83% 50%);
-		height: 10px;
-		width: 10px;
-		background-color: $studio-primary-element;
-		// border: 8px solid transparent; 
-		// border-right: 6px solid $studio-darker-border; 
-		// border-bottom: 5px solid $studio-darker-border;
-	}
+	// background-color: $studio-primary-element;
+	// border-radius: 10px 10px 10px 0;
+
 	&__text {
 		word-wrap: break-word;
 		word-break: break-word;

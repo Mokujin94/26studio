@@ -44,7 +44,6 @@ const MessengerContent = observer(() => {
 		socket.on('newMessage', (message) => {
 			setMessages((prevMessages) => {
 				const lastGroup = prevMessages[0];
-				console.log(lastGroup[0], message.userId)
 				if (lastGroup && lastGroup[0].userId === message.userId) {
 					// Добавляем в начало последней группы, если это от того же пользователя
 					return [[...lastGroup, message], ...prevMessages.slice(1, prevMessages.length)];

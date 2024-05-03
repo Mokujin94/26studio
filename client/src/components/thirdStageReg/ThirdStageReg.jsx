@@ -33,7 +33,7 @@ const ThirdStageReg = observer(
 		const endConfetti = Date.now() + 15 * 200;
 
 		const colorsConfetti = ["#bb0000", "#ffffff"];
-
+		console.log(user.codeAuth); //Убрать
 		function congrats() {
 			confetti({
 				particleCount: 2,
