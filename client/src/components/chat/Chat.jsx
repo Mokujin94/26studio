@@ -9,12 +9,14 @@ const Chat = observer(({ chat }) => {
 	const { user } = useContext(Context)
 	const [otherUserData, setOtherUserData] = useState({})
 	const [userData, setUserData] = useState({})
+	const [lastMessage, setLastMessage] = useState()
 
 	const location = useLocation();
 	const hashPersonal = Number(location.hash.replace("#", ""))
 	const hashGroup = Number(location.hash.replace("#chatGroup=", ""))
 
 	useEffect(() => {
+		setLastMessage(chat.messages[0].text)
 		chat.members.filter(item => {
 			if (item.id !== user.user.id) {
 				setOtherUserData(item)
@@ -23,6 +25,18 @@ const Chat = observer(({ chat }) => {
 			}
 		})
 	}, [])
+
+	useEffect(() => {
+		if (user.socket === null) return;
+		user.socket.on("lastMessage", (message) => {
+			console.log(message, chat);
+			if (message.chatId !== chat.id) return;
+			setLastMessage(message.text);
+		})
+		return () => {
+			user.socket.off("lastMessage")
+		}
+	}, [user.socket, chat])
 
 	console.log(chat);
 
@@ -59,7 +73,7 @@ const Chat = observer(({ chat }) => {
 							<span className={style.chat__textName}>
 								{chat.members.length < 2 ? "Избранное" : otherUserData.name}
 							</span>
-							<p className={style.chat__textMessage}>{chat.messages.length ? chat.messages[0].text : 'избранное'}</p>
+							<p className={style.chat__textMessage}>{lastMessage}</p>
 						</div>
 						<div className={style.chat__info}>
 							<span className={style.chat__infoTime}>15:43</span>

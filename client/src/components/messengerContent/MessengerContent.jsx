@@ -8,22 +8,12 @@ import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat } from '../../http/messengerAPI'
 import socketIOClient from "socket.io-client";
-const MessengerContent = observer(() => {
+const MessengerContent = observer(({ setChatData, otherUserData, setOtherUserData, messages, setMessages }) => {
 
 	const { user } = useContext(Context)
 
-
-	const [chatData, setChatData] = useState({});
-	const [otherUserData, setOtherUserData] = useState({})
-	const [messages, setMessages] = useState([])
-
 	const location = useLocation();
 	const hash = location.hash.replace("#", "")
-
-	// Функция для добавления нового сообщения
-	const addMessage = (message) => {
-
-	};
 
 	useEffect(() => {
 		if (!hash) return;
@@ -32,35 +22,7 @@ const MessengerContent = observer(() => {
 			setOtherUserData(data.member)
 			setMessages(data.messages);
 			console.log(data);
-			// Подключение к комнате чата
-			user.socket.emit('joinChat', data.id);
-
-			console.log(`Joined chat with ID ${data.id}`);
-
-			// Подписка на новые сообщения
-
 		})
-		user.socket.on("getMessages", (message) => {
-			console.log(message)
-			setMessages((prevMessages) => {
-				const lastGroup = prevMessages[0];
-				if (lastGroup && lastGroup[0].userId === message.userId) {
-					// Добавляем в начало последней группы, если это от того же пользователя
-					return [[...lastGroup, message], ...prevMessages.slice(1, prevMessages.length)];
-				} else {
-					// Создаем новую группу, если это другой пользователь
-					return [[message], ...prevMessages];
-				}
-			});
-			console.log(message)
-		});
-		return () => {
-			if (chatData.id) {
-				// Если chatId установлен, отключаемся от чата при выходе
-				user.socket.emit('leaveChat', chatData.id);
-			}
-			user.socket.off('getMessages'); // Убираем подписку
-		};
 	}, [hash])
 
 	console.log(messages)
@@ -89,7 +51,7 @@ const MessengerContent = observer(() => {
 
 			</div>
 			<div className={style.content__bottom}>
-				<MessengerInteraction />
+				<MessengerInteraction setMessages={setMessages} />
 			</div>
 		</>
 	return (

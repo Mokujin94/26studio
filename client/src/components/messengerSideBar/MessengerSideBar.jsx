@@ -5,7 +5,7 @@ import { Context } from '../..';
 import { observer } from 'mobx-react-lite';
 import { fetchAllChats } from '../../http/messengerAPI';
 
-const MessengerSideBar = observer(() => {
+const MessengerSideBar = observer(({ }) => {
 	const { user } = useContext(Context);
 
 	const [chats, setChats] = useState([])

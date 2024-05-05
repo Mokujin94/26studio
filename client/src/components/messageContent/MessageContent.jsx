@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import style from './messageContent.module.scss'
+import useTimeFormatter from '../../hooks/useTimeFormatter';
 
 const MessageContent = ({ content, isOther }) => {
 	const [isRead, setIsRead] = useState(false)
+	console.log(content);
+	const time = useTimeFormatter(content.createdAt)
+	console.log(time);
 	return (
 		<div className={isOther ? style.messageContent + " " + style.messageContent_other : style.messageContent}>
-			<p className={style.messageContent__text}>{content}</p>
+			<p className={style.messageContent__text}>{content.text}</p>
 			<div className={style.messageContent__info}>
-				<span className={style.messageContent__infoTime}>15:44</span>
+				<span className={style.messageContent__infoTime}>{time}</span>
 				{
 					!isOther &&
 					<div className={isRead ? style.messageContent__infoView + " " + style.messageContent__infoView_active : style.messageContent__infoView} onClick={() => setIsRead(prev => !prev)}>

@@ -28,14 +28,27 @@ function initSocket(httpServer) {
 			console.log("userSockets", userSockets)
 		})
 
-		socket.on("sendMessage", ({ message, recipientId }) => {
-			console.log(message)
-			console.log(userSockets)
+		socket.on("sendMessageRecipient", ({ message, recipientId }) => {
 			const user = userSockets.find(user => user.userId === recipientId);
+			if (user) io.to(user.socketId).emit("getMessages", message)
+		})
 
-			if (!user) return;
-			io.to(user.socketId).emit("getMessages", message)
-			// io.to(user2.socketId).emit("getMessages", data)
+		socket.on("sendMessage", ({ message, recipientId }) => {
+			const user1 = userSockets.find(user => user.userId === recipientId);
+			const user2 = userSockets.find(user => user.userId === message.user.id);
+
+			if (!user1 || !user2) {
+				if (!user1) {
+					io.to(user2.socketId).emit("lastMessage", message)
+					return;
+				} else {
+					io.to(user1.socketId).emit("lastMessage", message)
+					return;
+				}
+			} else {
+				io.to(user1.socketId).emit("lastMessage", message)
+				io.to(user2.socketId).emit("lastMessage", message)
+			}
 		})
 
 

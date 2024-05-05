@@ -18,11 +18,11 @@ const Message = observer(({ messages }) => {
 					messages.map(message => {
 						if (message.userId == user.user.id) {
 							return (
-								<MessageContent content={message.text} isOther={false} />
+								<MessageContent content={message} isOther={false} />
 							)
 						} else {
 							return (
-								<MessageContent content={message.text} isOther={true} />
+								<MessageContent content={message} isOther={true} />
 							)
 						}
 					})

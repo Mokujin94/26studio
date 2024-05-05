@@ -5,7 +5,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
 import { sendMessage } from '../../http/messengerAPI'
-const MessengerInteraction = observer(() => {
+const MessengerInteraction = observer(({ setMessages }) => {
 	const [messageContent, setMessageContent] = useState('');
 	const [notEmpty, setNotEmpty] = useState(false)
 
@@ -18,15 +18,37 @@ const MessengerInteraction = observer(() => {
 
 	const onSend = () => {
 		if (messageContent.length <= 0) return;
+		let message = {
+			createdAt: Date.now(),
+			text: messageContent,
+			user: {
+				avatar: user.user.avatar
+			},
+			userId: user.user.id
+		}
 		// создать сообщение только у нас
-
+		setMessages((prevMessages) => {
+			const lastGroup = prevMessages[0];
+			if (lastGroup && lastGroup[0].userId === message.userId) {
+				// Добавляем в начало последней группы, если это от того же пользователя
+				return [[...lastGroup, message], ...prevMessages.slice(1, prevMessages.length)];
+			} else {
+				// Создаем новую группу, если это другой пользователь
+				return [[message], ...prevMessages];
+			}
+		});
 		// 
 		sendMessage(Number(hash), user.user.id, messageContent).then(data => {
 			setMessageContent("");
 			inputRef.current.innerText = '';
 			return data;
 		}).then((data) => {
-			user.socket.emit("sendMessage", { message: data, recipientId: hash })
+			if (user.user.id === hash) {
+				user.socket.emit("sendMessage", { message: data, recipientId: hash })
+			} else {
+				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
+				user.socket.emit("sendMessage", { message: data, recipientId: hash })
+			}
 		});
 	}
 
