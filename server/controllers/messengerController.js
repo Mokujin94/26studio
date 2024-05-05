@@ -171,11 +171,8 @@ class MessengerController {
 				},
 			],
 		});
-		io.to(`chat_${chat.id}`).emit('newMessage', messageWithUser);
 
 		return res.json(messageWithUser)
-
-
 	}
 }
 

@@ -9,9 +9,9 @@ import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat } from '../../http/messengerAPI'
 import socketIOClient from "socket.io-client";
 const MessengerContent = observer(() => {
-	const socket = socketIOClient(process.env.REACT_APP_API_URL);
 
 	const { user } = useContext(Context)
+
 
 	const [chatData, setChatData] = useState({});
 	const [otherUserData, setOtherUserData] = useState({})
@@ -32,16 +32,16 @@ const MessengerContent = observer(() => {
 			setOtherUserData(data.member)
 			setMessages(data.messages);
 			console.log(data);
-
 			// Подключение к комнате чата
-			socket.emit('joinChat', data.id);
+			user.socket.emit('joinChat', data.id);
 
 			console.log(`Joined chat with ID ${data.id}`);
 
 			// Подписка на новые сообщения
 
 		})
-		socket.on('newMessage', (message) => {
+		user.socket.on("getMessages", (message) => {
+			console.log(message)
 			setMessages((prevMessages) => {
 				const lastGroup = prevMessages[0];
 				if (lastGroup && lastGroup[0].userId === message.userId) {
@@ -52,14 +52,14 @@ const MessengerContent = observer(() => {
 					return [[message], ...prevMessages];
 				}
 			});
-			// console.log(message)
+			console.log(message)
 		});
 		return () => {
 			if (chatData.id) {
 				// Если chatId установлен, отключаемся от чата при выходе
-				socket.emit('leaveChat', chatData.id);
+				user.socket.emit('leaveChat', chatData.id);
 			}
-			socket.off('newMessage'); // Убираем подписку
+			user.socket.off('getMessages'); // Убираем подписку
 		};
 	}, [hash])
 

@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
+import io from 'socket.io-client';
 import style from './messengerInteraction.module.scss'
 import { useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
@@ -13,24 +14,26 @@ const MessengerInteraction = observer(() => {
 	const { user } = useContext(Context)
 	const location = useLocation();
 
-	const hash = location.hash.replace("#", "")
+	const hash = Number(location.hash.replace("#", ""))
 
 	const onSend = () => {
 		if (messageContent.length <= 0) return;
+		// создать сообщение только у нас
+
+		// 
 		sendMessage(Number(hash), user.user.id, messageContent).then(data => {
 			setMessageContent("");
 			inputRef.current.innerText = '';
+			return data;
+		}).then((data) => {
+			user.socket.emit("sendMessage", { message: data, recipientId: hash })
 		});
 	}
 
 	const onEnter = (e) => {
 		if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey) {
 			e.preventDefault(); // Предотвращает перевод строки
-			if (messageContent.length <= 0) return;
-			sendMessage(Number(hash), user.user.id, messageContent).then(data => {
-				setMessageContent("");
-				inputRef.current.innerText = '';
-			})
+			onSend();
 		}
 	}
 

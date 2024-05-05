@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter, useLocation } from "react-router-dom";
-import socketIOClient from "socket.io-client";
+import io from "socket.io-client";
 import { ScrollContainer } from "react-nice-scroll";
 import "react-nice-scroll/dist/styles.css";
 
@@ -45,13 +45,17 @@ const App = observer(() => {
 	const { user, error, modal, profile } = useContext(Context);
 
 	const [isLoading, setIsLoading] = useState(true);
+	const socket = io(process.env.REACT_APP_API_URL);
 
 	useEffect(() => {
+		const socket = io(process.env.REACT_APP_API_URL);
 		setIsLoading(true);
 		check().then((data) => {
 			user.setUser(data);
 			user.setAuth(true);
-			console.log(data)
+			user.setSocket(socket);
+			console.log(socket)
+			socket.emit('joinUser', data.id);
 		}).finally(() => setIsLoading(false));
 	}, []);
 
@@ -88,7 +92,6 @@ const App = observer(() => {
 				user.setNotifications(data);
 			});
 		}
-		const socket = socketIOClient(process.env.REACT_APP_API_URL);
 		socket.on("notification", (updateNotification) => {
 			if (
 				updateNotification.senderId !== user.user.id &&

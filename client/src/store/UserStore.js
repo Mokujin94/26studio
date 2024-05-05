@@ -11,191 +11,200 @@ import about from '../resource/graphics/icons/burgerMenu/aboutIcon.svg';
 import { ADMIN_ROUTE, GROUPS_ROUTE, MESSENGER_ROUTE, MY_GROUP_ROUTE, NEWS_ROUTE, PROJECTS_ROUTE } from '../utils/consts';
 
 export default class UserStore {
-  constructor() {
-    this._isAuth = false;
-    this._user = {};
-    this._path = '';
-    this._modalProject = false;
-    this._modalNews = false;
-    this._modalProfileMiniature = false;
-    this._notifications = []
-    this._errorAuth = [
-      {
-        id: 0,
-        name: 'Никнейм',
-        errors: [],
-      },
-      {
-        id: 1,
-        name: 'ФИО',
-        errors: [],
-      },
-      {
-        id: 2,
-        name: 'Почта',
-        errors: [],
-      },
-      {
-        id: 3,
-        name: 'Пароль',
-        errors: [],
-      },
-      {
-        id: 4,
-        name: 'Повторный пароль',
-        errors: [],
-      },
-    ];
-    this._dataAuth = {
-      name: '',
-      fullName: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
-      group: 'Выберите группу',
-      about: '',
-      avatar: null,
-    };
-    this._codeAuth = 0;
-    this._menuAuth = [
-      { id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
-      { id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
-      // { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
-      { id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
-      { id: 3, title: 'Моя группа', icon: mygroup, path: GROUPS_ROUTE},
-      // { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
-      // { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
-    ];
-    this._menuAdmin = [
-      { id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
-      { id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
-      // { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
-      { id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
-      // { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
-      { id: 3, title: 'Управление', icon: control, path: ADMIN_ROUTE },
-    ];
-    this._menu = [
-      { id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
-      { id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
-      { id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
-      // { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
-    ];
-    this._burgerActive = false;
-    makeAutoObservable(this);
-  }
+	constructor() {
+		this._isAuth = false;
+		this._socket = null;
+		this._user = {};
+		this._path = '';
+		this._modalProject = false;
+		this._modalNews = false;
+		this._modalProfileMiniature = false;
+		this._notifications = []
+		this._errorAuth = [
+			{
+				id: 0,
+				name: 'Никнейм',
+				errors: [],
+			},
+			{
+				id: 1,
+				name: 'ФИО',
+				errors: [],
+			},
+			{
+				id: 2,
+				name: 'Почта',
+				errors: [],
+			},
+			{
+				id: 3,
+				name: 'Пароль',
+				errors: [],
+			},
+			{
+				id: 4,
+				name: 'Повторный пароль',
+				errors: [],
+			},
+		];
+		this._dataAuth = {
+			name: '',
+			fullName: '',
+			email: '',
+			password: '',
+			passwordConfirm: '',
+			group: 'Выберите группу',
+			about: '',
+			avatar: null,
+		};
+		this._codeAuth = 0;
+		this._menuAuth = [
+			{ id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
+			{ id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
+			// { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
+			{ id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+			{ id: 3, title: 'Моя группа', icon: mygroup, path: GROUPS_ROUTE },
+			// { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
+			// { id: 4, title: 'Управление', icon: control, path: ADMIN_ROUTE },
+		];
+		this._menuAdmin = [
+			{ id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
+			{ id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
+			// { id: 2, title: 'Мессенджер', icon: messeges, path: MESSENGER_ROUTE },
+			{ id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+			// { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
+			{ id: 3, title: 'Управление', icon: control, path: ADMIN_ROUTE },
+		];
+		this._menu = [
+			{ id: 0, title: 'Новости', icon: news, path: NEWS_ROUTE },
+			{ id: 1, title: 'Проекты', icon: project, path: PROJECTS_ROUTE },
+			{ id: 2, title: 'Группы', icon: group, path: GROUPS_ROUTE },
+			// { id: 3, title: 'Возможности', icon: about, path: GROUPS_ROUTE },
+		];
+		this._burgerActive = false;
+		makeAutoObservable(this);
+	}
 
-  setAuth(bool) {
-    this._isAuth = bool;
-  }
-  setUser(user) {
-    this._user = user;
-  }
+	setAuth(bool) {
+		this._isAuth = bool;
+	}
+	setUser(user) {
+		this._user = user;
+	}
 
-  setDataAuth(dataAuth) {
-    this._dataAuth = dataAuth;
-  }
+	setSocket(socket) {
+		this._socket = socket
+	}
 
-  setCodeAuth(code) {
-    this._codeAuth = code;
-  }
+	setDataAuth(dataAuth) {
+		this._dataAuth = dataAuth;
+	}
 
-  setMenuAuth(menuAuth) {
-    this._menuAuth = menuAuth;
-  }
+	setCodeAuth(code) {
+		this._codeAuth = code;
+	}
 
-  setMenuAdmin(menuAdmin) {
-    this._menuAdmin = menuAdmin;
-  }
+	setMenuAuth(menuAuth) {
+		this._menuAuth = menuAuth;
+	}
 
-  setMenu(menu) {
-    this._menu = menu;
-  }
+	setMenuAdmin(menuAdmin) {
+		this._menuAdmin = menuAdmin;
+	}
 
-  setPath(path) {
-    this._path = path;
-  }
+	setMenu(menu) {
+		this._menu = menu;
+	}
 
-  setNotifications(notifications) {
-    this._notifications = notifications;
-  }
+	setPath(path) {
+		this._path = path;
+	}
 
-  setModalProfileMiniature(modalProfileMiniature) {
-    this._modalProfileMiniature = modalProfileMiniature;
-  }
+	setNotifications(notifications) {
+		this._notifications = notifications;
+	}
 
-  setModalProject(modalProject) {
-    this._modalProject = modalProject;
-  }
+	setModalProfileMiniature(modalProfileMiniature) {
+		this._modalProfileMiniature = modalProfileMiniature;
+	}
 
-  setModalNews(modalNews) {
-    this._modalNews = modalNews;
-  }
+	setModalProject(modalProject) {
+		this._modalProject = modalProject;
+	}
 
-  setErrorAuth(newErrors) {
-    this._errorAuth = this._errorAuth.map((item, i) => {
-      if (i === newErrors.id) {
-        return newErrors;
-      }
-      return item;
-    });
-  }
+	setModalNews(modalNews) {
+		this._modalNews = modalNews;
+	}
 
-  setBurgerActive(bool) {
-    this._burgerActive = bool;
-  }
+	setErrorAuth(newErrors) {
+		this._errorAuth = this._errorAuth.map((item, i) => {
+			if (i === newErrors.id) {
+				return newErrors;
+			}
+			return item;
+		});
+	}
 
-  get isAuth() {
-    return this._isAuth;
-  }
-  get user() {
-    return this._user;
-  }
+	setBurgerActive(bool) {
+		this._burgerActive = bool;
+	}
 
-  get menuAuth() {
-    return this._menuAuth;
-  }
+	get isAuth() {
+		return this._isAuth;
+	}
+	get user() {
+		return this._user;
+	}
 
-  get menuAdmin() {
-    return this._menuAdmin;
-  }
+	get menuAuth() {
+		return this._menuAuth;
+	}
 
-  get menu() {
-    return this._menu;
-  }
+	get menuAdmin() {
+		return this._menuAdmin;
+	}
 
-  get path() {
-    return this._path;
-  }
+	get menu() {
+		return this._menu;
+	}
 
-  get notifications() {
-    return this._notifications;
-  }
+	get path() {
+		return this._path;
+	}
 
-  get modalProfileMiniature() {
-    return this._modalProfileMiniature;
-  }
+	get notifications() {
+		return this._notifications;
+	}
 
-  get modalProject() {
-    return this._modalProject;
-  }
+	get modalProfileMiniature() {
+		return this._modalProfileMiniature;
+	}
 
-  get modalNews() {
-    return this._modalNews;
-  }
+	get modalProject() {
+		return this._modalProject;
+	}
 
-  get errorAuth() {
-    return this._errorAuth;
-  }
+	get modalNews() {
+		return this._modalNews;
+	}
 
-  get dataAuth() {
-    return this._dataAuth;
-  }
+	get socket() {
+		return this._socket;
+	}
 
-  get codeAuth() {
-    return this._codeAuth;
-  }
+	get errorAuth() {
+		return this._errorAuth;
+	}
 
-  get burgerActive() {
-    return this._burgerActive;
-  }
+	get dataAuth() {
+		return this._dataAuth;
+	}
+
+	get codeAuth() {
+		return this._codeAuth;
+	}
+
+	get burgerActive() {
+		return this._burgerActive;
+	}
 }
