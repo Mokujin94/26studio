@@ -9,14 +9,16 @@ const Chat = observer(({ chat }) => {
 	const { user } = useContext(Context)
 	const [otherUserData, setOtherUserData] = useState({})
 	const [userData, setUserData] = useState({})
-	const [lastMessage, setLastMessage] = useState()
+	const [lastMessage, setLastMessage] = useState("")
 
 	const location = useLocation();
 	const hashPersonal = Number(location.hash.replace("#", ""))
 	const hashGroup = Number(location.hash.replace("#chatGroup=", ""))
 
 	useEffect(() => {
-		setLastMessage(chat.messages[0].text)
+		if (chat.messages.length) {
+			setLastMessage(chat.messages[0].text)
+		}
 		chat.members.filter(item => {
 			if (item.id !== user.user.id) {
 				setOtherUserData(item)
