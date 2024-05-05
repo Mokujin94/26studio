@@ -12,14 +12,64 @@ function initSocket(httpServer) {
 		},
 	});
 
+	let userSockets = [];
 	// События подключения и отключения
 
 	io.on("connection", (socket) => {
 		console.log("Пользователь подключен");
 
-		socket.on("disconnect", () => {
-			console.log("Пользователь отключен");
-		});
+
+		socket.on("joinUser", (userId) => {
+			!userSockets.some(user => user.userId === userId) &&
+				userSockets.push({
+					userId,
+					socketId: socket.id
+				})
+			console.log("userSockets", userSockets)
+		})
+
+		socket.on("sendMessageRecipient", ({ message, recipientId }) => {
+			const user = userSockets.find(user => user.userId === recipientId);
+			if (user) io.to(user.socketId).emit("getMessages", message)
+		})
+
+		socket.on("sendMessage", ({ message, recipientId }) => {
+			const user1 = userSockets.find(user => user.userId === recipientId);
+			const user2 = userSockets.find(user => user.userId === message.user.id);
+
+			if (!user1 || !user2) {
+				if (!user1) {
+					io.to(user2.socketId).emit("lastMessage", message)
+					return;
+				} else {
+					io.to(user1.socketId).emit("lastMessage", message)
+					return;
+				}
+			} else {
+				io.to(user1.socketId).emit("lastMessage", message)
+				io.to(user2.socketId).emit("lastMessage", message)
+			}
+		})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		socket.on("sendCommentsToClients", (comments) => {
 			console.log("Отправка комментариев всем клиентам");
@@ -69,13 +119,17 @@ function initSocket(httpServer) {
 		// Обработка подписки на чат
 		socket.on('joinChat', (chatId) => {
 			socket.join(`chat_${chatId}`); // Подключение к комнате чата
-			console.log(`User ${socket.id} joined chat ${chatId}`);
+			// console.log(`User ${socket.id} joined chat ${chatId}`);
 		});
 
 		// Обработка выхода из чата
 		socket.on('leaveChat', (chatId) => {
 			socket.leave(`chat_${chatId}`); // Отключение от комнаты чата
-			console.log(`User ${socket.id} left chat ${chatId}`);
+			// console.log(`User ${socket.id} left chat ${chatId}`);
+		});
+
+		socket.on("disconnect", () => {
+			userSockets = userSockets.filter(user => user.socketId !== socket.id);
 		});
 	});
 

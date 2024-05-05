@@ -188,3 +188,57 @@ body {
   opacity: 0;
   transition: opacity 0.3s;
 }
+
+
+// .message-enter {
+//   opacity: 0;
+//   transform: scaleY(0.9) translateY(5px);
+// 	transform-origin: 50% 100%; 
+// }
+
+// .message-enter-active {
+//   opacity: 1;
+//   transform: scaleY(1) translateY(0);
+
+//   transition: opacity 300ms, transform 300ms; /* Длительность анимации */
+// 	transform-origin: 50% 100%; 
+// }
+
+// .message-exit {
+//   opacity: 1;
+//   transform: scaleY(1) translateY(0);
+// 	transform-origin: 50% 100%; 
+// }
+
+// .message-exit-active {
+//   opacity: 0;
+//   transform: scaleY(0.9) translateY(5px);
+//   transition: opacity 300ms, transform 300ms;
+// 	transform-origin: 50% 100%; 
+// }
+
+
+.message-enter {
+	opacity: 0; // Начальная прозрачность
+  min-height: 0; // Начальная высота
+	grid-template-rows: 0fr;
+	transform: translateY(30px);
+	
+}
+
+.message-enter-active {
+	opacity: 1; // Плавное появление
+  min-height: 0; // Конечная высота (должна быть выше, чем контент)
+	grid-template-rows: 1fr;
+	transform: translateY(0);
+}
+
+.message-exit {
+	opacity: 1;
+  min-height: 0; 
+}
+
+.message-exit-active {
+	opacity: 0; // Плавное исчезновение
+  min-height: 0; // Плавное уменьшение высоты
+}

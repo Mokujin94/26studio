@@ -34,7 +34,8 @@ class MessengerController {
 					required: true
 				},
 				{
-					model: Messages
+					model: Messages,
+					include: User
 				}
 			],
 		});
@@ -162,11 +163,16 @@ class MessengerController {
 			chatId: chat.id,
 			text
 		})
-		io.to(`chat_${chat.id}`).emit('newMessage', message);
+		const messageWithUser = await Messages.findByPk(message.id, {
+			include: [
+				{
+					model: User,
+					attributes: ['id', 'name', 'avatar'], // Укажите необходимые атрибуты
+				},
+			],
+		});
 
-		return res.json(message)
-
-
+		return res.json(messageWithUser)
 	}
 }
 

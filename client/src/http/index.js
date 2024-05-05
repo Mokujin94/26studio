@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import socketIOClient from "socket.io-client";
 
 const $host = axios.create({
 	baseURL: process.env.REACT_APP_API_URL,
@@ -19,7 +20,9 @@ const $adminHost = axios.create({
 
 const authInterceptor = async (config) => {
 	const token = localStorage.getItem("token");
+
 	if (token) {
+
 		config.headers.authorization = `Bearer ${token}`;
 		const decode = jwt_decode(token);
 		try {
