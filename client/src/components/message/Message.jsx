@@ -4,7 +4,7 @@ import MessageContent from '../messageContent/MessageContent'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-const Message = observer(({ messages }) => {
+const Message = observer(({ messages, handleVisible }) => {
 	const { user } = useContext(Context)
 	console.log(messages[0])
 	return (
@@ -18,11 +18,11 @@ const Message = observer(({ messages }) => {
 					messages.map(message => {
 						if (message.userId == user.user.id) {
 							return (
-								<MessageContent content={message} isOther={false} />
+								<MessageContent content={message} isOther={false} onVisible={handleVisible} isRead={message.isRead} />
 							)
 						} else {
 							return (
-								<MessageContent content={message} isOther={true} />
+								<MessageContent content={message} isOther={true} onVisible={handleVisible} isRead={message.isRead} />
 							)
 						}
 					})

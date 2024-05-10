@@ -27,6 +27,9 @@ const Friend = sequelize.define("friend", {
 	status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
 });
 
+const ReadMessages = sequelize.define("read_messages", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+})
 
 const Group = sequelize.define("group", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -175,11 +178,19 @@ User.belongsTo(Role);
 User.hasMany(Messages);
 Messages.belongsTo(User);
 
-Chats.hasMany(Messages);
-Messages.belongsTo(Chats);
+Chats.hasMany(Messages, { foreignKey: "chatId", as: "messages" });
+Chats.hasMany(Messages, { foreignKey: "chatId", as: "notReadMessages" });
+Messages.belongsTo(Chats, { foreignKey: "chatId", as: "messages" });
+Messages.belongsTo(Chats, { foreignKey: "chatId", as: "notReadMessages" });
 
 Chats.belongsToMany(User, { through: ChatMembers, as: 'members' });
 User.belongsToMany(Chats, { through: ChatMembers, as: 'chats' });
+
+Messages.hasMany(ReadMessages);
+ReadMessages.belongsTo(Messages);
+
+User.hasMany(ReadMessages);
+ReadMessages.belongsTo(User);
 
 module.exports = {
 	User,
@@ -189,6 +200,7 @@ module.exports = {
 	Project,
 	News,
 	Messages,
+	ReadMessages,
 	Chats,
 	ChatMembers,
 	Comments,

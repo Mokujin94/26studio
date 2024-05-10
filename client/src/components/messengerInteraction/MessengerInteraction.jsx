@@ -26,6 +26,8 @@ const MessengerInteraction = observer(({ setMessages }) => {
 			},
 			userId: user.user.id
 		}
+		setMessageContent("");
+		inputRef.current.innerText = '';
 		// создать сообщение только у нас
 		setMessages((prevMessages) => {
 			const lastGroup = prevMessages[0];
@@ -39,8 +41,7 @@ const MessengerInteraction = observer(({ setMessages }) => {
 		});
 		// 
 		sendMessage(Number(hash), user.user.id, messageContent).then(data => {
-			setMessageContent("");
-			inputRef.current.innerText = '';
+
 			return data;
 		}).then((data) => {
 			if (user.user.id === hash) {

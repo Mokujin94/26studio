@@ -6,9 +6,9 @@ import { useLocation, useParams } from 'react-router-dom'
 import { useDateFormatter } from '../../hooks/useDateFormatter'
 import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
-import { fetchPersonalChat } from '../../http/messengerAPI'
+import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import socketIOClient from "socket.io-client";
-const MessengerContent = observer(({ setChatData, otherUserData, setOtherUserData, messages, setMessages }) => {
+const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages }) => {
 
 	const { user } = useContext(Context)
 
@@ -21,9 +21,29 @@ const MessengerContent = observer(({ setChatData, otherUserData, setOtherUserDat
 			setChatData(data);
 			setOtherUserData(data.member)
 			setMessages(data.messages);
-			console.log(data);
+			console.log(data.messages);
 		})
 	}, [hash])
+
+	const handleVisible = async (messageId) => {
+		// const findMessages = messages.filter(item => {
+		//     if (item[0].userId === user.user.id) {
+		//         return item;
+		//     }
+		// }).map(message => {
+		//     return message.map(item => {
+		//         if (item.id === messageId) {
+		//             console.log(item)
+		//             return item
+		//         }
+		//     })
+		// })
+
+		await onReadMessage(Number(user.user.id), Number(messageId)).then(data => {
+			console.log(data)
+		})
+		// console.log(findMessages)
+	};
 
 	console.log(messages)
 	const contentOutsideChat =
@@ -45,7 +65,7 @@ const MessengerContent = observer(({ setChatData, otherUserData, setOtherUserDat
 			<div className={style.content__inner}>
 				{
 					messages.map(messages => {
-						return <Message messages={messages} />
+						return <Message messages={messages} handleVisible={handleVisible} />
 					})
 				}
 

@@ -46,6 +46,7 @@ const Messenger = observer(() => {
 				/>
 				<MessengerContent
 					setChatData={setChatData}
+					chatData={chatData}
 					otherUserData={otherUserData}
 					setOtherUserData={setOtherUserData}
 					messages={messages}

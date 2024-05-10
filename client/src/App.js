@@ -49,13 +49,13 @@ const App = observer(() => {
 
 	useEffect(() => {
 		const socket = io(process.env.REACT_APP_API_URL);
+		user.setSocket(socket);
 		setIsLoading(true);
 		check().then((data) => {
 			user.setUser(data);
 			user.setAuth(true);
-			user.setSocket(socket);
-			console.log(socket)
 			socket.emit('joinUser', data.id);
+			console.log(socket)
 		}).finally(() => setIsLoading(false));
 	}, []);
 
@@ -106,6 +106,12 @@ const App = observer(() => {
 			socket.disconnect();
 		};
 	}, [user.user.id]);
+
+	useEffect(() => {
+		if (user.socket && user.user.id) {
+			user.socket.emit('joinUser', user.user.id);
+		}
+	}, [user.user.id, user.socket])
 
 	return (
 		<SwitchTransition mode="out-in">
