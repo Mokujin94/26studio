@@ -32,7 +32,6 @@ const Chat = observer(({ chat }) => {
 	useEffect(() => {
 		if (user.socket === null) return;
 		user.socket.on("lastMessage", (message) => {
-			console.log(message, chat);
 			if (message.chatId !== chat.id) return;
 			setLastMessage(message);
 		})
@@ -41,7 +40,6 @@ const Chat = observer(({ chat }) => {
 		}
 	}, [user.socket, chat])
 
-	console.log(chat);
 
 	return (
 		<>

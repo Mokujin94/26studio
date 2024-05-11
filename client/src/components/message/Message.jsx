@@ -6,7 +6,6 @@ import { Context } from '../..'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 const Message = observer(({ messages, handleVisible }) => {
 	const { user } = useContext(Context)
-	console.log(messages[0])
 	return (
 		// <div className={style.message}>
 		<div className={style.message}>
@@ -16,15 +15,9 @@ const Message = observer(({ messages, handleVisible }) => {
 			<div className={style.message__list}>
 				{
 					messages.map(message => {
-						if (message.userId == user.user.id) {
-							return (
-								<MessageContent content={message} isOther={false} onVisible={handleVisible} isRead={message.isRead} />
-							)
-						} else {
-							return (
-								<MessageContent content={message} isOther={true} onVisible={handleVisible} isRead={message.isRead} />
-							)
-						}
+						return (
+							<MessageContent content={message} isOther={message.userId == user.user.id ? false : true} onVisible={handleVisible} isRead={message.isRead} />
+						)
 					})
 				}
 			</div>

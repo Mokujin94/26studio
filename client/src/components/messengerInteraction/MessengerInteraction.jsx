@@ -29,25 +29,19 @@ const MessengerInteraction = observer(({ setMessages }) => {
 		setMessageContent("");
 		inputRef.current.innerText = '';
 		// создать сообщение только у нас
-		setMessages((prevMessages) => {
-			const lastGroup = prevMessages[0];
-			if (lastGroup && lastGroup[0].userId === message.userId) {
-				// Добавляем в начало последней группы, если это от того же пользователя
-				return [[...lastGroup, message], ...prevMessages.slice(1, prevMessages.length)];
-			} else {
-				// Создаем новую группу, если это другой пользователь
-				return [[message], ...prevMessages];
-			}
-		});
+
 		// 
 		sendMessage(Number(hash), user.user.id, messageContent).then(data => {
 
 			return data;
 		}).then((data) => {
 			if (user.user.id === hash) {
+				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
+				user.socket.emit("sendMessageRecipient", { message: data, recipientId: user.user.id })
 				user.socket.emit("sendMessage", { message: data, recipientId: hash })
 			} else {
 				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
+				user.socket.emit("sendMessageRecipient", { message: data, recipientId: user.user.id })
 				user.socket.emit("sendMessage", { message: data, recipientId: hash })
 			}
 		});

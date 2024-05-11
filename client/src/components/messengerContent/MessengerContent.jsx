@@ -13,7 +13,7 @@ const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOt
 	const { user } = useContext(Context)
 
 	const location = useLocation();
-	const hash = location.hash.replace("#", "")
+	const hash = Number(location.hash.replace("#", ""))
 
 	useEffect(() => {
 		if (!hash) return;
@@ -21,23 +21,23 @@ const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOt
 			setChatData(data);
 			setOtherUserData(data.member)
 			setMessages(data.messages);
-			console.log(data.messages);
 		})
 	}, [hash])
 
+
+
 	const handleVisible = async (messageId) => {
-		// const findMessages = messages.filter(item => {
-		//     if (item[0].userId === user.user.id) {
-		//         return item;
-		//     }
-		// }).map(message => {
-		//     return message.map(item => {
-		//         if (item.id === messageId) {
-		//             console.log(item)
-		//             return item
-		//         }
-		//     })
-		// })
+		messages.map((group) => {
+			return group.map((message) => {
+				if (message.id === messageId && message.userId !== user.user.id) {
+					message.isRead = true;
+					return user.socket.emit("onReadMessage", { message: message, recipientId: hash }); // Объединяем старое и новое сообщение
+				}
+				return message;
+			});
+		});
+
+
 
 		await onReadMessage(Number(user.user.id), Number(messageId)).then(data => {
 			console.log(data)

@@ -24,6 +24,7 @@ const Messenger = observer(() => {
 				const lastGroup = prevMessages[0];
 				if (lastGroup && lastGroup[0].userId === message.userId) {
 					// Добавляем в начало последней группы, если это от того же пользователя
+					console.log("подпишу", [...prevMessages.slice(1, prevMessages.length)])
 					return [[...lastGroup, message], ...prevMessages.slice(1, prevMessages.length)];
 				} else {
 					// Создаем новую группу, если это другой пользователь
@@ -32,10 +33,41 @@ const Messenger = observer(() => {
 			});
 			console.log(message)
 		});
+
+
+		user.socket.on("getReadMessage", (updatedMessage) => {
+			console.log(updatedMessage)
+
+
+			setMessages(prevMessages => {
+				const updatedMessages = prevMessages.map(group => {
+					return group.map(message => {
+						console.log(updatedMessage.id)
+						if (message.id === updatedMessage.id) {
+							// Если это обновляемое сообщение, возвращаем новый объект с обновленными данными
+							// return updatedMessage
+							console.log('log', updatedMessage)
+							return { ...message, ...updatedMessage };
+						} else {
+							// Если это не обновляемое сообщение, просто возвращаем его без изменений
+							return message;
+						}
+					});
+				});
+				console.log(updatedMessages)
+				return updatedMessages
+			});
+
+
+		})
+
 		return () => {
 			user.socket.off("getMessages")
+			user.socket.off("getReadMessage")
 		}
 	}, [user.socket, chatData])
+
+	console.log(messages)
 
 	return (
 		<div className='messenger'>

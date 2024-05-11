@@ -9,7 +9,7 @@ const MessageContent = ({ content, isOther, onVisible, isRead }) => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				if (entry.isIntersecting) {
-					console.log('render2')
+					console.log(content)
 					onVisible(content.id); // Сообщение стало видимым, вызываем обработчик
 					observer.disconnect(); // Прекращаем наблюдение после первого срабатывания
 				}
@@ -20,11 +20,10 @@ const MessageContent = ({ content, isOther, onVisible, isRead }) => {
 		if (messageRef.current) {
 			observer.observe(messageRef.current); // Начинаем наблюдать за элементом
 		}
-		console.log('render')
 		return () => {
 			observer.disconnect(); // Чистка при размонтировании компонента
 		};
-	}, []);
+	}, [content]);
 	// const [isRead, setIsRead] = useState(false)
 	const time = useTimeFormatter(content.createdAt)
 	return (
