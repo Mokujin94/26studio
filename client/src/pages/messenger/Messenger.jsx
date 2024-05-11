@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 import MessengerSideBar from '../../components/messengerSideBar/MessengerSideBar'
 import MessengerContent from '../../components/messengerContent/MessengerContent'
-import { useLocation } from 'react-router-dom'
-import { fetchChat } from '../../http/chatsAPI';
 import { observer } from 'mobx-react-lite';
 import { Context } from '../..';
+import { fetchAllChats } from '../../http/messengerAPI';
+import { useLocation } from 'react-router-dom';
 
 const Messenger = observer(() => {
 	const { user } = useContext(Context);
 
+	const location = useLocation();
+	const hash = Number(location.hash.replace("#", ""))
+
+	const [chats, setChats] = useState([]);
 	const [chatData, setChatData] = useState({});
 	const [otherUserData, setOtherUserData] = useState({})
 	const [messages, setMessages] = useState([])
@@ -21,8 +25,26 @@ const Messenger = observer(() => {
 	};
 
 	useEffect(() => {
+		fetchAllChats(user.user.id).then(data => {
+			setChats(data.chats)
+			console.log(data.chats)
+		})
+	}, [])
+
+	useEffect(() => {
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
+			setChats(prevChats => {
+				const newChats = prevChats.map(chat => {
+					if (chat.id === message.chatId) {
+						chat.notReadMessages.push(message);
+					}
+					return chat;
+				})
+				console.log(newChats);
+				return newChats;
+			})
+
 			setLastMessage(message)
 			console.log(message)
 			if (message.chatId !== chatData.id) return;
@@ -45,10 +67,26 @@ const Messenger = observer(() => {
 			console.log(message)
 		});
 
+		user.socket.on("getNotReadMessage", (message) => {
+			setChats(prevChats => {
+				const newChats = prevChats.map(chat => {
+					if (chat.id === message.chatId) {
+						const newChat = chat.notReadMessages.filter(item => item.id !== message.id)
+						return {
+							...chat,
+							notReadMessages: newChat
+						};
+					}
+					return chat;
+				})
+				console.log(newChats);
+				return newChats;
+			})
+		})
+
 
 		user.socket.on("getReadMessage", (updatedMessage) => {
 			console.log(updatedMessage)
-
 
 			setMessages(prevMessages => {
 				const updatedMessages = prevMessages.map(group => {
@@ -84,16 +122,21 @@ const Messenger = observer(() => {
 		<div className='messenger'>
 			<div className="messenger__inner">
 				<MessengerSideBar
+					chats={chats}
+					setChats={setChats}
 					messages={messages}
 					lastMessage={lastMessage}
+					hash={hash}
 				/>
 				<MessengerContent
+					chats={chats}
 					setChatData={setChatData}
 					chatData={chatData}
 					otherUserData={otherUserData}
 					setOtherUserData={setOtherUserData}
 					messages={messages}
 					setMessages={setMessages}
+					hash={hash}
 				/>
 			</div>
 		</div>

@@ -6,14 +6,13 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { MESSENGER_ROUTE } from '../../utils/consts';
 import useTimeFormatter from '../../hooks/useTimeFormatter';
 
-const Chat = observer(({ chat }) => {
+const Chat = observer(({ chat, hash }) => {
 	const { user } = useContext(Context)
 	const [otherUserData, setOtherUserData] = useState({})
 	const [userData, setUserData] = useState({})
 	const [lastMessage, setLastMessage] = useState({})
 
 	const location = useLocation();
-	const hashPersonal = Number(location.hash.replace("#", ""))
 	const hashGroup = Number(location.hash.replace("#chatGroup=", ""))
 
 	useEffect(() => {
@@ -31,12 +30,14 @@ const Chat = observer(({ chat }) => {
 
 	useEffect(() => {
 		if (user.socket === null) return;
+
 		user.socket.on("lastMessage", (message) => {
 			if (message.chatId !== chat.id) return;
 			setLastMessage(message);
 		})
 		return () => {
 			user.socket.off("lastMessage")
+			user.socket.off("getNotReadMessage")
 		}
 	}, [user.socket, chat])
 
@@ -65,7 +66,7 @@ const Chat = observer(({ chat }) => {
 						</div>
 					</Link>
 					:
-					<Link className={chat.members.length < 2 ? userData.id === hashPersonal ? style.chat + ' ' + style.chat_active : style.chat : otherUserData.id === hashPersonal ? style.chat + ' ' + style.chat_active : style.chat} to={MESSENGER_ROUTE + `/#${chat.members.length < 2 ? userData.id : otherUserData.id}`}>
+					<Link className={chat.members.length < 2 ? userData.id === hash ? style.chat + ' ' + style.chat_active : style.chat : otherUserData.id === hash ? style.chat + ' ' + style.chat_active : style.chat} to={MESSENGER_ROUTE + `/#${chat.members.length < 2 ? userData.id : otherUserData.id}`}>
 
 						<div className={style.chat__avatar}>
 							<img src={process.env.REACT_APP_API_URL + "/" + `${chat.members.length < 2 ? userData.avatar : otherUserData.avatar}`} alt="" />

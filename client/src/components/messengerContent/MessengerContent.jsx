@@ -1,29 +1,42 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import style from './messengerContent.module.scss'
 import MessengerInteraction from '../messengerInteraction/MessengerInteraction'
 import Message from '../message/Message'
-import { useLocation, useParams } from 'react-router-dom'
-import { useDateFormatter } from '../../hooks/useDateFormatter'
+import { useLocation } from 'react-router-dom'
 import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
-import socketIOClient from "socket.io-client";
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
-const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages }) => {
+const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash }) => {
 
 	const { user } = useContext(Context)
 
-	const location = useLocation();
-	const hash = Number(location.hash.replace("#", ""))
-
 	useEffect(() => {
+		chats.map(chat => {
+			chat.members.filter(item => {
+				if (item.id !== user.user.id && item.id === hash) {
+					setOtherUserData(item)
+				}
+			})
+		})
+
 		if (!hash) return;
 		fetchPersonalChat(Number(hash), user.user.id).then(data => {
 			setChatData(data);
-			setOtherUserData(data.member)
+			// setOtherUserData(data.member)
 			setMessages(data.messages);
 		})
-	}, [hash])
+	}, [hash, chats])
+
+	// useEffect(() => {
+	// 	chats.map(chat => {
+	// 		chat.members.filter(item => {
+	// 			if (item.id !== user.user.id && item.id === hash) {
+	// 				setOtherUserData(item)
+	// 			}
+	// 		})
+	// 	})
+	// }, [chats])
 
 
 
@@ -32,7 +45,7 @@ const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOt
 			return group.map((message) => {
 				if (message.id === messageId && message.userId !== user.user.id) {
 					message.isRead = true;
-					return user.socket.emit("onReadMessage", { message: message, recipientId: hash }); // Объединяем старое и новое сообщение
+					return user.socket.emit("onReadMessage", { message: message, recipientId: hash, senderId: user.user.id }); // Объединяем старое и новое сообщение
 				}
 				return message;
 			});
