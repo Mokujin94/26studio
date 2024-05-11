@@ -37,7 +37,6 @@ const MessengerInteraction = observer(({ setMessages }) => {
 		}).then((data) => {
 			if (user.user.id === hash) {
 				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
-				user.socket.emit("sendMessageRecipient", { message: data, recipientId: user.user.id })
 				user.socket.emit("sendMessage", { message: data, recipientId: hash })
 			} else {
 				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })

@@ -51,15 +51,23 @@ function initSocket(httpServer) {
 			}
 		})
 
-		socket.on("onReadMessage", ({ message, recipientId }) => {
+		socket.on("onReadMessage", ({ message, recipientId, senderId }) => {
 			const user = userSockets.find(user => user.userId === recipientId);
+			console.log(message);
 
 			if (!user) return;
 
 			io.to(user.socketId).emit("getReadMessage", message);
 		})
 
+		socket.on("onNotReadMessage", ({ message, recipientId }) => {
+			const user = userSockets.find(user => user.userId === recipientId);
+			console.log(message);
 
+			if (!user) return;
+
+			io.to(user.socketId).emit("getNotReadMessage", message);
+		})
 
 
 
