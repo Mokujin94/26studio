@@ -11,6 +11,7 @@ const Chat = observer(({ chat, hash }) => {
 	const [otherUserData, setOtherUserData] = useState({})
 	const [userData, setUserData] = useState({})
 	const [lastMessage, setLastMessage] = useState({})
+	const [notReadMessages, setNotReadMessages] = useState([])
 
 	const location = useLocation();
 	const hashGroup = Number(location.hash.replace("#chatGroup=", ""))
@@ -26,20 +27,41 @@ const Chat = observer(({ chat, hash }) => {
 				setUserData(item)
 			}
 		})
+
+		setNotReadMessages(chat.notReadMessages);
 	}, [])
 
 	useEffect(() => {
 		if (user.socket === null) return;
 
 		user.socket.on("lastMessage", (message) => {
+
+
 			if (message.chatId !== chat.id) return;
+
+			setNotReadMessages(prevMessages => {
+				return [...prevMessages, message]
+			})
 			setLastMessage(message);
 		})
+		user.socket.on("getNotReadMessage", (message) => {
+			console.log(message)
+			setNotReadMessages(prevMessages => {
+				if (prevMessages.id === message.id) {
+					console.log("id", message)
+				}
+				return prevMessages.filter(messageRead => messageRead.id !== message.id)
+			})
+		})
+
+
+
+
 		return () => {
 			user.socket.off("lastMessage")
 			user.socket.off("getNotReadMessage")
 		}
-	}, [user.socket, chat])
+	}, [user.socket])
 
 
 	return (
@@ -83,9 +105,9 @@ const Chat = observer(({ chat, hash }) => {
 							}
 
 							{
-								chat.notReadMessages.length > 0 &&
+								notReadMessages.length > 0 &&
 								<div className={style.chat__infoCount}>
-									<span className={style.chat__infoCountText}>{chat.notReadMessages.length}</span>
+									<span className={style.chat__infoCountText}>{notReadMessages.length}</span>
 								</div>
 							}
 						</div>

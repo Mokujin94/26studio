@@ -26,17 +26,18 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			// setOtherUserData(data.member)
 			setMessages(data.messages);
 		})
-	}, [hash, chats])
+	}, [hash])
 
-	// useEffect(() => {
-	// 	chats.map(chat => {
-	// 		chat.members.filter(item => {
-	// 			if (item.id !== user.user.id && item.id === hash) {
-	// 				setOtherUserData(item)
-	// 			}
-	// 		})
-	// 	})
-	// }, [chats])
+	useEffect(() => {
+
+		chats.map(chat => {
+			chat.members.filter(item => {
+				if (item.id !== user.user.id && item.id === hash) {
+					setOtherUserData(item)
+				}
+			})
+		})
+	}, [chats])
 
 
 
@@ -44,8 +45,10 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 		messages.map((group) => {
 			return group.map((message) => {
 				if (message.id === messageId && message.userId !== user.user.id) {
+					console.log(message)
 					message.isRead = true;
-					return user.socket.emit("onReadMessage", { message: message, recipientId: hash, senderId: user.user.id }); // Объединяем старое и новое сообщение
+					user.socket.emit("onReadMessage", { message: message, recipientId: hash }); // Объединяем старое и новое сообщение
+					user.socket.emit("onNotReadMessage", { message: message, recipientId: user.user.id }); // Объединяем старое и новое сообщение
 				}
 				return message;
 			});

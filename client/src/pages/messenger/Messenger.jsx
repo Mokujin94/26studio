@@ -67,24 +67,6 @@ const Messenger = observer(() => {
 			console.log(message)
 		});
 
-		user.socket.on("getNotReadMessage", (message) => {
-			setChats(prevChats => {
-				const newChats = prevChats.map(chat => {
-					if (chat.id === message.chatId) {
-						const newChat = chat.notReadMessages.filter(item => item.id !== message.id)
-						return {
-							...chat,
-							notReadMessages: newChat
-						};
-					}
-					return chat;
-				})
-				console.log(newChats);
-				return newChats;
-			})
-		})
-
-
 		user.socket.on("getReadMessage", (updatedMessage) => {
 			console.log(updatedMessage)
 

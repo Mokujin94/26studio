@@ -36,7 +36,11 @@ class MessengerController {
 				{
 					model: Messages,
 					as: "messages",
-					include: User
+					include: User,
+					order: [
+						["createdAt", "DESC"]
+					],
+					// limit: 12
 				}
 			],
 		});

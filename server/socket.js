@@ -52,19 +52,22 @@ function initSocket(httpServer) {
 		})
 
 		socket.on("onReadMessage", ({ message, recipientId, senderId }) => {
-			const user1 = userSockets.find(user => user.userId === recipientId);
-			const user2 = userSockets.find(user => user.userId === senderId);
+			const user = userSockets.find(user => user.userId === recipientId);
 			console.log(message);
 
-			if (!user1) {
-				return io.to(user2.socketId).emit("getNotReadMessage", message);
-			}
+			if (!user) return;
 
-			io.to(user1.socketId).emit("getReadMessage", message);
-			io.to(user2.socketId).emit("getNotReadMessage", message);
+			io.to(user.socketId).emit("getReadMessage", message);
 		})
 
+		socket.on("onNotReadMessage", ({ message, recipientId }) => {
+			const user = userSockets.find(user => user.userId === recipientId);
+			console.log(message);
 
+			if (!user) return;
+
+			io.to(user.socketId).emit("getNotReadMessage", message);
+		})
 
 
 
