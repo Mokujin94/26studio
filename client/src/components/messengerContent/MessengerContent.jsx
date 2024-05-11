@@ -8,6 +8,7 @@ import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import socketIOClient from "socket.io-client";
+import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages }) => {
 
 	const { user } = useContext(Context)
@@ -45,6 +46,56 @@ const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOt
 		// console.log(findMessages)
 	};
 
+	// const renderMessagesWithDate = () => {
+	// 	let jsx = [];
+	// 	let lastDate = null;
+
+	// 	messages.forEach((messageGroup, index) => {
+	// 		const groupDate = messageGroup[messageGroup.length - 1].createdAt;
+	// 		const lastGroup = messages[index - 1];
+	// 		console.log(index)
+	// 		const lastGroupDate = lastGroup ? lastGroup[lastGroup.length - 1].createdAt : null;
+
+
+
+	// 		if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
+	// 			// Если последнее сообщение предыдущей группы было отправлено в другой день,
+	// 			// добавляем компонент с датой
+	// 			console.log(groupDate)
+	// 			jsx.push(
+	// 				<div key={`date-${groupDate}`} className={style.content__inner_date}>
+	// 					{useDayMonthFormatter(lastDate)}
+	// 				</div>
+	// 			);
+	// 		}
+
+	// 		// Добавляем все сообщения из текущей группы
+	// 		jsx.push(
+	// 			<Message key={`message-group-${index}`} messages={messageGroup} handleVisible={handleVisible} />
+	// 		);
+	// 		if (index === messages.length - 1 && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
+	// 			jsx.push(
+	// 				<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
+	// 					{useDayMonthFormatter(groupDate)}
+	// 				</div>
+	// 			);
+	// 		}
+	// 		// Обновляем дату последнего сообщения для следующей итерации
+	// 		lastDate = groupDate;
+	// 	});
+
+	// 	return jsx;
+	// };
+
+	// Функция для проверки, различаются ли две даты по дню
+	const isDifferentDay = (date1, date2) => {
+		return (
+			date1.getFullYear() !== date2.getFullYear() ||
+			date1.getMonth() !== date2.getMonth() ||
+			// date1.getDay() !== date2.getDay() ||
+			date1.getDate() !== date2.getDate()
+		);
+	};
 	console.log(messages)
 	const contentOutsideChat =
 		<div className={style.content__inner}>
@@ -63,9 +114,36 @@ const MessengerContent = observer(({ setChatData, chatData, otherUserData, setOt
 			</div>
 
 			<div className={style.content__inner}>
+				{/* {renderMessagesWithDate()} */}
 				{
-					messages.map(messages => {
-						return <Message messages={messages} handleVisible={handleVisible} />
+					messages.map((messageGroup, index) => {
+						const groupDate = messageGroup[0].createdAt;
+						const lastGroup = messages[index + 1];
+						const lastGroupDate = lastGroup ? lastGroup[0].createdAt : null;
+
+						if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
+							return (
+								<>
+
+									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
+									<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
+										{useDayMonthFormatter(groupDate)}
+									</div>
+								</>
+							)
+						} else if (!lastGroupDate) {
+							return (
+								<>
+
+									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
+									<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
+										{useDayMonthFormatter(groupDate)}
+									</div>
+								</>
+							)
+
+						} else return <Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
+
 					})
 				}
 

@@ -47,6 +47,18 @@
 				left: 50%;
 				transform: translate(-50%, -50%);
 			}
+			&_date {
+				padding: 7px 15px;
+				background: $studio-darker-element;
+				border-radius: 10px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin: 0 auto;
+				color: $studio-white-text;
+				font-weight: 500;
+				font-size: 14px;
+			}
 			&_active {
 					flex-direction: column-reverse;
 					justify-content: flex-start;

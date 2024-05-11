@@ -14,6 +14,12 @@ const Messenger = observer(() => {
 	const [messages, setMessages] = useState([])
 	const [lastMessage, setLastMessage] = useState({})
 
+	const isDifferentDay = (date1, date2) => {
+		return date1.getDate() !== date2.getDate() ||
+			date1.getMonth() !== date2.getMonth() ||
+			date1.getFullYear() !== date2.getFullYear();
+	};
+
 	useEffect(() => {
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
@@ -22,6 +28,11 @@ const Messenger = observer(() => {
 			if (message.chatId !== chatData.id) return;
 			setMessages((prevMessages) => {
 				const lastGroup = prevMessages[0];
+
+				if (lastGroup && isDifferentDay(new Date(lastGroup[0].createdAt), new Date(message.createdAt))) {
+					return [[message], ...prevMessages];
+				}
+
 				if (lastGroup && lastGroup[0].userId === message.userId) {
 					// Добавляем в начало последней группы, если это от того же пользователя
 					console.log("подпишу", [...prevMessages.slice(1, prevMessages.length)])
