@@ -52,6 +52,7 @@
 		gap: 5px;
 		flex-direction: column;
 		align-items: end;
+		min-height: 37px;
 		&Time {
 			font-size: 12px;
 			font-weight: 500;
@@ -79,6 +80,10 @@
 		color: $studio-dark-text;
 		&:hover {
 			background-color: $studio-primary-element;
+		}
+		.chat__infoCount {
+			background: $studio-white-element;
+			color: $studio-dark-text;
 		}
 	}
 }

@@ -51,7 +51,13 @@ function initSocket(httpServer) {
 			}
 		})
 
+		socket.on("onReadMessage", ({ message, recipientId }) => {
+			const user = userSockets.find(user => user.userId === recipientId);
 
+			if (!user) return;
+
+			io.to(user.socketId).emit("getReadMessage", message);
+		})
 
 
 

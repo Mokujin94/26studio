@@ -1,6 +1,6 @@
-const { Op, json } = require("sequelize");
+const { Op, json, where, Sequelize } = require("sequelize");
 const ApiError = require("../error/ApiError");
-const { Chats, User, Messages, ChatMembers } = require("../models/models");
+const { Chats, User, Messages, ChatMembers, ReadMessages } = require("../models/models");
 const { sequelize } = require("../db");
 const { getIo } = require("../socket");
 require("dotenv").config();
@@ -35,6 +35,7 @@ class MessengerController {
 				},
 				{
 					model: Messages,
+					as: "messages",
 					include: User
 				}
 			],
@@ -99,10 +100,17 @@ class MessengerController {
 						},
 						{
 							model: Messages,
+							as: "messages",
 							order: [
 								["createdAt", "DESC"]
 							],
 							limit: 1 // Получаем последние сообщения, если нужно
+						},
+						{
+							model: Messages,
+							as: "notReadMessages",
+							where: { isRead: false, userId: { [Sequelize.Op.ne]: userId }, },
+							required: false
 						}
 					]
 				}
@@ -139,7 +147,8 @@ class MessengerController {
 					required: true
 				},
 				{
-					model: Messages
+					model: Messages,
+					as: "messages",
 				}
 			],
 		});
@@ -173,6 +182,41 @@ class MessengerController {
 		});
 
 		return res.json(messageWithUser)
+	}
+
+	async readMessage(req, res, next) {
+		const { userId, messageId } = req.body;
+
+		if (!messageId) return next(ApiError.badRequest("Не найдено сообщение"))
+
+		const message = await Messages.findOne({
+			where: { id: messageId }
+		})
+
+		if (message.userId === userId) {
+			return next(ApiError.badRequest("Нельзя прочитать свое сообщение"))
+		}
+
+		await message.update(
+			{ isRead: true }
+		)
+
+
+
+		const findReadMessage = await ReadMessages.findOne({
+			where: { userId, messageId }
+		})
+
+		if (findReadMessage) {
+			return next(ApiError.badRequest("Нельзя прочитать уже прочитанное сообщение"))
+		}
+
+		const readMessage = await ReadMessages.create({
+			userId,
+			messageId
+		})
+
+		return res.json(readMessage);
 	}
 }
 

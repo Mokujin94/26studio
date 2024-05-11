@@ -4,12 +4,13 @@ import { observer } from 'mobx-react-lite';
 import { Context } from '../..';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { MESSENGER_ROUTE } from '../../utils/consts';
+import useTimeFormatter from '../../hooks/useTimeFormatter';
 
 const Chat = observer(({ chat }) => {
 	const { user } = useContext(Context)
 	const [otherUserData, setOtherUserData] = useState({})
 	const [userData, setUserData] = useState({})
-	const [lastMessage, setLastMessage] = useState("")
+	const [lastMessage, setLastMessage] = useState({})
 
 	const location = useLocation();
 	const hashPersonal = Number(location.hash.replace("#", ""))
@@ -17,7 +18,7 @@ const Chat = observer(({ chat }) => {
 
 	useEffect(() => {
 		if (chat.messages.length) {
-			setLastMessage(chat.messages[0].text)
+			setLastMessage(chat.messages[0])
 		}
 		chat.members.filter(item => {
 			if (item.id !== user.user.id) {
@@ -31,16 +32,14 @@ const Chat = observer(({ chat }) => {
 	useEffect(() => {
 		if (user.socket === null) return;
 		user.socket.on("lastMessage", (message) => {
-			console.log(message, chat);
 			if (message.chatId !== chat.id) return;
-			setLastMessage(message.text);
+			setLastMessage(message);
 		})
 		return () => {
 			user.socket.off("lastMessage")
 		}
 	}, [user.socket, chat])
 
-	console.log(chat);
 
 	return (
 		<>
@@ -75,13 +74,19 @@ const Chat = observer(({ chat }) => {
 							<span className={style.chat__textName}>
 								{chat.members.length < 2 ? "Избранное" : otherUserData.name}
 							</span>
-							<p className={style.chat__textMessage}>{lastMessage}</p>
+							<p className={style.chat__textMessage}>{lastMessage.text}</p>
 						</div>
 						<div className={style.chat__info}>
-							<span className={style.chat__infoTime}>15:43</span>
-							<div className={style.chat__infoCount}>
-								<span className={style.chat__infoCountText}>1</span>
-							</div>
+							{
+								lastMessage.text && <span className={style.chat__infoTime}>{useTimeFormatter(lastMessage.createdAt)}</span>
+							}
+
+							{
+								chat.notReadMessages.length > 0 &&
+								<div className={style.chat__infoCount}>
+									<span className={style.chat__infoCountText}>{chat.notReadMessages.length}</span>
+								</div>
+							}
 						</div>
 					</Link>
 			}

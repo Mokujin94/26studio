@@ -28,3 +28,10 @@ export const sendMessage = async (otherUserId, userId, text) => {
 	const { data } = await $host.post('api/messenger/sendMessage', { otherUserId, userId, text });
 	return data;
 };
+
+
+export const onReadMessage = async (userId, messageId) => {
+
+	const { data } = await $host.post('api/messenger/readMessage', { userId, messageId });
+	return data;
+};
