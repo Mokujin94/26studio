@@ -5,6 +5,7 @@ import { Context } from '../..';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { MESSENGER_ROUTE } from '../../utils/consts';
 import useTimeFormatter from '../../hooks/useTimeFormatter';
+import { CSSTransition } from 'react-transition-group';
 
 const Chat = observer(({ chat, hash }) => {
 	const { user } = useContext(Context)
@@ -34,14 +35,19 @@ const Chat = observer(({ chat, hash }) => {
 	useEffect(() => {
 		if (user.socket === null) return;
 
-		user.socket.on("lastMessage", (message) => {
+		user.socket.on("incReadMessege", (message) => {
 
 
 			if (message.chatId !== chat.id) return;
 
 			setNotReadMessages(prevMessages => {
+				if (message.userId === user.user.id) return prevMessages;
 				return [...prevMessages, message]
 			})
+		})
+
+		user.socket.on("lastMessage", (message) => {
+			if (message.chatId !== chat.id) return;
 			setLastMessage(message);
 		})
 		user.socket.on("getNotReadMessage", (message) => {
@@ -105,13 +111,20 @@ const Chat = observer(({ chat, hash }) => {
 							}
 
 							{
-								notReadMessages.length > 0 &&
-								<div className={style.chat__infoCount}>
-									<span className={style.chat__infoCountText}>{notReadMessages.length}</span>
-								</div>
+								<CSSTransition
+									in={notReadMessages.length >= 1}
+									timeout={300}
+									classNames="create-anim"
+									unmountOnExit
+								>
+									<div className={style.chat__infoCount}>
+										<span className={style.chat__infoCountText}>{notReadMessages.length}</span>
+									</div>
+								</CSSTransition>
+
 							}
 						</div>
-					</Link>
+					</Link >
 			}
 		</>
 	);
