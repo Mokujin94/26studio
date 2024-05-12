@@ -7,7 +7,7 @@ import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
-const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash }) => {
+const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat }) => {
 
 	const { user } = useContext(Context)
 
@@ -38,6 +38,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			})
 		})
 	}, [chats])
+
 
 
 
@@ -129,32 +130,32 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 				</div>
 			</div>
 
-			<div className={style.content__inner}>
+			<div className={style.content__inner} ref={windowChat}>
 				{/* {renderMessagesWithDate()} */}
 				{
 					messages.map((messageGroup, index) => {
-						const groupDate = messageGroup[0].createdAt;
-						const lastGroup = messages[index + 1];
-						const lastGroupDate = lastGroup ? lastGroup[0].createdAt : null;
+						const groupDate = messageGroup[messageGroup.length - 1].createdAt;
+						const lastGroup = messages[index - 1];
+						const lastGroupDate = lastGroup ? lastGroup[lastGroup.length - 1].createdAt : null;
 
 						if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
 							return (
 								<>
-
-									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
 									<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
 										{useDayMonthFormatter(groupDate)}
 									</div>
+									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
+
 								</>
 							)
 						} else if (!lastGroupDate) {
 							return (
 								<>
-
-									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
 									<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
 										{useDayMonthFormatter(groupDate)}
 									</div>
+									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
+
 								</>
 							)
 

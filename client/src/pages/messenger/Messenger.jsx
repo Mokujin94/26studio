@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import MessengerSideBar from '../../components/messengerSideBar/MessengerSideBar'
 import MessengerContent from '../../components/messengerContent/MessengerContent'
 import { observer } from 'mobx-react-lite';
@@ -17,7 +17,7 @@ const Messenger = observer(() => {
 	const [otherUserData, setOtherUserData] = useState({})
 	const [messages, setMessages] = useState([])
 	const [lastMessage, setLastMessage] = useState({})
-
+	const windowChat = useRef(null)
 	const isDifferentDay = (date1, date2) => {
 		return date1.getDate() === date2.getDate() &&
 			date1.getMonth() === date2.getMonth() &&
@@ -36,26 +36,44 @@ const Messenger = observer(() => {
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
 
-
 			setLastMessage(message)
 			console.log(message)
 			if (message.chatId !== chatData.id) return;
 			setMessages((prevMessages) => {
-				const lastGroup = prevMessages[0];
+				const lastGroup = prevMessages[prevMessages.length - 1];
 
-				if (lastGroup && !isDifferentDay(new Date(lastGroup[0].createdAt), new Date(message.createdAt))) {
-					return [[message], ...prevMessages];
+				if (lastGroup && !isDifferentDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
+					return [...prevMessages, [message]];
 				}
 
 				if (lastGroup && lastGroup[0].userId === message.userId) {
 					// Добавляем в начало последней группы, если это от того же пользователя
-					console.log("подпишу", [...prevMessages.slice(1, prevMessages.length)])
-					return [[...lastGroup, message], ...prevMessages.slice(1, prevMessages.length)];
+					return [...prevMessages.slice(0, prevMessages.length - 1), [...lastGroup, message]];
 				} else {
 					// Создаем новую группу, если это другой пользователь
-					return [[message], ...prevMessages];
+					return [...prevMessages, [message]];
 				}
 			});
+
+			const isScrollAtBottom = (windowChatRef) => {
+				const windowChat = windowChatRef.current;
+				if (!windowChat) return false; // Проверка на случай, если ref не существует
+
+				const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
+				const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
+				return scrollOffset <= windowChat.clientHeight + bottomOffset;
+			};
+			if (isScrollAtBottom(windowChat)) {
+				if (message && windowChat) {
+					// const windowChatCurrent = windowChat.current;
+					setTimeout(() => {
+						windowChat.current.scrollTo({
+							top: windowChat.current.scrollHeight,
+							behavior: "smooth"
+						});
+					}, 0)
+				}
+			}
 			console.log(message)
 		});
 
@@ -124,6 +142,7 @@ const Messenger = observer(() => {
 					messages={messages}
 					setMessages={setMessages}
 					hash={hash}
+					windowChat={windowChat}
 				/>
 			</div>
 		</div>
