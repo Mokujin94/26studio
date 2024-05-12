@@ -61,10 +61,10 @@ class MessengerController {
 		chat.messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
 		function isSameDay(date1, date2) {
-			return date1.getDate() === date2.getDate() &&
-				date1.getMonth() === date2.getMonth() &&
-				date1.getFullYear() === date2.getFullYear() &&
-				date1.getDay() === date2.getDay();
+			return date1.getDate() !== date2.getDate() ||
+				date1.getMonth() !== date2.getMonth() ||
+				date1.getFullYear() !== date2.getFullYear() ||
+				date1.getDay() !== date2.getDay();
 		}
 
 		function groupMessagesByUser(messages) {
@@ -72,7 +72,7 @@ class MessengerController {
 				const lastGroup = acc[acc.length - 1];
 				const messageDate = new Date(message.createdAt);
 
-				if (!lastGroup || lastGroup[0].userId !== message.userId || !isSameDay(new Date(lastGroup[0].createdAt), messageDate)) {
+				if (!lastGroup || lastGroup[0].userId !== message.userId || isSameDay(new Date(lastGroup[lastGroup.length - 1].createdAt), messageDate)) {
 					acc.push([message]);
 				} else {
 					lastGroup.push(message);
