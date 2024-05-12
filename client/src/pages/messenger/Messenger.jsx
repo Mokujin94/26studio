@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import MessengerSideBar from '../../components/messengerSideBar/MessengerSideBar'
 import MessengerContent from '../../components/messengerContent/MessengerContent'
 import { observer } from 'mobx-react-lite';
@@ -17,6 +17,8 @@ const Messenger = observer(() => {
 	const [otherUserData, setOtherUserData] = useState({})
 	const [messages, setMessages] = useState([])
 	const [lastMessage, setLastMessage] = useState({})
+	const [isScrollBottom, setIsScrollBottom] = useState(true)
+	const windowChatRef = useRef(null)
 
 	const isDifferentDay = (date1, date2) => {
 		return date1.getDate() === date2.getDate() &&
@@ -33,31 +35,52 @@ const Messenger = observer(() => {
 	}, [])
 
 	useEffect(() => {
+
+
+		// const isScrollAtBottom = (windowChatRef) => {
+		// 	const windowChat = windowChatRef.current;
+		// 	if (!windowChat) return false; // Проверка на случай, если ref не существует
+
+		// 	const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
+		// 	const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
+		// 	return scrollOffset <= windowChat.clientHeight + bottomOffset;
+		// };
+
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
 
+			const promise = new Promise((resolve, reject) => {
+				setLastMessage(message);
+				console.log(message);
+				if (message.chatId !== chatData.id) return;
+				setMessages((prevMessages) => {
+					const lastGroup = prevMessages[prevMessages.length - 1];
 
-			setLastMessage(message)
-			console.log(message)
-			if (message.chatId !== chatData.id) return;
-			setMessages((prevMessages) => {
-				const lastGroup = prevMessages[0];
+					if (lastGroup && !isDifferentDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
+						resolve();
+						return [...prevMessages, [message]];
+					}
 
-				if (lastGroup && !isDifferentDay(new Date(lastGroup[0].createdAt), new Date(message.createdAt))) {
-					return [[message], ...prevMessages];
-				}
-
-				if (lastGroup && lastGroup[0].userId === message.userId) {
-					// Добавляем в начало последней группы, если это от того же пользователя
-					console.log("подпишу", [...prevMessages.slice(1, prevMessages.length)])
-					return [[...lastGroup, message], ...prevMessages.slice(1, prevMessages.length)];
-				} else {
-					// Создаем новую группу, если это другой пользователь
-					return [[message], ...prevMessages];
-				}
+					if (lastGroup && lastGroup[0].userId === message.userId) {
+						// Добавляем в начало последней группы, если это от того же пользователя
+						resolve();
+						return [...prevMessages.slice(0, prevMessages.length - 1), [...lastGroup, message]];
+					} else {
+						// Создаем новую группу, если это другой пользователь
+						resolve();
+						return [...prevMessages, [message]];
+					}
+				});
+				resolve();
 			});
-			console.log(message)
+
+			promise.then(() => {
+
+			});
+
+			console.log(message);
 		});
+
 
 		// user.socket.on("incReadMessege", (message) => {
 		// 	setChats(prevChats => {
@@ -78,7 +101,6 @@ const Messenger = observer(() => {
 			setMessages(prevMessages => {
 				const updatedMessages = prevMessages.map(group => {
 					return group.map(message => {
-						console.log(updatedMessage.id)
 						if (message.id === updatedMessage.id) {
 							// Если это обновляемое сообщение, возвращаем новый объект с обновленными данными
 							// return updatedMessage
@@ -103,6 +125,43 @@ const Messenger = observer(() => {
 		}
 	}, [user.socket, chatData])
 
+	useEffect(() => {
+
+		windowChatRef.current.addEventListener("scroll", () => {
+			const windowChat = windowChatRef.current;
+			if (!windowChat) return false; // Проверка на случай, если ref не существует
+			const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
+			const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
+			console.log(scrollOffset);
+			if (scrollOffset <= windowChat.clientHeight + bottomOffset) {
+				setIsScrollBottom(true)
+			} else {
+				setIsScrollBottom(false)
+			}
+		})
+
+		// return () => {
+		// 	windowChatRef.current.removeEventListener("scroll", checkScroll)
+		// }
+	}, [])
+
+
+	useEffect(() => {
+
+
+		if (isScrollBottom) {
+			setTimeout(() => {
+				console.log('привет мир')
+				windowChatRef.current.scrollTo({
+					top: windowChatRef.current.scrollHeight,
+					behavior: "smooth",
+				});
+			}, 0)
+
+		}
+
+	}, [lastMessage])
+
 	console.log(messages)
 
 	return (
@@ -124,6 +183,7 @@ const Messenger = observer(() => {
 					messages={messages}
 					setMessages={setMessages}
 					hash={hash}
+					windowChat={windowChatRef}
 				/>
 			</div>
 		</div>

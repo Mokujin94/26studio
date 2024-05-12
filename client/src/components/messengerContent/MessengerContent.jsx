@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import style from './messengerContent.module.scss'
 import MessengerInteraction from '../messengerInteraction/MessengerInteraction'
 import Message from '../message/Message'
@@ -7,9 +7,12 @@ import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
-const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash }) => {
+import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
+const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat }) => {
 
 	const { user } = useContext(Context)
+
+	const chatRef = useRef(null)
 
 	useEffect(() => {
 		chats.map(chat => {
@@ -25,8 +28,20 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			setChatData(data);
 			// setOtherUserData(data.member)
 			setMessages(data.messages);
+		}).then(() => {
+			// console.log("window", window);
+			// windowChat.current.scrollTo({
+			// 	top: windowChat.current.scrollHeight,
+			// });
 		})
 	}, [hash])
+
+	useEffect(() => {
+		console.log("chatData", chatData);
+		windowChat.current.scrollTo({
+			top: windowChat.current.scrollHeight,
+		});
+	}, [chatData])
 
 	useEffect(() => {
 
@@ -38,6 +53,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			})
 		})
 	}, [chats])
+
 
 
 
@@ -129,41 +145,70 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 				</div>
 			</div>
 
-			<div className={style.content__inner}>
+
+			<div className={style.content__inner} ref={windowChat}>
 				{/* {renderMessagesWithDate()} */}
-				{
-					messages.map((messageGroup, index) => {
-						const groupDate = messageGroup[0].createdAt;
-						const lastGroup = messages[index + 1];
-						const lastGroupDate = lastGroup ? lastGroup[0].createdAt : null;
 
-						if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
-							return (
-								<>
+				<TransitionGroup component={null}>
+					{
+						messages.map((messageGroup, index) => {
+							const groupDate = messageGroup[messageGroup.length - 1].createdAt;
+							const lastGroup = messages[index - 1];
+							const lastGroupDate = lastGroup ? lastGroup[lastGroup.length - 1].createdAt : null;
 
-									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
-									<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
-										{useDayMonthFormatter(groupDate)}
-									</div>
-								</>
+							const key = `message-group-${messageGroup[0].id}`;
+
+							if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
+								return (
+									<CSSTransition
+										key={key}
+										in={hash}
+										timeout={300}
+									>
+										<>
+											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
+												{useDayMonthFormatter(groupDate)}
+											</div>
+											<Message messages={messageGroup} handleVisible={handleVisible} />
+										</>
+									</CSSTransition>
+								)
+							} else if (!lastGroupDate) {
+								return (
+									<CSSTransition
+										key={key}
+										in={hash}
+										timeout={300}
+									>
+										<>
+											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
+												{useDayMonthFormatter(groupDate)}
+											</div>
+											<Message messages={messageGroup} handleVisible={handleVisible} />
+										</>
+									</CSSTransition>
+								)
+
+							} else return (
+								<CSSTransition
+									key={key}
+									in={hash}
+									timeout={300}
+								>
+									<Message messages={messageGroup} handleVisible={handleVisible} />
+								</CSSTransition>
 							)
-						} else if (!lastGroupDate) {
-							return (
-								<>
 
-									<Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
-									<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
-										{useDayMonthFormatter(groupDate)}
-									</div>
-								</>
-							)
+						})
+					}
+				</TransitionGroup>
 
-						} else return <Message key={`message-group-${messageGroup[0].id}`} messages={messageGroup} handleVisible={handleVisible} />
 
-					})
-				}
+			</div >
 
-			</div>
+
+
+
 			<div className={style.content__bottom}>
 				<MessengerInteraction setMessages={setMessages} />
 			</div>

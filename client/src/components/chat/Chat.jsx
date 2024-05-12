@@ -53,9 +53,6 @@ const Chat = observer(({ chat, hash }) => {
 		user.socket.on("getNotReadMessage", (message) => {
 			console.log(message)
 			setNotReadMessages(prevMessages => {
-				if (prevMessages.id === message.id) {
-					console.log("id", message)
-				}
 				return prevMessages.filter(messageRead => messageRead.id !== message.id)
 			})
 		})
