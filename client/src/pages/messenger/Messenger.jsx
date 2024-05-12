@@ -35,9 +35,7 @@ const Messenger = observer(() => {
 	}, [])
 
 	useEffect(() => {
-		windowChatRef.current.addEventListener("scroll", () => {
 
-		});
 
 		// const isScrollAtBottom = (windowChatRef) => {
 		// 	const windowChat = windowChatRef.current;
@@ -73,7 +71,7 @@ const Messenger = observer(() => {
 						return [...prevMessages, [message]];
 					}
 				});
-
+				resolve();
 			});
 
 			promise.then(() => {
@@ -103,7 +101,6 @@ const Messenger = observer(() => {
 			setMessages(prevMessages => {
 				const updatedMessages = prevMessages.map(group => {
 					return group.map(message => {
-						console.log(updatedMessage.id)
 						if (message.id === updatedMessage.id) {
 							// Если это обновляемое сообщение, возвращаем новый объект с обновленными данными
 							// return updatedMessage
@@ -129,7 +126,7 @@ const Messenger = observer(() => {
 	}, [user.socket, chatData])
 
 	useEffect(() => {
-		let isScrollBottom;
+
 		windowChatRef.current.addEventListener("scroll", () => {
 			const windowChat = windowChatRef.current;
 			if (!windowChat) return false; // Проверка на случай, если ref не существует
@@ -137,19 +134,33 @@ const Messenger = observer(() => {
 			const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
 			console.log(scrollOffset);
 			if (scrollOffset <= windowChat.clientHeight + bottomOffset) {
-				isScrollBottom = true;
+				setIsScrollBottom(true)
 			} else {
-				isScrollBottom = false;
+				setIsScrollBottom(false)
 			}
 		})
 
+		// return () => {
+		// 	windowChatRef.current.removeEventListener("scroll", checkScroll)
+		// }
+	}, [])
+
+
+	useEffect(() => {
+
+
 		if (isScrollBottom) {
-			windowChatRef.current.scrollTo({
-				top: windowChatRef.current.scrollHeight,
-				behavior: "smooth"
-			});
+			setTimeout(() => {
+				console.log('привет мир')
+				windowChatRef.current.scrollTo({
+					top: windowChatRef.current.scrollHeight,
+					behavior: "smooth",
+				});
+			}, 0)
+
 		}
-	}, [messages])
+
+	}, [lastMessage])
 
 	console.log(messages)
 
