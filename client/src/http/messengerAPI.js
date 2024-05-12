@@ -35,3 +35,14 @@ export const onReadMessage = async (userId, messageId) => {
 	const { data } = await $host.post('api/messenger/readMessage', { userId, messageId });
 	return data;
 };
+
+export const fetchMessages = async (chatId, offset) => {
+	const config = {
+		params: {
+			chatId,
+			offset
+		}
+	}
+	const { data } = await $host.get('api/messenger/getMessages', config);
+	return data;
+};

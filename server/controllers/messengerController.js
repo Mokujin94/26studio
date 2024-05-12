@@ -40,7 +40,7 @@ class MessengerController {
 					// order: [
 					// 	["createdAt", "DESC"]
 					// ],
-					// limit: 12
+					// limit: 50
 				}
 			],
 		});
@@ -230,6 +230,20 @@ class MessengerController {
 		})
 
 		return res.json(readMessage);
+	}
+
+	async getMessages(req, res, next) {
+		const { chatId, offset } = req.query;
+		const limit = 50;
+		const messages = await Messages.findAndCountAll({
+			where: { chatId },
+			order: [
+				["createdAt", "DESC"]
+			],
+			limit,
+			offset
+		})
+		return res.json(messages);
 	}
 }
 

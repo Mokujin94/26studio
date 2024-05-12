@@ -23,7 +23,6 @@
 	&__list {
 		display: grid;
 		justify-items: start;
-		grid-template-rows: 0fr; // Сеточный шаблон строк (можно динамически изменять)
 		align-items: flex-start;
 		gap: 5px;
 		> *:not(*:last-child) {
