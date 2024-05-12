@@ -43,10 +43,12 @@ function initSocket(httpServer) {
 					return;
 				} else {
 					io.to(user1.socketId).emit("lastMessage", message)
+					io.to(user1.socketId).emit("incReadMessege", message)
 					return;
 				}
 			} else {
 				io.to(user1.socketId).emit("lastMessage", message)
+				io.to(user1.socketId).emit("incReadMessege", message)
 				io.to(user2.socketId).emit("lastMessage", message)
 			}
 		})

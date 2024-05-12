@@ -19,9 +19,10 @@ const Messenger = observer(() => {
 	const [lastMessage, setLastMessage] = useState({})
 
 	const isDifferentDay = (date1, date2) => {
-		return date1.getDate() !== date2.getDate() ||
-			date1.getMonth() !== date2.getMonth() ||
-			date1.getFullYear() !== date2.getFullYear();
+		return date1.getDate() === date2.getDate() &&
+			date1.getMonth() === date2.getMonth() &&
+			date1.getFullYear() === date2.getFullYear() &&
+			date1.getHours() === date2.getHours();
 	};
 
 	useEffect(() => {
@@ -34,16 +35,7 @@ const Messenger = observer(() => {
 	useEffect(() => {
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
-			setChats(prevChats => {
-				const newChats = prevChats.map(chat => {
-					if (chat.id === message.chatId) {
-						chat.notReadMessages.push(message);
-					}
-					return chat;
-				})
-				console.log(newChats);
-				return newChats;
-			})
+
 
 			setLastMessage(message)
 			console.log(message)
@@ -51,7 +43,7 @@ const Messenger = observer(() => {
 			setMessages((prevMessages) => {
 				const lastGroup = prevMessages[0];
 
-				if (lastGroup && isDifferentDay(new Date(lastGroup[0].createdAt), new Date(message.createdAt))) {
+				if (lastGroup && !isDifferentDay(new Date(lastGroup[0].createdAt), new Date(message.createdAt))) {
 					return [[message], ...prevMessages];
 				}
 
@@ -66,6 +58,19 @@ const Messenger = observer(() => {
 			});
 			console.log(message)
 		});
+
+		// user.socket.on("incReadMessege", (message) => {
+		// 	setChats(prevChats => {
+		// 		const newChats = prevChats.map(chat => {
+		// 			if (chat.id === message.chatId) {
+		// 				chat.notReadMessages.push(message);
+		// 			}
+		// 			return chat;
+		// 		})
+		// 		console.log(newChats);
+		// 		return newChats;
+		// 	})
+		// })
 
 		user.socket.on("getReadMessage", (updatedMessage) => {
 			console.log(updatedMessage)
