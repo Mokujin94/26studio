@@ -68,7 +68,7 @@ class MessengerController {
 
 		function groupMessagesByUser(messages) {
 			return messages.reduce((acc, message) => {
-				const lastGroup = acc[0];
+				const lastGroup = acc[acc.length - 1];
 				if (lastGroup && isSameDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
 					acc.push([message]);
 					return acc;
