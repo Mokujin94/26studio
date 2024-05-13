@@ -8,11 +8,9 @@ import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
-const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat }) => {
+const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, setTotalCountMessages, setMessagesOffset }) => {
 
 	const { user } = useContext(Context)
-
-	const chatRef = useRef(null)
 
 	useEffect(() => {
 		chats.map(chat => {
@@ -28,20 +26,20 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			setChatData(data);
 			// setOtherUserData(data.member)
 			setMessages(data.messages);
-		}).then(() => {
-			// console.log("window", window);
-			// windowChat.current.scrollTo({
-			// 	top: windowChat.current.scrollHeight,
-			// });
+			setTotalCountMessages(data.countMessages)
+
+			setMessagesOffset(2)
 		})
-	}, [hash])
+	}, [Number(hash)])
 
 	useEffect(() => {
-		console.log("chatData", chatData);
-		windowChat.current.scrollTo({
-			top: windowChat.current.scrollHeight,
-		});
-	}, [chatData])
+		setTotalCountMessages(chatData.countMessages)
+		setMessagesOffset(2)
+		if (windowChat.current)
+			windowChat.current.scrollTo({
+				top: windowChat.current.scrollHeight,
+			});
+	}, [chatData, windowChat.current])
 
 	useEffect(() => {
 
@@ -61,7 +59,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 		messages.map((group) => {
 			return group.map((message) => {
 				if (message.id === messageId && message.userId !== user.user.id) {
-					console.log(message)
+
 					message.isRead = true;
 					user.socket.emit("onReadMessage", { message: message, recipientId: hash }); // Объединяем старое и новое сообщение
 					user.socket.emit("onNotReadMessage", { message: message, recipientId: user.user.id }); // Объединяем старое и новое сообщение
@@ -70,65 +68,19 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			});
 		});
 
-
-
-		await onReadMessage(Number(user.user.id), Number(messageId)).then(data => {
-			console.log(data)
+		await onReadMessage(Number(user.user.id), Number(messageId)).catch(() => {
+			console.log('fgsd')
 		})
-		// console.log(findMessages)
 	};
-
-	// const renderMessagesWithDate = () => {
-	// 	let jsx = [];
-	// 	let lastDate = null;
-
-	// 	messages.forEach((messageGroup, index) => {
-	// 		const groupDate = messageGroup[messageGroup.length - 1].createdAt;
-	// 		const lastGroup = messages[index - 1];
-	// 		console.log(index)
-	// 		const lastGroupDate = lastGroup ? lastGroup[lastGroup.length - 1].createdAt : null;
-
-
-
-	// 		if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
-	// 			// Если последнее сообщение предыдущей группы было отправлено в другой день,
-	// 			// добавляем компонент с датой
-	// 			console.log(groupDate)
-	// 			jsx.push(
-	// 				<div key={`date-${groupDate}`} className={style.content__inner_date}>
-	// 					{useDayMonthFormatter(lastDate)}
-	// 				</div>
-	// 			);
-	// 		}
-
-	// 		// Добавляем все сообщения из текущей группы
-	// 		jsx.push(
-	// 			<Message key={`message-group-${index}`} messages={messageGroup} handleVisible={handleVisible} />
-	// 		);
-	// 		if (index === messages.length - 1 && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
-	// 			jsx.push(
-	// 				<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
-	// 					{useDayMonthFormatter(groupDate)}
-	// 				</div>
-	// 			);
-	// 		}
-	// 		// Обновляем дату последнего сообщения для следующей итерации
-	// 		lastDate = groupDate;
-	// 	});
-
-	// 	return jsx;
-	// };
 
 	// Функция для проверки, различаются ли две даты по дню
 	const isDifferentDay = (date1, date2) => {
 		return (
 			date1.getFullYear() !== date2.getFullYear() ||
 			date1.getMonth() !== date2.getMonth() ||
-			// date1.getDay() !== date2.getDay() ||
 			date1.getDate() !== date2.getDate()
 		);
 	};
-	console.log(messages)
 	const contentOutsideChat =
 		<div className={style.content__inner}>
 			<span className={style.content__innerText}>Выберите, кому хотели бы написать</span>
@@ -162,8 +114,8 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 								return (
 									<CSSTransition
 										key={key}
-										in={hash}
-										timeout={300}
+										in={!!hash}
+										timeout={0}
 									>
 										<>
 											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
@@ -177,8 +129,8 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 								return (
 									<CSSTransition
 										key={key}
-										in={hash}
-										timeout={300}
+										in={!!hash}
+										timeout={0}
 									>
 										<>
 											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
@@ -192,8 +144,8 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 							} else return (
 								<CSSTransition
 									key={key}
-									in={hash}
-									timeout={300}
+									in={!!hash}
+									timeout={0}
 								>
 									<Message messages={messageGroup} handleVisible={handleVisible} />
 								</CSSTransition>

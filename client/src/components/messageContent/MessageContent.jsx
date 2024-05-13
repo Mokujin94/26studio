@@ -15,7 +15,7 @@ const MessageContent = ({ content, isOther, onVisible, isRead }) => {
 		const observer = new IntersectionObserver(
 			([entry]) => {
 				if (entry.isIntersecting) {
-					// console.log(content)
+					// 
 					onVisible(content.id); // Сообщение стало видимым, вызываем обработчик
 					observer.disconnect(); // Прекращаем наблюдение после первого срабатывания
 				}

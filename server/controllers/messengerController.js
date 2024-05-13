@@ -37,23 +37,32 @@ class MessengerController {
 					model: Messages,
 					as: "messages",
 					include: User,
-					// order: [
-					// 	["createdAt", "DESC"]
-					// ],
-					// limit: 50
+					order: [
+						["createdAt", "DESC"]
+					],
+					limit: 50,
 				}
 			],
 		});
+
+
 
 		if (!commonChat) {
 			chat = {
 				is_group: false,
 				member: user,
-				messages: []
+				messages: [],
+				countMessages: 0
 			}
 		} else {
 			chat = commonChat ? commonChat.get({ plain: true }) : {}; // Если нужно получить "чистый" объект
 			chat.member = user; // Добавляем свойство
+			const totalCountMessages = await Messages.count({
+				where: {
+					chatId: commonChat.id
+				}
+			});
+			chat.countMessages = totalCountMessages
 		}
 
 
@@ -207,9 +216,8 @@ class MessengerController {
 		})
 
 		if (message.userId === userId) {
-			return next(ApiError.badRequest("Нельзя прочитать свое сообщение"))
+			return res.status(200).json({ message: "Нельзя прочитать свое сообщение" });
 		}
-
 		await message.update(
 			{ isRead: true }
 		)
@@ -221,7 +229,7 @@ class MessengerController {
 		})
 
 		if (findReadMessage) {
-			return next(ApiError.badRequest("Нельзя прочитать уже прочитанное сообщение"))
+			return res.status(200).json({ message: "Нельзя прочитать уже прочитанное сообщение" });
 		}
 
 		const readMessage = await ReadMessages.create({
@@ -233,17 +241,50 @@ class MessengerController {
 	}
 
 	async getMessages(req, res, next) {
-		const { chatId, offset } = req.query;
+		const { chatId, groupMessages } = req.query;
 		const limit = 50;
+		let offset = groupMessages * limit - limit;
 		const messages = await Messages.findAndCountAll({
 			where: { chatId },
+			include: User,
 			order: [
 				["createdAt", "DESC"]
 			],
 			limit,
 			offset
 		})
-		return res.json(messages);
+
+
+		messages.rows.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+
+		function isSameDay(date1, date2) {
+			return date1.getDate() === date2.getDate() &&
+				date1.getMonth() === date2.getMonth() &&
+				date1.getFullYear() === date2.getFullYear() &&
+				date1.getHours() === date2.getHours();
+		}
+
+		function groupMessagesByUser(messages) {
+			return messages.reduce((acc, message) => {
+				const lastGroup = acc[acc.length - 1];
+				const messageDate = new Date(message.createdAt);
+
+				if (!lastGroup || lastGroup[0].userId !== message.userId || !isSameDay(new Date(lastGroup[lastGroup.length - 1].createdAt), messageDate)) {
+					acc.push([message]);
+				} else {
+					lastGroup.push(message);
+				}
+				return acc;
+			}, []);
+		}
+
+		const groupedMessages = groupMessagesByUser(messages.rows);
+		groupedMessages.map(item => item.sort((a, b) => a.id - b.id))
+		const filteredMessages = {
+			count: messages.count,
+			rows: groupedMessages
+		};
+		return res.json(filteredMessages);
 	}
 }
 

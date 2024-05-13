@@ -41,7 +41,7 @@ const Project = observer(() => {
         setIsLoadingComments(true)
         viewProject(id, user.user.id).catch((e) => console.log(e));
         fetchProjectById(id).then((data) => {
-            console.log(data)
+
             setDataProject(data);
             setDataUser(data.user);
             setDescription(data.description);
@@ -92,7 +92,7 @@ const Project = observer(() => {
                             setLikeLoading(false);
                         })
                         .catch((data) => {
-                            console.log(data.response.data.message);
+
                             error.setNotAuthError(true);
                             setLikeLoading(false)
                         });
@@ -104,14 +104,14 @@ const Project = observer(() => {
                             setLikeLoading(false);
                         })
                         .catch((data) => {
-                            console.log(data.response.data.message);
+
                             error.setNotAuthError(true);
                             setLikeLoading(false)
                         });
                 }
             })
             .catch((data) => {
-                console.log(data.response.data.message);
+
                 error.setNotAuthError(true);
                 setLikeLoading(false)
             });

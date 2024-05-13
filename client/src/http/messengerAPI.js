@@ -36,11 +36,11 @@ export const onReadMessage = async (userId, messageId) => {
 	return data;
 };
 
-export const fetchMessages = async (chatId, offset) => {
+export const fetchMessages = async (chatId, groupMessages) => {
 	const config = {
 		params: {
 			chatId,
-			offset
+			groupMessages
 		}
 	}
 	const { data } = await $host.get('api/messenger/getMessages', config);
