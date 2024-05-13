@@ -25,7 +25,7 @@ const NewsPaper = observer(() => {
     const { user, error } = useContext(Context);
     const navigate = useNavigate()
 
-    console.log(user);
+
 
     const [newsData, setNewsData] = useState({});
 
@@ -43,12 +43,12 @@ const NewsPaper = observer(() => {
 
 
     // useEffect(() => {
-    // 	console.log(userStore.user.user);
-    // 	console.log(user.user);
+    // 	
+    // 	
     // 	// Проверяем, что пользователь загружен в UserStore
     // 	if (!userStore.user || !userStore.user.id) {
-    // 		console.log(userStore.user.user);
-    // 		console.log(user.user);
+    // 		
+    // 		
     // 		// Если пользователя нет, перенаправляем на страницу входа
     // 		navigate(NEWS_ROUTE);
     // 	}
@@ -64,7 +64,7 @@ const NewsPaper = observer(() => {
         });
 
         fetchNewsById(id).then((data) => {
-            console.log(user.user.isAuth);
+
             if (data.isProposed) {
                 if ((user.user.id && user.user.roleId !== 4) || !user.user.id) {
                     setIsProposed(true)
@@ -75,7 +75,7 @@ const NewsPaper = observer(() => {
             }
 
             setNewsData(data);
-            console.log(JSON.parse(data.description))
+
             const filteredDescription = JSON.parse(data.description)
                 .map(item => {
                     if (item.type === "paragraph") {
@@ -128,7 +128,7 @@ const NewsPaper = observer(() => {
                             setLikeLoading(false);
                         })
                         .catch((data) => {
-                            console.log(data.response.data.message);
+
                             error.setNotAuthError(true);
                             setLikeLoading(false)
                         });
@@ -140,14 +140,14 @@ const NewsPaper = observer(() => {
                             setLikeLoading(false);
                         })
                         .catch((data) => {
-                            console.log(data.response.data.message);
+
                             error.setNotAuthError(true);
                             setLikeLoading(false)
                         });
                 }
             })
             .catch((data) => {
-                console.log(data.response.data.message);
+
                 error.setNotAuthError(true);
                 setLikeLoading(false)
             });

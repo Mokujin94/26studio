@@ -75,14 +75,14 @@ const start = async () => {
 				await models.Group.findOrCreate({ where: { name: "ИС 43/9" } });
 			})
 			.catch((e) => console.log(e));
-		// console.log(path.resolve(__dirname, "static"));
+		// ;
 		// clientRedis.connect();
 		httpServer.listen(PORT, () =>
 
 			console.log(`сервер стартанул на порте ${PORT}`)
 		);
 	} catch (e) {
-		console.log(e);
+
 	}
 };
 

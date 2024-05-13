@@ -3,8 +3,9 @@ import MessengerSideBar from '../../components/messengerSideBar/MessengerSideBar
 import MessengerContent from '../../components/messengerContent/MessengerContent'
 import { observer } from 'mobx-react-lite';
 import { Context } from '../..';
-import { fetchAllChats } from '../../http/messengerAPI';
+import { fetchAllChats, fetchMessages } from '../../http/messengerAPI';
 import { useLocation } from 'react-router-dom';
+import { useDebounce } from '../../hooks/useDebounce';
 
 const Messenger = observer(() => {
 	const { user } = useContext(Context);
@@ -18,6 +19,9 @@ const Messenger = observer(() => {
 	const [messages, setMessages] = useState([])
 	const [lastMessage, setLastMessage] = useState({})
 	const [isScrollBottom, setIsScrollBottom] = useState(true)
+	const [messagesOffset, setMessagesOffset] = useState(2)
+	const [isFetchingMessages, setIsFetchingMessages] = useState(false)
+	const [totalCountMessages, setTotalCountMessages] = useState(0);
 	const windowChatRef = useRef(null)
 
 	const isDifferentDay = (date1, date2) => {
@@ -30,28 +34,18 @@ const Messenger = observer(() => {
 	useEffect(() => {
 		fetchAllChats(user.user.id).then(data => {
 			setChats(data.chats)
-			console.log(data.chats)
+
 		})
 	}, [])
 
 	useEffect(() => {
-
-
-		// const isScrollAtBottom = (windowChatRef) => {
-		// 	const windowChat = windowChatRef.current;
-		// 	if (!windowChat) return false; // Проверка на случай, если ref не существует
-
-		// 	const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
-		// 	const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
-		// 	return scrollOffset <= windowChat.clientHeight + bottomOffset;
-		// };
 
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
 
 			const promise = new Promise((resolve, reject) => {
 				setLastMessage(message);
-				console.log(message);
+
 				if (message.chatId !== chatData.id) return;
 				setMessages((prevMessages) => {
 					const lastGroup = prevMessages[prevMessages.length - 1];
@@ -74,29 +68,13 @@ const Messenger = observer(() => {
 				resolve();
 			});
 
-			promise.then(() => {
-
-			});
-
-			console.log(message);
 		});
 
 
-		// user.socket.on("incReadMessege", (message) => {
-		// 	setChats(prevChats => {
-		// 		const newChats = prevChats.map(chat => {
-		// 			if (chat.id === message.chatId) {
-		// 				chat.notReadMessages.push(message);
-		// 			}
-		// 			return chat;
-		// 		})
-		// 		console.log(newChats);
-		// 		return newChats;
-		// 	})
-		// })
+
 
 		user.socket.on("getReadMessage", (updatedMessage) => {
-			console.log(updatedMessage)
+
 
 			setMessages(prevMessages => {
 				const updatedMessages = prevMessages.map(group => {
@@ -104,7 +82,7 @@ const Messenger = observer(() => {
 						if (message.id === updatedMessage.id) {
 							// Если это обновляемое сообщение, возвращаем новый объект с обновленными данными
 							// return updatedMessage
-							console.log('log', updatedMessage)
+
 							return { ...message, ...updatedMessage };
 						} else {
 							// Если это не обновляемое сообщение, просто возвращаем его без изменений
@@ -112,7 +90,7 @@ const Messenger = observer(() => {
 						}
 					});
 				});
-				console.log(updatedMessages)
+
 				return updatedMessages
 			});
 
@@ -126,24 +104,31 @@ const Messenger = observer(() => {
 	}, [user.socket, chatData])
 
 	useEffect(() => {
+		if (!windowChatRef.current) return
+		windowChatRef.current.addEventListener("scroll", checkScrollHandler)
 
-		windowChatRef.current.addEventListener("scroll", () => {
-			const windowChat = windowChatRef.current;
-			if (!windowChat) return false; // Проверка на случай, если ref не существует
-			const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
-			const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
-			console.log(scrollOffset);
-			if (scrollOffset <= windowChat.clientHeight + bottomOffset) {
-				setIsScrollBottom(true)
-			} else {
-				setIsScrollBottom(false)
-			}
-		})
+		return () => {
+			windowChatRef.current.removeEventListener("scroll", checkScrollHandler);
+		}
+	}, [chatData, messages, totalCountMessages, isFetchingMessages, hash, windowChatRef.current])
 
-		// return () => {
-		// 	windowChatRef.current.removeEventListener("scroll", checkScroll)
-		// }
-	}, [])
+	function checkScrollHandler() {
+		const windowChat = windowChatRef.current;
+		if (!windowChat) return false; // Проверка на случай, если ref не существует
+		const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
+		const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
+		const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
+		if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages) {
+			console.log("true")
+			setIsFetchingMessages(true);
+		}
+
+		if (scrollOffset <= windowChat.clientHeight + bottomOffset) {
+			setIsScrollBottom(true)
+		} else {
+			setIsScrollBottom(false)
+		}
+	}
 
 
 	useEffect(() => {
@@ -151,18 +136,33 @@ const Messenger = observer(() => {
 
 		if (isScrollBottom) {
 			setTimeout(() => {
-				console.log('привет мир')
-				windowChatRef.current.scrollTo({
-					top: windowChatRef.current.scrollHeight,
-					behavior: "smooth",
-				});
+				if (windowChatRef.current)
+					windowChatRef.current.scrollTo({
+						top: windowChatRef.current.scrollHeight,
+						behavior: "smooth",
+					});
 			}, 0)
 
 		}
 
 	}, [lastMessage])
 
-	console.log(messages)
+	useEffect(() => {
+		if (chatData.id && isFetchingMessages) {
+			fetchMessages(chatData.id, messagesOffset).then((data) => {
+				console.log(data)
+				setMessages(prevMessages => {
+					return [...data.rows, ...prevMessages]
+				})
+				setMessagesOffset(prevOffset => prevOffset + 1)
+
+			}).finally(() => {
+				setIsFetchingMessages(false)
+			})
+		}
+	}, [isFetchingMessages, chatData, messagesOffset])
+
+
 
 	return (
 		<div className='messenger'>
@@ -184,6 +184,8 @@ const Messenger = observer(() => {
 					setMessages={setMessages}
 					hash={hash}
 					windowChat={windowChatRef}
+					setTotalCountMessages={setTotalCountMessages}
+					setMessagesOffset={setMessagesOffset}
 				/>
 			</div>
 		</div>

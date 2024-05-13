@@ -51,7 +51,7 @@ const ReplyComment = observer((props) => {
 
 		const height = blockElement.clientHeight;
 		const hideHeight = blockElement.scrollHeight;
-		console.log(height, hideHeight)
+
 		if (height + 1 < hideHeight) {
 			setIsHideContent(true);
 		}
@@ -73,22 +73,22 @@ const ReplyComment = observer((props) => {
 		}
 	}
 
-	console.log(props)
+
 
 	const onLike = useCallback(async () => {
 		if (!user.isAuth) {
 			return error.setNotAuthError(true);
 		}
 		setIsLike(prevIsLike => !prevIsLike); // Обновляем состояние isLike, используя предыдущее значение
-		console.log(isLike)
+
 		if (isLike) {
 			setLikesCount(prev => prev - 1);
 
 			try {
 				const data = await deleteLike(props.replyId, user.user.id);
-				// console.log(data);
+				// 
 			} catch (err) {
-				// console.log(err);
+				// 
 			}
 
 		} else {
@@ -96,9 +96,9 @@ const ReplyComment = observer((props) => {
 
 			try {
 				const data = await like(props.replyId, user.user.id);
-				// console.log(data);
+				// 
 			} catch (err) {
-				// console.log(err);
+				// 
 			}
 		}
 	}, [isLike, props.commentId, user.user.id, setIsLike, setLikesCount]);
