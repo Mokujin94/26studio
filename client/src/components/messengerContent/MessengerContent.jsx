@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
-const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, setTotalCountMessages, setMessagesOffset }) => {
+const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages }) => {
 
 	const { user } = useContext(Context)
 
@@ -56,6 +56,11 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 
 	const handleVisible = async (messageId) => {
+		const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
+
+		if (messages[0][0].id === messageId && totalElements < totalCountMessages) {
+			setIsFetchingMessages(true)
+		}
 		messages.map((group) => {
 			return group.map((message) => {
 				if (message.id === messageId && message.userId !== user.user.id) {

@@ -184,8 +184,10 @@ const Messenger = observer(() => {
 					setMessages={setMessages}
 					hash={hash}
 					windowChat={windowChatRef}
+					totalCountMessages={totalCountMessages}
 					setTotalCountMessages={setTotalCountMessages}
 					setMessagesOffset={setMessagesOffset}
+					setIsFetchingMessages={setIsFetchingMessages}
 				/>
 			</div>
 		</div>
