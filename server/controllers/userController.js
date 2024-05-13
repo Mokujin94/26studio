@@ -91,7 +91,7 @@ class UserController {
 	async generateCode(req, res, next) {
 		try {
 			const { email, code } = req.body;
-			// console.log(code);
+			// 
 			const message = {
 				to: email,
 				subject: "Код подтверждения аккаунта 26Studio",
@@ -427,7 +427,7 @@ class UserController {
 						return next(ApiError.badRequest("В архиве нет HTML-файлов"));
 					}
 					// Выводим список относительных путей файлов
-					console.log("Files in the archive:", filePaths);
+
 					res.json({ filePaths, normalPath, baseUrl });
 				});
 

@@ -16,7 +16,7 @@ const Message = observer(({ messages, handleVisible }) => {
 				{
 					messages.map(message => {
 						return (
-							<MessageContent content={message} isOther={message.userId == user.user.id ? false : true} onVisible={handleVisible} isRead={message.isRead} />
+							<MessageContent key={message.id} content={message} isOther={message.userId == user.user.id ? false : true} onVisible={handleVisible} isRead={message.isRead} />
 						)
 					})
 				}

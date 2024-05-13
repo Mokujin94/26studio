@@ -23,18 +23,18 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 	const formatedDate = useMemo(() => useDateFormatter(date), [date]);
 
 	const blockRef = useRef(null)
-	console.log(descr);
+
 
 	useEffect(() => {
 		const blockElement = blockRef.current;
-		console.log(descr)
+
 		if (!blockElement) return;
 		if (descr.length) {
 			const height = blockElement.clientHeight;
 			const hideHeight = blockElement.scrollHeight;
 			setHeightDescr(height);
 			setHideHeightDescr(hideHeight);
-			console.log(height, hideHeight)
+
 
 			if (height < hideHeight) {
 				setIsHideContent(true);
@@ -53,7 +53,7 @@ const ContentStats = observer(({ dataUser, title, descr, descrLimit, onClick, li
 		}
 	}, [isExpanded, heightDescr, hideHeightDescr])
 
-	console.log(dataUser);
+
 	const like = (style) => {
 		return (
 			<svg
