@@ -55,6 +55,8 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 
 
+
+
 	const handleVisible = async (messageId) => {
 		const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
 

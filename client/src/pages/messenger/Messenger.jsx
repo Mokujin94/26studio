@@ -51,12 +51,13 @@ const Messenger = observer(() => {
 					const lastGroup = prevMessages[prevMessages.length - 1];
 
 					if (lastGroup && !isDifferentDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
+						// Создаем новую группу, если сообщение написанно в другом часу или в другой день
 						resolve();
 						return [...prevMessages, [message]];
 					}
 
 					if (lastGroup && lastGroup[0].userId === message.userId) {
-						// Добавляем в начало последней группы, если это от того же пользователя
+						// Добавляем в конец последней группы, если это от того же пользователя
 						resolve();
 						return [...prevMessages.slice(0, prevMessages.length - 1), [...lastGroup, message]];
 					} else {
@@ -82,7 +83,6 @@ const Messenger = observer(() => {
 						if (message.id === updatedMessage.id) {
 							// Если это обновляемое сообщение, возвращаем новый объект с обновленными данными
 							// return updatedMessage
-
 							return { ...message, ...updatedMessage };
 						} else {
 							// Если это не обновляемое сообщение, просто возвращаем его без изменений
@@ -104,31 +104,40 @@ const Messenger = observer(() => {
 	}, [user.socket, chatData])
 
 	useEffect(() => {
-		if (!windowChatRef.current) return
-		windowChatRef.current.addEventListener("scroll", checkScrollHandler)
+		if (!windowChatRef.current) return;
+
+		const checkScrollHandler = () => {
+			const windowChat = windowChatRef.current;
+			if (!windowChat) return false; // Проверка на случай, если ref не существует
+			const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
+			const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
+			const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
+			if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages) {
+				console.log("true")
+				setIsFetchingMessages(true);
+			}
+
+			if (scrollOffset <= windowChat.clientHeight + bottomOffset) {
+				setIsScrollBottom(true)
+			} else {
+				setIsScrollBottom(false)
+			}
+		}
+
+		const ref = windowChatRef.current;
+
+		if (ref) {
+			ref.addEventListener("scroll", checkScrollHandler);
+		}
 
 		return () => {
-			windowChatRef.current.removeEventListener("scroll", checkScrollHandler);
-		}
+			if (ref) {
+				ref.removeEventListener("scroll", checkScrollHandler);
+			}
+		};
 	}, [chatData, messages, totalCountMessages, isFetchingMessages, hash, windowChatRef.current])
 
-	function checkScrollHandler() {
-		const windowChat = windowChatRef.current;
-		if (!windowChat) return false; // Проверка на случай, если ref не существует
-		const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
-		const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
-		const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
-		if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages) {
-			console.log("true")
-			setIsFetchingMessages(true);
-		}
 
-		if (scrollOffset <= windowChat.clientHeight + bottomOffset) {
-			setIsScrollBottom(true)
-		} else {
-			setIsScrollBottom(false)
-		}
-	}
 
 
 	useEffect(() => {
