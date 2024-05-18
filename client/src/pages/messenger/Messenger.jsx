@@ -113,7 +113,7 @@ const Messenger = observer(() => {
 			const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
 			const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
 			const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
-			if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages && isLoadingMessages) {
+			if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages && !isLoadingMessages) {
 				console.log("true")
 				setIsFetchingMessages(true);
 			}
