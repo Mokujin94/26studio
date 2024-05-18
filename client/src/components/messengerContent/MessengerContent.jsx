@@ -8,7 +8,8 @@ import { observer } from 'mobx-react-lite'
 import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
-const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages }) => {
+import Spinner from '../spinner/Spinner'
+const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages }) => {
 
 	const { user } = useContext(Context)
 
@@ -29,6 +30,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			setTotalCountMessages(data.countMessages)
 
 			setMessagesOffset(2)
+			setIsLoadingMessages(false)
 		})
 	}, [Number(hash)])
 
@@ -107,7 +109,12 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 			<div className={style.content__inner} ref={windowChat}>
 				{/* {renderMessagesWithDate()} */}
+				{isLoadingMessages &&
+					<div style={{ margin: "0 auto" }}>
 
+						<Spinner />
+					</div>
+				}
 				<TransitionGroup component={null}>
 					{
 						messages.map((messageGroup, index) => {
