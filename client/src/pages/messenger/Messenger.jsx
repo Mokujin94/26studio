@@ -22,6 +22,7 @@ const Messenger = observer(() => {
 	const [messagesOffset, setMessagesOffset] = useState(2)
 	const [isFetchingMessages, setIsFetchingMessages] = useState(false)
 	const [totalCountMessages, setTotalCountMessages] = useState(0);
+	const [isLoadingMessages, setIsLoadingMessages] = useState(true);
 	const windowChatRef = useRef(null)
 
 	const isDifferentDay = (date1, date2) => {
@@ -112,7 +113,7 @@ const Messenger = observer(() => {
 			const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
 			const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
 			const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
-			if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages) {
+			if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages && !isLoadingMessages) {
 				console.log("true")
 				setIsFetchingMessages(true);
 			}
@@ -158,15 +159,20 @@ const Messenger = observer(() => {
 
 	useEffect(() => {
 		if (chatData.id && isFetchingMessages) {
+			setIsLoadingMessages(true)
+			const currentScrollHeight = windowChatRef.current.scrollHeight;
+			const currentScrollTop = windowChatRef.current.scrollTop;
 			fetchMessages(chatData.id, messagesOffset).then((data) => {
 				console.log(data)
 				setMessages(prevMessages => {
 					return [...data.rows, ...prevMessages]
 				})
+				windowChatRef.current.scrollTop = windowChatRef.current.scrollHeight - currentScrollHeight + currentScrollTop;
 				setMessagesOffset(prevOffset => prevOffset + 1)
 
 			}).finally(() => {
 				setIsFetchingMessages(false)
+				setIsLoadingMessages(false)
 			})
 		}
 	}, [isFetchingMessages, chatData, messagesOffset])
@@ -197,6 +203,9 @@ const Messenger = observer(() => {
 					setTotalCountMessages={setTotalCountMessages}
 					setMessagesOffset={setMessagesOffset}
 					setIsFetchingMessages={setIsFetchingMessages}
+					setIsLoadingMessages={setIsLoadingMessages}
+					isLoadingMessages={isLoadingMessages}
+					isScrollBottom={isScrollBottom}
 				/>
 			</div>
 		</div>

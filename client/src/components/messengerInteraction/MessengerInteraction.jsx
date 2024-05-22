@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client';
 import style from './messengerInteraction.module.scss'
 import { useLocation, useParams } from 'react-router-dom'
@@ -71,6 +71,24 @@ const MessengerInteraction = observer(({ setMessages }) => {
 			setNotEmpty(false);
 		}
 	}
+
+	const handlePaste = (e) => {
+		e.preventDefault();
+		const text = (e.clipboardData || window.Clipboard).getData('text');
+		document.execCommand('insertText', false, text);
+	};
+
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.addEventListener('paste', handlePaste);
+		}
+
+		return () => {
+			if (inputRef.current) {
+				inputRef.current.removeEventListener('paste', handlePaste);
+			}
+		};
+	}, []);
 
 	return (
 		<div className={style.interaction}>

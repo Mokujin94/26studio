@@ -12,6 +12,7 @@ const CommentRouter = require("./commentRouter");
 const ViewRouter = require("./viewRouter");
 const SearchRouter = require("./searchRouter");
 const NotificationRouter = require("./notificationsRouter")
+const LinkRouter = require("./linkRouter")
 
 router.use("/user", UserRouter);
 router.use("/project", ProjectRouter);
@@ -24,5 +25,6 @@ router.use("/comment", CommentRouter);
 router.use("/view", ViewRouter);
 router.use("/search", SearchRouter);
 router.use("/notification", NotificationRouter)
+router.use("/link", LinkRouter)
 
 module.exports = router;

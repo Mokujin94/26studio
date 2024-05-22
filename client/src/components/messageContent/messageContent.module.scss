@@ -2,15 +2,27 @@
 
 .messageContent {
 	max-width: 450px;
-	min-height: 40px;
+	min-height: 35px;
 	position: relative;
-	display: flex;
-	align-items: center;
-	gap: 10px;
+	// display: flex;
+	// align-items: center;
+	// gap: 10px;
 	color: $studio-dark-text;
-	padding: 5px 10px;
+	padding: 8.5px 10px;
 	background-color: $studio-primary-element;
 	border-radius: 10px 10px 10px 0;
+	word-wrap: break-word;
+	word-break: break-word;
+	white-space: pre-wrap;
+	font-size: 14px;
+	font-weight: 500;
+
+	a {
+		&:first-child {
+			text-decoration: underline;
+		}
+	}
+
 	&::before {
 		content: '';
 		position: absolute;
@@ -34,14 +46,37 @@
 		font-weight: 500;
 	}
 	&__info {
-		height: min-content;
-		display: flex;
-		gap: 5px;
-		align-items: center;
-		margin-top: auto;
+		visibility: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    line-height: 1;
+    vertical-align: middle;
+    pointer-events: none;
+    display: inline-flex;
+    z-index: 1;
+    direction: ltr;
+    float: right;
+		padding-inline-end: 10px;
+    margin-inline-start: 3px;
 		&Time {
 			display: block;
 			font-size: 12px;
+		}
+
+		&__visible {
+			pointer-events: all;
+			position: absolute;
+			bottom: 0;
+			inset-inline-end: 0;
+			display: flex;
+			align-items: center;
+			line-height: 1;
+			padding: inherit;
+			white-space: nowrap;
+			visibility: visible;
+			gap: 5px;
+			bottom: 8.5px;
 		}
 
 		&View {

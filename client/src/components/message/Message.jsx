@@ -4,7 +4,7 @@ import MessageContent from '../messageContent/MessageContent'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-const Message = observer(({ messages, handleVisible }) => {
+const Message = observer(({ isScrollBottom, windowChatRef, messages, handleVisible }) => {
 	const { user } = useContext(Context)
 	return (
 		// <div className={style.message}>
@@ -16,7 +16,7 @@ const Message = observer(({ messages, handleVisible }) => {
 				{
 					messages.map(message => {
 						return (
-							<MessageContent key={message.id} content={message} isOther={message.userId == user.user.id ? false : true} onVisible={handleVisible} isRead={message.isRead} />
+							<MessageContent isScrollBottom={isScrollBottom} windowChatRef={windowChatRef} key={message.id} content={message} isOther={message.userId == user.user.id ? false : true} onVisible={handleVisible} isRead={message.isRead} />
 						)
 					})
 				}
