@@ -21,16 +21,24 @@ const Image = styled.img`
 `;
 
 const Title = styled.h4`
-  margin: 10px 0 5px 0;
 	color: #222c36;
+	font-size: 14px;
 `;
 
 const Description = styled.p`
-  margin: 0;
+  margin: 5px 0;
 	color: #222c36;
+	font-size: 14px;
+	line-height: 18px;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	white-space: pre-wrap;
+	word-break: break-word;
 `;
 
-const LinkPreview = ({ url }) => {
+const LinkPreview = ({ isScrollBottom, windowChatRef, url }) => {
 	const [metadata, setMetadata] = useState(null);
 
 	useEffect(() => {
@@ -39,6 +47,18 @@ const LinkPreview = ({ url }) => {
 				getLinkPreview(url).then(data => {
 					console.log(data)
 					setMetadata(data);
+
+				}).then(() => {
+					if (isScrollBottom) {
+						setTimeout(() => {
+							if (windowChatRef.current)
+								windowChatRef.current.scrollTo({
+									top: windowChatRef.current.scrollHeight,
+									behavior: "smooth",
+								});
+						}, 0)
+
+					}
 				});
 
 			} catch (error) {

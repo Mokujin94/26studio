@@ -6,7 +6,7 @@ import { useClickOutside } from '../../hooks/useClickOutside';
 import Linkify from 'react-linkify';
 import LinkPreview from '../linkPreview/linkPreview';
 
-const MessageContent = ({ content, isOther, onVisible, isRead }) => {
+const MessageContent = ({ isScrollBottom, windowChatRef, content, isOther, onVisible, isRead }) => {
 	const messageRef = useRef(null);
 
 	const [isSubMenu, setIsSubMenu] = useState(Boolean)
@@ -55,13 +55,12 @@ const MessageContent = ({ content, isOther, onVisible, isRead }) => {
 		if (urls) {
 			return (
 				<>
-					{text.replace(urlRegex, '')}
 					{urls.map((url, index) => {
 						// Добавляем http:// если протокол не указан
 						if (!url.startsWith('http://') && !url.startsWith('https://')) {
 							url = 'http://' + url;
 						}
-						return <LinkPreview key={index} url={url} />;
+						return <LinkPreview isScrollBottom={isScrollBottom} windowChatRef={windowChatRef} key={index} url={url} />;
 					})}
 				</>
 			);

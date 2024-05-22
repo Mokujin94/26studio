@@ -205,6 +205,7 @@ const Messenger = observer(() => {
 					setIsFetchingMessages={setIsFetchingMessages}
 					setIsLoadingMessages={setIsLoadingMessages}
 					isLoadingMessages={isLoadingMessages}
+					isScrollBottom={isScrollBottom}
 				/>
 			</div>
 		</div>

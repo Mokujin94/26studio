@@ -9,7 +9,7 @@ import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
 import Spinner from '../spinner/Spinner'
-const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages }) => {
+const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
 
 	const { user } = useContext(Context)
 
@@ -135,7 +135,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
 												{useDayMonthFormatter(groupDate)}
 											</div>
-											<Message messages={messageGroup} handleVisible={handleVisible} />
+											<Message isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
 										</>
 									</CSSTransition>
 								)
@@ -150,7 +150,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
 												{useDayMonthFormatter(groupDate)}
 											</div>
-											<Message messages={messageGroup} handleVisible={handleVisible} />
+											<Message isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
 										</>
 									</CSSTransition>
 								)
@@ -161,7 +161,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 									in={!!hash}
 									timeout={0}
 								>
-									<Message messages={messageGroup} handleVisible={handleVisible} />
+									<Message isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
 								</CSSTransition>
 							)
 

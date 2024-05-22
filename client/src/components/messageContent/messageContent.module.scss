@@ -16,6 +16,13 @@
 	white-space: pre-wrap;
 	font-size: 14px;
 	font-weight: 500;
+
+	a {
+		&:first-child {
+			text-decoration: underline;
+		}
+	}
+
 	&::before {
 		content: '';
 		position: absolute;
