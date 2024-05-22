@@ -4,7 +4,7 @@ import useTimeFormatter from '../../hooks/useTimeFormatter';
 import { CSSTransition } from 'react-transition-group';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import Linkify from 'react-linkify';
-import LinkPreview from '../linkPreview/linkPreview';
+import LinkPreview from '../linkPreview/LinkPreview';
 
 const MessageContent = ({ isScrollBottom, windowChatRef, content, isOther, onVisible, isRead }) => {
 	const messageRef = useRef(null);
