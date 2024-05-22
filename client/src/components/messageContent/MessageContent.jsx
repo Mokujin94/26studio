@@ -66,8 +66,6 @@ const MessageContent = ({ content, isOther, onVisible, isRead }) => {
 				</>
 			);
 		}
-
-		return text;
 	};
 
 	return (
@@ -76,8 +74,8 @@ const MessageContent = ({ content, isOther, onVisible, isRead }) => {
 			<div ref={messageRef} className={isOther ? style.messageContent + " " + style.messageContent_other : style.messageContent} onContextMenu={onSubMenu}>
 				{/* <p className={style.messageContent__text}>
 				</p> */}
-				{/* <Linkify>{content.text}</Linkify> */}
-				<Linkify>{renderLinkPreview(content.text)}</Linkify>
+				<Linkify>{content.text}</Linkify>
+				{renderLinkPreview(content.text)}
 				<div className={style.messageContent__info}>
 					<span className={style.messageContent__infoTime}>{time}</span>
 					{

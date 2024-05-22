@@ -58,7 +58,7 @@ const LinkPreview = ({ url }) => {
 			<PreviewWrapper>
 				<Title>{metadata.title}</Title>
 				<Description>{metadata.description}</Description>
-				{metadata.image && <Image src={metadata.image} alt={metadata.title} />}
+				{metadata.image ? <Image src={metadata.image} alt={metadata.title} /> : metadata.favicon ? <Image src={metadata.favicon} alt={metadata.title} /> : null}
 				{/* <a href={url} target="_blank" rel="noopener noreferrer">{url}</a> */}
 			</PreviewWrapper>
 		</Link>
