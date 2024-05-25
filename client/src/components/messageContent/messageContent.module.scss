@@ -105,23 +105,43 @@
 		}
 	}
 
-	// &__info {
+	&__info {
 		
-	// 	&Time {
+		&Time {
 
-	// 	}
+		}
 
-	// 	&View {
-	// 		&_active {
+		&View {
+			&_active {
 
-	// 		}
+			}
 
-	// 		&Second {
+			&Second {
 
-	// 		}
-	// 	}
+			}
+		}
+		&Load {
+			display: flex;
+			width: 17px;
+			height: 10px;
+			justify-content: flex-start;
+			svg {
+				display: block;
+				width: auto;
+				height: 100%;
+			}
+			&Item {
+				transform-origin: center;
+				&:nth-child(1) {
+					animation: aminClock 1s infinite linear;
+				}
+				&:nth-child(2) {
+					animation: aminClock 12s infinite linear;
+				}
+			}
+		}
+	}
 
-	// }
 	&__subMenu {
 		position: absolute;
     top: 0;
@@ -190,5 +210,14 @@
 				}
 			}
 		}
+	}
+}
+
+@keyframes aminClock {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
 	}
 }
