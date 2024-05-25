@@ -66,9 +66,11 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			setIsFetchingMessages(true)
 		}
 		messages.map((group) => {
-			return group.map((message) => {
+			return group.map(async (message) => {
 				if (message.id === messageId && message.userId !== user.user.id) {
-
+					await onReadMessage(Number(user.user.id), Number(messageId)).catch((e) => {
+						console.log(e)
+					})
 					message.isRead = true;
 					user.socket.emit("onReadMessage", { message: message, recipientId: hash }); // Объединяем старое и новое сообщение
 					user.socket.emit("onNotReadMessage", { message: message, recipientId: user.user.id }); // Объединяем старое и новое сообщение
@@ -77,9 +79,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			});
 		});
 
-		await onReadMessage(Number(user.user.id), Number(messageId)).catch(() => {
-			console.log('fgsd')
-		})
+
 	};
 
 	// Функция для проверки, различаются ли две даты по дню
@@ -176,7 +176,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 
 			<div className={style.content__bottom}>
-				<MessengerInteraction setMessages={setMessages} />
+				<MessengerInteraction setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} />
 			</div>
 		</>
 	return (

@@ -6,7 +6,7 @@ import { useClickOutside } from '../../hooks/useClickOutside';
 import Linkify from 'react-linkify';
 import LinkPreview from '../linkPreview/linkPreview';
 
-const MessageContent = ({ isScrollBottom, windowChatRef, content, isOther, onVisible, isRead }) => {
+const MessageContent = ({ isScrollBottom, windowChatRef, content, isOther, onVisible, isRead, load }) => {
 	const messageRef = useRef(null);
 
 	const [isSubMenu, setIsSubMenu] = useState(Boolean)
