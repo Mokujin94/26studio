@@ -18,6 +18,7 @@
 				padding: 16px 0;
 				overflow: auto;
 				background: none;
+				word-break: break-all;
 
 				* {
 					font-weight: 400 !important;
@@ -35,7 +36,34 @@
         // }
     }
 
-    &__clip, &__send {
+		&__emoji {
+			position: relative;
+			background: #222c36;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			max-width: 50px;
+			width: 100%;
+			aspect-ratio: 1 / 1;
+			margin-top: auto;
+			cursor: pointer;
+			transition: 0.3s;
+
+			svg {
+				max-height: 20px;
+				path {
+					fill: $studio-white-element;
+				}
+			}
+
+			&_picker {
+				position: absolute;
+				bottom: 55px;
+				right: 0;
+			}
+		}
+
+    &__clip, &__send, &__emoji {
 			background: $studio-darker-element;
 			display: flex;
 			justify-content: center;

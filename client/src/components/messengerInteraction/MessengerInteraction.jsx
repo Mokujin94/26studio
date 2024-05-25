@@ -5,44 +5,106 @@ import { useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
 import { sendMessage } from '../../http/messengerAPI'
-const MessengerInteraction = observer(({ setMessages }) => {
+import EmojiPicker from 'emoji-picker-react';
+const MessengerInteraction = observer(({ setMessages, isScrollBottom, windowChatRef }) => {
 	const [messageContent, setMessageContent] = useState('');
 	const [notEmpty, setNotEmpty] = useState(false)
+	const [showPicker, setShowPicker] = useState(false)
 
 	const inputRef = useRef(null)
+	const emojiRef = useRef(null)
 
 	const { user } = useContext(Context)
 	const location = useLocation();
 
 	const hash = Number(location.hash.replace("#", ""))
 
+	const isDifferentDay = (date1, date2) => {
+		return date1.getDate() === date2.getDate() &&
+			date1.getMonth() === date2.getMonth() &&
+			date1.getFullYear() === date2.getFullYear() &&
+			date1.getHours() === date2.getHours();
+	};
+
 	const onSend = () => {
 		if (messageContent.length <= 0) return;
 		let message = {
+			id: Date.now(),
 			createdAt: Date.now(),
 			text: messageContent,
+			load: true,
 			user: {
-				avatar: user.user.avatar
+				avatar: user.user.avatar,
+				id: user.user.id,
 			},
-			userId: user.user.id
+			userId: user.user.id,
 		}
 		setMessageContent("");
 		inputRef.current.innerText = '';
+		console.log(message);
 		// создать сообщение только у нас
+		setMessages((prevMessages) => {
+			const lastGroup = prevMessages[prevMessages.length - 1];
+
+			if (lastGroup && !isDifferentDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
+				// Создаем новую группу, если сообщение написанно в другом часу или в другой день
+
+				return [...prevMessages, [message]];
+			}
+
+			if (lastGroup && lastGroup[0].userId === message.userId) {
+				// Добавляем в конец последней группы, если это от того же пользователя
+
+				return [...prevMessages.slice(0, prevMessages.length - 1), [...lastGroup, message]];
+			} else {
+				// Создаем новую группу, если это другой пользователь
+
+				return [...prevMessages, [message]];
+			}
+		});
 
 		// 
+
+		// Прокрутка вниз после отправки фейкового сообщения
+
+		if (isScrollBottom) {
+			setTimeout(() => {
+				if (windowChatRef.current)
+					windowChatRef.current.scrollTo({
+						top: windowChatRef.current.scrollHeight,
+						behavior: "smooth",
+					});
+			}, 0)
+
+		}
+
+		//
+
 		sendMessage(Number(hash), user.user.id, messageContent).then(data => {
 
 			return data;
 		}).then((data) => {
 			if (user.user.id === hash) {
-				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
-				user.socket.emit("sendMessage", { message: data, recipientId: hash })
+				// user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
+				// user.socket.emit("sendMessage", { message: data, recipientId: hash })
 			} else {
 				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
-				user.socket.emit("sendMessageRecipient", { message: data, recipientId: user.user.id })
+				// user.socket.emit("sendMessageRecipient", { message: data, recipientId: user.user.id })
 				user.socket.emit("sendMessage", { message: data, recipientId: hash })
 			}
+			return data;
+		}).then(data => {
+			setMessages(prevMessages => {
+				return prevMessages.map(group => {
+					return group.map(oldMessage => {
+						if (oldMessage.id === message.id) {
+							// console.log(oldMessage)
+							return { ...oldMessage, load: false, ...data }
+						}
+						return oldMessage;
+					})
+				})
+			})
 		});
 	}
 
@@ -78,6 +140,16 @@ const MessengerInteraction = observer(({ setMessages }) => {
 		document.execCommand('insertText', false, text);
 	};
 
+	const onEmojiClick = (emojiObject, event) => {
+		console.log(inputRef.current);
+		console.log(emojiObject);
+		const img = <img scr={emojiObject.imageUrl} />
+		console.log(img);
+		inputRef.current.appendChild(img)
+		setShowPicker(false);
+		console.log(messageContent);
+	};
+
 	useEffect(() => {
 		if (inputRef.current) {
 			inputRef.current.addEventListener('paste', handlePaste);
@@ -98,6 +170,12 @@ const MessengerInteraction = observer(({ setMessages }) => {
 				</svg>
 			</div>
 			<div className={style.interaction__input} onInput={onInput} onKeyDown={onEnter} contentEditable ref={inputRef}></div>
+			<div className={style.interaction__emoji}>
+				{/* <div className={style.interaction__emoji_picker} ref={emojiRef}>
+					<EmojiPicker />
+				</div> */}
+				<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8.5 11C9.32843 11 10 10.3284 10 9.5C10 8.67157 9.32843 8 8.5 8C7.67157 8 7 8.67157 7 9.5C7 10.3284 7.67157 11 8.5 11Z" fill="#0F0F0F"></path> <path d="M17 9.5C17 10.3284 16.3284 11 15.5 11C14.6716 11 14 10.3284 14 9.5C14 8.67157 14.6716 8 15.5 8C16.3284 8 17 8.67157 17 9.5Z" fill="#0F0F0F"></path> <path d="M8.88875 13.5414C8.63822 13.0559 8.0431 12.8607 7.55301 13.1058C7.05903 13.3528 6.8588 13.9535 7.10579 14.4474C7.18825 14.6118 7.29326 14.7659 7.40334 14.9127C7.58615 15.1565 7.8621 15.4704 8.25052 15.7811C9.04005 16.4127 10.2573 17.0002 12.0002 17.0002C13.7431 17.0002 14.9604 16.4127 15.7499 15.7811C16.1383 15.4704 16.4143 15.1565 16.5971 14.9127C16.7076 14.7654 16.8081 14.6113 16.8941 14.4485C17.1387 13.961 16.9352 13.3497 16.4474 13.1058C15.9573 12.8607 15.3622 13.0559 15.1117 13.5414C15.0979 13.5663 14.9097 13.892 14.5005 14.2194C14.0401 14.5877 13.2573 15.0002 12.0002 15.0002C10.7431 15.0002 9.96038 14.5877 9.49991 14.2194C9.09071 13.892 8.90255 13.5663 8.88875 13.5414Z" fill="#0F0F0F"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23ZM12 20.9932C7.03321 20.9932 3.00683 16.9668 3.00683 12C3.00683 7.03321 7.03321 3.00683 12 3.00683C16.9668 3.00683 20.9932 7.03321 20.9932 12C20.9932 16.9668 16.9668 20.9932 12 20.9932Z" fill="#0F0F0F"></path> </g></svg>
+			</div>
 			<div className={style.interaction__send} onClick={onSend}>
 				<svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
 					<path d="M9.05317 9.00264H2.90136M2.72699 9.83037L1.71063 12.9467C1.15398 14.6534 0.875649 15.5068 1.07539 16.0323C1.24884 16.4887 1.62138 16.8347 2.08108 16.9664C2.61043 17.118 3.40996 16.7487 5.00901 16.0102L15.2604 11.275C16.8212 10.5541 17.6017 10.1937 17.8428 9.6929C18.0524 9.25785 18.0524 8.74733 17.8428 8.31228C17.6017 7.81162 16.8212 7.45113 15.2604 6.73019L4.99133 1.98695C3.39709 1.25058 2.59998 0.882393 2.07116 1.03343C1.61189 1.1646 1.23939 1.50968 1.06533 1.9652C0.864906 2.48974 1.14026 3.34127 1.69098 5.04434L2.72897 8.25435C2.82354 8.54683 2.87084 8.69313 2.88951 8.84264C2.90608 8.97544 2.9059 9.10979 2.88901 9.24249C2.86996 9.392 2.82231 9.53809 2.72699 9.83037Z" stroke="#97BCE6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

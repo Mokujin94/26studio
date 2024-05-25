@@ -69,6 +69,19 @@ const LinkPreview = ({ isScrollBottom, windowChatRef, url }) => {
 		fetchMetadata();
 	}, [url]);
 
+	const onLoadImage = () => {
+		if (isScrollBottom && (metadata.image || metadata.favicon)) {
+			setTimeout(() => {
+				if (windowChatRef.current)
+					windowChatRef.current.scrollTo({
+						top: windowChatRef.current.scrollHeight,
+						behavior: "smooth",
+					});
+			}, 0)
+
+		}
+	}
+
 	if (!metadata) {
 		return null;
 	}
@@ -78,7 +91,7 @@ const LinkPreview = ({ isScrollBottom, windowChatRef, url }) => {
 			<PreviewWrapper>
 				<Title>{metadata.title}</Title>
 				<Description>{metadata.description}</Description>
-				{metadata.image ? <Image src={metadata.image} alt={metadata.title} /> : metadata.favicon ? <Image src={metadata.favicon} alt={metadata.title} /> : null}
+				{metadata.image ? <Image src={metadata.image} alt={metadata.title} onLoad={onLoadImage} /> : metadata.favicon ? <Image src={metadata.favicon} alt={metadata.title} onLoad={onLoadImage} /> : null}
 				{/* <a href={url} target="_blank" rel="noopener noreferrer">{url}</a> */}
 			</PreviewWrapper>
 		</Link>

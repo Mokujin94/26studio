@@ -3,6 +3,7 @@
 .content {
     display: flex;
     flex-direction: column;
+		max-width: 1040px;
     width: 100%;
     &__header {
         display: flex;
