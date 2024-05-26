@@ -64,7 +64,7 @@ const Chat = observer(({ chat, hash }) => {
 			setIsWriting(isWriting);
 		})
 
-
+		console.log(user.socket)
 
 
 		return () => {

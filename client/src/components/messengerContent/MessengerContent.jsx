@@ -46,9 +46,6 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			windowChat.current.scrollTo({
 				top: windowChat.current.scrollHeight,
 			});
-		return () => {
-			user.socket.off("getWriting")
-		}
 	}, [chatData, windowChat.current])
 
 	useEffect(() => {
