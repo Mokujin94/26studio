@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import style from './messengerContent.module.scss'
 import MessengerInteraction from '../messengerInteraction/MessengerInteraction'
 import Message from '../message/Message'
@@ -12,6 +12,7 @@ import Spinner from '../spinner/Spinner'
 const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
 
 	const { user } = useContext(Context)
+	const [isWriting, setIsWriting] = useState(false)
 
 	useEffect(() => {
 		chats.map(chat => {
@@ -35,6 +36,10 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 	}, [Number(hash)])
 
 	useEffect(() => {
+		user.socket.on("getWriting", ({ chatId, isWriting }) => {
+			if (chatId !== chatData.id) return;
+			setIsWriting(isWriting);
+		})
 		setTotalCountMessages(chatData.countMessages)
 		setMessagesOffset(2)
 		if (windowChat.current)
@@ -53,6 +58,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			})
 		})
 	}, [chats])
+
 
 
 
@@ -101,7 +107,18 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 				<div className={style.content__headerInfo}>
 
 					<span className={style.content__headerInfoName}>{Number(hash) === user.user.id ? "Избранное" : otherUserData.name}</span>
-					<span className={style.content__headerInfoOnline}>Онлайн</span>
+					{
+						isWriting ? (
+							<span className={style.content__headerInfoOnline + " " + style.content__headerInfoOnline_writing}>
+								Печатает
+							</span>
+						) : (
+							<span className={style.content__headerInfoOnline}>
+								Онлайн
+							</span>
+						)
+
+					}
 
 				</div>
 			</div>
@@ -176,7 +193,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 
 			<div className={style.content__bottom}>
-				<MessengerInteraction setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} />
+				<MessengerInteraction chat={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} />
 			</div>
 		</>
 	return (
