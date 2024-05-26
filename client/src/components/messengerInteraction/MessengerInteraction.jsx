@@ -6,8 +6,10 @@ import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
 import { sendMessage } from '../../http/messengerAPI'
 import EmojiPicker from 'emoji-picker-react';
-const MessengerInteraction = observer(({ setMessages, isScrollBottom, windowChatRef }) => {
+import { useDebounce } from '../../hooks/useDebounce';
+const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, windowChatRef }) => {
 	const [messageContent, setMessageContent] = useState('');
+	const [messageContentFull, setMessageContentFull] = useState('')
 	const [notEmpty, setNotEmpty] = useState(false)
 	const [showPicker, setShowPicker] = useState(false)
 
@@ -18,6 +20,8 @@ const MessengerInteraction = observer(({ setMessages, isScrollBottom, windowChat
 	const location = useLocation();
 
 	const hash = Number(location.hash.replace("#", ""))
+
+	const debounceText = useDebounce(messageContentFull, 500)
 
 	const isDifferentDay = (date1, date2) => {
 		return date1.getDate() === date2.getDate() &&
@@ -113,13 +117,16 @@ const MessengerInteraction = observer(({ setMessages, isScrollBottom, windowChat
 			e.preventDefault(); // Предотвращает перевод строки
 			onSend();
 		}
+
 	}
 
 	const onInput = (e) => {
 		const content = e.target.innerText;
 		const formattedContent = content.trim();
 		const filteredContent = formattedContent.normalize("NFD");
-
+		const lastSymbol = content.slice(content.length - 1, content.length)
+		console.log(lastSymbol == " ");
+		setMessageContentFull(content)
 		setMessageContent(filteredContent)
 
 		const regex = /<br>/g;
@@ -132,7 +139,19 @@ const MessengerInteraction = observer(({ setMessages, isScrollBottom, windowChat
 		} else {
 			setNotEmpty(false);
 		}
+
+		if (lastSymbol != ' ') {
+			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: true }))
+		}
+
 	}
+
+
+	useEffect(() => {
+		user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: false }))
+	}, [debounceText])
+
+
 
 	const handlePaste = (e) => {
 		e.preventDefault();

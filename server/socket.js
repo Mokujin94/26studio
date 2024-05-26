@@ -53,6 +53,12 @@ function initSocket(httpServer) {
             }
         })
 
+				socket.on("onWriting", ({chatId, recipientId, isWriting}) => {
+					const user = userSockets.find(user => user.userId === recipientId);
+					if (!user) return;
+					io.to(user.socketId).emit("getWriting", {chatId, isWriting})
+				})
+
         socket.on("onReadMessage", ({ message, recipientId, senderId }) => {
             const user = userSockets.find(user => user.userId === recipientId);
 
