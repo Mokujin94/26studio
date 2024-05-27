@@ -6,7 +6,7 @@ import { useClickOutside } from '../../hooks/useClickOutside';
 import Linkify from 'react-linkify';
 import LinkPreview from '../linkPreview/LinkPreview';
 
-const MessageContent = ({ isScrollBottom, windowChatRef, content, isOther, onVisible, isRead, load }) => {
+const MessageContent = ({ contextMenu, onContextMenu, isScrollBottom, windowChatRef, content, isOther, onVisible, isRead, load }) => {
 	const messageRef = useRef(null);
 
 	const [isSubMenu, setIsSubMenu] = useState(Boolean)
@@ -69,8 +69,15 @@ const MessageContent = ({ isScrollBottom, windowChatRef, content, isOther, onVis
 
 	return (
 		// <div ref={subMenuRef} style={{ position: 'relative' }}>
-		<>
-			<div ref={messageRef} className={isOther ? style.messageContent + " " + style.messageContent_other : style.messageContent} onContextMenu={onSubMenu}>
+		<div
+			onContextMenu={(e) => {
+				e.preventDefault();
+				onContextMenu(e, content.id);
+			}}
+			ref={messageRef}
+			className={contextMenu.messageId === content.id ? style.messageContent__highlight_active + " " + style.messageContent__highlight : style.messageContent__highlight}
+		>
+			<div className={isOther ? style.messageContent + " " + style.messageContent_other : style.messageContent}>
 				{/* <p className={style.messageContent__text}>
 				</p> */}
 				<Linkify>{content.text}</Linkify>
@@ -113,34 +120,7 @@ const MessageContent = ({ isScrollBottom, windowChatRef, content, isOther, onVis
 					</div>
 				</div>
 			</div>
-			{/* <CSSTransition
-				in={isSubMenu}
-				timeout={300}
-				classNames="create-anim"
-				unmountOnExit
-			>
-				<div className={style.messageContent__subMenu}  >
-					<ul className={style.messageContent__subMenuList}>
-						<li className={style.messageContent__subMenuListItem}>
-							<span className={style.messageContent__subMenuListItemText}>
-								Ответить
-							</span>
-							<div className={style.messageContent__subMenuListItemIcon}>
-								<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-reply-fill">
-									<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-									<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
-									<g id="SVGRepo_iconCarrier">
-										<path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z">
-										</path>
-									</g>
-								</svg>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</CSSTransition> */}
-		</>
-		// </div >
+		</div>
 	);
 };
 

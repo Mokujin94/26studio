@@ -16,6 +16,35 @@
 	white-space: pre-wrap;
 	font-size: 14px;
 	font-weight: 500;
+	z-index: 1;
+
+
+	&__highlight {
+		position: relative;
+		z-index: 1;
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			background: transparent;
+			width: 1040px;
+			height: calc(100% + 5px);
+			transform: translateY(-2.5px);
+			top: 0;
+			left: -55px;
+			z-index: -1;
+			transition: 0.3s;
+		}
+
+		&_active {
+			&::after {
+				background: rgba(0, 0, 0, 0.2);
+			}
+		}
+	}
+
+
+
 
 	a {
 		&:first-child {
@@ -38,6 +67,12 @@
 		// border-right: 6px solid $studio-darker-border; 
 		// border-bottom: 5px solid $studio-darker-border;
 	}
+
+	&__inner {
+		z-index: 2;
+
+	}
+
 	&__text {
 		word-wrap: break-word;
 		word-break: break-word;
