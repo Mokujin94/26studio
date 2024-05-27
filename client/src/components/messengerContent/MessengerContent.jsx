@@ -9,10 +9,44 @@ import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
 import Spinner from '../spinner/Spinner'
+import MessageContextMenu from '../messageContextMenu/MessageContextMenu'
 const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
 
 	const { user } = useContext(Context)
 	const [isWriting, setIsWriting] = useState(false)
+
+	const [contextMenu, setContextMenu] = useState({
+		visible: false,
+		x: 0,
+		y: 0,
+		messageId: null,
+	});
+
+	const handleContextMenu = (event, messageId) => {
+		event.preventDefault();
+		const containerRect = windowChat.current.getBoundingClientRect();
+		const scrollTop = windowChat.current.scrollTop;
+		const scrollLeft = windowChat.current.scrollLeft;
+		setContextMenu({
+			visible: true,
+			x: event.clientX - containerRect.left + scrollLeft,
+			y: event.clientY - containerRect.top + scrollTop,
+			messageId,
+		});
+	};
+
+	const handleCloseContextMenu = () => {
+		setContextMenu(prev => {
+			return { ...prev, visible: false, messageId: null, }
+
+
+		});
+	};
+
+	const handleReply = (messageId) => {
+		alert(`Ответить на сообщение с ID: ${messageId}`);
+		handleCloseContextMenu();
+	};
 
 	useEffect(() => {
 		chats.map(chat => {
@@ -124,7 +158,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			</div>
 
 
-			<div className={style.content__inner} ref={windowChat}>
+			<div className={style.content__inner} onClick={handleCloseContextMenu} ref={windowChat}>
 				{/* {renderMessagesWithDate()} */}
 				{isLoadingMessages &&
 					<div style={{ margin: "0 auto" }}>
@@ -152,7 +186,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
 												{useDayMonthFormatter(groupDate)}
 											</div>
-											<Message isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
+											<Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
 										</>
 									</CSSTransition>
 								)
@@ -167,7 +201,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
 												{useDayMonthFormatter(groupDate)}
 											</div>
-											<Message isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
+											<Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
 										</>
 									</CSSTransition>
 								)
@@ -178,14 +212,27 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 									in={!!hash}
 									timeout={0}
 								>
-									<Message isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
+									<Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
 								</CSSTransition>
 							)
 
 						})
 					}
 				</TransitionGroup>
-
+				<CSSTransition
+					in={contextMenu.visible}
+					timeout={300}
+					classNames="create-anim"
+					unmountOnExit
+					mountOnEnter
+				>
+					<MessageContextMenu
+						messageId={contextMenu.messageId}
+						position={{ x: contextMenu.x, y: contextMenu.y }}
+						onClose={handleCloseContextMenu}
+						onReply={handleReply}
+					/>
+				</CSSTransition>
 
 			</div >
 

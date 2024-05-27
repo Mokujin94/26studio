@@ -3,6 +3,7 @@
 .message { 
 	display: flex;
 	gap: 10px;
+	width: 100%;
 	&__avatar {
 		position: sticky;
 		bottom: 0;
@@ -24,21 +25,31 @@
 		display: grid;
 		justify-items: start;
 		align-items: flex-start;
+		width: 100%;
 		gap: 5px;
 		> *:not(*:last-child) {
-			border-radius: 5px 10px 10px 5px;
-			&::before {
-				display: none;
+			> * {
+				border-radius: 5px 10px 10px 5px;
+				&::before {
+					display: none;
+				}
 			}
+
 		}
 		> *:first-child {
-			border-radius: 10px 10px 10px 5px;
+			> * {
+				border-radius: 10px 10px 10px 5px;
+			}
 		}
 		> *:last-child {
-			border-radius: 5px 10px 10px 0px;
+			> * {
+				border-radius: 5px 10px 10px 0px;
+			}
 		}
 		> *:only-child {
-			border-radius: 10px 10px 10px 0px;
+			> * {
+				border-radius: 10px 10px 10px 0px;
+			}
 		}
 	}
 }

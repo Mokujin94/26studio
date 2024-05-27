@@ -40,7 +40,8 @@
 			flex: 1 1 auto;
 			color: $studio-white-text;
 			background: $studio-dark-element;
-			overflow: auto;
+			overflow-y: auto;
+			overflow-x: hidden;
 			padding: 10px;
 			&Text {
 				position: absolute;
