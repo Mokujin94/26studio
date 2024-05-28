@@ -18,6 +18,15 @@
 	font-weight: 500;
 	z-index: 1;
 
+	> a:first-child {
+		color: $studio-dark-text;
+		font-weight: 500;
+		
+		&:hover {
+			color: $studio-dark-bright-text;
+		}
+	}
+
 
 	&__highlight {
 		position: relative;
@@ -91,7 +100,7 @@
     display: inline-flex;
     z-index: 1;
     direction: ltr;
-    float: right;
+    // float: right;
 		padding-inline-end: 10px;
     margin-inline-start: 3px;
 		&Time {
@@ -135,6 +144,12 @@
 	&_other {
 		color: $studio-white-text;
 		background-color: $studio-light-dark-element;
+		> a:first-child {
+			color: $studio-primary-text;
+			&:hover {
+				color: $studio-primary-bright-text;
+			}
+		}
 		&::before {
 			background-color: $studio-light-dark-element;
 		}

@@ -23,6 +23,12 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 
 	const debounceText = useDebounce(messageContentFull, 500)
 
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [chat])
+
 	const isDifferentDay = (date1, date2) => {
 		return date1.getDate() === date2.getDate() &&
 			date1.getMonth() === date2.getMonth() &&

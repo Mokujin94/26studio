@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import style from './messengerContent.module.scss'
 import MessengerInteraction from '../messengerInteraction/MessengerInteraction'
 import Message from '../message/Message'
@@ -14,6 +14,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 	const { user } = useContext(Context)
 	const [isWriting, setIsWriting] = useState(false)
+	const [notReadMessages, setNotReadMessages] = useState([])
 
 	const [contextMenu, setContextMenu] = useState({
 		visible: false,
@@ -37,7 +38,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 	const handleCloseContextMenu = () => {
 		setContextMenu(prev => {
-			return { ...prev, visible: false, messageId: null, }
+			return { ...prev, visible: false, messageId: null }
 
 
 		});
@@ -47,6 +48,37 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 		alert(`Ответить на сообщение с ID: ${messageId}`);
 		handleCloseContextMenu();
 	};
+
+	const handleCopy = (messageId) => {
+		messages.map(group => {
+			group.map(msg => {
+				if (msg.id === messageId) {
+					navigator.clipboard.writeText(msg.text)
+				}
+			})
+		})
+		handleCloseContextMenu();
+	};
+
+	useEffect(() => {
+		user.socket.on("incReadMessege", (message) => {
+			if (message.chatId !== chatData.id) return;
+			setNotReadMessages(prevMessages => {
+				if (message.userId === user.user.id) return prevMessages;
+				return [...prevMessages, message]
+			})
+		})
+		user.socket.on("getNotReadMessage", (message) => {
+			setNotReadMessages(prevMessages => {
+				return prevMessages.filter(messageRead => messageRead.id !== message.id)
+			})
+		})
+	}, [user.socket, chatData])
+
+
+	useEffect(() => {
+		console.log(notReadMessages);
+	}, [notReadMessages])
 
 	useEffect(() => {
 		chats.map(chat => {
@@ -76,10 +108,13 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 		})
 		setTotalCountMessages(chatData.countMessages)
 		setMessagesOffset(2)
-		if (windowChat.current)
+		if (windowChat.current) {
 			windowChat.current.scrollTo({
 				top: windowChat.current.scrollHeight,
 			});
+		}
+
+
 	}, [chatData, windowChat.current])
 
 	useEffect(() => {
@@ -92,12 +127,6 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			})
 		})
 	}, [chats])
-
-
-
-
-
-
 
 	const handleVisible = async (messageId) => {
 		const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
@@ -121,6 +150,17 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 
 	};
+
+	const scrollToBottom = useCallback(() => {
+		if (windowChat.current) {
+			windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight - 299;
+			windowChat.current.scrollTo({
+				top: windowChat.current.scrollHeight,
+				behavior: "smooth",
+			});
+
+		}
+	}, [windowChat.current])
 
 	// Функция для проверки, различаются ли две даты по дню
 	const isDifferentDay = (date1, date2) => {
@@ -162,7 +202,6 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 				{/* {renderMessagesWithDate()} */}
 				{isLoadingMessages &&
 					<div style={{ margin: "0 auto" }}>
-
 						<Spinner />
 					</div>
 				}
@@ -219,6 +258,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 						})
 					}
 				</TransitionGroup>
+
 				<CSSTransition
 					in={contextMenu.visible}
 					timeout={300}
@@ -231,6 +271,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 						position={{ x: contextMenu.x, y: contextMenu.y }}
 						onClose={handleCloseContextMenu}
 						onReply={handleReply}
+						onCopy={handleCopy}
 					/>
 				</CSSTransition>
 
@@ -240,6 +281,29 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 
 			<div className={style.content__bottom}>
+				<CSSTransition
+					in={!isScrollBottom}
+					timeout={300}
+					classNames="create-anim"
+					unmountOnExit
+					mountOnEnter
+				>
+					<div className={style.content__innerScrollButton} onClick={scrollToBottom}>
+						<CSSTransition
+							in={!!notReadMessages.length > 0}
+							timeout={300}
+							classNames="create-anim"
+							unmountOnExit
+							mountOnEnter
+						>
+							<span style={{ minWidth: notReadMessages.length.length * 11 }} className={style.content__innerScrollButtonNotReadCount}>{notReadMessages.length}</span>
+						</CSSTransition>
+						<svg xmlns="http://www.w3.org/2000/svg" width="17" height="10" viewBox="0 0 17 10" fill="none">
+							<path d="M1.5 1.5L7.26263 7.93043C7.94318 8.68986 9.05682 8.68986 9.73737 7.93043L15.5 1.5" stroke="#97BCE6" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round">
+							</path>
+						</svg>
+					</div>
+				</CSSTransition>
 				<MessengerInteraction chat={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} />
 			</div>
 		</>

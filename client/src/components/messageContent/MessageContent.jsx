@@ -60,7 +60,7 @@ const MessageContent = ({ contextMenu, onContextMenu, isScrollBottom, windowChat
 						if (!url.startsWith('http://') && !url.startsWith('https://')) {
 							url = 'http://' + url;
 						}
-						return <LinkPreview isScrollBottom={isScrollBottom} windowChatRef={windowChatRef} key={index} url={url} />;
+						return <LinkPreview isOther={isOther} isScrollBottom={isScrollBottom} windowChatRef={windowChatRef} key={index} url={url} />;
 					})}
 				</>
 			);

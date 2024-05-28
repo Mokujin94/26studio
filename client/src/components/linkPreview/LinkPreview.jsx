@@ -1,44 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import style from './linkPreview.module.scss';
 import { getLinkPreview } from '../../http/linkApi';
 import { Link } from "react-router-dom";
 
-const PreviewWrapper = styled.div`
-	margin: 5px 0;
-  border-left: 3px solid #3c4752;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  background-color: #b1cff1;
-`;
-
-const Image = styled.img`
-  width: 100%;
-  border-radius: 8px;
-`;
-
-const Title = styled.h4`
-	color: #222c36;
-	font-size: 14px;
-`;
-
-const Description = styled.p`
-  margin: 5px 0;
-	color: #222c36;
-	font-size: 14px;
-	line-height: 18px;
-	display: -webkit-box;
-	-webkit-line-clamp: 4;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	white-space: pre-wrap;
-	word-break: break-word;
-`;
-
-const LinkPreview = ({ isScrollBottom, windowChatRef, url }) => {
+const LinkPreview = ({ isOther, isScrollBottom, windowChatRef, url }) => {
 	const [metadata, setMetadata] = useState(null);
 
 	useEffect(() => {
@@ -82,21 +48,39 @@ const LinkPreview = ({ isScrollBottom, windowChatRef, url }) => {
 		}
 	}
 
-	if (!metadata) {
+	function extractBaseDomain(url) {
+		// Используем регулярное выражение для извлечения домена
+		let domain = url.replace(/(^\w+:|^)\/\//, '').split('/')[0];
+		// Удаляем доменную зону
+		let baseDomain = domain.split('.')[0];
+		return baseDomain;
+	}
+
+	if (!metadata || (!metadata.title && !metadata.description) || (!metadata.favicon && !metadata.image && (!metadata.title || !metadata.description))) {
 		return null;
 	}
 
+
+
+
 	return (
 		<Link to={url} target='_blank'>
-			<PreviewWrapper>
-				<Title>{metadata.title}</Title>
-				<Description>{metadata.description}</Description>
-				{metadata.image ? <Image src={metadata.image} alt={metadata.title} onLoad={onLoadImage} /> : metadata.favicon ? <Image src={metadata.favicon} alt={metadata.title} onLoad={onLoadImage} /> : null}
-				{/* <a href={url} target="_blank" rel="noopener noreferrer">{url}</a> */}
-			</PreviewWrapper>
+			<div className={isOther ? style.linkPreview__other + " " + style.linkPreview : style.linkPreview}>
+				<div className={style.linkPreview__wrapper} style={(metadata.title && !metadata.description) ? { alignItems: "center" } : null}>
+					{(metadata.favicon && !metadata.image) && <img src={metadata.favicon} alt={metadata.title} className={style.linkPreview__favicon} />}
+					<div className={style.linkPreview__info}>
+						<h2 className={style.linkPreview__info__title}>{metadata.ogSiteName ? metadata.ogSiteName : extractBaseDomain(metadata.url)}</h2>
+						{metadata.title && <h2 className={style.linkPreview__info__title}>{metadata.title.trim()}</h2>}
+						{metadata.description && <p className={style.linkPreview__info__descr}>{metadata.description.trim()}</p>}
+					</div>
+				</div>
+				{metadata.ogImage && <img src={metadata.ogImage} alt={metadata.title} className={style.linkPreview__image} />}
+			</div>
 		</Link>
 
 	);
+
+
 };
 
 LinkPreview.propTypes = {

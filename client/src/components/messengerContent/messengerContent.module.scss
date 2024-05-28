@@ -66,9 +66,46 @@
 					justify-content: flex-start;
 					align-items: flex-start;
 			}
+
+			&ScrollButton {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: absolute;
+				top: -65px;
+				right: 15px;
+				width: 50px;
+				min-height: 50px;
+				border-radius: 50%;
+				background-color: $studio-light-dark-element;
+				z-index: 2;
+				cursor: pointer;
+				transition: .3s background-color;
+
+				&:hover {
+					background-color: $studio-dark-bright-element;
+				}
+				svg	{
+					display: block;
+					width: 22px;
+					height: auto;
+				}
+				&NotReadCount {
+					position: absolute;
+					top: -5px;
+					min-width: 11px;
+					font-size: 12px;
+					box-sizing: content-box;
+					text-align: center;
+					background-color: $studio-primary-element;
+					border-radius: 10px;
+					padding: 2px 4px;
+				}
+			}
     }
 
     &__bottom {
+			position: relative;
         width: 100%;
         min-height: 50px;
 				max-height: 200px;
