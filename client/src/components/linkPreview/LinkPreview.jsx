@@ -48,6 +48,14 @@ const LinkPreview = ({ isOther, isScrollBottom, windowChatRef, url }) => {
 		}
 	}
 
+	function extractBaseDomain(url) {
+		// Используем регулярное выражение для извлечения домена
+		let domain = url.replace(/(^\w+:|^)\/\//, '').split('/')[0];
+		// Удаляем доменную зону
+		let baseDomain = domain.split('.')[0];
+		return baseDomain;
+	}
+
 	if (!metadata || (!metadata.title && !metadata.description) || (!metadata.favicon && !metadata.image && (!metadata.title || !metadata.description))) {
 		return null;
 	}
@@ -61,11 +69,12 @@ const LinkPreview = ({ isOther, isScrollBottom, windowChatRef, url }) => {
 				<div className={style.linkPreview__wrapper} style={(metadata.title && !metadata.description) ? { alignItems: "center" } : null}>
 					{(metadata.favicon && !metadata.image) && <img src={metadata.favicon} alt={metadata.title} className={style.linkPreview__favicon} />}
 					<div className={style.linkPreview__info}>
+						<h2 className={style.linkPreview__info__title}>{metadata.ogSiteName ? metadata.ogSiteName : extractBaseDomain(metadata.url)}</h2>
 						{metadata.title && <h2 className={style.linkPreview__info__title}>{metadata.title.trim()}</h2>}
 						{metadata.description && <p className={style.linkPreview__info__descr}>{metadata.description.trim()}</p>}
 					</div>
 				</div>
-				{metadata.image && <img src={metadata.image} alt={metadata.title} className={style.linkPreview__image} />}
+				{metadata.ogImage && <img src={metadata.ogImage} alt={metadata.title} className={style.linkPreview__image} />}
 			</div>
 		</Link>
 

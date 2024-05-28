@@ -52,7 +52,8 @@ class LinkController {
 				author: getMetaTag(["author"]),
 				ogTitle: getMetaTag(["title"]),
 				ogDescription: getMetaTag(["description"]),
-				ogImage: makeAbsoluteUrl(url, getMetaTag(["image"]))
+				ogImage: makeAbsoluteUrl(url, getMetaTag(["image"])),
+				ogSiteName: getMetaTag(["site_name"])
 			};
 
 			// Добавление данных в кэш
