@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import style from './messageContextMenu.module.scss'
 
-const MessageContextMenu = ({ messageId, position, onClose, onReply }) => {
+const MessageContextMenu = ({ messageId, position, onClose, onReply, onCopy }) => {
 
 	const menuRef = useRef(null);
 
@@ -52,7 +52,7 @@ const MessageContextMenu = ({ messageId, position, onClose, onReply }) => {
 						</svg>
 					</div>
 				</li>
-				<li className={style.messageContextMenu__subMenuListItem}>
+				<li className={style.messageContextMenu__subMenuListItem} onClick={() => onCopy(messageId)}>
 					<span className={style.messageContextMenu__subMenuListItemText}>
 						Копировать
 					</span>

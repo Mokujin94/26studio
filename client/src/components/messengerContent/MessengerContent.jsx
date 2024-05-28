@@ -12,248 +12,263 @@ import Spinner from '../spinner/Spinner'
 import MessageContextMenu from '../messageContextMenu/MessageContextMenu'
 const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
 
-	const { user } = useContext(Context)
-	const [isWriting, setIsWriting] = useState(false)
+    const { user } = useContext(Context)
+    const [isWriting, setIsWriting] = useState(false)
 
-	const [contextMenu, setContextMenu] = useState({
-		visible: false,
-		x: 0,
-		y: 0,
-		messageId: null,
-	});
+    const [contextMenu, setContextMenu] = useState({
+        visible: false,
+        x: 0,
+        y: 0,
+        messageId: null,
+    });
 
-	const handleContextMenu = (event, messageId) => {
-		event.preventDefault();
-		const containerRect = windowChat.current.getBoundingClientRect();
-		const scrollTop = windowChat.current.scrollTop;
-		const scrollLeft = windowChat.current.scrollLeft;
-		setContextMenu({
-			visible: true,
-			x: event.clientX - containerRect.left + scrollLeft,
-			y: event.clientY - containerRect.top + scrollTop,
-			messageId,
-		});
-	};
+    const handleContextMenu = (event, messageId) => {
+        event.preventDefault();
+        const containerRect = windowChat.current.getBoundingClientRect();
+        const scrollTop = windowChat.current.scrollTop;
+        const scrollLeft = windowChat.current.scrollLeft;
+        setContextMenu({
+            visible: true,
+            x: event.clientX - containerRect.left + scrollLeft,
+            y: event.clientY - containerRect.top + scrollTop,
+            messageId,
+        });
+    };
 
-	const handleCloseContextMenu = () => {
-		setContextMenu(prev => {
-			return { ...prev, visible: false, messageId: null, }
-
-
-		});
-	};
-
-	const handleReply = (messageId) => {
-		alert(`Ответить на сообщение с ID: ${messageId}`);
-		handleCloseContextMenu();
-	};
-
-	useEffect(() => {
-		chats.map(chat => {
-			chat.members.filter(item => {
-				if (item.id !== user.user.id && item.id === hash) {
-					setOtherUserData(item)
-				}
-			})
-		})
-
-		if (!hash) return;
-		fetchPersonalChat(Number(hash), user.user.id).then(data => {
-			setChatData(data);
-			// setOtherUserData(data.member)
-			setMessages(data.messages);
-			setTotalCountMessages(data.countMessages)
-
-			setMessagesOffset(2)
-			setIsLoadingMessages(false)
-		})
-	}, [Number(hash)])
-
-	useEffect(() => {
-		user.socket.on("getWriting", ({ chatId, isWriting }) => {
-			if (chatId !== chatData.id) return;
-			setIsWriting(isWriting);
-		})
-		setTotalCountMessages(chatData.countMessages)
-		setMessagesOffset(2)
-		if (windowChat.current)
-			windowChat.current.scrollTo({
-				top: windowChat.current.scrollHeight,
-			});
-	}, [chatData, windowChat.current])
-
-	useEffect(() => {
-
-		chats.map(chat => {
-			chat.members.filter(item => {
-				if (item.id !== user.user.id && item.id === hash) {
-					setOtherUserData(item)
-				}
-			})
-		})
-	}, [chats])
+    const handleCloseContextMenu = () => {
+        setContextMenu(prev => {
+            return { ...prev, visible: false, messageId: null }
 
 
+        });
+    };
+
+    const handleReply = (messageId) => {
+        alert(`Ответить на сообщение с ID: ${messageId}`);
+        handleCloseContextMenu();
+    };
+
+    const handleCopy = (messageId) => {
+        messages.map(group => {
+            group.map(msg => {
+                if (msg.id === messageId) {
+                    navigator.clipboard.writeText(msg.text)
+                }
+            })
+        })
+        handleCloseContextMenu();
+    };
+
+    useEffect(() => {
+        chats.map(chat => {
+            chat.members.filter(item => {
+                if (item.id !== user.user.id && item.id === hash) {
+                    setOtherUserData(item)
+                }
+            })
+        })
+
+        if (!hash) return;
+        fetchPersonalChat(Number(hash), user.user.id).then(data => {
+            setChatData(data);
+            // setOtherUserData(data.member)
+            setMessages(data.messages);
+            setTotalCountMessages(data.countMessages)
+
+            setMessagesOffset(2)
+            setIsLoadingMessages(false)
+        })
+    }, [Number(hash)])
+
+    useEffect(() => {
+        user.socket.on("getWriting", ({ chatId, isWriting }) => {
+            if (chatId !== chatData.id) return;
+            setIsWriting(isWriting);
+        })
+        setTotalCountMessages(chatData.countMessages)
+        setMessagesOffset(2)
+        if (windowChat.current) {
+            windowChat.current.scrollTo({
+                top: windowChat.current.scrollHeight,
+            });
+        }
 
 
+    }, [chatData, windowChat.current])
 
+    useEffect(() => {
 
-
-	const handleVisible = async (messageId) => {
-		const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
-
-		if (messages[0][0].id === messageId && totalElements < totalCountMessages) {
-			setIsFetchingMessages(true)
-		}
-		messages.map((group) => {
-			return group.map(async (message) => {
-				if (message.id === messageId && message.userId !== user.user.id) {
-					await onReadMessage(Number(user.user.id), Number(messageId)).catch((e) => {
-						console.log(e)
-					})
-					message.isRead = true;
-					user.socket.emit("onReadMessage", { message: message, recipientId: hash }); // Объединяем старое и новое сообщение
-					user.socket.emit("onNotReadMessage", { message: message, recipientId: user.user.id }); // Объединяем старое и новое сообщение
-				}
-				return message;
-			});
-		});
-
-
-	};
-
-	// Функция для проверки, различаются ли две даты по дню
-	const isDifferentDay = (date1, date2) => {
-		return (
-			date1.getFullYear() !== date2.getFullYear() ||
-			date1.getMonth() !== date2.getMonth() ||
-			date1.getDate() !== date2.getDate()
-		);
-	};
-	const contentOutsideChat =
-		<div className={style.content__inner}>
-			<span className={style.content__innerText}>Выберите, кому хотели бы написать</span>
-		</div>
-
-	const contentChat =
-		<>
-			<div className={style.content__header}>
-				<div className={style.content__headerInfo}>
-
-					<span className={style.content__headerInfoName}>{Number(hash) === user.user.id ? "Избранное" : otherUserData.name}</span>
-					{
-						isWriting ? (
-							<span className={style.content__headerInfoOnline + " " + style.content__headerInfoOnline_writing}>
-								Печатает
-							</span>
-						) : (
-							<span className={style.content__headerInfoOnline}>
-								Онлайн
-							</span>
-						)
-
-					}
-
-				</div>
-			</div>
-
-
-			<div className={style.content__inner} onClick={handleCloseContextMenu} ref={windowChat}>
-				{/* {renderMessagesWithDate()} */}
-				{isLoadingMessages &&
-					<div style={{ margin: "0 auto" }}>
-
-						<Spinner />
-					</div>
-				}
-				<TransitionGroup component={null}>
-					{
-						messages.map((messageGroup, index) => {
-							const groupDate = messageGroup[messageGroup.length - 1].createdAt;
-							const lastGroup = messages[index - 1];
-							const lastGroupDate = lastGroup ? lastGroup[lastGroup.length - 1].createdAt : null;
-
-							const key = `message-group-${messageGroup[0].id}`;
-
-							if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
-								return (
-									<CSSTransition
-										key={key}
-										in={!!hash}
-										timeout={0}
-									>
-										<>
-											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
-												{useDayMonthFormatter(groupDate)}
-											</div>
-											<Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
-										</>
-									</CSSTransition>
-								)
-							} else if (!lastGroupDate) {
-								return (
-									<CSSTransition
-										key={key}
-										in={!!hash}
-										timeout={0}
-									>
-										<>
-											<div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
-												{useDayMonthFormatter(groupDate)}
-											</div>
-											<Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
-										</>
-									</CSSTransition>
-								)
-
-							} else return (
-								<CSSTransition
-									key={key}
-									in={!!hash}
-									timeout={0}
-								>
-									<Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
-								</CSSTransition>
-							)
-
-						})
-					}
-				</TransitionGroup>
-				<CSSTransition
-					in={contextMenu.visible}
-					timeout={300}
-					classNames="create-anim"
-					unmountOnExit
-					mountOnEnter
-				>
-					<MessageContextMenu
-						messageId={contextMenu.messageId}
-						position={{ x: contextMenu.x, y: contextMenu.y }}
-						onClose={handleCloseContextMenu}
-						onReply={handleReply}
-					/>
-				</CSSTransition>
-
-			</div >
+        chats.map(chat => {
+            chat.members.filter(item => {
+                if (item.id !== user.user.id && item.id === hash) {
+                    setOtherUserData(item)
+                }
+            })
+        })
+    }, [chats])
 
 
 
 
-			<div className={style.content__bottom}>
-				<MessengerInteraction chat={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} />
-			</div>
-		</>
-	return (
-		<div className={style.content}>
-			{
-				hash
-					?
-					contentChat
-					:
-					contentOutsideChat
-			}
-		</div>
-	)
+
+
+
+    const handleVisible = async (messageId) => {
+        const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
+
+        if (messages[0][0].id === messageId && totalElements < totalCountMessages) {
+            setIsFetchingMessages(true)
+        }
+        messages.map((group) => {
+            return group.map(async (message) => {
+                if (message.id === messageId && message.userId !== user.user.id) {
+                    await onReadMessage(Number(user.user.id), Number(messageId)).catch((e) => {
+                        console.log(e)
+                    })
+                    message.isRead = true;
+                    user.socket.emit("onReadMessage", { message: message, recipientId: hash }); // Объединяем старое и новое сообщение
+                    user.socket.emit("onNotReadMessage", { message: message, recipientId: user.user.id }); // Объединяем старое и новое сообщение
+                }
+                return message;
+            });
+        });
+
+
+    };
+
+    // Функция для проверки, различаются ли две даты по дню
+    const isDifferentDay = (date1, date2) => {
+        return (
+            date1.getFullYear() !== date2.getFullYear() ||
+            date1.getMonth() !== date2.getMonth() ||
+            date1.getDate() !== date2.getDate()
+        );
+    };
+    const contentOutsideChat =
+        <div className={style.content__inner}>
+            <span className={style.content__innerText}>Выберите, кому хотели бы написать</span>
+        </div>
+
+    const contentChat =
+        <>
+            <div className={style.content__header}>
+                <div className={style.content__headerInfo}>
+
+                    <span className={style.content__headerInfoName}>{Number(hash) === user.user.id ? "Избранное" : otherUserData.name}</span>
+                    {
+                        isWriting ? (
+                            <span className={style.content__headerInfoOnline + " " + style.content__headerInfoOnline_writing}>
+                                Печатает
+                            </span>
+                        ) : (
+                            <span className={style.content__headerInfoOnline}>
+                                Онлайн
+                            </span>
+                        )
+
+                    }
+
+                </div>
+            </div>
+
+
+            <div className={style.content__inner} onClick={handleCloseContextMenu} ref={windowChat}>
+                {/* {renderMessagesWithDate()} */}
+                {isLoadingMessages &&
+                    <div style={{ margin: "0 auto" }}>
+
+                        <Spinner />
+                    </div>
+                }
+                <TransitionGroup component={null}>
+                    {
+                        messages.map((messageGroup, index) => {
+                            const groupDate = messageGroup[messageGroup.length - 1].createdAt;
+                            const lastGroup = messages[index - 1];
+                            const lastGroupDate = lastGroup ? lastGroup[lastGroup.length - 1].createdAt : null;
+
+                            const key = `message-group-${messageGroup[0].id}`;
+
+                            if (lastGroupDate && isDifferentDay(new Date(groupDate), new Date(lastGroupDate))) {
+                                return (
+                                    <CSSTransition
+                                        key={key}
+                                        in={!!hash}
+                                        timeout={0}
+                                    >
+                                        <>
+                                            <div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
+                                                {useDayMonthFormatter(groupDate)}
+                                            </div>
+                                            <Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
+                                        </>
+                                    </CSSTransition>
+                                )
+                            } else if (!lastGroupDate) {
+                                return (
+                                    <CSSTransition
+                                        key={key}
+                                        in={!!hash}
+                                        timeout={0}
+                                    >
+                                        <>
+                                            <div key={`date-${lastGroupDate}`} className={style.content__inner_date}>
+                                                {useDayMonthFormatter(groupDate)}
+                                            </div>
+                                            <Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
+                                        </>
+                                    </CSSTransition>
+                                )
+
+                            } else return (
+                                <CSSTransition
+                                    key={key}
+                                    in={!!hash}
+                                    timeout={0}
+                                >
+                                    <Message contextMenu={contextMenu} onContextMenu={handleContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChat} messages={messageGroup} handleVisible={handleVisible} />
+                                </CSSTransition>
+                            )
+
+                        })
+                    }
+                </TransitionGroup>
+                <CSSTransition
+                    in={contextMenu.visible}
+                    timeout={300}
+                    classNames="create-anim"
+                    unmountOnExit
+                    mountOnEnter
+                >
+                    <MessageContextMenu
+                        messageId={contextMenu.messageId}
+                        position={{ x: contextMenu.x, y: contextMenu.y }}
+                        onClose={handleCloseContextMenu}
+                        onReply={handleReply}
+                        onCopy={handleCopy}
+                    />
+                </CSSTransition>
+
+            </div >
+
+
+
+
+            <div className={style.content__bottom}>
+                <MessengerInteraction chat={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} />
+            </div>
+        </>
+    return (
+        <div className={style.content}>
+            {
+                hash
+                    ?
+                    contentChat
+                    :
+                    contentOutsideChat
+            }
+        </div>
+    )
 })
 
 export default MessengerContent
