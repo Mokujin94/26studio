@@ -134,6 +134,8 @@ body {
 }
 .create-anim-exit {
   opacity: 1;
+	pointer-events: none;
+	cursor: default;
 }
 .create-anim-exit-active {
   opacity: 0;

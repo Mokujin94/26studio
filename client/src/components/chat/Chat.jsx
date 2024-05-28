@@ -37,8 +37,6 @@ const Chat = observer(({ chat, hash }) => {
 		if (user.socket === null) return;
 
 		user.socket.on("incReadMessege", (message) => {
-
-
 			if (message.chatId !== chat.id) return;
 
 			setNotReadMessages(prevMessages => {
@@ -52,7 +50,6 @@ const Chat = observer(({ chat, hash }) => {
 			setLastMessage(message);
 		})
 		user.socket.on("getNotReadMessage", (message) => {
-
 			setNotReadMessages(prevMessages => {
 				return prevMessages.filter(messageRead => messageRead.id !== message.id)
 			})
@@ -65,14 +62,6 @@ const Chat = observer(({ chat, hash }) => {
 		})
 
 		console.log(user.socket)
-
-
-		return () => {
-			user.socket.off("incReadMessege")
-			user.socket.off("lastMessage")
-			user.socket.off("getNotReadMessage")
-			user.socket.off("getWriting")
-		}
 	}, [user.socket])
 
 
