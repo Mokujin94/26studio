@@ -41,7 +41,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
-    command: tunnel --no-autoupdate run --token eyJhIjoiMWYwNDMwYWViNGMwM2QzZjRkNTc4OWUzMjFjYjI2MzAiLCJ0IjoiNmM0YmNhMzctMTJkMS00MjQzLTg1N2ItYWRlNDZhMjM5YzU3IiwicyI6Ik9XRXhOalUyTlRZdE5tTm1aaTAwWlRBd0xUbGpObU10T1dWa1ptVXhNek5rTmpVeiJ9
+    command: tunnel --no-autoupdate run --token eyJhIjoiMWYwNDMwYWViNGMwM2QzZjRkNTc4OWUzMjFjYjI2MzAiLCJ0IjoiNmM0YmNhMzctMTJkMS00MjQzLTg1N2ItYWRlNDZhMjM5YzU3IiwicyI6Ik1qYzFabUprWm1FdFpUWTVNQzAwT1RFNUxXRTBPREV0TWpnNU16Y3pZbUV6TlRSayJ9
     restart: always
     depends_on:
       - backend
