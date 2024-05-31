@@ -1,6 +1,6 @@
 const { Op, json, where, Sequelize } = require("sequelize");
 const ApiError = require("../error/ApiError");
-const { Chats, User, Messages, ChatMembers, ReadMessages } = require("../models/models");
+const { Chats, User, Messages, ChatMembers, ReadMessages, Draft } = require("../models/models");
 const { sequelize } = require("../db");
 const { getIo } = require("../socket");
 require("dotenv").config();
@@ -41,6 +41,11 @@ class MessengerController {
 						["createdAt", "DESC"]
 					],
 					limit: 50,
+				},
+				{
+					model: Draft,
+					where: { userId },
+					required: false
 				}
 			],
 		});
@@ -132,6 +137,11 @@ class MessengerController {
 							model: Messages,
 							as: "notReadMessages",
 							where: { isRead: false, userId: { [Sequelize.Op.ne]: userId }, },
+							required: false
+						},
+						{
+							model: Draft,
+							where: { userId },
 							required: false
 						}
 					]

@@ -35,6 +35,7 @@ const Messenger = observer(() => {
 	useEffect(() => {
 		fetchAllChats(user.user.id).then(data => {
 			setChats(data.chats)
+			console.log(data.chats);
 		})
 		// return () => {
 		// 	user.socket.off("incReadMessege")

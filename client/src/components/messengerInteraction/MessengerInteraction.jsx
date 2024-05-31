@@ -7,6 +7,7 @@ import { Context } from '../..'
 import { sendMessage } from '../../http/messengerAPI'
 import EmojiPicker from 'emoji-picker-react';
 import { useDebounce } from '../../hooks/useDebounce';
+import { checkDraft } from '../../http/draftAPI';
 const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, windowChatRef }) => {
 	const [messageContent, setMessageContent] = useState('');
 	const [messageContentFull, setMessageContentFull] = useState('')
@@ -21,13 +22,50 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 
 	const hash = Number(location.hash.replace("#", ""))
 
-	const debounceText = useDebounce(messageContentFull, 500)
-
 	useEffect(() => {
 		if (inputRef.current) {
 			inputRef.current.focus();
+			if (chat.drafts?.length) {
+				inputRef.current.innerText = chat.drafts[0].text;
+				setMessageContent(chat.drafts[0].text)
+			} else {
+				inputRef.current.innerText = '';
+				// setMessageContent('')
+			}
+			const range = document.createRange();
+			range.selectNodeContents(inputRef.current);
+			range.collapse(false);
+			const sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
+		}
+		return () => {
+			const filter = inputRef.current.innerText.trim().normalize("NFD");
+			if (inputRef.current) {
+				checkDraft(user.user.id, chat.id, filter).then(data => {
+					console.log(data);
+				})
+			}
+			user.socket.emit("onDraft", ({ text: filter, recipientId: user.user.id, chatId: chat.id }))
+			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: false }))
 		}
 	}, [chat])
+
+	useEffect(() => {
+		const timerWriting = setTimeout(() => {
+			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: false }))
+		}, 500);
+		const timerDraft = setTimeout(() => {
+			checkDraft(user.user.id, chat.id, messageContent).then(data => {
+				console.log(data);
+			})
+			user.socket.emit("onDraft", ({ text: messageContent, recipientId: user.user.id, chatId: chat.id }))
+		}, 3000);
+		return () => {
+			clearTimeout(timerWriting)
+			clearTimeout(timerDraft)
+		}
+	}, [messageContent])
 
 	const isDifferentDay = (date1, date2) => {
 		return date1.getDate() === date2.getDate() &&
@@ -95,6 +133,7 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 			return data;
 		}).then((data) => {
 			if (user.user.id === hash) {
+				user.socket.emit("sendMessage", { message: data, recipientId: hash })
 				// user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
 				// user.socket.emit("sendMessage", { message: data, recipientId: hash })
 			} else {
@@ -146,16 +185,14 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 			setNotEmpty(false);
 		}
 
-		if (lastSymbol != ' ') {
+		if (lastSymbol != ' ' && lastSymbol != '') {
 			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: true }))
 		}
 
 	}
 
 
-	useEffect(() => {
-		user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: false }))
-	}, [debounceText])
+
 
 
 

@@ -13,6 +13,7 @@ const ViewRouter = require("./viewRouter");
 const SearchRouter = require("./searchRouter");
 const NotificationRouter = require("./notificationsRouter")
 const LinkRouter = require("./linkRouter")
+const DraftRouter = require("./draftRouter")
 
 router.use("/user", UserRouter);
 router.use("/project", ProjectRouter);
@@ -26,5 +27,6 @@ router.use("/view", ViewRouter);
 router.use("/search", SearchRouter);
 router.use("/notification", NotificationRouter)
 router.use("/link", LinkRouter)
+router.use("/draft", DraftRouter)
 
 module.exports = router;

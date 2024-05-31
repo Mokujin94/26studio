@@ -14,6 +14,7 @@ const Chat = observer(({ chat, hash }) => {
 	const [lastMessage, setLastMessage] = useState({})
 	const [notReadMessages, setNotReadMessages] = useState([])
 	const [isWriting, setIsWriting] = useState(false)
+	const [draft, setDraft] = useState('')
 
 	const location = useLocation();
 	const hashGroup = Number(location.hash.replace("#chatGroup=", ""))
@@ -30,11 +31,20 @@ const Chat = observer(({ chat, hash }) => {
 			}
 		})
 
+		if (!!chat.drafts.length) {
+			setDraft(chat.drafts[0].text)
+		}
+
 		setNotReadMessages(chat.notReadMessages);
 	}, [])
 
 	useEffect(() => {
 		if (user.socket === null) return;
+
+		user.socket.on("getDraft", ({ text, chatId }) => {
+			if (chatId !== chat.id) return;
+			setDraft(text)
+		})
 
 		user.socket.on("incReadMessege", (message) => {
 			if (message.chatId !== chat.id) return;
@@ -47,6 +57,8 @@ const Chat = observer(({ chat, hash }) => {
 
 		user.socket.on("lastMessage", (message) => {
 			if (message.chatId !== chat.id) return;
+
+			console.log(message);
 			setLastMessage(message);
 		})
 		user.socket.on("getNotReadMessage", (message) => {
@@ -56,7 +68,6 @@ const Chat = observer(({ chat, hash }) => {
 		})
 
 		user.socket.on("getWriting", ({ chatId, isWriting }) => {
-			console.log(chatId, isWriting);
 			if (chatId !== chat.id) return;
 			setIsWriting(isWriting);
 		})
@@ -105,7 +116,16 @@ const Chat = observer(({ chat, hash }) => {
 									</p>
 								) : (
 									<p className={style.chat__textMessage}>
-										{lastMessage.text}
+										{
+											draft.length > 0 ? (
+												<>
+													<span className={chat.members.length < 2 ? userData.id === hash ? style.chat__textMessageDraft : style.chat__textMessageDraft + " " + style.chat__textMessageDraft_red : otherUserData.id === hash ? style.chat__textMessageDraft : style.chat__textMessageDraft + " " + style.chat__textMessageDraft_red}>Черновик: </span>
+													{draft}
+												</>
+											)
+												:
+												lastMessage.text
+										}
 									</p>
 								)
 							}
