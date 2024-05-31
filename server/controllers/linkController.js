@@ -62,6 +62,7 @@ class LinkController {
 			res.status(200).json(preview);
 		} catch (e) {
 			next(ApiError.badRequest(e.message));
+
 		}
 	}
 }
