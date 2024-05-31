@@ -16,7 +16,7 @@ const Message = observer(({ contextMenu, onContextMenu, isScrollBottom, windowCh
 				{
 					messages.map(message => {
 						return (
-							<MessageContent contextMenu={contextMenu} onContextMenu={onContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChatRef} key={message.id} content={message} isOther={message.userId == user.user.id ? false : true} onVisible={handleVisible} isRead={message.isRead} load={message.load ? message.load : false} />
+							<MessageContent contextMenu={contextMenu} onContextMenu={onContextMenu} isScrollBottom={isScrollBottom} windowChatRef={windowChatRef} key={message.id} content={message} isOther={message.userId == user.user.id ? false : true} onVisible={handleVisible} isRead={message.chatId == user.user.id ? true : message.isRead} load={message.load ? message.load : false} />
 						)
 					})
 				}

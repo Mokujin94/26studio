@@ -43,6 +43,14 @@
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			&Draft {
+				font-weight: 600;
+				color: $studio-dark-text;
+				transition: .3s;
+				&_red {
+					color: $studio-red-text;
+				}
+			}
 		}
 	}
 

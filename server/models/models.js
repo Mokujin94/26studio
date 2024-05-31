@@ -122,6 +122,11 @@ const UserGroup = sequelize.define("user_group", {
 	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
+const Draft = sequelize.define("draft", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	text: {type: DataTypes.TEXT }
+})
+
 User.hasMany(Project);
 Project.belongsTo(User);
 
@@ -192,6 +197,12 @@ ReadMessages.belongsTo(Messages);
 User.hasMany(ReadMessages);
 ReadMessages.belongsTo(User);
 
+User.hasMany(Draft, { foreignKey: 'userId' });
+Draft.belongsTo(User, { foreignKey: 'userId' });
+
+Chats.hasMany(Draft, { foreignKey: 'chatId' });
+Draft.belongsTo(Chats, { foreignKey: 'chatId' });
+
 module.exports = {
 	User,
 	Friend,
@@ -209,5 +220,6 @@ module.exports = {
 	Notifications,
 	UserFriend,
 	ReplyComments,
-	UserGroup
+	UserGroup,
+	Draft
 };

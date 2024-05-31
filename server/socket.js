@@ -46,7 +46,7 @@ function initSocket(httpServer) {
 					io.to(user1.socketId).emit("incReadMessege", message)
 					return;
 				}
-			} else {
+			} else if (user1 && user2) {
 				io.to(user1.socketId).emit("lastMessage", message)
 				io.to(user1.socketId).emit("incReadMessege", message)
 				io.to(user2.socketId).emit("lastMessage", message)
@@ -58,6 +58,13 @@ function initSocket(httpServer) {
 			if (!user) return;
 			console.log(user)
 			io.to(user.socketId).emit("getWriting", { chatId, isWriting })
+		})
+
+		socket.on("onDraft", ({text, recipientId, chatId}) => {
+			const user = userSockets.find(user => user.userId === recipientId);
+			if (!user) return;
+			io.to(user.socketId).emit("getDraft", { text, chatId })
+
 		})
 
 		socket.on("onReadMessage", ({ message, recipientId, senderId }) => {
