@@ -38,5 +38,16 @@ services:
       - 80:80
     restart: always
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel --no-autoupdate run --token eyJhIjoiMWYwNDMwYWViNGMwM2QzZjRkNTc4OWUzMjFjYjI2MzAiLCJ0IjoiNmM0YmNhMzctMTJkMS00MjQzLTg1N2ItYWRlNDZhMjM5YzU3IiwicyI6Ik9XRXhOalUyTlRZdE5tTm1aaTAwWlRBd0xUbGpObU10T1dWa1ptVXhNek5rTmpVeiJ9
+    restart: always
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./config.yml:/etc/cloudflared/config.yml
+
 volumes:
   my_app_data:

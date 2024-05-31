@@ -1,0 +1,7 @@
+tunnel: 6c4bca37-12d1-4243-857b-ade46a239c57
+credentials-file: /root/.cloudflared/6c4bca37-12d1-4243-857b-ade46a239c57.json
+
+ingress:
+  - hostname: 26studio.ru
+    service: http://localhost:80
+  - service: http_status:404
