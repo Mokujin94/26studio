@@ -51,3 +51,4 @@ services:
 
 volumes:
   my_app_data:
+
