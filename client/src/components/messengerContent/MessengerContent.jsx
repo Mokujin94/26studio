@@ -75,11 +75,6 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 		})
 	}, [user.socket, chatData])
 
-
-	useEffect(() => {
-		console.log(notReadMessages);
-	}, [notReadMessages])
-
 	useEffect(() => {
 		chats.map(chat => {
 			chat.members.filter(item => {
@@ -299,7 +294,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 							<span style={{ minWidth: notReadMessages.length.length * 11 }} className={style.content__innerScrollButtonNotReadCount}>{notReadMessages.length}</span>
 						</CSSTransition>
 						<svg xmlns="http://www.w3.org/2000/svg" width="17" height="10" viewBox="0 0 17 10" fill="none">
-							<path d="M1.5 1.5L7.26263 7.93043C7.94318 8.68986 9.05682 8.68986 9.73737 7.93043L15.5 1.5" stroke="#97BCE6" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M1.5 1.5L7.26263 7.93043C7.94318 8.68986 9.05682 8.68986 9.73737 7.93043L15.5 1.5" stroke="#97BCE6" strokeWidth="1.5" stroke-miterlimit="10" strokeLinecap="round" strokeLinejoin="round">
 							</path>
 						</svg>
 					</div>
