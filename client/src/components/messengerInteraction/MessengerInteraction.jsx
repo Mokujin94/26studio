@@ -4,11 +4,11 @@ import style from './messengerInteraction.module.scss'
 import { useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { Context } from '../..'
-import { sendMessage } from '../../http/messengerAPI'
+import { fetchPersonalChat, sendMessage } from '../../http/messengerAPI'
 import EmojiPicker from 'emoji-picker-react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { checkDraft } from '../../http/draftAPI';
-const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, windowChatRef }) => {
+const MessengerInteraction = observer(({ chatData, setMessages, isScrollBottom, windowChatRef, setChatData, setChats }) => {
 	const [messageContent, setMessageContent] = useState('');
 	const [messageContentFull, setMessageContentFull] = useState('')
 	const [notEmpty, setNotEmpty] = useState(false)
@@ -25,9 +25,9 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 	useEffect(() => {
 		if (inputRef.current) {
 			inputRef.current.focus();
-			if (chat.drafts?.length) {
-				inputRef.current.innerText = chat.drafts[0].text;
-				setMessageContent(chat.drafts[0].text)
+			if (chatData.drafts?.length) {
+				inputRef.current.innerText = chatData.drafts[0].text;
+				setMessageContent(chatData.drafts[0].text)
 			} else {
 				inputRef.current.innerText = '';
 				// setMessageContent('')
@@ -40,29 +40,29 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 			sel.addRange(range);
 		}
 		return () => {
-			if (inputRef.current && chat.id) {
+			if (inputRef.current && chatData.id) {
 				const filter = inputRef.current.innerText.trim().normalize("NFD");
 
-				checkDraft(user.user.id, chat.id, filter).then(data => {
+				checkDraft(user.user.id, chatData.id, filter).then(data => {
 					console.log(data);
 				})
-				user.socket.emit("onDraft", ({ text: filter, recipientId: user.user.id, chatId: chat.id }))
+				user.socket.emit("onDraft", ({ text: filter, recipientId: user.user.id, chatId: chatData.id }))
 				console.log(filter)
 			}
-			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: false }))
+			user.socket.emit("onWriting", ({ chatId: chatData.id, recipientId: hash, isWriting: false }))
 		}
-	}, [chat])
+	}, [chatData])
 
 	useEffect(() => {
-		if (!chat.id) return;
+		if (!chatData.id) return;
 		const timerWriting = setTimeout(() => {
-			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: false }))
+			user.socket.emit("onWriting", ({ chatId: chatData.id, recipientId: hash, isWriting: false }))
 		}, 500);
 		const timerDraft = setTimeout(() => {
-			checkDraft(user.user.id, chat.id, messageContent).then(data => {
+			checkDraft(user.user.id, chatData.id, messageContent).then(data => {
 				console.log(data);
 			})
-			user.socket.emit("onDraft", ({ text: messageContent, recipientId: user.user.id, chatId: chat.id }))
+			user.socket.emit("onDraft", ({ text: messageContent, recipientId: user.user.id, chatId: chatData.id }))
 		}, 3000);
 		return () => {
 			clearTimeout(timerWriting)
@@ -130,8 +130,17 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 
 		//
 
-		sendMessage(Number(hash), user.user.id, messageContent).then(data => {
-
+		sendMessage(Number(hash), user.user.id, messageContent).then(async data => {
+			if (!chatData.id && data.userId == user.user.id) {
+				await fetchPersonalChat(hash, user.user.id).then(data => {
+					setChats(prevChats => {
+						return [...prevChats, data]
+					})
+					setChatData(prevChatData => {
+						return { ...prevChatData, ...data }
+					})
+				})
+			}
 			return data;
 		}).then((data) => {
 			if (user.user.id === hash) {
@@ -187,7 +196,7 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 		}
 
 		if (lastSymbol != ' ' && lastSymbol != '') {
-			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: true }))
+			user.socket.emit("onWriting", ({ chatId: chatData.id, recipientId: hash, isWriting: true }))
 		}
 
 	}

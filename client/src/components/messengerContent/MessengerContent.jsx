@@ -10,11 +10,14 @@ import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
 import Spinner from '../spinner/Spinner'
 import MessageContextMenu from '../messageContextMenu/MessageContextMenu'
-const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
+import { useDateFormatter } from '../../hooks/useDateFormatter'
+const MessengerContent = observer(({ chats, setChats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
 
 	const { user } = useContext(Context)
 	const [isWriting, setIsWriting] = useState(false)
 	const [notReadMessages, setNotReadMessages] = useState([])
+	const [isOnline, setIsOnline] = useState(false)
+	const [lastTimeOnline, setLastTimeOnline] = useState('')
 
 	const [contextMenu, setContextMenu] = useState({
 		visible: false,
@@ -61,6 +64,17 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 	};
 
 	useEffect(() => {
+		console.log(chatData);
+
+		const lastOnline = new Date(chatData?.member?.lastOnline).getTime() / 1000;
+		const nowTime = new Date().getTime() / 1000;
+		if ((nowTime - lastOnline) <= 300) {
+			setIsOnline(true)
+		} else {
+			const time = useDateFormatter(chatData?.member?.lastOnline)
+			setLastTimeOnline(time);
+			setIsOnline(false)
+		}
 		user.socket.on("incReadMessege", (message) => {
 			if (message.chatId !== chatData.id) return;
 			setNotReadMessages(prevMessages => {
@@ -84,8 +98,13 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 			})
 		})
 
+
+
 		if (!hash) return;
 		fetchPersonalChat(Number(hash), user.user.id).then(data => {
+			if (!data.is_chat) {
+				setOtherUserData(data.member)
+			}
 			setChatData(data);
 			// setOtherUserData(data.member)
 			setMessages(data.messages);
@@ -93,7 +112,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 
 			setMessagesOffset(2)
 			setIsLoadingMessages(false)
-		})
+		}).catch(e => console.log(e))
 	}, [Number(hash)])
 
 	useEffect(() => {
@@ -182,8 +201,10 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 								Печатает
 							</span>
 						) : (
-							<span className={style.content__headerInfoOnline}>
-								Онлайн
+							<span className={isOnline ? style.content__headerInfoOnline + " " + style.content__headerInfoOnline_primary : style.content__headerInfoOnline}>
+								{
+									isOnline ? 'Онлайн' : lastTimeOnline
+								}
 							</span>
 						)
 
@@ -299,7 +320,7 @@ const MessengerContent = observer(({ chats, setChatData, chatData, otherUserData
 						</svg>
 					</div>
 				</CSSTransition>
-				<MessengerInteraction chat={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} />
+				<MessengerInteraction chatData={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} setChatData={setChatData} setChats={setChats} />
 			</div>
 		</>
 	return (

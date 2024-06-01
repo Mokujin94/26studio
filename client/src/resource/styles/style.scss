@@ -142,6 +142,27 @@ body {
   transition: opacity 0.3s;
 }
 
+.create-anim-scale-enter {
+  opacity: 0;
+	transform: scale(0);
+}
+.create-anim-scale-enter-active {
+  opacity: 1;
+	transform: scale(1);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.create-anim-scale-exit {
+  opacity: 1;
+	transform: scale(1);
+	pointer-events: none;
+	cursor: default;
+}
+.create-anim-scale-exit-active {
+  opacity: 0;
+	transform: scale(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
 .create-anim-update-enter {
   opacity: 0;
 }
