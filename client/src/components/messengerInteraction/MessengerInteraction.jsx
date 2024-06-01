@@ -40,13 +40,15 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 			sel.addRange(range);
 		}
 		return () => {
-			const filter = inputRef.current.innerText.trim().normalize("NFD");
 			if (inputRef.current) {
+				const filter = inputRef.current.innerText.trim().normalize("NFD");
+
 				checkDraft(user.user.id, chat.id, filter).then(data => {
 					console.log(data);
 				})
+				user.socket.emit("onDraft", ({ text: filter, recipientId: user.user.id, chatId: chat.id }))
+				console.log(filter)
 			}
-			user.socket.emit("onDraft", ({ text: filter, recipientId: user.user.id, chatId: chat.id }))
 			user.socket.emit("onWriting", ({ chatId: chat.id, recipientId: hash, isWriting: false }))
 		}
 	}, [chat])
@@ -89,7 +91,6 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 		}
 		setMessageContent("");
 		inputRef.current.innerText = '';
-		console.log(message);
 		// создать сообщение только у нас
 		setMessages((prevMessages) => {
 			const lastGroup = prevMessages[prevMessages.length - 1];
@@ -135,7 +136,6 @@ const MessengerInteraction = observer(({ chat, setMessages, isScrollBottom, wind
 			if (user.user.id === hash) {
 				user.socket.emit("sendMessage", { message: data, recipientId: hash })
 				// user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
-				// user.socket.emit("sendMessage", { message: data, recipientId: hash })
 			} else {
 				user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash })
 				// user.socket.emit("sendMessageRecipient", { message: data, recipientId: user.user.id })
