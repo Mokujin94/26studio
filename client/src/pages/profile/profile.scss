@@ -185,19 +185,12 @@
 					padding: 10px 15px;
 					text-align: center;
 					font-size: 16px;
-					line-height: 20px;
 					font-weight: 500;
 					border: 0;
 					border-left: 1px solid $studio-dark-border;
 					outline: 0;
 					cursor: pointer;
 					transition: all $studio-transition-03;
-					&::before {
-						position: absolute;
-						left: 0;
-						content: 'Написать';
-						color: $studio-dark-text;
-					}
 					&:hover {
 						background-color: $studio-primary-button-hover;
 					}

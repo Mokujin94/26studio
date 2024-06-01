@@ -15,13 +15,13 @@ const Chat = observer(({ chat, hash }) => {
 	const [notReadMessages, setNotReadMessages] = useState([])
 	const [isWriting, setIsWriting] = useState(false)
 	const [draft, setDraft] = useState('')
-
 	const location = useLocation();
 	const hashGroup = Number(location.hash.replace("#chatGroup=", ""))
 
 	useEffect(() => {
+		console.log(chat);
 		if (chat.messages.length) {
-			setLastMessage(chat.messages[0])
+			setLastMessage(chat.messages[0][0] || chat.messages[0])
 		}
 		chat.members.filter(item => {
 			if (item.id !== user.user.id) {
@@ -140,11 +140,11 @@ const Chat = observer(({ chat, hash }) => {
 								<CSSTransition
 									in={notReadMessages.length >= 1}
 									timeout={300}
-									classNames="create-anim"
+									classNames="create-anim-scale"
 									unmountOnExit
 								>
 									<div className={style.chat__infoCount}>
-										<span className={style.chat__infoCountText}>{notReadMessages.length}</span>
+										<span className={style.chat__infoCountText}>{notReadMessages.length == 0 ? 1 : notReadMessages.length}</span>
 									</div>
 								</CSSTransition>
 

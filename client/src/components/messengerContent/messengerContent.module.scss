@@ -24,7 +24,10 @@
             &Online {
                 font-size: 12px;
                 font-weight: 500;
-                color: $studio-primary-text;
+								color: $studio-grey-text;
+								&_primary {
+									color: $studio-primary-text;
+								}
             }
         }
     }
@@ -60,7 +63,9 @@
 				color: $studio-white-text;
 				font-weight: 500;
 				font-size: 14px;
-				margin-top: auto;
+				&:first-child {
+					margin-top: auto;
+				}
 			}
 			&_active {
 					flex-direction: column-reverse;

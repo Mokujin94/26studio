@@ -13,6 +13,9 @@ class MessengerController {
 		const user = await User.findOne({
 			where: { id: otherUserId }
 		})
+		const meUser = await User.findOne({
+			where: { id: userId }
+		})
 		const user1ChatIds = await ChatMembers.findAll({
 			where: { userId: otherUserId },
 			attributes: ['chatId'],
@@ -43,6 +46,12 @@ class MessengerController {
 					limit: 50,
 				},
 				{
+					model: Messages,
+					as: "notReadMessages",
+					where: { isRead: false, userId: { [Sequelize.Op.ne]: userId }, },
+					required: false
+				},
+				{
 					model: Draft,
 					where: { userId },
 					required: false
@@ -55,13 +64,18 @@ class MessengerController {
 		if (!commonChat) {
 			chat = {
 				is_group: false,
+				is_chat: false,
 				member: user,
+				members: [user, meUser],
+				notReadMessages: [],
 				messages: [],
 				countMessages: 0
 			}
 		} else {
 			chat = commonChat ? commonChat.get({ plain: true }) : {}; // Если нужно получить "чистый" объект
+			chat.is_chat = true;
 			chat.member = user; // Добавляем свойство
+			chat.members = [user, meUser];
 			const totalCountMessages = await Messages.count({
 				where: {
 					chatId: commonChat.id

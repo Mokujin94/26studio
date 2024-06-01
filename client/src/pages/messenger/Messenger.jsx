@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import MessengerSideBar from '../../components/messengerSideBar/MessengerSideBar'
 import MessengerContent from '../../components/messengerContent/MessengerContent'
 import { observer } from 'mobx-react-lite';
 import { Context } from '../..';
-import { fetchAllChats, fetchMessages } from '../../http/messengerAPI';
+import { fetchAllChats, fetchMessages, fetchPersonalChat } from '../../http/messengerAPI';
 import { useLocation } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
 
@@ -46,14 +46,26 @@ const Messenger = observer(() => {
 	}, [])
 
 	useEffect(() => {
-
+		console.log(chats);
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
-
-			const promise = new Promise((resolve, reject) => {
+			console.log(message);
+			const promise = new Promise(async (resolve, reject) => {
+				const isChat = chats.filter(item => message.chatId === item.id)
 				setLastMessage(message);
+				if ((!chatData.id && message.userId == hash) || !isChat.length) {
+					await fetchPersonalChat(message.userId, user.user.id).then(data => {
+						setChatData(prevChatData => {
+							return { ...prevChatData, ...data }
+						})
+						setChats(prevChats => {
+							return [...prevChats, data]
+						})
+					})
+				}
+				console.log(chats);
 
-				if (message.chatId !== chatData.id) return;
+				if (message.userId != hash) return;
 				setMessages((prevMessages) => {
 					const lastGroup = prevMessages[prevMessages.length - 1];
 
@@ -108,7 +120,7 @@ const Messenger = observer(() => {
 			user.socket.off("getMessages")
 			user.socket.off("getReadMessage")
 		}
-	}, [user.socket, chatData])
+	}, [user.socket, chatData, chats])
 
 	useEffect(() => {
 		if (!windowChatRef.current) return;
@@ -197,6 +209,7 @@ const Messenger = observer(() => {
 				/>
 				<MessengerContent
 					chats={chats}
+					setChats={setChats}
 					setChatData={setChatData}
 					chatData={chatData}
 					otherUserData={otherUserData}

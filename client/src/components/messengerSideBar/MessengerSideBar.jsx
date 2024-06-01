@@ -3,13 +3,21 @@ import Chat from '../chat/Chat';
 import style from './messengerSideBar.module.scss'
 import { Context } from '../..';
 import { observer } from 'mobx-react-lite';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const MessengerSideBar = observer(({ chats, setChats, hash }) => {
 	const { user } = useContext(Context);
 
 	const renderChats = chats.map(chat => {
 		return (
-			<Chat chat={chat} key={chat.id} hash={hash} />
+			<CSSTransition
+				key={chat.id}
+				// in={chats.length}
+				timeout={300}
+				classNames="create-anim"
+			>
+				<Chat chat={chat} key={chat.id} hash={hash} />
+			</CSSTransition>
 		)
 	})
 	return (
@@ -25,7 +33,9 @@ const MessengerSideBar = observer(({ chats, setChats, hash }) => {
 				</div>
 			</div>
 			<div className={style.sideBar__chats}>
-				{renderChats}
+				<TransitionGroup component={null}>
+					{renderChats}
+				</TransitionGroup>
 			</div>
 		</div>
 	);
