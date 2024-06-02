@@ -11,6 +11,7 @@ import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transiti
 import Spinner from '../spinner/Spinner'
 import MessageContextMenu from '../messageContextMenu/MessageContextMenu'
 import { useDateFormatter } from '../../hooks/useDateFormatter'
+import Cross from '../cross/Cross'
 const MessengerContent = observer(({ chats, setChats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
 
 	const { user } = useContext(Context)
@@ -18,15 +19,20 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	const [notReadMessages, setNotReadMessages] = useState([])
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
+	const [replyMessage, setReplyMessage] = useState({ id: null, userName: '', text: '' })
 
 	const [contextMenu, setContextMenu] = useState({
 		visible: false,
 		x: 0,
 		y: 0,
-		messageId: null,
+		message: {
+			id: null,
+			userName: '',
+			text: '',
+		},
 	});
 
-	const handleContextMenu = (event, messageId) => {
+	const handleContextMenu = (event, message) => {
 		event.preventDefault();
 		const containerRect = windowChat.current.getBoundingClientRect();
 		const scrollTop = windowChat.current.scrollTop;
@@ -35,20 +41,28 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 			visible: true,
 			x: event.clientX - containerRect.left + scrollLeft,
 			y: event.clientY - containerRect.top + scrollTop,
-			messageId,
+			message: {
+				id: message.id,
+				userName: message.user.name,
+				text: message.text,
+			},
 		});
 	};
 
 	const handleCloseContextMenu = () => {
 		setContextMenu(prev => {
-			return { ...prev, visible: false, messageId: null }
-
-
+			return { ...prev, visible: false, message: { id: null, userName: '', text: '' } }
 		});
 	};
 
-	const handleReply = (messageId) => {
-		alert(`Ответить на сообщение с ID: ${messageId}`);
+	const handleReply = (message) => {
+		if (message.id !== replyMessage.id) {
+			setReplyMessage(prev => {
+				return { ...prev, ...message }
+			})
+		}
+		console.log(replyMessage)
+		console.log(`Ответить на сообщение: ${message.text}`);
 		handleCloseContextMenu();
 	};
 
@@ -203,7 +217,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 						) : (
 							<span className={isOnline ? style.content__headerInfoOnline + " " + style.content__headerInfoOnline_primary : style.content__headerInfoOnline}>
 								{
-									isOnline ? 'Онлайн' : lastTimeOnline
+									isOnline ? 'Онлайн' : lastTimeOnline && lastTimeOnline
 								}
 							</span>
 						)
@@ -283,7 +297,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 					mountOnEnter
 				>
 					<MessageContextMenu
-						messageId={contextMenu.messageId}
+						message={contextMenu.message}
 						position={{ x: contextMenu.x, y: contextMenu.y }}
 						onClose={handleCloseContextMenu}
 						onReply={handleReply}
@@ -297,6 +311,34 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
 			<div className={style.content__bottom}>
+				<CSSTransition
+					in={replyMessage.id}
+					timeout={200}
+					classNames="create-anim-traslate"
+					unmountOnExit
+					mountOnEnter
+				>
+					<div className={style.content__bottomReply}>
+						<div className={style.content__bottomReplyIcon}>
+							<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-reply-fill">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+								<g id="SVGRepo_iconCarrier">
+									<path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"></path>
+								</g>
+							</svg>
+						</div>
+						<div className={style.content__bottomReplyInfo}>
+							<p className={style.content__bottomReplyText}>Ответ <span className={style.content__bottomReplyUser}>{replyMessage.userName}</span></p>
+							<span className={style.content__bottomReplyMessage}>{replyMessage.text}</span>
+						</div>
+						<div className={style.content__bottomReplyClose}>
+							<Cross onClick={() => setReplyMessage(prev => {
+								return { ...prev, id: null }
+							})} />
+						</div>
+					</div>
+				</CSSTransition>
 				<CSSTransition
 					in={!isScrollBottom}
 					timeout={300}

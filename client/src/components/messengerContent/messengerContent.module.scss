@@ -112,8 +112,65 @@
 
     &__bottom {
 			position: relative;
-        width: 100%;
-        min-height: 50px;
-				max-height: 200px;
+      width: 100%;
+      min-height: 50px;
+			max-height: 200px;
+			&Reply {
+				position: absolute;
+				z-index: 2;
+				background-color: $studio-darker-element;
+				top: 0;
+				left: 0;
+				width: 100%;
+				transform: translateY(-100%);
+				transform-origin: center bottom;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 7px 10px 7px 0;
+				&Icon {
+					display: flex;
+					justify-content: center;
+					min-width: 50px;
+					svg {
+						display: block;
+						height: 30px;
+						fill: $studio-primary-element;
+					}
+				}
+
+				&Info {
+					display: flex;
+					flex-direction: column;
+					gap: 2px;
+					width: calc(100% - 35px);
+					> * {
+						font-size: 14px;
+						font-weight: 500;
+					}
+				}
+				&Text {
+					color: $studio-primary-text;
+				}
+
+				&User {
+					display: inline-block;
+					color: $studio-primary-bright-text;
+					font-weight: 600;
+				}
+
+				&Message {
+					color: $studio-white-text;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+				&Close {
+					svg {
+						display: block;
+					}
+				}
+			}
+			
     }
 }
