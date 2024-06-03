@@ -8,7 +8,7 @@ import { fetchPersonalChat, sendMessage } from '../../http/messengerAPI'
 import EmojiPicker from 'emoji-picker-react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { checkDraft } from '../../http/draftAPI';
-const MessengerInteraction = observer(({ chatData, setMessages, isScrollBottom, windowChatRef, setChatData, setChats }) => {
+const MessengerInteraction = observer(({ chatData, setMessages, isScrollBottom, windowChatRef, setChatData, setChats, replyMessage, setReplyMessage }) => {
 	const [messageContent, setMessageContent] = useState('');
 	const [messageContentFull, setMessageContentFull] = useState('')
 	const [notEmpty, setNotEmpty] = useState(false)
@@ -79,6 +79,11 @@ const MessengerInteraction = observer(({ chatData, setMessages, isScrollBottom, 
 
 	const onSend = () => {
 		if (messageContent.length <= 0) return;
+		if (replyMessage.id !== null) {
+			setReplyMessage(prev => {
+				return { ...prev, id: null }
+			})
+		}
 		let message = {
 			id: Date.now(),
 			createdAt: Date.now(),

@@ -61,6 +61,11 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 				return { ...prev, ...message }
 			})
 		}
+		if (windowChat.current) {
+			const chatScrollBottom = windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight;
+			console.log(chatScrollBottom);
+			console.log(windowChat.current.scrollHeight);
+		}
 		console.log(replyMessage)
 		console.log(`Ответить на сообщение: ${message.text}`);
 		handleCloseContextMenu();
@@ -311,13 +316,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
 			<div className={style.content__bottom}>
-				<CSSTransition
-					in={replyMessage.id}
-					timeout={200}
-					classNames="create-anim-traslate"
-					unmountOnExit
-					mountOnEnter
-				>
+				<div className={replyMessage.id ? style.content__bottomReplyWrapper + " " + style.content__bottomReplyWrapper_active : style.content__bottomReplyWrapper}>
 					<div className={style.content__bottomReply}>
 						<div className={style.content__bottomReplyIcon}>
 							<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-reply-fill">
@@ -338,7 +337,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 							})} />
 						</div>
 					</div>
-				</CSSTransition>
+				</div>
 				<CSSTransition
 					in={!isScrollBottom}
 					timeout={300}
@@ -362,7 +361,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 						</svg>
 					</div>
 				</CSSTransition>
-				<MessengerInteraction chatData={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} setChatData={setChatData} setChats={setChats} />
+				<MessengerInteraction chatData={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} setChatData={setChatData} setChats={setChats} replyMessage={replyMessage} setReplyMessage={setReplyMessage} />
 			</div>
 		</>
 	return (

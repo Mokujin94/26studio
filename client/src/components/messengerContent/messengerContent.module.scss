@@ -5,6 +5,7 @@
     flex-direction: column;
 		max-width: 1040px;
     width: 100%;
+		background-color: $studio-dark-element;
     &__header {
         display: flex;
         align-items: center;
@@ -33,7 +34,6 @@
     }
 
     &__inner {
-			height: calc(100vh - 120px);
 			position: relative;
 			display: flex;
 			gap: 10px;
@@ -113,21 +113,30 @@
     &__bottom {
 			position: relative;
       width: 100%;
-      min-height: 50px;
-			max-height: 200px;
 			&Reply {
-				position: absolute;
+				min-height: 0;
+				position: relative;
 				z-index: 2;
-				background-color: $studio-darker-element;
-				top: 0;
-				left: 0;
+				background-color: #222c36;
 				width: 100%;
-				transform: translateY(-100%);
 				transform-origin: center bottom;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				padding: 7px 10px 7px 0;
+				padding-right: 10px;
+				&Wrapper {
+					display: grid;
+					opacity: 0;
+					grid-template-rows: 0fr;
+					transition: 0.3s;
+					&_active {
+						grid-template-rows: 1fr;
+						opacity: 1;
+						.content__bottomReply {
+							padding: 7px 10px 7px 0px;
+						}
+					}
+				}
 				&Icon {
 					display: flex;
 					justify-content: center;
