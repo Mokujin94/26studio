@@ -170,9 +170,11 @@
 
 				&Message {
 					color: $studio-white-text;
-					white-space: nowrap;
+					-webkit-line-clamp: 1;
+					-webkit-box-orient: vertical;
+					display: -webkit-box;
 					overflow: hidden;
-					text-overflow: ellipsis;
+					word-break: break-all;
 				}
 				&Close {
 					svg {

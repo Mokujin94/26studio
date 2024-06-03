@@ -62,9 +62,17 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 			})
 		}
 		if (windowChat.current) {
-			const chatScrollBottom = windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight;
-			console.log(chatScrollBottom);
-			console.log(windowChat.current.scrollHeight);
+			if (windowChat.current.scrollTop === windowChat.current.scrollHeight - windowChat.current.clientHeight) {
+				setTimeout(() => {
+					windowChat.current.scrollTo({
+						top: windowChat.current.scrollHeight,
+						behavior: 'smooth'
+					})
+				}, 300);
+			}
+			// const chatScrollBottom = windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight;
+			// console.log(chatScrollBottom);
+			// console.log(windowChat.current.scrollHeight);
 		}
 		console.log(replyMessage)
 		console.log(`Ответить на сообщение: ${message.text}`);
