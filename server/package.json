@@ -4,23 +4,35 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.0",
+    "adm-zip": "^0.5.10",
+    "axios": "^1.7.1",
+    "bcryptjs": "^2.4.3",
+    "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
+    "html-metadata-parser": "^2.0.4",
+    "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.0",
-    "pg": "^8.10.0",
+    "node-cache": "^5.1.2",
+    "nodemailer": "^6.9.7",
+    "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.29.1"
+    "redis": "^4.6.13",
+    "sequelize": "^6.35.2",
+    "socket.io": "^4.7.2",
+    "unzipper": "^0.10.14"
   },
   "devDependencies": {
-    "nodemon": "^2.0.21"
+    "nodemon": "^3.1.0",
+    "sequelize-cli": "^6.6.2"
   }
 }

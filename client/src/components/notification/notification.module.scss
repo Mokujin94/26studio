@@ -1,0 +1,68 @@
+@import "../../resource/styles/variables";
+
+.notification {
+  position: relative;
+  width: 37px;
+  height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-user-select: none;
+  user-select: none;
+  border-radius: 10px;
+  border: 1px solid $studio-grey-border;
+	background-color: $studio-dark-element;
+  cursor: pointer;
+  transition: $studio-transition-03;
+  &_active {
+    border-color: $studio-primary-border;
+    > .notification__icon {
+      path {
+        stroke: $studio-primary-border;
+      }
+    }
+  }
+  &__icon {
+    display: block;
+    width: 30px;
+    transform-origin: top;
+    &_active {  
+      animation: animateNotification 1s forwards;
+    }
+    path {
+      stroke: $studio-white-element;
+      strokeWidth: 1;
+      transition: $studio-transition-03;
+    }
+  }
+  &__circle {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    top: -5px;
+    right: -5px;
+    background-color: $studio-primary-element;
+    border-radius: 50%;
+    // border: 1px solid $studio-grey-border;
+  }
+}
+
+
+@keyframes animateNotification {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  33% {
+    transform: rotate(-7deg);
+
+  }
+
+  66% {
+    transform: rotate(7deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}

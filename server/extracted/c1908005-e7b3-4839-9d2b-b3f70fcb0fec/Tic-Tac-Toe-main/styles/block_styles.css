@@ -1,0 +1,131 @@
+/* 
+this file contains styles wich set position, size and form of block with content
+for exemple:
+    div, section, etc...
+*/
+
+/* ============= HEADER ============ */
+header {
+    min-width: 100vw;
+    min-height: 12vh;
+
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.intro-container {
+    display: flex;
+    align-items: baseline;
+}
+
+/* =========== GAME-AREA =========== */
+main {
+    display: flex;
+    min-height: var(--main-height-size);
+}
+/* 1. game container (parent element for .game-area)*/
+:root {
+    /* size for game square */
+    --game-sqare-size: 7vw;
+    --main-height-size: 76vh;
+}
+
+.game-container {
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    
+    min-width: 100vw;
+    max-height: auto;
+}
+
+.game-area table td{
+	width: var(--game-sqare-size);
+    height: var(--game-sqare-size);
+}
+
+/* td{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+} */
+
+.game-area .legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 4vh;
+    
+    border-radius: 15px 15px 0 0;;
+}
+
+.game-container .game-status {
+    width: auto;
+    padding: 0.5vh;
+    border-radius: 15px;
+    margin-top: 1vh;
+}
+
+.result-container {
+    position: absolute;
+
+    width: 100vw;
+    height: var(--main-height-size);
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    min-height: 40vh;
+    min-width: 40vw;
+
+    border-radius: 20px;
+
+    text-align: center;
+}
+
+.result-area .game-icon {
+    display: block;
+    order: 1;
+
+    margin-bottom: 1vh;
+}
+
+
+.result-container .icon {
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+}
+
+/* ========== FOOTER =========== */
+footer {
+    align-content: space-between;
+    align-items: stretch;
+    justify-content: space-around;
+
+    min-width: 100vw;
+    min-height: 12vh;
+}
+
+footer > section {
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 1vh;
+}
+
+footer > section > span {
+    margin-bottom: 0.6vh;
+}

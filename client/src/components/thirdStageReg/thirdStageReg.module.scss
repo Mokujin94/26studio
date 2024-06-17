@@ -1,0 +1,66 @@
+@import "../../resource/styles/variables";
+
+.third {
+  &__title {
+    color: $studio-white-text;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 50px;
+  }
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 190px;
+    &_active {
+      height: 188px;
+    }
+  }
+  &__text {
+    color: $studio-white-text;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  &__inputBox {
+    display: flex;
+    gap: 20px;
+    // margin-bottom: 50px;
+    &Item {
+      width: 50px;
+      height: 60px;
+      outline: 0;
+      background-color: transparent;
+      border: 2px solid $studio-primary-border;
+      color: $studio-white-text;
+      border-radius: 10px;
+      font-size: 20px;
+      text-align: center;
+      opacity: 0.5;
+      transition: opacity $studio-transition-03 ease;
+      &_active {
+        opacity: 1;
+      }
+    }
+  }
+
+	&__sendCodeAgain {
+		max-width: 400px;
+    width: 100%;
+		margin-top: 10px;
+		&Text {
+			font-size: 14px;
+			color: $studio-primary-text;
+			user-select: none;
+			cursor: pointer;
+			&_disabled {
+				opacity: .5;
+				cursor: default;
+			}
+		}
+	}
+
+  &__activeAcc {
+    margin-top: 50px;
+  }
+}

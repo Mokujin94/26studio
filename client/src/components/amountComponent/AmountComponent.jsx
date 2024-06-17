@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import style from "./amountComponent.module.scss";
+import Skeleton from "../Skeletons/Skeleton";
 
-function amountComponent(props) {
-  return (
-    <div className={style.block}>
-      <img src={props.img} alt="" className={style.block__img} />
-      <div className={style.block__amount}>{props.value}</div>
-    </div>
-  );
+function AmountComponent({ img, value, onClick, likeLoading, isLoading }) {
+	return (
+		<>
+			{
+				isLoading
+					?
+					<Skeleton width={100} height={37} backgroundColor={"#222c36"} />
+					:
+					<button disabled={likeLoading} className={onClick ? style.block : style.block + " " + style.block_noClicked} onClick={onClick}>
+						{img(style)}
+						<div className={style.block__amount} style={{ minWidth: value.length <= 4 && value.length * 11 }}>{value}</div>
+					</button>
+			}
+		</>
+	);
 }
 
-export default amountComponent;
+export default AmountComponent;

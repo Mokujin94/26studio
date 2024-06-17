@@ -1,31 +1,42 @@
-import React from 'react'
-import GroupCard from '../../components/groupCard/GroupCard'
-import { Context } from '../../index'
-import SpSelect from '../../components/spSelect/SpSelect'
+import React, { useContext, useEffect } from 'react';
+import GroupCard from '../../components/groupCard/GroupCard';
+import { Context } from '../../index';
+import SpSelect from '../../components/spSelect/SpSelect';
+import SpSelectMobile from '../../components/spSelectMobile/SpSelectMobile';
+import { fetchGroups } from '../../http/groupsAPI';
+import { observer } from 'mobx-react-lite';
 
-function Groups() {
-  
-  return (
-    <div className="container">
-      <div className="groups">
-        <div className="title">Группы</div>
-        <div className="spSelect-wrapper">
-          <SpSelect/>
-        </div>
-        <div className="groups-wrapper">
-          <GroupCard/>
-          <GroupCard/>
-          <GroupCard/>
-          <GroupCard/>
-          <GroupCard/>
-          <GroupCard/>
-          <GroupCard/>
-          <GroupCard/>
-        </div>
-     
-      </div>
-    </div>
-  )
-}
+const Groups = observer(() => {
+    const { groups } = useContext(Context);
 
-export default Groups
+    useEffect(() => {
+        document.title = "Группы";
+        fetchGroups().then((data) => {
+
+            groups.setGroups(data.rows.sort((a, b) => a.id > b.id ? 1 : -1));
+        });
+    }, []);
+
+    return (
+        <div className="container">
+            <div className="groups">
+                <div className="groups__title">Группы</div>
+                <div className="groups__spSelect-wrapper">
+                    <div className="groups__spSelect">
+                        <SpSelect />
+                    </div>
+                    <div className="groups__spSelect_mobile">
+                        <SpSelectMobile />
+                    </div>
+                </div>
+                <div className="groups__wrapper">
+                    {groups.groups.map((item) => (
+                        <GroupCard group={item} key={item.id} />
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+});
+
+export default Groups;

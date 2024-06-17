@@ -1,0 +1,78 @@
+@import "../../resource/styles/variables";
+
+.first {
+  display: flex;
+  flex-direction: column;
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 50px;
+  }
+  &__row {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__item {
+    display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 10px;
+		transition: $studio-transition-03;
+		&_error {
+			grid-template-rows: 1fr;
+		}
+    &Title {
+      color: $studio-white-text;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    &Input {
+      width: 280px;
+      height: 40px;
+      background-color: $studio-dark-element;
+      border-radius: 10px;
+      border: 2px solid $studio-primary-border;
+      color: $studio-white-text;
+      font-size: 16px;
+      padding: 0 20px;
+      outline: none;
+      transition: $studio-transition-03;
+    }
+    &Email {
+      margin: 15px 0;
+      input {
+        width: 100%;
+      }
+    }
+    &Bottom {
+      position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 10px;
+    }
+  }
+}
+
+.error {
+	display: grid;
+	align-items: flex-start;
+	grid-template-rows: 0fr;
+	opacity: 0;
+	transition: $studio-transition-03;
+	&_active {
+		opacity: 1;
+		grid-template-rows: 1fr;
+		transition: $studio-transition-03;
+	}
+  &_message {
+		min-height: 0px;
+		display: block;
+    max-width: 280px;
+		height: auto;
+    font-size: 14px;
+    color: rgb(255, 149, 149);
+		transition: $studio-transition-03;
+  }
+}

@@ -1,0 +1,82 @@
+@import "../../resource/styles/variables";
+
+.stages {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  &__item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &Num {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+      font-weight: 500;
+      color: $studio-white-text;
+      border-radius: 50%;
+      border: 2px solid $studio-primary-border;
+      overflow: hidden;
+      transition: color 0.3s $studio-transition-03, border 0.3s $studio-transition-06;
+      cursor: pointer;
+      &::before {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        border-radius: 50%;
+        height: 45px;
+        width: 0px;
+        background: $studio-primary-element;
+        transition: width 0.3s $studio-transition-03;
+      }
+      &_active {
+        color: $studio-dark-text;
+        border: 0px solid $studio-primary-border;
+        &::before {
+          width: 45px;
+        }
+      }
+    }
+
+    &Text {
+      position: absolute;
+      bottom: -10px;
+      transform: translateY(100%);
+      white-space: nowrap;
+      color: $studio-white-text;
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+  &__line {
+    position: relative;
+    display: block;
+    box-sizing: content-box;
+    width: 200px;
+    height: 3px;
+    border: 1px solid $studio-primary-border;
+    border-radius: 20px;
+
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      height: 3px;
+      width: 0px;
+      background: $studio-primary-element;
+      transition: $studio-transition-03 ease-in;
+    }
+    &_active {
+      &::before {
+        width: 100%;
+      }
+    }
+  }
+}

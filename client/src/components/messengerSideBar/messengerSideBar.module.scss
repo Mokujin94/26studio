@@ -1,0 +1,69 @@
+@import '../../resource/styles/variables';
+
+.sideBar {
+	max-width: 340px;
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	border-right: 1px solid $studio-black-opacity-03;
+	&__header {
+		height: 70px;
+		background-color: $studio-background-header;
+		display: flex;
+		align-items: center;
+		padding: 0px 10px;
+	}
+
+	&__search {
+		width: 100%;
+		height: 35px;
+		display: flex;
+		align-items: center;
+		background-color: $studio-grey-element;
+		border-radius: 10px;
+		overflow: hidden;
+		&Input {
+			width: 100%;
+			height: 100%;
+			padding-left: 10px;
+			background-color: transparent;
+			border: none;
+			outline: none;
+			font-size: 12px;
+			color: #fcfcfc;
+			&::placeholder {
+				color: $studio-grey-text;
+			}
+		}
+
+		&Icon {
+			display: flex;
+			background: $studio-grey-element;
+			height: 100%;
+			aspect-ratio: 1 / 1;
+			cursor: pointer;
+			align-items: center;
+			justify-content: center;
+			transition: .3s;
+			&:hover {
+				filter: brightness(1.2);
+			}
+			svg {
+				display: block;
+				width: 10px;
+				height: 10px;
+			}
+		}
+	}
+
+	&__chats {
+		flex: 1 0 auto;
+		display: flex;
+		flex-direction: column;
+		background-color: $studio-darker-element;
+		padding: 10px;
+		height: calc(100vh - 70px);
+		overflow-y: auto;
+	}
+}

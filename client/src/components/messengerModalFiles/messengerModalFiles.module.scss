@@ -1,0 +1,90 @@
+@import '../../resource/styles/variables';
+
+
+
+
+.block {
+	position: relative;
+
+	border-radius: 10px;
+	padding: 20px 10px 20px 20px;
+	max-width: 500px;
+
+
+	background: $studio-light-dark-element;
+
+
+	&__wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(auto, 100%));
+		overflow: auto;
+		// border-radius: 5px;
+		max-height: 600px;
+		gap: 5px;
+		background: $studio-light-dark-element;
+		padding-right: 10px;
+	}
+
+	&__img {
+		display: block;
+		width: 100%;
+		border-radius: 5px;
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			object-fit: cover;
+			display: block;
+		}
+
+	}
+
+	&__header {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-bottom: 10px;
+		&Btn {
+			input[type="file"] {
+				display: none;
+			}
+			&Wrapper {
+				padding: 5px 10px;
+				background: $studio-primary-button;
+				cursor: pointer;
+				border-radius: 10px;
+				transition: all $studio-transition-03;
+				color: $studio-dark-text;
+				&:hover {
+					background-color: $studio-primary-button-hover;
+				}
+			}
+			&Inner {
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				&Icon {
+					height: 25px;
+					width: auto;
+		
+					svg {
+						width: 100%;
+						height: 100%;
+						path {
+							stroke: $studio-dark-border;
+							fill: transparent;
+						}
+					}
+				}
+
+				span {
+					font-size: 14px;
+					font-weight: 600;
+				}
+			}
+		}
+	}
+
+
+}

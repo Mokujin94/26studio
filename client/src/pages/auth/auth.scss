@@ -1,1 +1,128 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
+
+.auth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 330px;
+  &__back-page {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: $studio-transition-03;
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &:hover {
+      @include studio-mixin-white-element-hover;
+    }
+    &:active {
+      @include studio-mixin-white-element-active;
+    }
+  }
+  &__errors {
+    position: absolute;
+    right: 100px;
+    top: 50px;
+    z-index: 99;
+  }
+  &__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    
+    color: $studio-white-text;
+    margin-bottom: 36px;
+
+  }
+  &__form {
+    display: flex;
+		gap: 15px;
+    flex-direction: column;
+  }
+  &__forget {
+    align-self: flex-end;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    text-align: center;
+    
+    color: $studio-white-text;
+  }
+  &__input {
+    display: flex;
+		gap: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    &-title {
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 19px;
+      text-align: center;
+      color: $studio-white-text;
+    }
+		&-inner {
+			position: relative; 
+		}
+
+    &-item {
+      width: 400px;
+      height: 40px;
+      background-color: $studio-dark-element;
+      border-radius: 10px;
+      border: 2px solid $studio-primary-border;
+      color: $studio-white-text;
+      font-size: 16px;
+      padding: 0 40px 0 20px;
+      outline: none;
+    }
+		&-eye {
+			position: absolute;
+			right: 0;
+			top: 0;
+			display: flex;
+			align-items: center;
+			border-radius: 0 20px 20px 0;
+			width: 40px;
+			height: 100%;
+			cursor: pointer;
+			justify-content: center;
+			svg {
+				width: 20px;
+				height: 20px;
+				path {
+					stroke: $studio-white-element;
+				}
+			}
+	}
+  }
+  &__notAuth {
+    display: flex;
+    justify-content: center;
+    &Text {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: $studio-white-text;
+      margin-right: 7px;
+    }
+    &Link {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: $studio-primary-text;
+      transition: all $studio-transition-03;
+      &:hover {
+        color: $studio-primary-text-hover;
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+@import "../../resource/styles/variables";
+
+.arrow {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid $studio-primary-border;
+  border-radius: 50%;
+  transition: $studio-transition-03;
+  background: transparent ;
+  &:hover {
+    background: $studio-primary-button;
+    .arrow__item {
+      path {
+        stroke: $studio-dark-element-hover;
+      }
+    }
+  }
+  &__item {
+    path {
+      transition: $studio-transition-03;
+      stroke: $studio-primary-element;
+    }
+  }
+}
+
+

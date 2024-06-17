@@ -1,14 +1,54 @@
-@import '../../resource/styles/variables';
+@import "../../resource/styles/variables";
 
-.block{
-    max-width: 1000px;
+.block {
+  position: relative;
+  width: 100%;
+	aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 5px;
+  &:hover .fullscreen {
+    opacity: 1;
+    z-index: 3;
+  }
+  &__img {
     width: 100%;
-    max-height: 560px;
-    overflow: hidden;
+    max-height: inherit;
+    object-fit: cover;
+  }
+  &_active {
+    position: fixed;
+    /* max-width: 1000px; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* max-height: 560px; */
+    /* overflow: hidden; */
     border-radius: 5px;
-    &__img{
-        width: 100%;
-        max-height: inherit;
-        object-fit: cover;
+    z-index: 4;
+    &:hover .fullscreen {
+      opacity: 1;
+      z-index: 5;
     }
+  }
+}
+
+.fullscreen {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 3;
+  opacity: 0;
+  transition: $studio-transition-03;
+  svg {
+    width: 100%;
+    height: 100%;
+    path {
+      fill: $studio-primary-element;
+      stroke: $studio-primary-element;
+    }
+  }
 }

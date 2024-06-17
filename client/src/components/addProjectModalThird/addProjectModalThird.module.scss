@@ -1,0 +1,96 @@
+@import "../../resource/styles/variables";
+
+.AddProjectModalThird {
+  margin-top: 65px;
+  display: flex;
+  font-size: 18px;
+  color: $studio-white-text;
+  width: 100%;
+  justify-content: space-between;
+  &__settings {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+    &__title {
+      margin-bottom: 15px;
+    }
+    &__select {
+      margin-top: 10px;
+      font-weight: 200;
+      display: flex;
+      gap: 10px;
+      cursor: pointer;
+      &:nth-child(2) {
+        margin-top: 0;
+      }
+      &__box {
+      }
+      &__wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  &__preview {
+    max-width: 350px;
+    width: 100%;
+    &__title {
+      margin-bottom: 10px;
+    }
+    &__canvas {
+      overflow: hidden;
+      margin-top: 10px;
+      height: auto;
+      border: 2px solid $studio-primary-border;
+      background-color: $studio-dark-input;
+      border-radius: 10px;
+    }
+    &Text {
+      padding: 16px;
+      &Title {
+        color: $studio-white-text;
+				font-size: 16px;
+				font-weight: 500;
+				margin-bottom: 10px;
+				word-break: break-all;
+				-webkit-line-clamp: 1;
+				-webkit-box-orient: vertical;
+				display: -webkit-box;
+				overflow: hidden;
+      }
+      &Descr {
+        color: $studio-white-text;
+				font-size: 12px;
+				font-weight: 400;
+				line-height: 18px;
+				word-wrap: break-word;
+				max-height: 74px;
+				white-space: pre-wrap;
+				overflow: auto;
+      }
+    }
+  }
+  &__button {
+    position: absolute;
+    bottom: 0;
+    right: 60px;
+    padding: 10px 40px;
+    border-radius: 10px;
+    background: $studio-primary-button;
+    color: $studio-dark-text;
+    font-size: 16px;
+    font-weight: 700;
+    
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: $studio-transition-03;
+    &:hover {
+      background: $studio-primary-button-hover;
+    }
+  }
+}

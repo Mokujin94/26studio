@@ -1,0 +1,119 @@
+@import "../../resource/styles/variables";
+
+.editModal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 400px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background: $studio-dark-element;
+	padding: 20px 30px;
+	border-radius: 10px;
+	gap: 20px;
+
+	&__close {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+	}
+
+	&__title {
+		font-size: 24px;
+		color: $studio-white-text;
+		font-weight: 400;
+		
+	}
+
+	&__content {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+	}
+
+	&__input {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+
+		&Button {
+			width: max-content;
+			background-color: transparent;
+			color: $studio-primary-text;
+			border: 2px solid $studio-primary-border;
+			border-radius: 5px;
+			padding: 5px 10px;
+			cursor: pointer;
+			transition: $studio-transition-03;
+			&:hover {
+				background-color: $studio-primary-border;
+				color: $studio-dark-text;
+			}
+		}
+
+		&__title {
+			font-size: 16px;
+			color: $studio-white-text;
+			span {
+				color: $studio-grey-text;
+			}
+		}
+
+		&__item {
+			width: 100%;
+			padding: 5px 10px;
+			background: $studio-darker-input;
+			border: none;
+			outline: none;
+			font-size: 16px;
+			color: $studio-white-text;
+			border-radius: 5px;
+			resize: none;
+			outline: 2px solid transparent;
+			transition: $studio-transition-03;
+			&::placeholder {
+				color: $studio-grey-text;
+			}
+			&_error {
+				outline: 2px solid $studio-red-border;
+			}
+		}
+	}
+
+	&__avatar {
+		display: flex;
+		align-items: center;
+		gap: 15px;
+		&__img {
+			width: 60px;
+			min-width: 60px;
+			height: 60px;
+			border-radius: 100%;
+			overflow: hidden;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+
+			}
+		}
+	}
+	&__error {
+		font-size: 14px;
+		color: $studio-red-text;
+		min-height: 0px;
+		&__wrapper {
+			display: grid;
+			opacity: 0;
+			grid-template-rows: 0fr;
+			transition: $studio-transition-03;
+			&_active {
+				grid-template-rows: 1fr;
+				opacity: 1;
+			}
+		}
+	}
+}

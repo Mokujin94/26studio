@@ -1,0 +1,241 @@
+@import "../../resource/styles/variables";
+
+.block {
+	margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  color: $studio-white-text;
+  width: 100%;
+	padding: 0px 15px 0px 65px;
+  position: relative;
+	background-color: $studio-darker-element;
+	border-radius: 10px;
+  transition: grid-template-rows 0.3s ease;
+  &__avatar {
+    max-width: 50px;
+    width: 100%;
+    max-height: 50px;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    &Img {
+      position: absolute;
+      width: 120%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  &__top {
+    &__info {
+      display: flex;
+      gap: 20px;
+    }
+  }
+  &__link {
+    display: inline-block;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+		margin-bottom: 10px;
+    &Name {
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: $studio-white-text;
+			overflow: hidden;
+    }
+    &Comment {
+      font-size: 16px;
+      font-weight: 400;
+			white-space: pre-line;
+			word-break: break-all;
+			overflow: hidden;
+			line-height: 19px;
+			&_expand {
+				display: -webkit-box;
+				-webkit-line-clamp: 4;
+				-webkit-box-orient: vertical;
+			}
+			&Expand {
+				color: $studio-grey-text;
+				font-size: 14px;
+				margin-top: 5px;
+				cursor: pointer;
+				transition: $studio-transition-03;
+				&:hover {
+					color: $studio-white-text;
+				}
+			}
+			span {
+				overflow: hidden;
+    		    display: inline-flex;
+			}
+			a {
+				padding: 2px 5px;
+				background: $studio-grey-element;
+				border-radius: 5px;
+				color: $studio-primary-text;
+				font-weight: 600;
+				margin-right: 5px;
+				font-size: 14px;
+				overflow: hidden;
+				&:hover {
+					color: $studio-primary-text-hover;
+				}
+			}
+    }
+    &Bottom {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      &Feedback {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        &Item {
+					z-index: 1;
+          font-size: 14px;
+          font-weight: 100;
+          display: flex;
+          gap: 10px;
+          align-items: center;
+					padding: 5px 10px;
+					background: #27323e;
+					border: 1px solid $studio-grey-border;
+					border-radius: 5px;
+					user-select: none;
+          cursor: pointer;
+          &Image {
+            width: 16px;
+            &Icon {
+              width: auto;
+							height: 15px;
+              display: block;
+							&_active {
+								path {
+									fill: $studio-red-element;
+								}
+							}
+            }
+          }
+          &:last-child {
+            margin: 0;
+          }
+          &Count {
+            color: $studio-white-text;
+          }
+        }
+        &Like {
+          font-size: 14px;
+          font-weight: 100;
+          cursor: pointer;
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          padding: 5px 10px;
+          background: $studio-dark-element;
+					border: 1px solid $studio-grey-border;
+          border-radius: 5px;
+					user-select: none;
+        }
+      }
+      &Date {
+        font-size: 14px;
+        color: $studio-grey-text;
+      }
+    }
+  }
+  &__input {
+    display: flex;
+		align-items: flex-end;
+    gap: 20px;
+    width: 100%;
+    min-height: 0px;
+    &__wrapper {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: 0.3s ease;
+    }
+    &__item {
+			position: relative;
+      width: 100%;
+      border: none;
+      background: none;
+      color: $studio-white-text;
+      padding: 5px 0px;
+      border-bottom: 2px solid $studio-primary-border;
+      outline: none;
+      animation: unWrap 0.6s ease-out forwards;
+			overflow-wrap: anywhere;
+			overflow: hidden;
+			word-break: break-all;
+			& * {
+				font-weight: 400 !important;
+				font-size: 16px !important;
+				background: none !important;
+				color: $studio-white-text !important;
+				white-space: pre-wrap !important;
+			}
+      &::placeholder {
+        color: $studio-grey-text;
+      }
+			&::before {
+				content: 'Ваш ответ';
+				position: absolute;
+				pointer-events: none; /* Не взаимодействовать событиями мыши */
+				color: #999;
+				left: 0px;
+				top: 5px;
+				font-size: 16px;
+				transition: opacity 0.2s ease; /* Добавляем плавный переход */
+			}
+			&_notEmpty::before {
+				opacity: 0; /* Скрываем placeholder если див не пустой */
+			}
+    }
+    &__buttons {
+      display: flex;
+      max-width: 300px;
+      gap: 10px;
+      margin-left: auto;
+      &__item {
+        padding: 5px 10px;
+        border: 1px solid $studio-primary-border;
+        background: $studio-primary-element;
+        border-radius: 5px;
+        color: $studio-dark-text;
+        transition: $studio-transition-03;
+        cursor: pointer;
+        &_border {
+          background: none;
+          color: $studio-primary-text;
+          &:hover {
+            background: $studio-primary-button-hover;
+            color: $studio-dark-text;
+          }
+        }
+        &:hover {
+          background: $studio-primary-button-hover;
+        }
+      }
+    }
+  }
+}
+
+@keyframes unWrap {
+  0% {
+    width: 0;
+    border-bottom: 2px solid transparent;
+  }
+  100% {
+    width: 100%;
+    border-bottom: 2px solid $studio-primary-border;
+  }
+}
