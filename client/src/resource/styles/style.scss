@@ -178,6 +178,25 @@ body {
   transition: opacity 0.3s;
 }
 
+.create-anim-traslate-enter {
+  opacity: 0;
+  transform: translateY(-50%) scaleY(0.6);
+}
+.create-anim-traslate-enter-active {
+  opacity: 1;
+  transform: translateY(-100%) scaleY(1);
+	transition: opacity 0.2s ease-in, transform 0.2s;
+}
+.create-anim-traslate-exit {
+  opacity: 1;
+  transform: translateY(-100%) scaleY(1);
+}
+.create-anim-traslate-exit-active {
+  opacity: 0;
+  transform: translateY(-70%) scaleY(0.6);
+  transition: opacity 0.2s ease-out, transform 0.2s;
+}
+
 .popup-success-enter {
   opacity: 0;
   transform: translateY(300px);

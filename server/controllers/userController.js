@@ -109,9 +109,9 @@ class UserController {
 			req.body;
 
 		let fileName;
+
 		if (!email || !password) {
 			return next(ApiError.badRequest("Неверная почта или пароль"));
-
 		}
 		const condidate = await User.findOne({ where: { email } });
 		if (condidate) {
@@ -341,10 +341,9 @@ class UserController {
 
 	async uploadProject(req, res, next) {
 		try {
-			// Путь для сохранения загруженных файлов
-			const uploadPath = '/app/uploads';
-			// Путь для сохранения извлеченных файлов
-			const extractPath = '/app/extracted';
+
+			const uploadPath = path.join(__dirname, "..", "uploads");
+			const extractPath = path.join(__dirname, "..", "extracted");
 
 			if (!fs.existsSync(uploadPath)) {
 				fs.mkdirSync(uploadPath);
@@ -450,7 +449,7 @@ class UserController {
 			}
 
 			// Формируем полный путь к файлу, включая уникальную папку
-			const fullPath = path.join("/app/extracted/", filePath);
+			const fullPath = path.join(__dirname, "../extracted/", filePath);
 
 			// Отправляем файл клиенту
 			res.sendFile(fullPath);
@@ -472,7 +471,7 @@ class UserController {
 		} = req.body;
 		try {
 
-			const staticProjects = "/app/static/projects";
+			const staticProjects = path.join(__dirname, "..", "static", "projects");
 
 			if (!fs.existsSync(staticProjects)) {
 				fs.mkdirSync(staticProjects);
@@ -480,10 +479,7 @@ class UserController {
 
 			const previewFile = uuid.v4() + ".jpg";
 			const { preview } = req.files;
-			// Путь сохранения файла внутри тома Docker
-			const filePath = path.resolve('/app/static/projects', previewFile);
-			// Сохранение файла внутри тома Docker
-			await preview.mv(filePath);
+			preview.mv(path.resolve(__dirname, "..", "static/projects", previewFile));
 
 			const project = await Project.create({
 				name,
@@ -510,10 +506,7 @@ class UserController {
 			if (req.files) {
 				fileName = uuid.v4() + ".jpg";
 				const { avatar } = req.files;
-				// Путь сохранения файла внутри тома Docker
-				const filePath = path.resolve('/app/static/avatars', fileName);
-				// Сохранение файла внутри тома Docker
-				await avatar.mv(filePath);
+				avatar.mv(path.resolve(__dirname, "..", "static/avatars", fileName));
 			} else {
 				fileName = "avatar.jpg";
 			}

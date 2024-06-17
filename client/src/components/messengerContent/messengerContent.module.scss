@@ -5,6 +5,7 @@
     flex-direction: column;
 		max-width: 1040px;
     width: 100%;
+		background-color: $studio-dark-element;
     &__header {
         display: flex;
         align-items: center;
@@ -33,7 +34,6 @@
     }
 
     &__inner {
-			height: calc(100vh - 120px);
 			position: relative;
 			display: flex;
 			gap: 10px;
@@ -46,6 +46,7 @@
 			overflow-y: auto;
 			overflow-x: hidden;
 			padding: 10px;
+
 			&Text {
 				position: absolute;
 				top: 50%;
@@ -112,8 +113,92 @@
 
     &__bottom {
 			position: relative;
-        width: 100%;
-        min-height: 50px;
-				max-height: 200px;
+      width: 100%;
+			&Reply {
+				min-height: 0;
+				position: relative;
+				z-index: 2;
+				background-color: #222c36;
+				width: 100%;
+				transform-origin: center bottom;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				// padding: 7px 10px 7px 0px;
+				padding-right: 10px;
+				&Wrapper {
+					display: grid;
+					opacity: 0;
+					grid-template-rows: 0fr;
+					align-items: start;
+					transition: grid-template-rows 0.15s, opacity 0.15s, padding 0s 0s;
+					&_active {
+						grid-template-rows: 1fr;
+						opacity: 1;
+						.content__bottomReply {
+							padding: 7px 10px 7px 0px;
+						}
+					}
+				}
+				&Icon {
+					display: flex;
+					justify-content: center;
+					min-width: 50px;
+					svg {
+						display: block;
+						height: 30px;
+						fill: $studio-primary-element;
+					}
+				}
+
+				&Info {
+					display: flex;
+					flex-direction: column;
+					gap: 2px;
+					width: calc(100% - 35px);
+					> * {
+						font-size: 14px;
+						font-weight: 500;
+					}
+				}
+				&Text {
+					color: $studio-primary-text;
+				}
+
+				&User {
+					display: inline-block;
+					color: $studio-primary-bright-text;
+					font-weight: 600;
+				}
+
+				&Message {
+					color: $studio-white-text;
+					-webkit-line-clamp: 1;
+					-webkit-box-orient: vertical;
+					display: -webkit-box;
+					overflow: hidden;
+					word-break: break-all;
+				}
+				&Close {
+					svg {
+						display: block;
+					}
+				}
+			}
+			
     }
+
+		&__modal {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 6;
+			width: 100%;
+			height: 100%;
+			background-color: $studio-black-opacity-02;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 }

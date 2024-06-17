@@ -16,7 +16,7 @@ const MessengerSideBar = observer(({ chats, setChats, hash }) => {
 				timeout={300}
 				classNames="create-anim"
 			>
-				<Chat chat={chat} key={chat.id} hash={hash} />
+				<Chat chat={chat} hash={hash} />
 			</CSSTransition>
 		)
 	})

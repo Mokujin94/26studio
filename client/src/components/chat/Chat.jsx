@@ -73,7 +73,7 @@ const Chat = observer(({ chat, hash }) => {
 		})
 
 		console.log(user.socket)
-	}, [user.socket])
+	}, [user.socket, chat])
 
 
 	return (
