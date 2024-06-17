@@ -12,14 +12,20 @@ import Spinner from '../spinner/Spinner'
 import MessageContextMenu from '../messageContextMenu/MessageContextMenu'
 import { useDateFormatter } from '../../hooks/useDateFormatter'
 import Cross from '../cross/Cross'
+import MessengerModalFiles from '../messengerModalFiles/MessengerModalFiles'
 const MessengerContent = observer(({ chats, setChats, setChatData, chatData, otherUserData, setOtherUserData, messages, setMessages, hash, windowChat, totalCountMessages, setTotalCountMessages, setMessagesOffset, setIsFetchingMessages, setIsLoadingMessages, isLoadingMessages, isScrollBottom }) => {
 
 	const { user } = useContext(Context)
 	const [isWriting, setIsWriting] = useState(false)
+	const [isModal, setIsModal] = useState(false)
+	const [files, setFiles] = useState(null)
 	const [notReadMessages, setNotReadMessages] = useState([])
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
 	const [replyMessage, setReplyMessage] = useState({ id: null, userName: '', text: '' })
+	const toMessagesRef = useRef(null)
+	const bottomRef = useRef(null)
+	const inputRef = useRef(null)
 
 	const [contextMenu, setContextMenu] = useState({
 		visible: false,
@@ -61,23 +67,44 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 				return { ...prev, ...message }
 			})
 		}
-		if (windowChat.current) {
-			if (windowChat.current.scrollTop === windowChat.current.scrollHeight - windowChat.current.clientHeight) {
-				setTimeout(() => {
-					windowChat.current.scrollTo({
-						top: windowChat.current.scrollHeight,
-						behavior: 'smooth'
-					})
-				}, 300);
-			}
-			// const chatScrollBottom = windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight;
-			// console.log(chatScrollBottom);
-			// console.log(windowChat.current.scrollHeight);
-		}
-		console.log(replyMessage)
-		console.log(`Ответить на сообщение: ${message.text}`);
+
+		// if (windowChat.current) {
+		// 	if (windowChat.current.scrollTop === windowChat.current.scrollHeight - windowChat.current.clientHeight) {
+		// 		setTimeout(() => {
+		// 			windowChat.current.scrollTo({
+		// 				top: windowChat.current.scrollHeight,
+		// 				behavior: 'smooth'
+		// 			})
+		// 		}, 300);
+		// 	}
+		// 	// const chatScrollBottom = windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight;
+		// 	// console.log(chatScrollBottom);
+		// 	// console.log(windowChat.current.scrollHeight);
+		// }
+		// console.log(replyMessage)
+		// console.log(`Ответить на сообщение: ${message.text}`);
 		handleCloseContextMenu();
 	};
+
+	// Обработчик нажатия клавиш
+	const handleKeyDown = (e) => {
+		if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement !== inputRef.current) {
+			const range = document.createRange();
+			range.selectNodeContents(inputRef.current);
+			range.collapse(false);
+			const sel = window.getSelection();
+			sel.removeAllRanges();
+			sel.addRange(range);
+		}
+	};
+
+	// Добавление обработчика нажатия клавиш при монтировании компонента
+	useEffect(() => {
+		window.addEventListener('keydown', handleKeyDown);
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, []);
 
 	const handleCopy = (messageId) => {
 		messages.map(group => {
@@ -91,7 +118,6 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	};
 
 	useEffect(() => {
-		console.log(chatData);
 
 		const lastOnline = new Date(chatData?.member?.lastOnline).getTime() / 1000;
 		const nowTime = new Date().getTime() / 1000;
@@ -102,6 +128,13 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 			setLastTimeOnline(time);
 			setIsOnline(false)
 		}
+
+		console.log(chatData)
+		user.socket.on("getWritingOnlyChat", ({ chatId, isWriting }) => {
+			if (chatData.id !== chatId) return;
+			setIsWriting(isWriting);
+		})
+
 		user.socket.on("incReadMessege", (message) => {
 			if (message.chatId !== chatData.id) return;
 			setNotReadMessages(prevMessages => {
@@ -114,6 +147,14 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 				return prevMessages.filter(messageRead => messageRead.id !== message.id)
 			})
 		})
+
+		setTotalCountMessages(chatData.countMessages)
+		setMessagesOffset(2)
+		scrollToBottom()
+
+		return () => {
+			user.socket.off("getWritingOnlyChat")
+		}
 	}, [user.socket, chatData])
 
 	useEffect(() => {
@@ -140,23 +181,8 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 			setMessagesOffset(2)
 			setIsLoadingMessages(false)
 		}).catch(e => console.log(e))
-	}, [Number(hash)])
+	}, [hash])
 
-	useEffect(() => {
-		user.socket.on("getWriting", ({ chatId, isWriting }) => {
-			if (chatId !== chatData.id) return;
-			setIsWriting(isWriting);
-		})
-		setTotalCountMessages(chatData.countMessages)
-		setMessagesOffset(2)
-		if (windowChat.current) {
-			windowChat.current.scrollTo({
-				top: windowChat.current.scrollHeight,
-			});
-		}
-
-
-	}, [chatData, windowChat.current])
 
 	useEffect(() => {
 
@@ -192,14 +218,35 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 	};
 
-	const scrollToBottom = useCallback(() => {
-		if (windowChat.current) {
-			windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight - 299;
-			windowChat.current.scrollTo({
-				top: windowChat.current.scrollHeight,
-				behavior: "smooth",
-			});
+	// useEffect(() => {
+	// 	console.log(bottomRef.current.clientHeight);
+	// 	setTimeout(() => {
+	// 		scrollToBottomSmooth()
 
+	// 	}, 0);
+	// }, [bottomRef.current.clientHeight])
+
+	const scrollToBottom = () => {
+		toMessagesRef.current?.scrollIntoView()
+	}
+
+	const scrollToBottomSmooth = () => {
+		toMessagesRef.current?.scrollIntoView({
+			behavior: 'smooth'
+		})
+	}
+
+	const handleScrollToBottom = useCallback(() => {
+		if (windowChat.current) {
+			const scrollBottom = windowChat.current.scrollHeight - windowChat.current.scrollTop - windowChat.current.clientHeight
+			if (scrollBottom > windowChat.current.clientHeight) {
+				windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight - 299;
+				setTimeout(() => {
+					scrollToBottomSmooth()
+				}, 0)
+			} else {
+				scrollToBottomSmooth()
+			}
 		}
 	}, [windowChat.current])
 
@@ -224,13 +271,13 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 					<span className={style.content__headerInfoName}>{Number(hash) === user.user.id ? "Избранное" : otherUserData.name}</span>
 					{
 						isWriting ? (
-							<span className={style.content__headerInfoOnline + " " + style.content__headerInfoOnline_writing}>
+							<span className={style.content__headerInfoOnline + " " + style.content__headerInfoOnline_writing + " " + style.content__headerInfoOnline_primary}>
 								Печатает
 							</span>
 						) : (
 							<span className={isOnline ? style.content__headerInfoOnline + " " + style.content__headerInfoOnline_primary : style.content__headerInfoOnline}>
 								{
-									isOnline ? 'Онлайн' : lastTimeOnline && lastTimeOnline
+									isOnline ? 'Онлайн' : lastTimeOnline
 								}
 							</span>
 						)
@@ -303,6 +350,18 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 				</TransitionGroup>
 
 				<CSSTransition
+					in={files}
+					timeout={300}
+					classNames="create-anim"
+					unmountOnExit
+					mountOnEnter
+				>
+					<div className={style.content__modal} onClick={() => setIsModal(false)}>
+						<MessengerModalFiles setIsModal={setIsModal} />
+					</div>
+				</CSSTransition>
+
+				<CSSTransition
 					in={contextMenu.visible}
 					timeout={300}
 					classNames="create-anim"
@@ -317,18 +376,18 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 						onCopy={handleCopy}
 					/>
 				</CSSTransition>
-
+				<div ref={toMessagesRef} />
 			</div >
 
 
 
 
-			<div className={style.content__bottom}>
+			<div className={style.content__bottom} ref={bottomRef}>
 				<div className={replyMessage.id ? style.content__bottomReplyWrapper + " " + style.content__bottomReplyWrapper_active : style.content__bottomReplyWrapper}>
 					<div className={style.content__bottomReply}>
 						<div className={style.content__bottomReplyIcon}>
 							<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-reply-fill">
-								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+								<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
 								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
 								<g id="SVGRepo_iconCarrier">
 									<path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"></path>
@@ -353,7 +412,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 					unmountOnExit
 					mountOnEnter
 				>
-					<div className={style.content__innerScrollButton} onClick={scrollToBottom}>
+					<div className={style.content__innerScrollButton} onClick={handleScrollToBottom}>
 						<CSSTransition
 							in={!!notReadMessages.length > 0}
 							timeout={300}
@@ -369,7 +428,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 						</svg>
 					</div>
 				</CSSTransition>
-				<MessengerInteraction chatData={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} setChatData={setChatData} setChats={setChats} replyMessage={replyMessage} setReplyMessage={setReplyMessage} />
+				<MessengerInteraction chatData={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} setChatData={setChatData} setChats={setChats} replyMessage={replyMessage} setReplyMessage={setReplyMessage} inputRef={inputRef} setFiles={setFiles} files={files} />
 			</div>
 		</>
 	return (

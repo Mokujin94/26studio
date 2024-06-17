@@ -58,9 +58,10 @@ function initSocket(httpServer) {
 			if (!user) return;
 			console.log(user)
 			io.to(user.socketId).emit("getWriting", { chatId, isWriting })
+			io.to(user.socketId).emit("getWritingOnlyChat", { chatId, isWriting })
 		})
 
-		socket.on("onDraft", ({text, recipientId, chatId}) => {
+		socket.on("onDraft", ({ text, recipientId, chatId }) => {
 			const user = userSockets.find(user => user.userId === recipientId);
 			if (!user) return;
 			io.to(user.socketId).emit("getDraft", { text, chatId })

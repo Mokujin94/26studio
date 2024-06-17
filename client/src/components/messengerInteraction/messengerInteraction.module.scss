@@ -1,11 +1,13 @@
 @import '../../resource/styles/variables';
 
 .interaction {
+	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	background-color: #222c36;
 	overflow: hidden;
+	z-index: 3;
     
 
     &__input {
@@ -83,4 +85,10 @@
 					display: block;
 			}
     }
+
+		&__clip {
+			> input[type="file"] {
+				display: none;
+			}
+		}
 }

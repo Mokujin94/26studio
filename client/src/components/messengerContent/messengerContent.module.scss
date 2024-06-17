@@ -46,6 +46,7 @@
 			overflow-y: auto;
 			overflow-x: hidden;
 			padding: 10px;
+
 			&Text {
 				position: absolute;
 				top: 50%;
@@ -123,12 +124,14 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+				// padding: 7px 10px 7px 0px;
 				padding-right: 10px;
 				&Wrapper {
 					display: grid;
 					opacity: 0;
 					grid-template-rows: 0fr;
-					transition: 0.3s;
+					align-items: start;
+					transition: grid-template-rows 0.15s, opacity 0.15s, padding 0s 0s;
 					&_active {
 						grid-template-rows: 1fr;
 						opacity: 1;
@@ -184,4 +187,18 @@
 			}
 			
     }
+
+		&__modal {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 6;
+			width: 100%;
+			height: 100%;
+			background-color: $studio-black-opacity-02;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 }

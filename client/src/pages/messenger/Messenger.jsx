@@ -37,16 +37,14 @@ const Messenger = observer(() => {
 			setChats(data.chats)
 			console.log(data.chats);
 		})
-		// return () => {
-		// 	user.socket.off("incReadMessege")
-		// 	user.socket.off("lastMessage")
-		// 	user.socket.off("getNotReadMessage")
-		// 	user.socket.off("getWriting")
-		// }
+		return () => {
+			// user.socket.off("incReadMessege")
+			// user.socket.off("lastMessage")
+			// user.socket.off("getNotReadMessage")
+		}
 	}, [])
 
 	useEffect(() => {
-		console.log(chats);
 		if (user.socket === null) return;
 		user.socket.on("getMessages", (message) => {
 			console.log(message);
@@ -119,6 +117,7 @@ const Messenger = observer(() => {
 		return () => {
 			user.socket.off("getMessages")
 			user.socket.off("getReadMessage")
+
 		}
 	}, [user.socket, chatData, chats])
 

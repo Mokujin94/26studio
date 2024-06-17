@@ -11,7 +11,6 @@ const LinkPreview = ({ isOther, isScrollBottom, windowChatRef, url }) => {
 		const fetchMetadata = async () => {
 			try {
 				getLinkPreview(url).then(data => {
-					console.log(data)
 					setMetadata(data);
 
 				}).then(() => {

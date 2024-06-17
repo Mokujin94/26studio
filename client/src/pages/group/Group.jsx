@@ -7,54 +7,54 @@ import { useParams } from 'react-router-dom';
 import { Context } from '../..';
 
 function Group() {
-    const { groups } = useContext(Context);
-    const [groupData, setGroupData] = useState({});
-    const [groupDataUsers, setGroupDataUsers] = useState([])
+	const { groups } = useContext(Context);
+	const [groupData, setGroupData] = useState({});
+	const [groupDataUsers, setGroupDataUsers] = useState([])
 
-    const { id } = useParams();
+	const { id } = useParams();
 
-    useEffect(() => {
-        fetchGroupById(id).then((data) => {
+	useEffect(() => {
+		fetchGroupById(id).then((data) => {
 
-            const dataUsers = data.users.filter(item => item.group_status)
+			const dataUsers = data.users.filter(item => item.group_status)
 
-            setGroupDataUsers(dataUsers)
-            setGroupData((item) => (item = data))
-        });
+			setGroupDataUsers(dataUsers)
+			setGroupData((item) => (item = data))
+		});
 
-    }, []);
+	}, []);
 
-    return (
-        <div className="group">
-            <div className="container">
-                <h2 className="group__title">{groupData.name}</h2>
-                <div className="group__content">
-                    <div className="group__content-curator">
-                        <h3 className="group__content-title group__content-title_color">Куратор</h3>
-                        <div className="group__content-wrapper">
-                            {
-                                groupDataUsers.filter(({ roleId }) => {
-                                    return roleId === 2;
-                                }).map(({ id }) => <FriendCard userId={id} key={id} />)
-                            }
-                        </div>
-                    </div>
-                    <div className="group__content-students">
-                        <h3 className="group__content-title">Студенты</h3>
-                        <div className="group__content-wrapper">
-                            {
-                                groupDataUsers.length
-                                    ? groupDataUsers.filter(({ roleId }) => {
-                                        return roleId === 1;
-                                    }).map(({ id }) => <FriendCard userId={id} key={id} />)
-                                    : "В этой группе нет участников"
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+	return (
+		<div className="group">
+			<div className="container">
+				<h2 className="group__title">{groupData.name}</h2>
+				<div className="group__content">
+					<div className="group__content-curator">
+						<h3 className="group__content-title group__content-title_color">Куратор</h3>
+						<div className="group__content-wrapper">
+							{
+								groupDataUsers.filter(({ roleId }) => {
+									return roleId === 2;
+								}).map(({ id }) => <FriendCard userId={id} key={id} />)
+							}
+						</div>
+					</div>
+					<div className="group__content-students">
+						<h3 className="group__content-title">Студенты</h3>
+						<div className="group__content-wrapper">
+							{
+								groupDataUsers.length
+									? groupDataUsers.filter(({ roleId }) => {
+										return roleId === 1;
+									}).map(({ id }) => <FriendCard userId={id} key={id} />)
+									: <span style={{ gridColumnStart: '1', gridColumnEnd: '5', color: "#7997b8", fontSize: "18px" }}>В этой группе нет участников</span>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default Group;
