@@ -349,8 +349,8 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 					}
 				</TransitionGroup>
 
-				<CSSTransition
-					in={files}
+				{/* <CSSTransition
+					in={true}
 					timeout={300}
 					classNames="create-anim"
 					unmountOnExit
@@ -359,7 +359,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 					<div className={style.content__modal} onClick={() => setIsModal(false)}>
 						<MessengerModalFiles setIsModal={setIsModal} />
 					</div>
-				</CSSTransition>
+				</CSSTransition> */}
 
 				<CSSTransition
 					in={contextMenu.visible}
