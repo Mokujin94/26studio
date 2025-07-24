@@ -1,8 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { createMessage } from '../../http/messageAPI'
 
-function Messenger() {
+const Messenger = () => {
+  const [file, setFile] = useState(null)
+
+  const selectFile = (e) => {
+    setFile(e.target.files[0])
+  }
+
+  const sendMessage = async () => {
+    const formData = new FormData()
+    if (file) {
+      formData.append('img', file)
+    }
+    await createMessage(formData)
+    setFile(null)
+  }
+
   return (
-    <div>Messenger</div>
+    <div>
+      <input type="file" accept="image/*" onChange={selectFile} />
+      <button onClick={sendMessage}>Send</button>
+    </div>
   )
 }
 
