@@ -25,7 +25,7 @@
 		padding-right: 10px;
 	}
 
-	&__img {
+        &__img {
 		display: block;
 		width: 100%;
 		border-radius: 5px;
@@ -35,7 +35,22 @@
 			width: 100%;
 			object-fit: cover;
 			display: block;
-		}
+        }
+
+        &__message {
+                width: 100%;
+                margin-top: 10px;
+                resize: none;
+                border-radius: 5px;
+                padding: 5px;
+                background: $studio-light-dark-element;
+                color: $studio-white-text;
+                border: none;
+        }
+
+        &__send {
+                margin-top: 10px;
+        }
 
 	}
 
