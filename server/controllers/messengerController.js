@@ -3,6 +3,8 @@ const ApiError = require("../error/ApiError");
 const { Chats, User, Messages, ChatMembers, ReadMessages, Draft } = require("../models/models");
 const { sequelize } = require("../db");
 const { getIo } = require("../socket");
+const uuid = require("uuid");
+const path = require("path");
 require("dotenv").config();
 
 
@@ -168,9 +170,18 @@ class MessengerController {
 
 
 
-	async createMessages(req, res, next) {
-		const { otherUserId, userId, text } = req.body;
-		const io = getIo();
+        async createMessages(req, res, next) {
+                const { otherUserId, userId, text } = req.body;
+                let uploadedFiles = [];
+                if (req.files && req.files.files) {
+                        const files = Array.isArray(req.files.files) ? req.files.files : [req.files.files];
+                        for (const file of files) {
+                                const fileName = uuid.v4() + path.extname(file.name);
+                                await file.mv(path.resolve(__dirname, "..", "static/messages", fileName));
+                                uploadedFiles.push(fileName);
+                        }
+                }
+                const io = getIo();
 		let chat
 		const user1ChatIds = await ChatMembers.findAll({
 			where: { userId: otherUserId },
@@ -213,11 +224,12 @@ class MessengerController {
 			})
 		}
 
-		const message = await Messages.create({
-			userId,
-			chatId: chat.id,
-			text
-		})
+                const message = await Messages.create({
+                        userId,
+                        chatId: chat.id,
+                        text,
+                        files: uploadedFiles.length ? uploadedFiles : null,
+                })
 		const messageWithUser = await Messages.findByPk(message.id, {
 			include: [
 				{
