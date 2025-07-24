@@ -148,9 +148,8 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 			})
 		})
 
-		setTotalCountMessages(chatData.countMessages)
-		setMessagesOffset(2)
-		scrollToBottom()
+                setTotalCountMessages(chatData.countMessages)
+                setMessagesOffset(2)
 
 		return () => {
 			user.socket.off("getWritingOnlyChat")
@@ -168,7 +167,9 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
 
-		if (!hash) return;
+
+                if (!hash) return;
+
                 fetchPersonalChat(Number(hash), user.user.id).then(data => {
                         if (!data.is_chat) {
                                 setOtherUserData(data.member)
@@ -184,10 +185,19 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                         setMessages(mappedMessages);
                         setTotalCountMessages(data.countMessages)
 
-			setMessagesOffset(2)
-			setIsLoadingMessages(false)
-		}).catch(e => console.log(e))
-	}, [hash])
+                        setNotReadMessages(data.notReadMessages || [])
+
+                        setMessagesOffset(2)
+                        setIsLoadingMessages(false)
+
+                        if (data.notReadMessages && data.notReadMessages.length) {
+                                setTimeout(() => scrollToFirstUnread(data.notReadMessages), 0);
+                        } else {
+                                setTimeout(() => scrollToBottom(), 0);
+                        }
+                }).catch(e => console.log(e))
+        }, [hash])
+
 
 
 	useEffect(() => {
@@ -242,19 +252,31 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 		})
 	}
 
-	const handleScrollToBottom = useCallback(() => {
-		if (windowChat.current) {
-			const scrollBottom = windowChat.current.scrollHeight - windowChat.current.scrollTop - windowChat.current.clientHeight
-			if (scrollBottom > windowChat.current.clientHeight) {
-				windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight - 299;
-				setTimeout(() => {
-					scrollToBottomSmooth()
-				}, 0)
-			} else {
-				scrollToBottomSmooth()
-			}
-		}
-	}, [windowChat.current])
+        const handleScrollToBottom = useCallback(() => {
+                if (windowChat.current) {
+                        const scrollBottom = windowChat.current.scrollHeight - windowChat.current.scrollTop - windowChat.current.clientHeight
+                        if (scrollBottom > windowChat.current.clientHeight) {
+                                windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight - 299;
+                                setTimeout(() => {
+                                        scrollToBottomSmooth()
+                                }, 0)
+                        } else {
+                                scrollToBottomSmooth()
+                        }
+                }
+        }, [windowChat.current])
+
+        const scrollToFirstUnread = useCallback((unread = notReadMessages) => {
+                if (!windowChat.current || !unread.length) return;
+                const sorted = [...unread].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                const firstUnread = sorted[0];
+                const element = document.getElementById(`message-${firstUnread.id}`);
+                if (element) {
+                        windowChat.current.scrollTop = element.offsetTop;
+                } else {
+                        scrollToBottom();
+                }
+        }, [notReadMessages, windowChat.current])
 
 	// Функция для проверки, различаются ли две даты по дню
 const isDifferentDay = (date1, date2) => {
@@ -335,7 +357,6 @@ const isDifferentDay = (date1, date2) => {
                                         return prevMessages.map(group => {
                                                 return group.map(oldMessage => {
                                                         if (oldMessage.id === message.id) {
-
                                                                 const serverFiles = (data.files || []).map(f => process.env.REACT_APP_API_URL + f);
                                                                 return { ...oldMessage, load: false, ...data, files: serverFiles };
 
