@@ -3,23 +3,13 @@ import style from './messengerModalFiles.module.scss'
 import FunctionButton from '../functionButton/FunctionButton';
 import Cross from '../cross/Cross';
 
-const MessengerModalFiles = ({ setIsModal }) => {
+const MessengerModalFiles = ({ setIsModal, files = [], setFiles }) => {
 
-	const photos = [
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-	]
+        const photos = files.map(file => ({ img: URL.createObjectURL(file) }))
 
-	const photoBlockRef = useRef(null);
+        const photoBlockRef = useRef(null);
 
-	useEffect(() => {
+        useEffect(() => {
 		const photoGrid = photoBlockRef.current;
 		const photoItems = photoGrid.querySelectorAll(`.${style.block__img}`);
 		photoItems.forEach(element => {
@@ -44,8 +34,14 @@ const MessengerModalFiles = ({ setIsModal }) => {
 
 				}
 			}
-		}
-	}, [photos]);
+                }
+        }, [photos]);
+
+        useEffect(() => {
+                return () => {
+                        photos.forEach(p => URL.revokeObjectURL(p.img));
+                };
+        }, [photos]);
 	return (
 		<div ref={photoBlockRef} className={style.block}>
 			<div className={style.block__header}>
@@ -53,8 +49,17 @@ const MessengerModalFiles = ({ setIsModal }) => {
 
 
 				<h3 className={style.block__headerCount}>Добавлено {photos.length} фото</h3>
-				<label htmlFor='addFile' className={style.block__headerBtn}>
-					<input type="file" id='addFile' name='addFile' />
+                                <label htmlFor='addFile' className={style.block__headerBtn}>
+                                        <input
+                                                multiple
+                                                type="file"
+                                                id='addFile'
+                                                name='addFile'
+                                                onChange={(e) => {
+                                                        const selected = Array.from(e.target.files);
+                                                        setFiles([...files, ...selected]);
+                                                }}
+                                        />
 					<div className={style.block__headerBtnWrapper}>
 						<div className={style.block__headerBtnInner}>
 							<div className={style.block__headerBtnInnerIcon}>
