@@ -77,15 +77,15 @@ const MessageContent = ({ contextMenu, onContextMenu, isScrollBottom, windowChat
 			ref={messageRef}
 			className={contextMenu.message.id === content.id ? style.messageContent__highlight_active + " " + style.messageContent__highlight : style.messageContent__highlight}
 		>
-                        <div className={isOther ? style.messageContent + " " + style.messageContent_other : style.messageContent}>
-                                {content.files && content.files.length > 0 && (
-                                        <div className={style.messageContent__images}>
-                                                {content.files.map((src, idx) => (
-                                                        <img key={idx} src={src} alt="" />
-                                                ))}
-                                        </div>
-                                )}
-                                {/* <p className={style.messageContent__text}>
+			<div className={isOther ? style.messageContent + " " + style.messageContent_other : style.messageContent}>
+				{content.files && content.files.length > 0 && (
+					<div className={content.files.length > 1 ? style.messageContent__images : style.messageContent__image}>
+						{content.files.map((src, idx) => (
+							<img key={idx} src={src} alt="" />
+						))}
+					</div>
+				)}
+				{/* <p className={style.messageContent__text}>
                                 </p> */}
 				<Linkify>{content.text}</Linkify>
 				{renderLinkPreview(content.text)}

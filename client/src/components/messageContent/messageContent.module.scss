@@ -26,6 +26,32 @@
 			color: $studio-dark-bright-text;
 		}
 	}
+	        &__image {
+                display: grid;
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+                gap: 5px;
+                margin-bottom: 5px;
+								
+                img {
+                        width: 100%;
+                        border-radius: 5px;
+                        display: block;
+                        object-fit: cover;
+                }
+        }
+	        &__images {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 5px;
+                margin-bottom: 5px;
+								
+                img {
+                        width: 100%;
+                        border-radius: 5px;
+                        display: block;
+                        object-fit: cover;
+                }
+        }
 
 
 	&__highlight {
@@ -259,20 +285,8 @@
                 }
         }
 
-        &__images {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 5px;
-                margin-bottom: 5px;
 
-                img {
-                        width: 100%;
-                        border-radius: 5px;
-                        display: block;
-                        object-fit: cover;
-                }
-        }
-}
+			}
 		}
 	}
 }
