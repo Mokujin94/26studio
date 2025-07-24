@@ -10,7 +10,9 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
         const photos = files.map(file => ({ img: URL.createObjectURL(file) }))
 
         const photoBlockRef = useRef(null);
+
         const inputRef = useRef(null);
+
 
         useEffect(() => {
 		const photoGrid = photoBlockRef.current;
@@ -49,11 +51,13 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
                 <div
                         ref={photoBlockRef}
                         className={style.block}
+
                         onClick={(e) => {
                                 if (!photos.length && e.target === e.currentTarget) {
                                         inputRef.current.click();
                                 }
                         }}
+
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => {
                                 e.preventDefault();
@@ -63,6 +67,7 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
                                 }
                         }}
                 >
+
                         <input
                                 multiple
                                 type="file"
@@ -75,6 +80,7 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
                                         }
                                 }}
                         />
+
 			<div className={style.block__header}>
 				<Cross onClick={() => setIsModal(false)} />
 

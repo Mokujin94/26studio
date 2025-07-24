@@ -167,7 +167,9 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
 
+
                 if (!hash) return;
+
                 fetchPersonalChat(Number(hash), user.user.id).then(data => {
                         if (!data.is_chat) {
                                 setOtherUserData(data.member)
@@ -182,6 +184,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                         );
                         setMessages(mappedMessages);
                         setTotalCountMessages(data.countMessages)
+
                         setNotReadMessages(data.notReadMessages || [])
 
                         setMessagesOffset(2)
@@ -194,6 +197,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                         }
                 }).catch(e => console.log(e))
         }, [hash])
+
 
 
 	useEffect(() => {
@@ -327,7 +331,9 @@ const isDifferentDay = (date1, date2) => {
                         }, 0);
                 }
 
+
                 sendMessage(Number(hash), user.user.id, text, files)
+
                         .then(async data => {
                                 if (!chatData.id && data.userId == user.user.id) {
                                         await fetchPersonalChat(hash, user.user.id).then(data => {
@@ -353,6 +359,7 @@ const isDifferentDay = (date1, date2) => {
                                                         if (oldMessage.id === message.id) {
                                                                 const serverFiles = (data.files || []).map(f => process.env.REACT_APP_API_URL + f);
                                                                 return { ...oldMessage, load: false, ...data, files: serverFiles };
+
                                                         }
                                                         return oldMessage;
                                                 });
@@ -458,6 +465,7 @@ const isDifferentDay = (date1, date2) => {
                                         unmountOnExit
                                         mountOnEnter
                                 >
+
                                         <div
                                                 className={style.content__modal}
                                                 onClick={(e) => {
@@ -466,6 +474,7 @@ const isDifferentDay = (date1, date2) => {
                                                         }
                                                 }}
                                         >
+
                                                 <MessengerModalFiles
                                                         setIsModal={setIsModal}
                                                         files={files}
