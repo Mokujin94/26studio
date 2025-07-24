@@ -100,7 +100,9 @@ const Messages = sequelize.define("messages", {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         text: { type: DataTypes.TEXT, allowNull: false },
         files: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
+
         replyMessageId: { type: DataTypes.INTEGER, allowNull: true },
+
         isRead: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 })
 

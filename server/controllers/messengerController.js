@@ -178,7 +178,9 @@ class MessengerController {
 
 
         async createMessages(req, res, next) {
+
                 const { otherUserId, userId, text, replyMessageId } = req.body;
+
                 let uploadedFiles = [];
                 if (req.files && req.files.files) {
                         const files = Array.isArray(req.files.files) ? req.files.files : [req.files.files];
@@ -235,6 +237,7 @@ class MessengerController {
                         userId,
                         chatId: chat.id,
                         text,
+
                         replyMessageId: replyMessageId || null,
                         files: uploadedFiles.length ? uploadedFiles : null,
                 })
@@ -251,6 +254,7 @@ class MessengerController {
                                 }
                         ],
                 });
+
 
 		return res.json(messageWithUser)
 	}

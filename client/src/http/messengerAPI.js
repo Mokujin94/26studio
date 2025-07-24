@@ -23,12 +23,16 @@ export const fetchPersonalChat = async (otherUserId, userId) => {
 	return data;
 };
 
+
 export const sendMessage = async (otherUserId, userId, text, files = [], replyMessageId = null) => {
+
         const formData = new FormData();
         formData.append('otherUserId', otherUserId);
         formData.append('userId', userId);
         formData.append('text', text);
+
         formData.append('replyMessageId', replyMessageId);
+
         if (files.length) {
                 files.forEach(file => {
                         formData.append('files', file);

@@ -18,6 +18,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	const { user } = useContext(Context)
 	const [isWriting, setIsWriting] = useState(false)
 	const [isModal, setIsModal] = useState(false)
+
        const [files, setFiles] = useState([])
        const [notReadMessages, setNotReadMessages] = useState([])
        const dedupeMessages = useCallback((arr) => {
@@ -29,6 +30,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                })
        }, [])
         const [hasScrolledUnread, setHasScrolledUnread] = useState(false)
+
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
        const [replyMessage, setReplyMessage] = useState({ id: null, userName: '', text: '' })
@@ -41,6 +43,12 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                const sorted = [...notReadMessages].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
                return sorted[0].id
        }, [notReadMessages])
+
+	const firstUnreadId = React.useMemo(() => {
+		if (!notReadMessages.length) return null
+		const sorted = [...notReadMessages].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+		return sorted[0].id
+	}, [notReadMessages])
 
 	const [contextMenu, setContextMenu] = useState({
 		visible: false,
@@ -150,6 +158,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 			setIsWriting(isWriting);
 		})
 
+
                user.socket.on("incReadMessege", (message) => {
                        if (message.chatId !== chatData.id) return;
                        setNotReadMessages(prevMessages => {
@@ -157,14 +166,17 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                                return dedupeMessages([...prevMessages, message])
                        })
                })
+
 		user.socket.on("getNotReadMessage", (message) => {
 			setNotReadMessages(prevMessages => {
 				return prevMessages.filter(messageRead => messageRead.id !== message.id)
 			})
 		})
 
+
                 setTotalCountMessages(chatData.countMessages)
                 setMessagesOffset(2)
+
 
 		return () => {
 			user.socket.off("getWritingOnlyChat")
@@ -179,6 +191,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 				}
 			})
 		})
+
 
 
 
@@ -208,6 +221,8 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                         }
                 }).catch(e => console.log(e))
         }, [hash])
+
+
 
 
 	useEffect(() => {
@@ -305,7 +320,39 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                 }
         }, [messages, notReadMessages, chatData.id, totalCountMessages, isLoadingMessages, hasScrolledUnread])
 
+	const scrollToFirstUnread = useCallback((unread = notReadMessages) => {
+		if (!windowChat.current || !unread.length) return;
+		const sorted = [...unread].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+		const firstUnread = sorted[0];
+		const element = document.getElementById(`message-${firstUnread.id}`);
+		if (element) {
+			windowChat.current.scrollTop = element.offsetTop;
+		} else {
+			scrollToBottom();
+		}
+	}, [notReadMessages, windowChat.current])
+
+
+	useEffect(() => {
+		if (!chatData.id || !notReadMessages.length || hasScrolledUnread) return;
+
+		const sorted = [...notReadMessages].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+		const firstUnread = sorted[0];
+
+		const isLoaded = messages.some(group => group.some(msg => msg.id === firstUnread.id));
+		const totalLoaded = messages.reduce((acc, arr) => acc + arr.length, 0);
+
+		if (isLoaded) {
+			scrollToFirstUnread(notReadMessages);
+			setHasScrolledUnread(true);
+		} else if (totalLoaded < totalCountMessages && !isLoadingMessages) {
+			setIsFetchingMessages(true);
+		}
+	}, [messages, notReadMessages, chatData.id, totalCountMessages, isLoadingMessages, hasScrolledUnread])
+
+	console.log(notReadMessages);
 	// Функция для проверки, различаются ли две даты по дню
+
 const isDifferentDay = (date1, date2) => {
         return (
                 date1.getFullYear() !== date2.getFullYear() ||
@@ -394,6 +441,7 @@ const isDifferentDay = (date1, date2) => {
                                 });
                         });
         };
+
 	const contentOutsideChat =
 		<div className={style.content__inner}>
 			<span className={style.content__innerText}>Выберите, кому хотели бы написать</span>
@@ -426,6 +474,7 @@ const isDifferentDay = (date1, date2) => {
 
 			<div className={style.content__inner} onClick={handleCloseContextMenu} ref={windowChat}>
 				{/* {renderMessagesWithDate()} */}
+
                                {isLoadingMessages &&
                                         <div style={{ margin: "0 auto" }}>
                                                 <Spinner />
@@ -501,6 +550,7 @@ const isDifferentDay = (date1, date2) => {
                                         </div>
                                 </CSSTransition>
 
+
 				<CSSTransition
 					in={contextMenu.visible}
 					timeout={300}
@@ -568,6 +618,7 @@ const isDifferentDay = (date1, date2) => {
 						</svg>
 					</div>
 				</CSSTransition>
+
                                 <MessengerInteraction
                                         chatData={chatData}
                                         setMessages={setMessages}
@@ -582,6 +633,7 @@ const isDifferentDay = (date1, date2) => {
                                         files={files}
                                         setIsModal={setIsModal}
                                 />
+
 			</div>
 		</>
 	return (
