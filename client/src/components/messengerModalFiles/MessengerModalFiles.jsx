@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import style from './messengerModalFiles.module.scss'
 import FunctionButton from '../functionButton/FunctionButton';
 import Cross from '../cross/Cross';
 
-const MessengerModalFiles = ({ setIsModal, files = [], setFiles }) => {
+const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
+
+        const [text, setText] = useState('');
 
         const photos = files.map(file => ({ img: URL.createObjectURL(file) }))
 
@@ -42,8 +44,19 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles }) => {
                         photos.forEach(p => URL.revokeObjectURL(p.img));
                 };
         }, [photos]);
-	return (
-		<div ref={photoBlockRef} className={style.block}>
+        return (
+                <div
+                        ref={photoBlockRef}
+                        className={style.block}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                                e.preventDefault();
+                                const dropped = Array.from(e.dataTransfer.files);
+                                if (dropped.length) {
+                                        setFiles([...files, ...dropped]);
+                                }
+                        }}
+                >
 			<div className={style.block__header}>
 				<Cross onClick={() => setIsModal(false)} />
 
@@ -70,15 +83,29 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles }) => {
 					</div>
 				</label>
 			</div>
-			<div className={style.block__wrapper}>
-				{photos.map((item, i) => {
-					return (
-						<div key={i} className={style.block__img}>
-							<img src={item.img} alt="" />
-						</div>
-					)
-				})}
-			</div>
+                        <div className={style.block__wrapper}>
+                                {photos.map((item, i) => (
+                                        <div key={i} className={style.block__img}>
+                                                <img src={item.img} alt="" />
+                                        </div>
+                                ))}
+                        </div>
+                        <textarea
+                                className={style.block__message}
+                                placeholder="Напишите сообщение..."
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                        />
+                        <div className={style.block__send}>
+                                <FunctionButton
+                                        onClick={() => {
+                                                onSend(text);
+                                                setText('');
+                                        }}
+                                >
+                                        Отправить
+                                </FunctionButton>
+                        </div>
 		</div>
 	);
 };
