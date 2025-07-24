@@ -1,10 +1,7 @@
 const Router = require('express')
 const router = new Router()
-const newsController = require('../controllers/newsController')
+const messageController = require('../controllers/messageController')
 
-
-router.post('/registration', )
-router.post('/login', )
-router.get('/auth', )
+router.post('/', messageController.create)
 
 module.exports = router
