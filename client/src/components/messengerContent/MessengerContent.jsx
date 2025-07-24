@@ -19,8 +19,10 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	const [isWriting, setIsWriting] = useState(false)
 	const [isModal, setIsModal] = useState(false)
         const [files, setFiles] = useState([])
+
         const [notReadMessages, setNotReadMessages] = useState([])
         const [hasScrolledUnread, setHasScrolledUnread] = useState(false)
+
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
 	const [replyMessage, setReplyMessage] = useState({ id: null, userName: '', text: '' })
@@ -168,6 +170,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
 
+
                 if (!hash) return;
                 fetchPersonalChat(Number(hash), user.user.id).then(data => {
                         if (!data.is_chat) {
@@ -190,10 +193,12 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                         setHasScrolledUnread(false);
 
                         if (!data.notReadMessages || !data.notReadMessages.length) {
+
                                 setTimeout(() => scrollToBottom(), 0);
                         }
                 }).catch(e => console.log(e))
         }, [hash])
+
 
 
 	useEffect(() => {
@@ -274,6 +279,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                 }
         }, [notReadMessages, windowChat.current])
 
+
         useEffect(() => {
                 if (!chatData.id || !notReadMessages.length || hasScrolledUnread) return;
 
@@ -290,6 +296,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                         setIsFetchingMessages(true);
                 }
         }, [messages, notReadMessages, chatData.id, totalCountMessages, isLoadingMessages, hasScrolledUnread])
+
 
 	// Функция для проверки, различаются ли две даты по дню
 const isDifferentDay = (date1, date2) => {
@@ -344,7 +351,9 @@ const isDifferentDay = (date1, date2) => {
                         }, 0);
                 }
 
+
                 sendMessage(Number(hash), user.user.id, text, files)
+
                         .then(async data => {
                                 if (!chatData.id && data.userId == user.user.id) {
                                         await fetchPersonalChat(hash, user.user.id).then(data => {
@@ -370,6 +379,7 @@ const isDifferentDay = (date1, date2) => {
                                                         if (oldMessage.id === message.id) {
                                                                 const serverFiles = (data.files || []).map(f => process.env.REACT_APP_API_URL + f);
                                                                 return { ...oldMessage, load: false, ...data, files: serverFiles };
+
                                                         }
                                                         return oldMessage;
                                                 });
@@ -475,6 +485,7 @@ const isDifferentDay = (date1, date2) => {
                                         unmountOnExit
                                         mountOnEnter
                                 >
+
                                         <div
                                                 className={style.content__modal}
                                                 onClick={(e) => {
@@ -483,6 +494,7 @@ const isDifferentDay = (date1, date2) => {
                                                         }
                                                 }}
                                         >
+
                                                 <MessengerModalFiles
                                                         setIsModal={setIsModal}
                                                         files={files}

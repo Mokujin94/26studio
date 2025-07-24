@@ -69,6 +69,7 @@ const MessageContent = ({ contextMenu, onContextMenu, isScrollBottom, windowChat
 
 	return (
 		// <div ref={subMenuRef} style={{ position: 'relative' }}>
+
                 <div
                         onContextMenu={(e) => {
                                 e.preventDefault();
@@ -87,6 +88,7 @@ const MessageContent = ({ contextMenu, onContextMenu, isScrollBottom, windowChat
                                         </div>
                                 )}
                                 {/* <p className={style.messageContent__text}>
+
                                 </p> */}
 				<Linkify>{content.text}</Linkify>
 				{renderLinkPreview(content.text)}
