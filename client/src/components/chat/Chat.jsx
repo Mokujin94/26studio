@@ -13,6 +13,14 @@ const Chat = observer(({ chat, hash }) => {
 	const [userData, setUserData] = useState({})
 	const [lastMessage, setLastMessage] = useState({})
 	const [notReadMessages, setNotReadMessages] = useState([])
+	const dedupeMessages = (arr) => {
+		const seen = new Set()
+		return arr.filter(m => {
+			if (seen.has(m.id)) return false
+			seen.add(m.id)
+			return true
+		})
+	}
 	const [isWriting, setIsWriting] = useState(false)
 	const [draft, setDraft] = useState('')
 	const location = useLocation();
@@ -35,7 +43,7 @@ const Chat = observer(({ chat, hash }) => {
 			setDraft(chat.drafts[0].text)
 		}
 
-		setNotReadMessages(chat.notReadMessages);
+		setNotReadMessages(dedupeMessages(chat.notReadMessages));
 	}, [])
 
 	useEffect(() => {
@@ -51,7 +59,7 @@ const Chat = observer(({ chat, hash }) => {
 
 			setNotReadMessages(prevMessages => {
 				if (message.userId === user.user.id) return prevMessages;
-				return [...prevMessages, message]
+				return dedupeMessages([...prevMessages, message])
 			})
 		})
 
