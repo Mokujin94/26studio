@@ -19,7 +19,10 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	const [isWriting, setIsWriting] = useState(false)
 	const [isModal, setIsModal] = useState(false)
         const [files, setFiles] = useState([])
-	const [notReadMessages, setNotReadMessages] = useState([])
+
+        const [notReadMessages, setNotReadMessages] = useState([])
+        const [hasScrolledUnread, setHasScrolledUnread] = useState(false)
+
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
 	const [replyMessage, setReplyMessage] = useState({ id: null, userName: '', text: '' })
@@ -169,7 +172,6 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
                 if (!hash) return;
-
                 fetchPersonalChat(Number(hash), user.user.id).then(data => {
                         if (!data.is_chat) {
                                 setOtherUserData(data.member)
@@ -183,16 +185,15 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                                 }))
                         );
                         setMessages(mappedMessages);
-                        setTotalCountMessages(data.countMessages)
+                        setTotalCountMessages(data.countMessages);
+                        setNotReadMessages(data.notReadMessages || []);
 
-                        setNotReadMessages(data.notReadMessages || [])
+                        setMessagesOffset(2);
+                        setIsLoadingMessages(false);
+                        setHasScrolledUnread(false);
 
-                        setMessagesOffset(2)
-                        setIsLoadingMessages(false)
+                        if (!data.notReadMessages || !data.notReadMessages.length) {
 
-                        if (data.notReadMessages && data.notReadMessages.length) {
-                                setTimeout(() => scrollToFirstUnread(data.notReadMessages), 0);
-                        } else {
                                 setTimeout(() => scrollToBottom(), 0);
                         }
                 }).catch(e => console.log(e))
@@ -277,6 +278,25 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                         scrollToBottom();
                 }
         }, [notReadMessages, windowChat.current])
+
+
+        useEffect(() => {
+                if (!chatData.id || !notReadMessages.length || hasScrolledUnread) return;
+
+                const sorted = [...notReadMessages].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                const firstUnread = sorted[0];
+
+                const isLoaded = messages.some(group => group.some(msg => msg.id === firstUnread.id));
+                const totalLoaded = messages.reduce((acc, arr) => acc + arr.length, 0);
+
+                if (isLoaded) {
+                        scrollToFirstUnread(notReadMessages);
+                        setHasScrolledUnread(true);
+                } else if (totalLoaded < totalCountMessages && !isLoadingMessages) {
+                        setIsFetchingMessages(true);
+                }
+        }, [messages, notReadMessages, chatData.id, totalCountMessages, isLoadingMessages, hasScrolledUnread])
+
 
 	// Функция для проверки, различаются ли две даты по дню
 const isDifferentDay = (date1, date2) => {
