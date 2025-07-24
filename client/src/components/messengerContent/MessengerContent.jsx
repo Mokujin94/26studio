@@ -309,7 +309,9 @@ const isDifferentDay = (date1, date2) => {
                         }, 0);
                 }
 
+
                 sendMessage(Number(hash), user.user.id, text, files)
+
                         .then(async data => {
                                 if (!chatData.id && data.userId == user.user.id) {
                                         await fetchPersonalChat(hash, user.user.id).then(data => {
@@ -333,8 +335,10 @@ const isDifferentDay = (date1, date2) => {
                                         return prevMessages.map(group => {
                                                 return group.map(oldMessage => {
                                                         if (oldMessage.id === message.id) {
+
                                                                 const serverFiles = (data.files || []).map(f => process.env.REACT_APP_API_URL + f);
                                                                 return { ...oldMessage, load: false, ...data, files: serverFiles };
+
                                                         }
                                                         return oldMessage;
                                                 });
@@ -440,6 +444,7 @@ const isDifferentDay = (date1, date2) => {
                                         unmountOnExit
                                         mountOnEnter
                                 >
+
                                         <div
                                                 className={style.content__modal}
                                                 onClick={(e) => {
@@ -448,6 +453,7 @@ const isDifferentDay = (date1, date2) => {
                                                         }
                                                 }}
                                         >
+
                                                 <MessengerModalFiles
                                                         setIsModal={setIsModal}
                                                         files={files}
