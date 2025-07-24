@@ -47,9 +47,12 @@ const Messenger = observer(() => {
 
 	useEffect(() => {
 		if (user.socket === null) return;
-		user.socket.on("getMessages", (message) => {
-			console.log(message);
-			const promise = new Promise(async (resolve, reject) => {
+                user.socket.on("getMessages", (message) => {
+                        console.log(message);
+                        if (message.files) {
+                                message.files = message.files.map(f => process.env.REACT_APP_API_URL + f);
+                        }
+                        const promise = new Promise(async (resolve, reject) => {
 				const isChat = chats.filter(item => message.chatId === item.id)
 				setLastMessage(message);
 				if ((!chatData.id && message.userId == hash) || !isChat.length) {
@@ -180,13 +183,19 @@ const Messenger = observer(() => {
 			setIsLoadingMessages(true)
 			const currentScrollHeight = windowChatRef.current.scrollHeight;
 			const currentScrollTop = windowChatRef.current.scrollTop;
-			fetchMessages(chatData.id, messagesOffset).then((data) => {
-				console.log(data)
-				setMessages(prevMessages => {
-					return [...data.rows, ...prevMessages]
-				})
-				windowChatRef.current.scrollTop = windowChatRef.current.scrollHeight - currentScrollHeight + currentScrollTop;
-				setMessagesOffset(prevOffset => prevOffset + 1)
+                        fetchMessages(chatData.id, messagesOffset).then((data) => {
+                                console.log(data)
+                                const mapped = data.rows.map(group =>
+                                        group.map(msg => ({
+                                                ...msg,
+                                                files: msg.files ? msg.files.map(f => process.env.REACT_APP_API_URL + f) : msg.files,
+                                        }))
+                                );
+                                setMessages(prevMessages => {
+                                        return [...mapped, ...prevMessages]
+                                })
+                                windowChatRef.current.scrollTop = windowChatRef.current.scrollHeight - currentScrollHeight + currentScrollTop;
+                                setMessagesOffset(prevOffset => prevOffset + 1)
 
 			}).finally(() => {
 				setIsFetchingMessages(false)

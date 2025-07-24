@@ -3,6 +3,8 @@ const ApiError = require("../error/ApiError");
 const { Chats, User, Messages, ChatMembers, ReadMessages, Draft } = require("../models/models");
 const { sequelize } = require("../db");
 const { getIo } = require("../socket");
+const uuid = require("uuid");
+const path = require("path");
 require("dotenv").config();
 
 
@@ -36,15 +38,18 @@ class MessengerController {
 					attributes: [],
 					required: true
 				},
-				{
-					model: Messages,
-					as: "messages",
-					include: User,
-					order: [
-						["createdAt", "DESC"]
-					],
-					limit: 50,
-				},
+                                {
+                                        model: Messages,
+                                        as: "messages",
+                                        include: [
+                                                User,
+                                                { model: Messages, as: 'replyMessage', include: User }
+                                        ],
+                                        order: [
+                                                ["createdAt", "DESC"]
+                                        ],
+                                        limit: 50,
+                                },
 				{
 					model: Messages,
 					as: "notReadMessages",
@@ -139,14 +144,18 @@ class MessengerController {
 							as: "members", // Или используйте подходящий алиас
 							through: { attributes: [] }, // Можно не включать атрибуты связующей таблицы
 						},
-						{
-							model: Messages,
-							as: "messages",
-							order: [
-								["createdAt", "DESC"]
-							],
-							limit: 1 // Получаем последние сообщения, если нужно
-						},
+                                                {
+                                                        model: Messages,
+                                                        as: "messages",
+                                                        include: [
+                                                                User,
+                                                                { model: Messages, as: 'replyMessage', include: User }
+                                                        ],
+                                                        order: [
+                                                                ["createdAt", "DESC"]
+                                                        ],
+                                                        limit: 1 // Получаем последние сообщения, если нужно
+                                                },
 						{
 							model: Messages,
 							as: "notReadMessages",
@@ -168,9 +177,18 @@ class MessengerController {
 
 
 
-	async createMessages(req, res, next) {
-		const { otherUserId, userId, text } = req.body;
-		const io = getIo();
+        async createMessages(req, res, next) {
+                const { otherUserId, userId, text, replyMessageId } = req.body;
+                let uploadedFiles = [];
+                if (req.files && req.files.files) {
+                        const files = Array.isArray(req.files.files) ? req.files.files : [req.files.files];
+                        for (const file of files) {
+                                const fileName = uuid.v4() + path.extname(file.name);
+                                await file.mv(path.resolve(__dirname, "..", "static/messages", fileName));
+                                uploadedFiles.push(fileName);
+                        }
+                }
+                const io = getIo();
 		let chat
 		const user1ChatIds = await ChatMembers.findAll({
 			where: { userId: otherUserId },
@@ -213,19 +231,26 @@ class MessengerController {
 			})
 		}
 
-		const message = await Messages.create({
-			userId,
-			chatId: chat.id,
-			text
-		})
-		const messageWithUser = await Messages.findByPk(message.id, {
-			include: [
-				{
-					model: User,
-					attributes: ['id', 'name', 'avatar'], // Укажите необходимые атрибуты
-				},
-			],
-		});
+                const message = await Messages.create({
+                        userId,
+                        chatId: chat.id,
+                        text,
+                        replyMessageId: replyMessageId || null,
+                        files: uploadedFiles.length ? uploadedFiles : null,
+                })
+                const messageWithUser = await Messages.findByPk(message.id, {
+                        include: [
+                                {
+                                        model: User,
+                                        attributes: ['id', 'name', 'avatar'],
+                                },
+                                {
+                                        model: Messages,
+                                        as: 'replyMessage',
+                                        include: [{ model: User, attributes: ['id', 'name', 'avatar'] }]
+                                }
+                        ],
+                });
 
 		return res.json(messageWithUser)
 	}
@@ -268,14 +293,17 @@ class MessengerController {
 		const { chatId, groupMessages } = req.query;
 		const limit = 50;
 		let offset = groupMessages * limit - limit;
-		const messages = await Messages.findAndCountAll({
-			where: { chatId },
-			include: User,
-			order: [
-				["createdAt", "DESC"]
-			],
-			limit,
-			offset
+                const messages = await Messages.findAndCountAll({
+                        where: { chatId },
+                        include: [
+                                User,
+                                { model: Messages, as: 'replyMessage', include: User }
+                        ],
+                        order: [
+                                ["createdAt", "DESC"]
+                        ],
+                        limit,
+                        offset
 		})
 
 

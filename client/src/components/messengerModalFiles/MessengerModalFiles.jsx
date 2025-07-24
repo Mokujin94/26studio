@@ -1,25 +1,18 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import style from './messengerModalFiles.module.scss'
 import FunctionButton from '../functionButton/FunctionButton';
 import Cross from '../cross/Cross';
 
-const MessengerModalFiles = ({ setIsModal }) => {
+const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
 
-	const photos = [
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-		{ img: "https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg" },
-	]
+        const [text, setText] = useState('');
 
-	const photoBlockRef = useRef(null);
+        const photos = files.map(file => ({ img: URL.createObjectURL(file) }))
 
-	useEffect(() => {
+        const photoBlockRef = useRef(null);
+        const inputRef = useRef(null);
+
+        useEffect(() => {
 		const photoGrid = photoBlockRef.current;
 		const photoItems = photoGrid.querySelectorAll(`.${style.block__img}`);
 		photoItems.forEach(element => {
@@ -44,17 +37,60 @@ const MessengerModalFiles = ({ setIsModal }) => {
 
 				}
 			}
-		}
-	}, [photos]);
-	return (
-		<div ref={photoBlockRef} className={style.block}>
+                }
+        }, [photos]);
+
+        useEffect(() => {
+                return () => {
+                        photos.forEach(p => URL.revokeObjectURL(p.img));
+                };
+        }, [photos]);
+        return (
+                <div
+                        ref={photoBlockRef}
+                        className={style.block}
+                        onClick={(e) => {
+                                if (!photos.length && e.target === e.currentTarget) {
+                                        inputRef.current.click();
+                                }
+                        }}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                                e.preventDefault();
+                                const dropped = Array.from(e.dataTransfer.files);
+                                if (dropped.length) {
+                                        setFiles([...files, ...dropped]);
+                                }
+                        }}
+                >
+                        <input
+                                multiple
+                                type="file"
+                                ref={inputRef}
+                                style={{ display: 'none' }}
+                                onChange={(e) => {
+                                        const selected = Array.from(e.target.files);
+                                        if (selected.length) {
+                                                setFiles([...files, ...selected]);
+                                        }
+                                }}
+                        />
 			<div className={style.block__header}>
 				<Cross onClick={() => setIsModal(false)} />
 
 
 				<h3 className={style.block__headerCount}>Добавлено {photos.length} фото</h3>
-				<label htmlFor='addFile' className={style.block__headerBtn}>
-					<input type="file" id='addFile' name='addFile' />
+                                <label htmlFor='addFile' className={style.block__headerBtn}>
+                                        <input
+                                                multiple
+                                                type="file"
+                                                id='addFile'
+                                                name='addFile'
+                                                onChange={(e) => {
+                                                        const selected = Array.from(e.target.files);
+                                                        setFiles([...files, ...selected]);
+                                                }}
+                                        />
 					<div className={style.block__headerBtnWrapper}>
 						<div className={style.block__headerBtnInner}>
 							<div className={style.block__headerBtnInnerIcon}>
@@ -65,15 +101,29 @@ const MessengerModalFiles = ({ setIsModal }) => {
 					</div>
 				</label>
 			</div>
-			<div className={style.block__wrapper}>
-				{photos.map((item, i) => {
-					return (
-						<div key={i} className={style.block__img}>
-							<img src={item.img} alt="" />
-						</div>
-					)
-				})}
-			</div>
+                        <div className={style.block__wrapper}>
+                                {photos.map((item, i) => (
+                                        <div key={i} className={style.block__img}>
+                                                <img src={item.img} alt="" />
+                                        </div>
+                                ))}
+                        </div>
+                        <textarea
+                                className={style.block__message}
+                                placeholder="Напишите сообщение..."
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                        />
+                        <div className={style.block__send}>
+                                <FunctionButton
+                                        onClick={() => {
+                                                onSend(text);
+                                                setText('');
+                                        }}
+                                >
+                                        Отправить
+                                </FunctionButton>
+                        </div>
 		</div>
 	);
 };
