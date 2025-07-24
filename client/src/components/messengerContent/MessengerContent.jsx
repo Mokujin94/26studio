@@ -18,7 +18,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	const { user } = useContext(Context)
 	const [isWriting, setIsWriting] = useState(false)
 	const [isModal, setIsModal] = useState(false)
-	const [files, setFiles] = useState(null)
+        const [files, setFiles] = useState([])
 	const [notReadMessages, setNotReadMessages] = useState([])
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
@@ -349,17 +349,17 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 					}
 				</TransitionGroup>
 
-				{/* <CSSTransition
-					in={true}
-					timeout={300}
-					classNames="create-anim"
-					unmountOnExit
-					mountOnEnter
-				>
-					<div className={style.content__modal} onClick={() => setIsModal(false)}>
-						<MessengerModalFiles setIsModal={setIsModal} />
-					</div>
-				</CSSTransition> */}
+                                <CSSTransition
+                                        in={isModal}
+                                        timeout={300}
+                                        classNames="create-anim"
+                                        unmountOnExit
+                                        mountOnEnter
+                                >
+                                        <div className={style.content__modal} onClick={() => setIsModal(false)}>
+                                                <MessengerModalFiles setIsModal={setIsModal} files={files} setFiles={setFiles} />
+                                        </div>
+                                </CSSTransition>
 
 				<CSSTransition
 					in={contextMenu.visible}
@@ -428,7 +428,20 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 						</svg>
 					</div>
 				</CSSTransition>
-				<MessengerInteraction chatData={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} setChatData={setChatData} setChats={setChats} replyMessage={replyMessage} setReplyMessage={setReplyMessage} inputRef={inputRef} setFiles={setFiles} files={files} />
+                                <MessengerInteraction
+                                        chatData={chatData}
+                                        setMessages={setMessages}
+                                        isScrollBottom={isScrollBottom}
+                                        windowChatRef={windowChat}
+                                        setChatData={setChatData}
+                                        setChats={setChats}
+                                        replyMessage={replyMessage}
+                                        setReplyMessage={setReplyMessage}
+                                        inputRef={inputRef}
+                                        setFiles={setFiles}
+                                        files={files}
+                                        setIsModal={setIsModal}
+                                />
 			</div>
 		</>
 	return (
