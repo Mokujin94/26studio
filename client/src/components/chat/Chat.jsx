@@ -8,19 +8,21 @@ import useTimeFormatter from '../../hooks/useTimeFormatter';
 import { CSSTransition } from 'react-transition-group';
 
 const Chat = observer(({ chat, hash }) => {
-	const { user } = useContext(Context)
-	const [otherUserData, setOtherUserData] = useState({})
-	const [userData, setUserData] = useState({})
-	const [lastMessage, setLastMessage] = useState({})
-	const [notReadMessages, setNotReadMessages] = useState([])
-	const dedupeMessages = (arr) => {
-		const seen = new Set()
-		return arr.filter(m => {
-			if (seen.has(m.id)) return false
-			seen.add(m.id)
-			return true
-		})
-	}
+
+        const { user } = useContext(Context)
+        const [otherUserData, setOtherUserData] = useState({})
+        const [userData, setUserData] = useState({})
+        const [lastMessage, setLastMessage] = useState({})
+       const [notReadMessages, setNotReadMessages] = useState([])
+       const dedupeMessages = (arr) => {
+               const seen = new Set()
+               return arr.filter(m => {
+                       if (seen.has(m.id)) return false
+                       seen.add(m.id)
+                       return true
+               })
+       }
+
 	const [isWriting, setIsWriting] = useState(false)
 	const [draft, setDraft] = useState('')
 	const location = useLocation();
@@ -43,7 +45,9 @@ const Chat = observer(({ chat, hash }) => {
 			setDraft(chat.drafts[0].text)
 		}
 
-		setNotReadMessages(dedupeMessages(chat.notReadMessages));
+
+               setNotReadMessages(dedupeMessages(chat.notReadMessages));
+
 	}, [])
 
 	useEffect(() => {
@@ -57,10 +61,12 @@ const Chat = observer(({ chat, hash }) => {
 		user.socket.on("incReadMessege", (message) => {
 			if (message.chatId !== chat.id) return;
 
-			setNotReadMessages(prevMessages => {
-				if (message.userId === user.user.id) return prevMessages;
-				return dedupeMessages([...prevMessages, message])
-			})
+
+               setNotReadMessages(prevMessages => {
+                       if (message.userId === user.user.id) return prevMessages;
+                       return dedupeMessages([...prevMessages, message])
+               })
+
 		})
 
 		user.socket.on("lastMessage", (message) => {

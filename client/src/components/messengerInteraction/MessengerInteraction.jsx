@@ -74,20 +74,25 @@ const MessengerInteraction = observer(({ chatData, setMessages, isScrollBottom, 
 
 	const onSend = () => {
 		if (messageContent.length <= 0) return;
-		if (replyMessage.id !== null) {
-			setReplyMessage(prev => {
-				return { ...prev, id: null }
-			})
-		}
-		let message = {
-			id: Date.now(),
-			createdAt: Date.now(),
-			text: messageContent,
-			load: true,
-			user: {
-				avatar: user.user.avatar,
-				id: user.user.id,
-			},
+                const replyId = replyMessage.id;
+                const replyData = replyId !== null ? {
+                        id: replyId,
+                        text: replyMessage.text,
+                        user: { name: replyMessage.userName }
+                } : null;
+                if (replyMessage.id !== null) {
+                        setReplyMessage(prev => ({ ...prev, id: null }));
+                }
+                let message = {
+                        id: Date.now(),
+                        createdAt: Date.now(),
+                        text: messageContent,
+                        replyMessage: replyData,
+                        load: true,
+                        user: {
+                                avatar: user.user.avatar,
+                                id: user.user.id,
+                        },
 			userId: user.user.id,
 		}
 		setMessageContent("");
@@ -130,7 +135,7 @@ const MessengerInteraction = observer(({ chatData, setMessages, isScrollBottom, 
 
 		//
 
-		sendMessage(Number(hash), user.user.id, messageContent).then(async data => {
+                sendMessage(Number(hash), user.user.id, messageContent, [], replyId).then(async data => {
 			if (!chatData.id && data.userId == user.user.id) {
 				await fetchPersonalChat(hash, user.user.id).then(data => {
 					setChats(prevChats => {

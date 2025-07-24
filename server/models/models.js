@@ -100,6 +100,9 @@ const Messages = sequelize.define("messages", {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         text: { type: DataTypes.TEXT, allowNull: false },
         files: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
+
+        replyMessageId: { type: DataTypes.INTEGER, allowNull: true },
+
         isRead: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 })
 
@@ -183,6 +186,7 @@ User.belongsTo(Role);
 
 User.hasMany(Messages);
 Messages.belongsTo(User);
+Messages.belongsTo(Messages, { as: 'replyMessage', foreignKey: 'replyMessageId' });
 
 Chats.hasMany(Messages, { foreignKey: "chatId", as: "messages" });
 Chats.hasMany(Messages, { foreignKey: "chatId", as: "notReadMessages" });

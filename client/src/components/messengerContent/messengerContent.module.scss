@@ -53,7 +53,9 @@
 				left: 50%;
 				transform: translate(-50%, -50%);
 			}
-			 &_date {
+
+                        &_date {
+
                                 padding: 7px 15px;
                                 background: $studio-darker-element;
                                 border-radius: 10px;
