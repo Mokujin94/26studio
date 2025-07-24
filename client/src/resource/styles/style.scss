@@ -1,38 +1,286 @@
-@import './reboot.scss';
-@import '../../pages/registration/registration.scss';
-@import '../../pages/auth/auth.scss';
-@import '../../pages/profile/profile.scss';
-@import '../../pages/projects/projects.scss';
-@import '../../pages/news/news.scss';
-@import '../../pages/messenger/messenger.scss';
-@import '../../pages/project/project.scss';
-@import '../../pages/newsPaper/newsPaper.scss';
-@import '../../pages/groups/groups.scss';
-@import '../../pages/group/group.scss';
-
-
+@import "./reboot.scss";
+@import "../../pages/registration/registration.scss";
+@import "../../pages/auth/auth.scss";
+@import "../../pages/profile/profile.scss";
+@import "../../pages/projects/projects.scss";
+@import "../../pages/news/news.scss";
+@import "../../pages/messenger/messenger.scss";
+@import "../../pages/project/project.scss";
+@import "../../pages/newsPaper/newsPaper.scss";
+@import "../../pages/groups/groups.scss";
+@import "../../pages/group/group.scss";
+@import "../../pages/admin/admin.scss";
 body {
-    background: $studio-background;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
-    &::-webkit-scrollbar {
-        display: none;
-    }
+  background: $studio-background;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-
 .container {
-    display: block;
-    max-width: 1620px;
-    width: 100%;
-    margin: 0 auto;
+  display: block;
+  max-width: 1650px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+	&_messenger {
+		max-width: 1400px;
+	}
 }
 
 .App {
-    // padding-right: 0;
-    // transition-delay: 0.15s;
-    // transition-duration: 0.3s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  &__inner {
+    flex: 1 1 auto;
+  }
+  // padding-right: 0;
+  // transition-delay: 0.15s;
+  // transition-duration: 0.3s;
+
+  &__modalError {
+    position: absolute;
+    right: 100px;
+    top: 100px;
+    z-index: 99;
+  }
+}
+
+.modal {
+  &__bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: $studio-black-opacity-03;
+    z-index: 6;
+  }
+  &__complete {
+    position: fixed;
+    left: 20px;
+    // transform: translateX(-50%);
+    bottom: 20px;
+    z-index: 99;
+  }
+}
+
+.project-skeleton {
+  width: 100%;
+  height: 100%;
+}
+
+.friend-skeleton {
+	width: 100%;
+  height: 100%;
+}
+
+@media (max-width: $xxl) {
+  .container {
+    max-width: 1470px;
+  }
+}
+
+@media (max-width: $xl) {
+  .container {
+    max-width: 1270px;
+  }
+}
+
+@media (max-width: $lg) {
+  .container {
+    max-width: 1070px;
+  }
+}
+
+@media (max-width: $md) {
+  .container {
+    max-width: 810px;
+  }
+}
+
+@media (max-width: $sm) {
+  .container {
+    max-width: 630px;
+  }
+}
+
+@media (max-width: $xs) {
+  .container {
+    max-width: 480px;
+  }
+}
+
+@media (max-width: $xxs) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+.create-anim-enter {
+  opacity: 0;
+}
+.create-anim-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.create-anim-exit {
+  opacity: 1;
+	pointer-events: none;
+	cursor: default;
+}
+.create-anim-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.create-anim-scale-enter {
+  opacity: 0;
+	transform: scale(0);
+}
+.create-anim-scale-enter-active {
+  opacity: 1;
+	transform: scale(1);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.create-anim-scale-exit {
+  opacity: 1;
+	transform: scale(1);
+	pointer-events: none;
+	cursor: default;
+}
+.create-anim-scale-exit-active {
+  opacity: 0;
+	transform: scale(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.create-anim-update-enter {
+  opacity: 0;
+}
+.create-anim-update-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.create-anim-update-exit {
+  opacity: 1;
+}
+.create-anim-update-exit-active {
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.create-anim-traslate-enter {
+  opacity: 0;
+  transform: translateY(-50%) scaleY(0.6);
+}
+.create-anim-traslate-enter-active {
+  opacity: 1;
+  transform: translateY(-100%) scaleY(1);
+	transition: opacity 0.2s ease-in, transform 0.2s;
+}
+.create-anim-traslate-exit {
+  opacity: 1;
+  transform: translateY(-100%) scaleY(1);
+}
+.create-anim-traslate-exit-active {
+  opacity: 0;
+  transform: translateY(-70%) scaleY(0.6);
+  transition: opacity 0.2s ease-out, transform 0.2s;
+}
+
+.popup-success-enter {
+  opacity: 0;
+  transform: translateY(300px);
+}
+.popup-success-enter-active {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: 0.3s ease-out;
+}
+.popup-success-exit {
+  opacity: 1;
+  transform: translateY(0px);
+}
+.popup-success-exit-active {
+  opacity: 0;
+  transform: translateY(300px);
+  transition: opacity 0.3s ease-out, transform 0s 0.3s;
+}
+
+.error-enter {
+  opacity: 0;
+}
+.error-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.error-exit {
+  opacity: 1;
+}
+.error-exit-active {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+
+// .message-enter {
+//   opacity: 0;
+//   transform: scaleY(0.9) translateY(5px);
+// 	transform-origin: 50% 100%; 
+// }
+
+// .message-enter-active {
+//   opacity: 1;
+//   transform: scaleY(1) translateY(0);
+
+//   transition: opacity 300ms, transform 300ms; /* Длительность анимации */
+// 	transform-origin: 50% 100%; 
+// }
+
+// .message-exit {
+//   opacity: 1;
+//   transform: scaleY(1) translateY(0);
+// 	transform-origin: 50% 100%; 
+// }
+
+// .message-exit-active {
+//   opacity: 0;
+//   transform: scaleY(0.9) translateY(5px);
+//   transition: opacity 300ms, transform 300ms;
+// 	transform-origin: 50% 100%; 
+// }
+
+
+.message-enter {
+	opacity: 0; // Начальная прозрачность
+  min-height: 0; // Начальная высота
+	grid-template-rows: 0fr;
+	transform: translateY(30px);
+	
+}
+
+.message-enter-active {
+	opacity: 1; // Плавное появление
+  min-height: 0; // Конечная высота (должна быть выше, чем контент)
+	grid-template-rows: 1fr;
+	transform: translateY(0);
+}
+
+.message-exit {
+	opacity: 1;
+  min-height: 0; 
+}
+
+.message-exit-active {
+	opacity: 0; // Плавное исчезновение
+  min-height: 0; // Плавное уменьшение высоты
 }

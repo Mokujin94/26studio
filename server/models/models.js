@@ -1,198 +1,225 @@
-const sequelize = require('../db')
-const {DataTypes} = require('sequelize');
-const { Sequelize } = require('../db');
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../db");
 
 let now = new Date();
 
-const User = sequelize.define('user', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true},
-    email: {type: DataTypes.STRING, unique: true},
-    password: {type: DataTypes.STRING},
-    birthday: {type: DataTypes.DATE},
-    avatar: {type: DataTypes.STRING, defaultValue: 'avatar.jpg'},
-    achivment_list: {type: DataTypes.JSON},
+const User = sequelize.define("user", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	name: { type: DataTypes.STRING, unique: true },
+	full_name: { type: DataTypes.STRING },
+	email: { type: DataTypes.STRING, unique: true },
+	password: { type: DataTypes.STRING },
+	description: { type: DataTypes.TEXT },
+	avatar: { type: DataTypes.STRING, defaultValue: "avatar.jpg" },
+	group_status: { type: DataTypes.BOOLEAN, defaultValue: false },
+	achivment_list: { type: DataTypes.JSON },
+	lastOnline: {
+		type: DataTypes.DATE,
+		allowNull: true // или false, в зависимости от ваших требований
+	}
+});
+
+
+const Friend = sequelize.define("friend", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	userId: { type: DataTypes.INTEGER },
+	friendId: { type: DataTypes.INTEGER },
+	status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+});
+
+const ReadMessages = sequelize.define("read_messages", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 })
 
-const Friend = sequelize.define('friend', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    id_sender: {type: DataTypes.INTEGER},
-    id_recipient: {type: DataTypes.INTEGER}
-})
-//fsdfdsf
-//fsdfsdf
+const Group = sequelize.define("group", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	name: { type: DataTypes.STRING },
+});
 
-const Subscriber = sequelize.define('subscriber', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    id_sender: {type: DataTypes.INTEGER},
-    id_recipient: {type: DataTypes.INTEGER}
-})
+const Role = sequelize.define("role", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	name: { type: DataTypes.STRING },
+});
 
-const Group = sequelize.define('group', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING},
-    id_curator: {type: DataTypes.INTEGER}
-})
+const Project = sequelize.define("project", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	name: { type: DataTypes.STRING, allowNull: false },
+	start_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+	description: { type: DataTypes.TEXT, defaultValue: "Нет описания" },
+	path_from_project: { type: DataTypes.STRING, allowNull: false },
+	baseURL: { type: DataTypes.STRING, allowNull: false },
+	preview: { type: DataTypes.STRING, allowNull: false },
+	is_private: { type: DataTypes.BOOLEAN, defaultValue: false },
+	is_private_comments: { type: DataTypes.BOOLEAN, defaultValue: false },
+});
 
-const Role = sequelize.define('role', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING}
-})
+const News = sequelize.define("news", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	title: { type: DataTypes.STRING, allowNull: false },
+	description: { type: DataTypes.JSON, allowNull: false },
+	img: { type: DataTypes.STRING },
+	isProposed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+});
 
-const Project = sequelize.define('project', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, allowNull: false},
-    start_date: {type: DataTypes.DATE, defaultValue: DataTypes.NOW},
-    description: {type: DataTypes.STRING, defaultValue: 'Нет описания'},
-    files: {type: DataTypes.STRING, allowNull: false},
-    img: {type: DataTypes.STRING, allowNull: false},
-    is_private: {type: DataTypes.BOOLEAN, defaultValue: false},
-    views: {type: DataTypes.JSON()},
-    amount_views: {type: DataTypes.INTEGER, defaultValue: 0},
-    likes: {type: DataTypes.JSON},
-    amount_likes: {type: DataTypes.INTEGER, defaultValue: 0}, 
-    comments: {type: DataTypes.JSON},
-    amount_comments: {type: DataTypes.INTEGER, defaultValue: 0} 
-})
 
-const Team = sequelize.define('team', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    role: {type: DataTypes.STRING},
-    give_privileges: {type: DataTypes.BOOLEAN},
-    read_privileges: {type: DataTypes.BOOLEAN},
-    insert_privileges: {type: DataTypes.BOOLEAN},
-    update_privileges: {type: DataTypes.BOOLEAN},
-    invite_privileges: {type: DataTypes.BOOLEAN},
-    kick_privileges: {type: DataTypes.BOOLEAN}
+const Comments = sequelize.define("comments", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	message: { type: DataTypes.TEXT },
+	resendId: { type: DataTypes.INTEGER },
+	userId: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+	},
+	replyUserId: { type: DataTypes.INTEGER }
+});
+
+const ReplyComments = sequelize.define("reply_comments", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 })
 
-const WhiteListUser = sequelize.define('white_list_user', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+const Likes = sequelize.define("likes", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+});
+
+const View = sequelize.define("views", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+});
+
+const Chats = sequelize.define("chats", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	name: { type: DataTypes.STRING, allowNull: true },
+	is_group: { type: DataTypes.BOOLEAN, defaultValue: false },
+});
+
+const ChatMembers = sequelize.define("chat_members", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
 })
 
-const Achivment = sequelize.define('achivment', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING},
-    rule: {type: DataTypes.STRING},
-    icon: {type: DataTypes.STRING}
+const Messages = sequelize.define("messages", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	text: { type: DataTypes.TEXT, allowNull: false },
+	isRead: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 })
 
-const GettingAchivment = sequelize.define('getting_achivment', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+const Notifications = sequelize.define("notifications", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	senderId: DataTypes.INTEGER,
+	recipientId: DataTypes.INTEGER,
+	status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+	friend_status: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false,
+	},
+});
+
+const UserFriend = sequelize.define("user_friend", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+});
+
+const UserGroup = sequelize.define("user_group", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+});
+
+const Draft = sequelize.define("draft", {
+	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+	text: {type: DataTypes.TEXT }
 })
 
-const UserAchivment = sequelize.define('user_achivment', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    amount: {type: DataTypes.INTEGER}
-})
+User.hasMany(Project);
+Project.belongsTo(User);
 
-const News = sequelize.define('news', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING, allowNull: false},
-    description: {type: DataTypes.STRING, allowNull: false},
-    img: {type: DataTypes.STRING},
-    views: {type: DataTypes.JSON},
-    amount_views: {type: DataTypes.INTEGER, defaultValue: 0},
-    likes: {type: DataTypes.JSON},
-    amount_likes: {type: DataTypes.INTEGER, defaultValue: 0},
-    comments: {type: DataTypes.JSON},
-    amount_comments: {type: DataTypes.INTEGER, defaultValue: 0}
-})
+User.hasMany(News);
+News.belongsTo(User);
 
-const ProposedNews = sequelize.define('proposed_news', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    img: {type: DataTypes.STRING},
-    title: {type: DataTypes.STRING},
-    description: {type: DataTypes.STRING}
-})
+Notifications.belongsTo(User, { foreignKey: "senderId", as: "sender" });
+Notifications.belongsTo(User, { foreignKey: "recipientId", as: "recipient" });
+Notifications.belongsTo(Likes, { foreignKey: "likeId", as: "like" });
+Notifications.belongsTo(Comments, { foreignKey: "commentId", as: "comment" });
+Notifications.belongsTo(Comments, { foreignKey: "replyCommentId", as: "replyComment" });
 
-const UnpostedNews = sequelize.define('unposted_news', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING},
-    img: {type: DataTypes.STRING},
-    description: {type: DataTypes.STRING}
-})
+Project.hasMany(Comments);
+Comments.belongsTo(Project);
 
-const Message = sequelize.define('message', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    files: {type: DataTypes.STRING},
-    is_updated: {type: DataTypes.BOOLEAN},
-    is_deleted_all: {type: DataTypes.BOOLEAN},
-    is_deleted: {type: DataTypes.BOOLEAN},
-    is_read: {type: DataTypes.BOOLEAN},
-    resended: {type: DataTypes.JSON}
-})
+News.hasMany(Comments);
+Comments.belongsTo(News);
 
-const Chat = sequelize.define('chat', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, allowNull: false},
-    avatar: {type: DataTypes.STRING},
-    members: {type: DataTypes.JSON}
-})
+User.hasMany(Comments);
+Comments.belongsTo(User, { foreignKey: "userId" });
+Comments.belongsTo(User, { as: "userReply", foreignKey: "replyUserId" });
 
-const TypeOfAttachment = sequelize.define('type_of_attachment', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING}
-})
+Comments.hasMany(Comments, { as: 'replyes', foreignKey: 'parentId' });
 
+Project.hasMany(Likes);
+Likes.belongsTo(Project, { foreignKey: "projectId" });
 
+Project.hasMany(View, { foreignKey: "projectId" });
+View.belongsTo(Project);
 
-User.belongsToMany(Project, {through: WhiteListUser, Team})
-Project.belongsToMany(User, {through: Team, WhiteListUser})
+News.hasMany(Likes);
+Likes.belongsTo(News);
 
-User.hasMany(WhiteListUser)
-WhiteListUser.belongsTo(User)
+News.hasMany(View, { foreignKey: "newsId" });
+View.belongsTo(News);
 
-User.hasMany(Team)
-Team.belongsTo(User)
+User.hasMany(Likes);
+Likes.belongsTo(User);
 
-User.hasMany(Friend)
-Friend.belongsTo(User)
+Comments.hasMany(Likes);
+Likes.belongsTo(Comments);
 
-User.hasMany(Subscriber)
-Subscriber.belongsTo(User)
+User.hasMany(View, { foreignKey: "userId" });
+View.belongsTo(User);
 
-User.belongsToMany(Achivment, {through: UserAchivment, GettingAchivment})
-Achivment.belongsToMany(User, {through: UserAchivment, GettingAchivment})
+User.belongsToMany(Friend, { through: UserFriend, as: "friends" });
 
-User.hasMany(ProposedNews)
-ProposedNews.belongsTo(User)
+Group.belongsToMany(User, { through: UserGroup });
+User.belongsToMany(Group, { through: UserGroup });
 
-User.hasMany(UnpostedNews)
-UnpostedNews.belongsTo(User)
+Role.hasMany(User, { foreignKey: { defaultValue: 1 } });
+User.belongsTo(Role);
 
-User.hasMany(Message)
-Message.belongsTo(User)
+User.hasMany(Messages);
+Messages.belongsTo(User);
 
+Chats.hasMany(Messages, { foreignKey: "chatId", as: "messages" });
+Chats.hasMany(Messages, { foreignKey: "chatId", as: "notReadMessages" });
+Messages.belongsTo(Chats, { foreignKey: "chatId", as: "messages" });
+Messages.belongsTo(Chats, { foreignKey: "chatId", as: "notReadMessages" });
 
-Group.hasMany(User)
-User.belongsTo(Group)
+Chats.belongsToMany(User, { through: ChatMembers, as: 'members' });
+User.belongsToMany(Chats, { through: ChatMembers, as: 'chats' });
 
-Role.hasMany(User, {foreignKey: {defaultValue: 1}})
-User.belongsTo(Role)
+Messages.hasMany(ReadMessages);
+ReadMessages.belongsTo(Messages);
 
-Chat.hasMany(Message)
-Message.belongsTo(Chat)
+User.hasMany(ReadMessages);
+ReadMessages.belongsTo(User);
 
-TypeOfAttachment.hasMany(Message)
-Message.belongsTo(TypeOfAttachment)
+User.hasMany(Draft, { foreignKey: 'userId' });
+Draft.belongsTo(User, { foreignKey: 'userId' });
+
+Chats.hasMany(Draft, { foreignKey: 'chatId' });
+Draft.belongsTo(Chats, { foreignKey: 'chatId' });
 
 module.exports = {
-    User,
-    Friend,
-    Subscriber,
-    Group,
-    Role,
-    Project,
-    Team,
-    WhiteListUser,
-    Achivment, 
-    GettingAchivment,
-    UserAchivment,
-    News,
-    ProposedNews,
-    UnpostedNews, 
-    Message,
-    Chat
-}
-                                                                                                                                                        
+	User,
+	Friend,
+	Group,
+	Role,
+	Project,
+	News,
+	Messages,
+	ReadMessages,
+	Chats,
+	ChatMembers,
+	Comments,
+	Likes,
+	View,
+	Notifications,
+	UserFriend,
+	ReplyComments,
+	UserGroup,
+	Draft
+};

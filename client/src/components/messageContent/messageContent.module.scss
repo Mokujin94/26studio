@@ -1,0 +1,273 @@
+@import '../../resource/styles/variables';
+
+.messageContent {
+	max-width: 450px;
+	min-height: 35px;
+	position: relative;
+	// display: flex;
+	// align-items: center;
+	// gap: 10px;
+	color: $studio-dark-text;
+	padding: 8.5px 10px;
+	background-color: $studio-primary-element;
+	border-radius: 10px 10px 10px 0;
+	word-wrap: break-word;
+	word-break: break-word;
+	white-space: pre-wrap;
+	font-size: 14px;
+	font-weight: 500;
+	z-index: 1;
+
+	> a:first-child {
+		color: $studio-dark-text;
+		font-weight: 500;
+		
+		&:hover {
+			color: $studio-dark-bright-text;
+		}
+	}
+
+
+	&__highlight {
+		position: relative;
+		z-index: 1;
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			background: transparent;
+			width: 1040px;
+			height: calc(100% + 5px);
+			transform: translateY(-2.5px);
+			top: 0;
+			left: -55px;
+			z-index: -1;
+			transition: 0.3s;
+		}
+
+		&_active {
+			&::after {
+				background: rgba(0, 0, 0, 0.2);
+			}
+		}
+	}
+
+
+
+
+	a {
+		&:first-child {
+			text-decoration: underline;
+		}
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		transform: translate(-95%, 0);
+		clip-path: polygon(90% 37%, 96% 20%, 100% 0, 100% 100%, 0 100%, 20% 96%, 35% 89%, 50% 81%, 65% 70%, 80% 54%);
+		// clip-path: polygon(91% 34%, 96% 19%, 100% 0, 100% 100%, 0 100%, 19% 96%, 32% 92%, 54% 81%, 71% 66%, 83% 50%);
+		height: 10px;
+		width: 10px;
+		background-color: $studio-primary-element;
+		// border: 8px solid transparent; 
+		// border-right: 6px solid $studio-darker-border; 
+		// border-bottom: 5px solid $studio-darker-border;
+	}
+
+	&__inner {
+		z-index: 2;
+
+	}
+
+	&__text {
+		word-wrap: break-word;
+		word-break: break-word;
+		white-space: pre-wrap;
+		font-size: 14px;
+		font-weight: 500;
+	}
+	&__info {
+		visibility: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    line-height: 1;
+    vertical-align: middle;
+    pointer-events: none;
+    display: inline-flex;
+    z-index: 1;
+    direction: ltr;
+    // float: right;
+		padding-inline-end: 10px;
+    margin-inline-start: 3px;
+		&Time {
+			display: block;
+			font-size: 12px;
+		}
+
+		&__visible {
+			pointer-events: all;
+			position: absolute;
+			bottom: 0;
+			inset-inline-end: 0;
+			display: flex;
+			align-items: center;
+			line-height: 1;
+			padding: inherit;
+			white-space: nowrap;
+			visibility: visible;
+			gap: 5px;
+			bottom: 8.5px;
+		}
+
+		&View {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			svg {
+				display: block;
+			}
+			&Second {
+				opacity: 0;
+				transition: .3s;
+				
+			}
+			&_active .messageContent__infoViewSecond {
+				opacity: 1;
+			}
+		}
+	}
+
+	&_other {
+		color: $studio-white-text;
+		background-color: $studio-light-dark-element;
+		> a:first-child {
+			color: $studio-primary-text;
+			&:hover {
+				color: $studio-primary-bright-text;
+			}
+		}
+		&::before {
+			background-color: $studio-light-dark-element;
+		}
+	}
+
+	&__info {
+		
+		&Time {
+
+		}
+
+		&View {
+			&_active {
+
+			}
+
+			&Second {
+
+			}
+		}
+		&Load {
+			display: flex;
+			width: 17px;
+			height: 10px;
+			justify-content: flex-start;
+			svg {
+				display: block;
+				width: auto;
+				height: 100%;
+			}
+			&Item {
+				transform-origin: center;
+				&:nth-child(1) {
+					animation: aminClock 1s infinite linear;
+				}
+				&:nth-child(2) {
+					animation: aminClock 12s infinite linear;
+				}
+			}
+		}
+	}
+
+	&__subMenu {
+		position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(100%, -100%);
+    padding: 10px;
+    border-radius: 10px;
+		overflow: hidden;
+		background-color: rgb(0 0 0 / 25%);
+			backdrop-filter: blur(5px);
+		// &::before {
+		// 	content: "";
+		// 	position: absolute;
+		// 	z-index: -1;
+		// 	top: 0;
+		// 	left: 0;
+		// 	width: 100%;
+		// 	height: 100%;
+			
+		// }
+		&List {
+			display: flex;
+			flex-direction: column;
+			list-style: none;
+			&Item {
+				position: relative;
+				display: flex;
+				gap: 5px;
+				padding: 5px;
+				border-radius: 5px;
+				overflow: hidden;
+				cursor: pointer;
+				transition: .3s;
+				&::before {
+					content: "";
+					position: absolute;
+					z-index: -1;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-color: rgb(0 0 0 / 25%);
+					backdrop-filter: blur(5px);
+					opacity: 0;
+					transition: .3s;
+				}
+				&:hover {
+					&::before {
+						opacity: 1
+					}
+				}
+
+				&Text {
+					font-size: 12px;
+					color: $studio-white-text;
+				}
+
+				&Icon {
+					height: 15px;
+					svg {
+						display: block;
+						width: auto;
+						height: 100%;
+						fill: $studio-white-element;
+					}
+				}
+			}
+		}
+	}
+}
+
+@keyframes aminClock {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

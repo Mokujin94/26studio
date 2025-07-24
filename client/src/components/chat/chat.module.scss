@@ -1,0 +1,97 @@
+@import '../../resource/styles/variables';
+
+.chat {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	border-radius: 10px;
+	color: $studio-white-text;
+	cursor: pointer;
+	transition: .3s;
+
+	&:hover {
+		background-color: $studio-grey-element;
+	}
+	
+	&__avatar {
+		max-width: 40px;
+		min-width: 40px;
+		width: 100%;
+		aspect-ratio: 1 / 1;
+		border-radius: 50%;
+		overflow: hidden;
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	&__text {
+		margin-left: 10px;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		&Name {
+			font-size: 16px;
+			font-weight: 700;
+		}
+
+		&Message {
+			font-size: 14px;
+			font-weight: 500;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			&Draft {
+				font-weight: 600;
+				color: $studio-dark-text;
+				transition: .3s;
+				&_red {
+					color: $studio-red-text;
+				}
+			}
+		}
+	}
+
+	&__info {
+		margin-left: auto;
+		display: flex;
+		gap: 5px;
+		flex-direction: column;
+		align-items: end;
+		min-height: 37px;
+		&Time {
+			font-size: 12px;
+			font-weight: 500;
+		}
+
+		&Count {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 17px;
+			height: 17px;
+			padding: 2px;
+			border-radius: 50px;
+			background-color: $studio-primary-element;
+			color: $studio-dark-text;
+			&Text {
+				font-size: 12px;
+				font-weight: 500;
+			}
+		}
+	}
+
+	&_active {
+		background-color: $studio-primary-element;
+		color: $studio-dark-text;
+		&:hover {
+			background-color: $studio-primary-element;
+		}
+		.chat__infoCount {
+			background: $studio-white-element;
+			color: $studio-dark-text;
+		}
+	}
+}

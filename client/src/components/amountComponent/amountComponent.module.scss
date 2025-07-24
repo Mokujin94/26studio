@@ -2,16 +2,41 @@
 
 .block {
   display: flex;
-  background-color: $studio-text-button;
-  padding: 15px 35px;
-  border-radius: 5px;
+  align-items: center;
+	gap: 10px;
+  background-color: $studio-darker-element;
+  padding: 8px 15px;
+	border: 1px solid transparent;
+  border-radius: 10px;
+  outline: none;
+  cursor: pointer;
+	transition: .3s;
+	&:hover {
+		border-color: $studio-grey-border;
+	}
+
+	&_noClicked {
+		cursor: default;
+		&:hover {
+			border-color: transparent;
+		}
+	}
+
   &__img {
-    max-height: 20px;
+		width: auto;
+    max-width: 18px;
+    height: 15px;
+    &__active {
+      path {
+        fill: $studio-red-element;
+      }
+    }
   }
   &__amount {
     font-weight: 500;
     font-size: 16px;
     color: $studio-white-text;
-    margin-left: 10px;
+		min-width: 11px;
+		transition:  0.3s ease;
   }
 }

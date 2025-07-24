@@ -1,8 +1,54 @@
-@import '../../resource/styles/variables';
-
+@import "../../resource/styles/variables";
 
 .wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.projects {
+  grid-column-start: 1;
+  grid-column-end: 5;
+  text-align: center;
+  &__title {
+    font-size: 24px;
+    font-weight: 400;
+    color: #fcfcfc;
+    text-align: center;
+  }
+  &__icon {
+    height: 200px;
+    svg {
+      fill: transparent;
+      height: 100%;
+      path {
+        stroke: $studio-primary-element;
+      }
+    }
+  }
+}
+
+.projectCardLink {
+	position: relative;
+	&_isOnSetting {
+		animation: onSetting 1s  infinite;
+	}
+}
+
+@keyframes onSetting {
+	0% {
+		transform: rotate(-0.25deg);
+	}
+	25% {
+		transform: rotate(0.25deg);
+	}
+	50% {
+		transform: rotate(-0.25deg);
+	}
+	75% {
+		transform: rotate(0.25deg);
+	}
+	100% {
+		transform: rotate(-0.25deg);
+	}
 }

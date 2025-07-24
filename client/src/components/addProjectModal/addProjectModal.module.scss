@@ -1,0 +1,51 @@
+@import "../../resource/styles/variables";
+
+.block {
+    position: absolute;
+    z-index: 6;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height: 700px;
+    background-color: $studio-dark-element;
+    border-radius: 15px;
+    padding: 20px 0 60px 0;
+    display: flex;
+    flex-direction: column;
+    &__header {
+        position: relative;
+        &Title {
+            color: $studio-white-text;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        &Close {
+					position: absolute;
+					top: 0;
+					right: 20px;
+        }
+    }
+
+    &__content {
+        position: relative;
+        display: flex;
+        flex: 1 1 auto;
+        padding: 0 60px;
+    }
+    &__stage {
+        opacity: 0;
+        display: block;
+        margin-top: 40px;
+        &_active {
+            animation: stageOpen .3s .3s forwards;
+        }
+    }
+}
+
+@keyframes stageOpen {
+    0% {opacity: 0;}
+    100%{opacity: 1}
+}

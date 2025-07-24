@@ -1,0 +1,28 @@
+@import "../../resource/styles/variables";
+
+.wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 215px;
+  padding: 0;
+  overflow: hidden;
+  background: $studio-black-opacity-03;
+}
+.iframe {
+	background-color: white;
+  position: absolute;
+  left: -1px;
+  top: -1px;
+  width: 335%;
+  height: 722px;
+  -ms-zoom: 0.75;
+  -moz-transform: scale(0.55);
+  -moz-transform-origin: 0 0;
+  -o-transform: scale(0.75);
+  -o-transform-origin: 0 0;
+  -webkit-transform: scale(0.3);
+  -webkit-transform-origin: 0 0;
+}

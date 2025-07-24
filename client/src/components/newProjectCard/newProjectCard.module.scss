@@ -1,0 +1,208 @@
+@import "../../resource/styles/variables";
+
+.newProjectCard {
+		position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+		overflow: hidden;
+    background-color: $studio-dark-element;
+		outline: 2px solid $studio-grey-border;
+		transition: $studio-transition-03;
+
+		&:hover {
+			@include studio-mixin-primary-element-hover;
+		}
+
+		&__trash {
+			position: absolute;
+			box-sizing: content-box;
+			z-index: 2;
+			top: 0;
+			right: 0;
+			padding: 5px;
+			width: 25px;
+			height: 25px;
+			svg {
+				display: block;
+				width: 100%;
+				height: 100%;
+				path {
+					stroke: $studio-white-button;
+				}
+			}
+			&:hover {
+				~ .newProjectCard {
+					@include studio-mixin-red-element-hover;
+				}
+				svg {
+					path {
+						stroke: $studio-red-button;
+					}
+				}
+			}
+		}
+	
+		&__acceptDelete {
+			position: absolute;
+			top: 0%;
+			transform: translateY(calc(-100% - 10px));
+			background-color: $studio-dark-element;
+			border: 1px solid $studio-primary-border;
+			border-radius: 5px;
+			padding: 10px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			font-weight: 500;
+			cursor: default;
+			&Text {
+				color: $studio-primary-text;
+			}
+	
+			&Buttons {
+				display: flex;
+				gap: 10px;
+				&Item {
+					text-align: center;
+					width: 100%;
+					color: $studio-red-text;
+					border: 1px solid $studio-red-border;
+	
+					padding: 5px 10px;
+					border-radius: 5px;
+					cursor: pointer;
+					transition: .3s;
+					&:hover {
+						color: $studio-dark-text;
+						background-color: $studio-red-button;
+					}
+					&:last-child {
+						color: $studio-primary-text;
+						border-color: $studio-primary-border;
+						&:hover {
+							color: $studio-dark-text;
+							background-color: $studio-primary-button;
+						}
+					}
+				}
+			}
+			
+		}
+
+		&__blur {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-blend-mode: multiply;
+			transition: .3s;
+			z-index: 1;
+			&_onSetting {
+				background-color: $studio-primary-opacity-04;
+			}
+		}
+
+    &__preview {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+				aspect-ratio: 16 / 9;
+        img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    &__content {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        &__img {
+            position: relative;
+            max-width: 35px;
+            width: 100%;
+            height: 35px;
+            overflow: hidden;
+            border-radius: 50%;
+            img {
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                object-fit: cover;
+            }
+        }
+
+        &__about {
+            display: flex;
+            flex-direction: column;
+            &__title {
+							font-size: 16px;
+							font-weight: 500;
+							color: #fcfcfc;
+							-webkit-line-clamp: 1;
+							-webkit-box-orient: vertical;
+							display: -webkit-box;
+							overflow: hidden;
+							word-break: break-all;
+            }
+            &__user {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                &__text {
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: $studio-grey-text;
+										overflow: hidden;
+                }
+            }
+        }
+    }
+
+    &__activity {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        &__item {
+            background: $studio-darker-element;
+            border-radius: 5px;
+            padding: 2px 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        &__img {
+            height: 9px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            svg {
+                display: block;
+                height: 100%;
+                width: auto;
+            }
+        }
+        &__count {
+            font-size: 12px;
+            font-weight: 500;
+            color: $studio-white-text;
+        }
+    }
+}

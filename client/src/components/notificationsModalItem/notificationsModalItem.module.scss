@@ -1,0 +1,103 @@
+@import "../../resource/styles/variables";
+
+.item {
+  position: relative;
+  background: $studio-darker-element;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 15px;
+  padding: 12px 12px 30px 12px;
+  &__avatar {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    &Img {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+      object-fit: cover;
+    }
+
+    &Icon {
+      position: absolute;
+      right: -2px;
+      bottom: -4px;
+      svg {
+        display: block;
+        width: 16px;
+        height: auto;
+        path {
+          stroke: $studio-darker-element;
+          strokeWidth: 1;
+        }
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+		align-items: flex-start;
+    &Name {
+      font-size: 16px;
+      font-weight: 700;
+      color: $studio-primary-text;
+			overflow: hidden;
+			transition: $studio-transition-03;
+			&:hover {
+				color: $studio-primary-text-hover;
+			}
+    }
+
+    &Text {
+      font-size: 16px;
+      font-weight: 500;
+      color: $studio-white-text;
+      &_primary {
+        color: $studio-primary-text;
+				transition: .3s;
+				&:hover {
+					color: $studio-primary-text-hover;
+				}
+      }
+    }
+
+    &Time {
+      position: absolute;
+      bottom: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: $studio-grey-text;
+      
+    }
+  }
+  &__close {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    transform: rotate(45deg);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      svg {
+        path {
+          stroke: $studio-red-element;
+        }
+      }
+    }
+    svg {
+      width: 15px;
+      height: 15px;
+      path {
+        transition: $studio-transition-03;
+      }
+    }
+  }
+}

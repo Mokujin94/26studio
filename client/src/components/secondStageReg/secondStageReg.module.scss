@@ -1,0 +1,99 @@
+@import "../../resource/styles/variables";
+
+.second {
+  &__inner {
+    margin-bottom: 50px;
+  }
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__item {
+    display: block;
+  }
+
+  &__itemTitle {
+    color: $studio-white-text;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+		span {
+			color: $studio-grey-text;
+		}
+  }
+
+  &__itemInput {
+    width: 600px;
+    height: 120px;
+    background-color: $studio-dark-element;
+    border-radius: 10px;
+    border: 2px solid $studio-primary-border;
+    color: $studio-white-text;
+    font-size: 16px;
+    padding: 0 20px;
+    outline: none;
+    &Pass {
+      padding-right: 45px;
+    }
+    &Area {
+      height: 140px;
+      padding: 10px 20px;
+      resize: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  &__itemGroup {
+    position: relative;
+    width: 280px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: $studio-dark-element;
+    color: $studio-white-text;
+    padding: 0 20px;
+    appearance: none;
+    border: 2px solid $studio-primary-border;
+    outline: none;
+    cursor: pointer;
+    &::before {
+      content: "";
+      display: block;
+      position: absolute; /* Абсолютное позиционирование */
+      right: 5px;
+      bottom: 5px; /* Положение треугольника */
+      border: 10px solid transparent; /* Прозрачные границы */
+      border-top: 10px solid green; /* Добавляем треугольник */
+    }
+  }
+
+  &__itemBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 280px;
+    height: 40px;
+    border-radius: 10px;
+    background-color: $studio-dark-button;
+    color: $studio-white-text;
+    padding: 0 50px;
+    border: 2px solid $studio-primary-border;
+    outline: none;
+    text-align: center;
+    transition: $studio-transition-03;
+    cursor: pointer;
+    &:hover {
+      background-color: $studio-primary-button-hover-v2;
+      color: $studio-dark-text;
+    }
+  }
+}

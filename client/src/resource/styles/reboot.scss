@@ -1,7 +1,36 @@
 @import './variables';
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+button:disabled {
+	opacity: .5;
+	pointer-events: none;
+}
+
+/* Скрываем глазик */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-eye,
+input[type="password"]::-webkit-inner-spin-button,
+input[type="password"]::-webkit-outer-spin-button {
+    display: none !important;
+}
+
+*::-webkit-scrollbar {
+	width: 7px;
+	&-track {
+		background: $studio-darker-element;
+		border-radius: 10px;
+	}
+
+	&-thumb {
+		background: $studio-primary-element;
+		border-radius: 10px;
+	}
 }

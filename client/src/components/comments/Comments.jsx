@@ -1,56 +1,97 @@
-import React from "react";
-import CommentsEnd from "../commentsEnd/CommentsEnd";
+import React, { useEffect, useState } from "react";
+import socketIOClient from "socket.io-client";
+import CommentsInput from "../commentsInput/CommentsInput";
 import NewsComment from "../newsComment/NewsComment";
 
 import style from "./comments.module.scss";
+import { useDateFormatter } from "../../hooks/useDateFormatter";
 
-function Comments() {
-  return (
-    <div className={style.block}>
-      <div className={style.block__title}>Комментарии</div>
-      <div className={style.block__underline}></div>
-      <div className={style.block__comments}>
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
-        <NewsComment
-          name="Zeliboba"
-          comment="Ну и новость конечно, фу, не могу на это смотретьНу и новость конечно, фу, не могу на это смотретьНу и новость конечно, фу, не могу на это смотретьНу и новость конечно, фу, не могу на это смотреть"
-          date="12:54 02.04.23"
-        />
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
-        <NewsComment
-          name="Zeliboba"
-          comment="Ну и новость конечно, фу, не могу на это смотреть"
-          date="12:54 02.04.23"
-        />
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
-        <NewsComment
-          name="Zeliboba"
-          comment="Ну и новость конечно, фу, не могу на это смотреть"
-          date="12:54 02.04.23"
-        />
-        <NewsComment
-          name="Mokujin94"
-          comment="Скучная новость, удалите!"
-          date="12:54 04.04.23"
-        />
-      </div>
-      <div className={style.block__bottom}>
-        <CommentsEnd />
-      </div>
-    </div>
-  );
-}
+const Comments = ({ comments, setComments, projectId, newsId }) => {
+
+    const [lastReplyComment, setLastReplyComment] = useState({});
+    const [commentsCout, setCommentsCout] = useState(0)
+
+    useEffect(() => {
+        // const socket = socketIOClient("https://26studio-production.up.railway.app");
+        const socket = socketIOClient(process.env.REACT_APP_API_URL);
+        // Подписываемся на событие обновления комментариев
+        if (projectId) {
+            socket.on("sendCommentsToClients", (updatedComments) => {
+                if (updatedComments) {
+                    if (updatedComments.projectId == projectId) {
+                        setComments((item) => [...item, updatedComments]);
+                    }
+                }
+            });
+        }
+        if (newsId) {
+            socket.on("sendCommentsNewsToClients", (updatedComments) => {
+                if (updatedComments) {
+                    if (updatedComments.newsId == newsId) {
+                        setComments((item) => [...item, updatedComments]);
+                    }
+                }
+            });
+        }
+
+        socket.on("replyComment", (newComment) => {
+            if (newComment) {
+                setLastReplyComment(newComment);
+
+            }
+        })
+
+
+
+
+        // Закрываем соединение при размонтировании компонента
+        return () => {
+            socket.disconnect();
+        };
+    }, []); // Пустой массив зависимостей гарантирует, что эффект будет вызван только при монтировании компонента
+
+    useEffect(() => {
+        let count = 0;
+
+        comments.map(item => {
+            if (item.replyes) {
+                count += item.replyes.length + 1;
+            } else {
+                count += 1
+            }
+        })
+        setCommentsCout(count);
+    }, [comments])
+
+    return (
+        <div className={style.block}>
+            <div className={style.block__title}>Комментарии ({commentsCout})</div>
+            <CommentsInput projectId={projectId} newsId={newsId} />
+            <div className={style.block__comments}>
+                {comments.length ? comments.map((item) => {
+                    return (
+                        <NewsComment
+                            id={item.userId}
+                            name={item.user.name}
+                            avatar={item.user.avatar}
+                            comment={item.message}
+                            commentId={item.id}
+                            projectId={item.projectId}
+                            replyes={item.replyes}
+                            lastReplyComment={lastReplyComment}
+                            date={useDateFormatter(item.createdAt)}
+                            key={item.id}
+                            likes={item.likes}
+                        />
+                    );
+                })
+                    :
+                    <span className={style.block__comments__text}>Нет комментариев</span>
+                }
+            </div>
+
+        </div>
+    );
+};
 
 export default Comments;
