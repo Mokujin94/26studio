@@ -5,7 +5,7 @@ import Message from '../message/Message'
 import { useLocation } from 'react-router-dom'
 import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
-import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
+import { fetchPersonalChat, onReadMessage, sendMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
 import Spinner from '../spinner/Spinner'
@@ -18,7 +18,7 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	const { user } = useContext(Context)
 	const [isWriting, setIsWriting] = useState(false)
 	const [isModal, setIsModal] = useState(false)
-	const [files, setFiles] = useState(null)
+        const [files, setFiles] = useState([])
 	const [notReadMessages, setNotReadMessages] = useState([])
 	const [isOnline, setIsOnline] = useState(false)
 	const [lastTimeOnline, setLastTimeOnline] = useState('')
@@ -148,9 +148,8 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 			})
 		})
 
-		setTotalCountMessages(chatData.countMessages)
-		setMessagesOffset(2)
-		scrollToBottom()
+                setTotalCountMessages(chatData.countMessages)
+                setMessagesOffset(2)
 
 		return () => {
 			user.socket.off("getWritingOnlyChat")
@@ -168,20 +167,33 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
 
-		if (!hash) return;
-		fetchPersonalChat(Number(hash), user.user.id).then(data => {
-			if (!data.is_chat) {
-				setOtherUserData(data.member)
-			}
-			setChatData(data);
-			// setOtherUserData(data.member)
-			setMessages(data.messages);
-			setTotalCountMessages(data.countMessages)
+                if (!hash) return;
+                fetchPersonalChat(Number(hash), user.user.id).then(data => {
+                        if (!data.is_chat) {
+                                setOtherUserData(data.member)
+                        }
+                        setChatData(data);
+                        // setOtherUserData(data.member)
+                        const mappedMessages = data.messages.map(group =>
+                                group.map(msg => ({
+                                        ...msg,
+                                        files: msg.files ? msg.files.map(f => process.env.REACT_APP_API_URL + f) : msg.files,
+                                }))
+                        );
+                        setMessages(mappedMessages);
+                        setTotalCountMessages(data.countMessages)
+                        setNotReadMessages(data.notReadMessages || [])
 
-			setMessagesOffset(2)
-			setIsLoadingMessages(false)
-		}).catch(e => console.log(e))
-	}, [hash])
+                        setMessagesOffset(2)
+                        setIsLoadingMessages(false)
+
+                        if (data.notReadMessages && data.notReadMessages.length) {
+                                setTimeout(() => scrollToFirstUnread(data.notReadMessages), 0);
+                        } else {
+                                setTimeout(() => scrollToBottom(), 0);
+                        }
+                }).catch(e => console.log(e))
+        }, [hash])
 
 
 	useEffect(() => {
@@ -236,28 +248,118 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 		})
 	}
 
-	const handleScrollToBottom = useCallback(() => {
-		if (windowChat.current) {
-			const scrollBottom = windowChat.current.scrollHeight - windowChat.current.scrollTop - windowChat.current.clientHeight
-			if (scrollBottom > windowChat.current.clientHeight) {
-				windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight - 299;
-				setTimeout(() => {
-					scrollToBottomSmooth()
-				}, 0)
-			} else {
-				scrollToBottomSmooth()
-			}
-		}
-	}, [windowChat.current])
+        const handleScrollToBottom = useCallback(() => {
+                if (windowChat.current) {
+                        const scrollBottom = windowChat.current.scrollHeight - windowChat.current.scrollTop - windowChat.current.clientHeight
+                        if (scrollBottom > windowChat.current.clientHeight) {
+                                windowChat.current.scrollTop = windowChat.current.scrollHeight - windowChat.current.clientHeight - 299;
+                                setTimeout(() => {
+                                        scrollToBottomSmooth()
+                                }, 0)
+                        } else {
+                                scrollToBottomSmooth()
+                        }
+                }
+        }, [windowChat.current])
+
+        const scrollToFirstUnread = useCallback((unread = notReadMessages) => {
+                if (!windowChat.current || !unread.length) return;
+                const sorted = [...unread].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                const firstUnread = sorted[0];
+                const element = document.getElementById(`message-${firstUnread.id}`);
+                if (element) {
+                        windowChat.current.scrollTop = element.offsetTop;
+                } else {
+                        scrollToBottom();
+                }
+        }, [notReadMessages, windowChat.current])
 
 	// Функция для проверки, различаются ли две даты по дню
-	const isDifferentDay = (date1, date2) => {
-		return (
-			date1.getFullYear() !== date2.getFullYear() ||
-			date1.getMonth() !== date2.getMonth() ||
-			date1.getDate() !== date2.getDate()
-		);
-	};
+const isDifferentDay = (date1, date2) => {
+        return (
+                date1.getFullYear() !== date2.getFullYear() ||
+                date1.getMonth() !== date2.getMonth() ||
+                date1.getDate() !== date2.getDate()
+        );
+};
+
+        const handleSendFiles = (text) => {
+                if (!text && !files.length) return;
+                if (replyMessage.id !== null) {
+                        setReplyMessage(prev => ({ ...prev, id: null }));
+                }
+                const fileUrls = files.map(f => URL.createObjectURL(f));
+                let message = {
+                        id: Date.now(),
+                        createdAt: Date.now(),
+                        text,
+                        files: fileUrls,
+                        load: true,
+                        user: {
+                                avatar: user.user.avatar,
+                                id: user.user.id,
+                        },
+                        userId: user.user.id,
+                };
+                setFiles([]);
+                setIsModal(false);
+                setMessages(prevMessages => {
+                        const lastGroup = prevMessages[prevMessages.length - 1];
+
+                        if (lastGroup && !isDifferentDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
+                                return [...prevMessages, [message]];
+                        }
+
+                        if (lastGroup && lastGroup[0].userId === message.userId) {
+                                return [...prevMessages.slice(0, prevMessages.length - 1), [...lastGroup, message]];
+                        } else {
+                                return [...prevMessages, [message]];
+                        }
+                });
+
+                if (isScrollBottom) {
+                        setTimeout(() => {
+                                if (windowChat.current)
+                                        windowChat.current.scrollTo({
+                                                top: windowChat.current.scrollHeight,
+                                                behavior: "smooth",
+                                        });
+                        }, 0);
+                }
+
+                sendMessage(Number(hash), user.user.id, text, files)
+                        .then(async data => {
+                                if (!chatData.id && data.userId == user.user.id) {
+                                        await fetchPersonalChat(hash, user.user.id).then(data => {
+                                                setChats(prevChats => [...prevChats, data]);
+                                                setChatData(prevChatData => ({ ...prevChatData, ...data }));
+                                        });
+                                }
+                                return data;
+                        })
+                        .then(data => {
+                                if (user.user.id === hash) {
+                                        user.socket.emit("sendMessage", { message: data, recipientId: hash });
+                                } else {
+                                        user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash });
+                                        user.socket.emit("sendMessage", { message: data, recipientId: hash });
+                                }
+                                return data;
+                        })
+                        .then(data => {
+                                setMessages(prevMessages => {
+                                        return prevMessages.map(group => {
+                                                return group.map(oldMessage => {
+                                                        if (oldMessage.id === message.id) {
+                                                                const serverFiles = (data.files || []).map(f => process.env.REACT_APP_API_URL + f);
+                                                                return { ...oldMessage, load: false, ...data, files: serverFiles };
+                                                        }
+                                                        return oldMessage;
+                                                });
+                                        });
+                                });
+                        });
+        };
 	const contentOutsideChat =
 		<div className={style.content__inner}>
 			<span className={style.content__innerText}>Выберите, кому хотели бы написать</span>
@@ -349,17 +451,29 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 					}
 				</TransitionGroup>
 
-				{/* <CSSTransition
-					in={true}
-					timeout={300}
-					classNames="create-anim"
-					unmountOnExit
-					mountOnEnter
-				>
-					<div className={style.content__modal} onClick={() => setIsModal(false)}>
-						<MessengerModalFiles setIsModal={setIsModal} />
-					</div>
-				</CSSTransition> */}
+                                <CSSTransition
+                                        in={isModal}
+                                        timeout={300}
+                                        classNames="create-anim"
+                                        unmountOnExit
+                                        mountOnEnter
+                                >
+                                        <div
+                                                className={style.content__modal}
+                                                onClick={(e) => {
+                                                        if (e.target === e.currentTarget) {
+                                                                setIsModal(false);
+                                                        }
+                                                }}
+                                        >
+                                                <MessengerModalFiles
+                                                        setIsModal={setIsModal}
+                                                        files={files}
+                                                        setFiles={setFiles}
+                                                        onSend={handleSendFiles}
+                                                />
+                                        </div>
+                                </CSSTransition>
 
 				<CSSTransition
 					in={contextMenu.visible}
@@ -428,7 +542,20 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 						</svg>
 					</div>
 				</CSSTransition>
-				<MessengerInteraction chatData={chatData} setMessages={setMessages} isScrollBottom={isScrollBottom} windowChatRef={windowChat} setChatData={setChatData} setChats={setChats} replyMessage={replyMessage} setReplyMessage={setReplyMessage} inputRef={inputRef} setFiles={setFiles} files={files} />
+                                <MessengerInteraction
+                                        chatData={chatData}
+                                        setMessages={setMessages}
+                                        isScrollBottom={isScrollBottom}
+                                        windowChatRef={windowChat}
+                                        setChatData={setChatData}
+                                        setChats={setChats}
+                                        replyMessage={replyMessage}
+                                        setReplyMessage={setReplyMessage}
+                                        inputRef={inputRef}
+                                        setFiles={setFiles}
+                                        files={files}
+                                        setIsModal={setIsModal}
+                                />
 			</div>
 		</>
 	return (

@@ -23,10 +23,19 @@ export const fetchPersonalChat = async (otherUserId, userId) => {
 	return data;
 };
 
-export const sendMessage = async (otherUserId, userId, text) => {
+export const sendMessage = async (otherUserId, userId, text, files = []) => {
+        const formData = new FormData();
+        formData.append('otherUserId', otherUserId);
+        formData.append('userId', userId);
+        formData.append('text', text);
+        if (files.length) {
+                files.forEach(file => {
+                        formData.append('files', file);
+                });
+        }
 
-	const { data } = await $host.post('api/messenger/sendMessage', { otherUserId, userId, text });
-	return data;
+        const { data } = await $host.post('api/messenger/sendMessage', formData);
+        return data;
 };
 
 
