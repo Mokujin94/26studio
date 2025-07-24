@@ -5,7 +5,7 @@ import Message from '../message/Message'
 import { useLocation } from 'react-router-dom'
 import { Context } from '../..'
 import { observer } from 'mobx-react-lite'
-import { fetchPersonalChat, onReadMessage } from '../../http/messengerAPI'
+import { fetchPersonalChat, onReadMessage, sendMessage } from '../../http/messengerAPI'
 import { useDayMonthFormatter } from '../../hooks/useDayMonthFormatter'
 import { CSSTransition, SwitchTransition, TransitionGroup } from 'react-transition-group'
 import Spinner from '../spinner/Spinner'
@@ -251,13 +251,90 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 	}, [windowChat.current])
 
 	// Функция для проверки, различаются ли две даты по дню
-	const isDifferentDay = (date1, date2) => {
-		return (
-			date1.getFullYear() !== date2.getFullYear() ||
-			date1.getMonth() !== date2.getMonth() ||
-			date1.getDate() !== date2.getDate()
-		);
-	};
+const isDifferentDay = (date1, date2) => {
+        return (
+                date1.getFullYear() !== date2.getFullYear() ||
+                date1.getMonth() !== date2.getMonth() ||
+                date1.getDate() !== date2.getDate()
+        );
+};
+
+        const handleSendFiles = (text) => {
+                if (!text && !files.length) return;
+                if (replyMessage.id !== null) {
+                        setReplyMessage(prev => ({ ...prev, id: null }));
+                }
+                const fileUrls = files.map(f => URL.createObjectURL(f));
+                let message = {
+                        id: Date.now(),
+                        createdAt: Date.now(),
+                        text,
+                        files: fileUrls,
+                        load: true,
+                        user: {
+                                avatar: user.user.avatar,
+                                id: user.user.id,
+                        },
+                        userId: user.user.id,
+                };
+                setFiles([]);
+                setIsModal(false);
+                setMessages(prevMessages => {
+                        const lastGroup = prevMessages[prevMessages.length - 1];
+
+                        if (lastGroup && !isDifferentDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
+                                return [...prevMessages, [message]];
+                        }
+
+                        if (lastGroup && lastGroup[0].userId === message.userId) {
+                                return [...prevMessages.slice(0, prevMessages.length - 1), [...lastGroup, message]];
+                        } else {
+                                return [...prevMessages, [message]];
+                        }
+                });
+
+                if (isScrollBottom) {
+                        setTimeout(() => {
+                                if (windowChat.current)
+                                        windowChat.current.scrollTo({
+                                                top: windowChat.current.scrollHeight,
+                                                behavior: "smooth",
+                                        });
+                        }, 0);
+                }
+
+                sendMessage(Number(hash), user.user.id, text)
+                        .then(async data => {
+                                if (!chatData.id && data.userId == user.user.id) {
+                                        await fetchPersonalChat(hash, user.user.id).then(data => {
+                                                setChats(prevChats => [...prevChats, data]);
+                                                setChatData(prevChatData => ({ ...prevChatData, ...data }));
+                                        });
+                                }
+                                return data;
+                        })
+                        .then(data => {
+                                if (user.user.id === hash) {
+                                        user.socket.emit("sendMessage", { message: data, recipientId: hash });
+                                } else {
+                                        user.socket.emit("sendMessageRecipient", { message: data, recipientId: hash });
+                                        user.socket.emit("sendMessage", { message: data, recipientId: hash });
+                                }
+                                return data;
+                        })
+                        .then(data => {
+                                setMessages(prevMessages => {
+                                        return prevMessages.map(group => {
+                                                return group.map(oldMessage => {
+                                                        if (oldMessage.id === message.id) {
+                                                                return { ...oldMessage, load: false, ...data, files: fileUrls };
+                                                        }
+                                                        return oldMessage;
+                                                });
+                                        });
+                                });
+                        });
+        };
 	const contentOutsideChat =
 		<div className={style.content__inner}>
 			<span className={style.content__innerText}>Выберите, кому хотели бы написать</span>
@@ -357,7 +434,12 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
                                         mountOnEnter
                                 >
                                         <div className={style.content__modal} onClick={() => setIsModal(false)}>
-                                                <MessengerModalFiles setIsModal={setIsModal} files={files} setFiles={setFiles} />
+                                                <MessengerModalFiles
+                                                        setIsModal={setIsModal}
+                                                        files={files}
+                                                        setFiles={setFiles}
+                                                        onSend={handleSendFiles}
+                                                />
                                         </div>
                                 </CSSTransition>
 
