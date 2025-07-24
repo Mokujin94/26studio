@@ -97,9 +97,10 @@ const ChatMembers = sequelize.define("chat_members", {
 })
 
 const Messages = sequelize.define("messages", {
-	id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-	text: { type: DataTypes.TEXT, allowNull: false },
-	isRead: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        text: { type: DataTypes.TEXT, allowNull: false },
+        files: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
+        isRead: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false }
 })
 
 const Notifications = sequelize.define("notifications", {

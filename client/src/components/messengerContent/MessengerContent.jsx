@@ -169,14 +169,20 @@ const MessengerContent = observer(({ chats, setChats, setChatData, chatData, oth
 
 
 		if (!hash) return;
-		fetchPersonalChat(Number(hash), user.user.id).then(data => {
-			if (!data.is_chat) {
-				setOtherUserData(data.member)
-			}
-			setChatData(data);
-			// setOtherUserData(data.member)
-			setMessages(data.messages);
-			setTotalCountMessages(data.countMessages)
+                fetchPersonalChat(Number(hash), user.user.id).then(data => {
+                        if (!data.is_chat) {
+                                setOtherUserData(data.member)
+                        }
+                        setChatData(data);
+                        // setOtherUserData(data.member)
+                        const mappedMessages = data.messages.map(group =>
+                                group.map(msg => ({
+                                        ...msg,
+                                        files: msg.files ? msg.files.map(f => process.env.REACT_APP_API_URL + f) : msg.files,
+                                }))
+                        );
+                        setMessages(mappedMessages);
+                        setTotalCountMessages(data.countMessages)
 
 			setMessagesOffset(2)
 			setIsLoadingMessages(false)
@@ -303,7 +309,9 @@ const isDifferentDay = (date1, date2) => {
                         }, 0);
                 }
 
-                sendMessage(Number(hash), user.user.id, text)
+
+                sendMessage(Number(hash), user.user.id, text, files)
+
                         .then(async data => {
                                 if (!chatData.id && data.userId == user.user.id) {
                                         await fetchPersonalChat(hash, user.user.id).then(data => {
@@ -327,7 +335,10 @@ const isDifferentDay = (date1, date2) => {
                                         return prevMessages.map(group => {
                                                 return group.map(oldMessage => {
                                                         if (oldMessage.id === message.id) {
-                                                                return { ...oldMessage, load: false, ...data, files: fileUrls };
+
+                                                                const serverFiles = (data.files || []).map(f => process.env.REACT_APP_API_URL + f);
+                                                                return { ...oldMessage, load: false, ...data, files: serverFiles };
+
                                                         }
                                                         return oldMessage;
                                                 });
@@ -433,7 +444,16 @@ const isDifferentDay = (date1, date2) => {
                                         unmountOnExit
                                         mountOnEnter
                                 >
-                                        <div className={style.content__modal} onClick={() => setIsModal(false)}>
+
+                                        <div
+                                                className={style.content__modal}
+                                                onClick={(e) => {
+                                                        if (e.target === e.currentTarget) {
+                                                                setIsModal(false);
+                                                        }
+                                                }}
+                                        >
+
                                                 <MessengerModalFiles
                                                         setIsModal={setIsModal}
                                                         files={files}

@@ -11,6 +11,9 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
 
         const photoBlockRef = useRef(null);
 
+        const inputRef = useRef(null);
+
+
         useEffect(() => {
 		const photoGrid = photoBlockRef.current;
 		const photoItems = photoGrid.querySelectorAll(`.${style.block__img}`);
@@ -48,6 +51,13 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
                 <div
                         ref={photoBlockRef}
                         className={style.block}
+
+                        onClick={(e) => {
+                                if (!photos.length && e.target === e.currentTarget) {
+                                        inputRef.current.click();
+                                }
+                        }}
+
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => {
                                 e.preventDefault();
@@ -57,6 +67,20 @@ const MessengerModalFiles = ({ setIsModal, files = [], setFiles, onSend }) => {
                                 }
                         }}
                 >
+
+                        <input
+                                multiple
+                                type="file"
+                                ref={inputRef}
+                                style={{ display: 'none' }}
+                                onChange={(e) => {
+                                        const selected = Array.from(e.target.files);
+                                        if (selected.length) {
+                                                setFiles([...files, ...selected]);
+                                        }
+                                }}
+                        />
+
 			<div className={style.block__header}>
 				<Cross onClick={() => setIsModal(false)} />
 

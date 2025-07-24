@@ -43,6 +43,11 @@
                 resize: none;
                 border-radius: 5px;
                 padding: 5px;
+
+                background: $studio-light-dark-element;
+                color: $studio-white-text;
+                border: none;
+
         }
 
         &__send {
