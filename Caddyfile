@@ -1,9 +1,8 @@
-# (опционально) укажи почту для ZeroSSL/LE
 {
   email admin@26studio.ru
 }
 
-# Боевой виртуальный хост для домена
+# боевой хост
 26studio.ru, www.26studio.ru {
   encode zstd gzip
 
@@ -24,11 +23,8 @@
   }
 }
 
-# ВРЕМЕННО для диагностики по IP (потом удали)
+# временно: чтобы по IP не казалось "мертвым"
 :80 {
-  respond "ok 80" 200
+  redir https://26studio.ru{uri}
 }
-:443 {
-  tls internal
-  respond "ok 443" 200
-}
+# УДАЛИ блок :443 полностью
