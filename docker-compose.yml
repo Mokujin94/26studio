@@ -1,16 +1,10 @@
-version: '3'
-
 services:
   postgres:
-    container_name: postgres
     image: postgres:16.2-alpine3.19
     restart: always
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=studio26
-    # База не нужна снаружи — лучше убрать проброс порта
-    # ports:
-    #   - 5432:5432
     volumes:
       - pg_data:/var/lib/postgresql/data
 
@@ -25,11 +19,10 @@ services:
       - DB_HOST=postgres
       - DB_PORT=5432
       - CLIENTURL=https://26studio.ru
-    depends_on:
-      - postgres
-    # не публикуем наружу
     expose:
       - "3000"
+    depends_on:
+      - postgres
     volumes:
       - my_app_data:/app/static
       - my_app_data:/app/extracted
@@ -38,7 +31,6 @@ services:
   frontend:
     build: ./client
     restart: always
-    # не публикуем наружу
     expose:
       - "80"
 

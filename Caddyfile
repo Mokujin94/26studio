@@ -1,28 +1,17 @@
-{
-  # полезно для корректных редиректов за прокси
-  servers {
-    trust_proxy
-  }
-}
+# Без глобального блока servers
 
-# Основной домен и www
 26studio.ru, www.26studio.ru {
-
-  # Автоматический HTTPS от Let's Encrypt — Caddy сделает сам
   encode zstd gzip
 
-  # Прокси на backend по префиксу /api (поменяй при необходимости)
   @api path /api*
   handle @api {
     reverse_proxy backend:3000
   }
 
-  # Всё остальное — фронтенд (Nginx в контейнере frontend)
   handle {
     reverse_proxy frontend:80
   }
 
-  # HSTS, безопасность заголовков (необязательно, но хорошо иметь)
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     Referrer-Policy "strict-origin-when-cross-origin"
@@ -31,5 +20,11 @@
   }
 }
 
-# Авторедирект с http на https — Caddy делает сам,
-# просто оставь прослушивание 80 порта в compose
+# (необязательно) Временный ответ по IP для диагностики
+:80 {
+  respond 200 "ok 80"
+}
+:443 {
+  tls internal
+  respond 200 "ok 443"
+}
