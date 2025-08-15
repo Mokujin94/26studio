@@ -1,5 +1,9 @@
-# Без глобального блока servers
+# (опционально) укажи почту для ZeroSSL/LE
+{
+  email admin@26studio.ru
+}
 
+# Боевой виртуальный хост для домена
 26studio.ru, www.26studio.ru {
   encode zstd gzip
 
@@ -20,11 +24,11 @@
   }
 }
 
-# (необязательно) Временный ответ по IP для диагностики
+# ВРЕМЕННО для диагностики по IP (потом удали)
 :80 {
-  respond 200 "ok 80"
+  respond "ok 80" 200
 }
 :443 {
   tls internal
-  respond 200 "ok 443"
+  respond "ok 443" 200
 }
