@@ -34,9 +34,9 @@ services:
 
   frontend:
     build: ./client
-    ports:
-      - 80:80
     restart: always
+    expose:
+      - "80"
 
   caddy:
     image: caddy:2.7
