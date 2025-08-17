@@ -19,7 +19,7 @@ const app = express();
 
 const corsOptions = {
 	origin: function (origin, callback) {
-		if (origin === 'http://91.201.41.143:80') {
+		if (origin === 'http://185.221.155.200:80') {
 			// Разрешить доступ для указанного URL
 			callback(null, true);
 		} else {
