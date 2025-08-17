@@ -2,14 +2,9 @@
   email admin@26studio.ru
 }
 
-# боевой хост
+# Веб-сайт
 26studio.ru, www.26studio.ru {
   encode zstd gzip
-
-  @api path /api*
-  handle @api {
-    reverse_proxy backend:3000
-  }
 
   handle {
     reverse_proxy frontend:80
@@ -23,8 +18,26 @@
   }
 }
 
-# временно: чтобы по IP не казалось "мертвым"
+# API по отдельному хосту
+api.26studio.ru {
+  encode zstd gzip
+
+  # Если backend ожидает корень / (без /api), оставь так:
+  reverse_proxy backend:3000
+
+  # Если backend ожидает префикс /api, то вместо строки выше:
+  # handle_path /api* {
+  #   reverse_proxy backend:3000
+  # }
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    X-Content-Type-Options "nosniff"
+  }
+}
+
+# (опционально) редирект по IP на основной домен
 :80 {
   redir https://26studio.ru{uri}
 }
-# УДАЛИ блок :443 полностью
