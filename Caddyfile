@@ -23,12 +23,12 @@ api.26studio.ru {
   encode zstd gzip
 
   # Если backend ожидает корень / (без /api), оставь так:
-  reverse_proxy backend:3000
+  # reverse_proxy backend:3000
 
   # Если backend ожидает префикс /api, то вместо строки выше:
-  # handle_path /api* {
-  #   reverse_proxy backend:3000
-  # }
+  handle_path /api* {
+  reverse_proxy backend:3000
+ }
 
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
