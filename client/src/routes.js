@@ -9,6 +9,7 @@ import Group from './pages/group/Group';
 import Registration from './pages/registration/Registation';
 import NewsPaper from './pages/newsPaper/NewsPaper';
 import Admin from './pages/admin/Admin';
+import GithubCallback from './pages/githubCallback/GithubCallback';
 
 import {
   GROUPS_ROUTE,
@@ -24,7 +25,8 @@ import {
   REGISTRATION_ROUTE,
   ADMIN_ROUTE,
   GROUP_MANAGEMENT_ROUTE,
-	PASSWORDRECOVERY_ROUTE
+	PASSWORDRECOVERY_ROUTE,
+	GITHUB_CALLBACK_ROUTE
 } from './utils/consts';
 import GroupsManagement from './pages/groupsManagement/GroupsManagement';
 import PasswordRecovery from './pages/passwordRecovery/PasswordRecovery';
@@ -100,5 +102,9 @@ export const publicRoutes = [
 	{
 		path: PASSWORDRECOVERY_ROUTE,
 		Component: <PasswordRecovery/>
+	},
+	{
+		path: GITHUB_CALLBACK_ROUTE,
+		Component: <GithubCallback/>
 	}
 ];

@@ -179,7 +179,12 @@ class MessengerController {
 
         async createMessages(req, res, next) {
 
-                const { otherUserId, userId, text, replyMessageId } = req.body;
+                const { otherUserId, userId, text, replyMessageId: rawReplyMessageId } = req.body;
+                
+                // Преобразуем replyMessageId из строки FormData в число или null
+                const replyMessageId = (rawReplyMessageId && rawReplyMessageId !== 'null' && rawReplyMessageId !== 'undefined') 
+                        ? parseInt(rawReplyMessageId, 10) 
+                        : null;
 
                 let uploadedFiles = [];
                 if (req.files && req.files.files) {
@@ -237,8 +242,7 @@ class MessengerController {
                         userId,
                         chatId: chat.id,
                         text,
-
-                        replyMessageId: replyMessageId || null,
+                        replyMessageId,
                         files: uploadedFiles.length ? uploadedFiles : null,
                 })
                 const messageWithUser = await Messages.findByPk(message.id, {

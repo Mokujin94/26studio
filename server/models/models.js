@@ -13,6 +13,7 @@ const User = sequelize.define("user", {
 	avatar: { type: DataTypes.STRING, defaultValue: "avatar.jpg" },
 	group_status: { type: DataTypes.BOOLEAN, defaultValue: false },
 	achivment_list: { type: DataTypes.JSON },
+	github_username: { type: DataTypes.STRING, allowNull: true },
 	lastOnline: {
 		type: DataTypes.DATE,
 		allowNull: true // или false, в зависимости от ваших требований

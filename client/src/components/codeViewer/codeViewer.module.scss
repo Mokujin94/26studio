@@ -1,0 +1,292 @@
+@import "../../resource/styles/variables";
+
+.codeViewer {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	min-height: 500px;
+	background: #1a1f25;
+	border-radius: 8px;
+	overflow: hidden;
+	border: 1px solid $studio-light-dark-border;
+}
+
+.sidebar {
+	width: 260px;
+	min-width: 260px;
+	background: #161b22;
+	border-right: 1px solid $studio-light-dark-border;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.sidebarHeader {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 16px;
+	border-bottom: 1px solid $studio-light-dark-border;
+	color: $studio-grey-text;
+	font-size: 12px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.headerIcon {
+	width: 14px;
+	height: 14px;
+}
+
+.fileTree {
+	flex: 1;
+	overflow-y: auto;
+	padding: 8px 0;
+
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $studio-grey-element;
+		border-radius: 3px;
+	}
+}
+
+.treeItem {
+	user-select: none;
+}
+
+.treeItemRow {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 8px;
+	cursor: pointer;
+	color: $studio-white-text;
+	font-size: 13px;
+	transition: background 0.15s ease;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	&.selected {
+		background: rgba($studio-primary-element, 0.15);
+		color: $studio-primary-element;
+	}
+}
+
+.chevron {
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.15s ease;
+
+	svg {
+		width: 12px;
+		height: 12px;
+	}
+
+	&.expanded {
+		transform: rotate(90deg);
+	}
+}
+
+.folderIcon,
+.fileIcon {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
+.itemName {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.treeChildren {
+	// Дочерние элементы
+}
+
+// Панель с кодом
+.codePanel {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	background: #0d1117;
+}
+
+.codeHeader {
+	border-bottom: 1px solid $studio-light-dark-border;
+	background: #161b22;
+}
+
+.tabs {
+	display: flex;
+	align-items: center;
+}
+
+.tab {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
+	color: $studio-white-text;
+	font-size: 13px;
+	border-bottom: 2px solid $studio-primary-element;
+	background: rgba($studio-primary-element, 0.05);
+
+	.fileIcon {
+		width: 14px;
+		height: 14px;
+	}
+}
+
+.codeContent {
+	flex: 1;
+	overflow: auto;
+	padding: 0;
+
+	&::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: #161b22;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $studio-grey-element;
+		border-radius: 5px;
+		border: 2px solid #161b22;
+	}
+
+	&::-webkit-scrollbar-corner {
+		background: #161b22;
+	}
+}
+
+.codeBlock {
+	margin: 0;
+	padding: 16px 0;
+	font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+	font-size: 13px;
+	line-height: 1.6;
+	color: $studio-white-text;
+	background: transparent;
+	min-width: fit-content;
+}
+
+.codeLine {
+	display: flex;
+	min-height: 21px;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.03);
+	}
+}
+
+.lineNumber {
+	width: 50px;
+	min-width: 50px;
+	padding: 0 16px;
+	text-align: right;
+	color: $studio-grey-text;
+	user-select: none;
+	opacity: 0.6;
+	border-right: 1px solid $studio-light-dark-border;
+}
+
+.lineContent {
+	padding: 0 16px;
+	white-space: pre;
+	flex: 1;
+}
+
+// Плейсхолдер
+.placeholder {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	color: $studio-grey-text;
+	font-size: 14px;
+}
+
+.placeholderIcon {
+	width: 64px;
+	height: 64px;
+	opacity: 0.3;
+}
+
+// Загрузка
+.loading {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 40px;
+}
+
+// Ошибка
+.errorMessage {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $studio-red-text;
+	font-size: 14px;
+	padding: 40px;
+}
+
+// Адаптивность
+@media (max-width: $md) {
+	.codeViewer {
+		flex-direction: column;
+		min-height: 600px;
+	}
+
+	.sidebar {
+		width: 100%;
+		min-width: 100%;
+		max-height: 200px;
+		border-right: none;
+		border-bottom: 1px solid $studio-light-dark-border;
+	}
+
+	.codePanel {
+		min-height: 400px;
+	}
+}
+
+@media (max-width: $sm) {
+	.sidebar {
+		max-height: 150px;
+	}
+
+	.lineNumber {
+		width: 40px;
+		min-width: 40px;
+		padding: 0 8px;
+		font-size: 11px;
+	}
+
+	.lineContent {
+		padding: 0 8px;
+		font-size: 12px;
+	}
+}
+

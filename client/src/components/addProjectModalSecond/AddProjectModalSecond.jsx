@@ -120,13 +120,21 @@ const AddProjectModalSecond = observer(
                             </option>
                             {projectPathes &&
                                 projectPathes.map((item, i) => {
+                                    // Для React проектов показываем все HTML файлы (включая index.html из dist/build)
                                     if (item.split('.').at(-1) === 'html') {
+                                        // Отмечаем index.html как рекомендуемый для React проектов
+                                        const isIndexHtml = item.toLowerCase().endsWith('index.html');
+                                        const isBuildFile = item.includes('/dist/') || item.includes('/build/');
+                                        const displayName = (project.isReactProject && isIndexHtml && isBuildFile) 
+                                            ? `${item} (рекомендуется)`
+                                            : item;
                                         return (
                                             <option key={i} value={item}>
-                                                {item}
+                                                {displayName}
                                             </option>
                                         );
                                     }
+                                    return null;
                                 })}
                         </select>
                     </div>

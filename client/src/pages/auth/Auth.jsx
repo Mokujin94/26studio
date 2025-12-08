@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import FunctionButton from "../../components/functionButton/FunctionButton";
 import { Context } from "../..";
-import { login } from "../../http/userAPI";
+import { login, getGithubAuthUrl } from "../../http/userAPI";
 import { NEWS_ROUTE, PASSWORDRECOVERY_ROUTE } from "../../utils/consts";
 import Spinner from "../../components/spinner/Spinner";
 import ModalError from "../../components/modalError/ModalError";
@@ -17,29 +17,40 @@ function Auth() {
 	const [errorMessage, setErrorMessage] = useState("");
 	const [errorModal, setErrorModal] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [isEyeOpen, setIsEyeOpen] = useState(false)
-
+	const [isEyeOpen, setIsEyeOpen] = useState(false);
 
 	const navigate = useNavigate();
 	const onLogin = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		await login(email.toLowerCase(), password).then((data) => {
-			setLoading(false);
-			user.setUser(data);
-			user.setAuth(true);
-			navigate(NEWS_ROUTE);
-		}).catch((err) => {
-			setLoading(false);
+		await login(email.toLowerCase(), password)
+			.then((data) => {
+				setLoading(false);
+				user.setUser(data);
+				user.setAuth(true);
+				navigate(NEWS_ROUTE);
+			})
+			.catch((err) => {
+				setLoading(false);
+				setErrorModal(true);
+				setErrorMessage(err.response.data.message);
+				// setErrorMessage(err)
+			});
+	};
+
+	const onGithubLogin = async () => {
+		try {
+			const url = await getGithubAuthUrl();
+			window.location.href = url;
+		} catch (err) {
 			setErrorModal(true);
-			setErrorMessage(err.response.data.message)
-			// setErrorMessage(err)
-		});
+			setErrorMessage("Ошибка авторизации через GitHub");
+		}
 	};
 
 	useEffect(() => {
 		document.title = "Авторизация";
-	}, [])
+	}, []);
 	return (
 		<div className="auth">
 			<CSSTransition
@@ -89,29 +100,93 @@ function Auth() {
 							type={isEyeOpen ? "text" : "password"}
 							className="auth__input-item"
 						/>
-						<div className="auth__input-eye" onClick={() => setIsEyeOpen(prev => !prev)}>
-							{
-								isEyeOpen
-									?
-									<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<g id="SVGRepo_bgCarrier" strokeWidth="0" />
-										<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
-										<g id="SVGRepo_iconCarrier"> <path d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /> </g>
-									</svg>
-									:
-									<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<g id="SVGRepo_bgCarrier" strokeWidth="0" />
-										<g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
-										<g id="SVGRepo_iconCarrier"> <path d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /> <path d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /> </g>
-									</svg>
-							}
+						<div
+							className="auth__input-eye"
+							onClick={() => setIsEyeOpen((prev) => !prev)}
+						>
+							{isEyeOpen ? (
+								<svg
+									width="800px"
+									height="800px"
+									viewBox="0 0 24 24"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<g id="SVGRepo_bgCarrier" strokeWidth="0" />
+									<g
+										id="SVGRepo_tracerCarrier"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+									<g id="SVGRepo_iconCarrier">
+										{" "}
+										<path
+											d="M2.99902 3L20.999 21M9.8433 9.91364C9.32066 10.4536 8.99902 11.1892 8.99902 12C8.99902 13.6569 10.3422 15 11.999 15C12.8215 15 13.5667 14.669 14.1086 14.133M6.49902 6.64715C4.59972 7.90034 3.15305 9.78394 2.45703 12C3.73128 16.0571 7.52159 19 11.9992 19C13.9881 19 15.8414 18.4194 17.3988 17.4184M10.999 5.04939C11.328 5.01673 11.6617 5 11.9992 5C16.4769 5 20.2672 7.94291 21.5414 12C21.2607 12.894 20.8577 13.7338 20.3522 14.5"
+											stroke="#000000"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>{" "}
+									</g>
+								</svg>
+							) : (
+								<svg
+									width="800px"
+									height="800px"
+									viewBox="0 0 24 24"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<g id="SVGRepo_bgCarrier" strokeWidth="0" />
+									<g
+										id="SVGRepo_tracerCarrier"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+									<g id="SVGRepo_iconCarrier">
+										{" "}
+										<path
+											d="M15.0007 12C15.0007 13.6569 13.6576 15 12.0007 15C10.3439 15 9.00073 13.6569 9.00073 12C9.00073 10.3431 10.3439 9 12.0007 9C13.6576 9 15.0007 10.3431 15.0007 12Z"
+											stroke="#000000"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>{" "}
+										<path
+											d="M12.0012 5C7.52354 5 3.73326 7.94288 2.45898 12C3.73324 16.0571 7.52354 19 12.0012 19C16.4788 19 20.2691 16.0571 21.5434 12C20.2691 7.94291 16.4788 5 12.0012 5Z"
+											stroke="#000000"
+											strokeWidth="2"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+										/>{" "}
+									</g>
+								</svg>
+							)}
 						</div>
 					</div>
 				</div>
 				<Link to={PASSWORDRECOVERY_ROUTE} className="auth__forget">
 					Забыли пароль?
 				</Link>
-				<FunctionButton onClick={onLogin}>{loading ? <Spinner /> : 'Войти'}</FunctionButton>
+				<FunctionButton onClick={onLogin}>
+					{loading ? <Spinner /> : "Войти"}
+				</FunctionButton>
+
+				<div className="auth__divider">
+					<span>или</span>
+				</div>
+
+				<button
+					type="button"
+					className="auth__github-btn"
+					onClick={onGithubLogin}
+				>
+					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+						<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+					</svg>
+					Войти через GitHub
+				</button>
+
 				<div className="auth__notAuth">
 					<p className="auth__notAuthText">Нет аккаунта?</p>
 					<Link to="/registration" className="auth__notAuthLink">

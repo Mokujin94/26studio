@@ -10,10 +10,21 @@ router.get('/login/recovery', userController.getUserByEmail);
 router.patch('/login/recovery', userController.recoveryPassword);
 router.post('/code', userController.generateCode);
 
+// GitHub OAuth
+router.get('/auth/github', userController.githubAuth);
+router.post('/auth/github/callback', userController.githubCallback);
+
+// GitHub repos
+router.get('/github/repos/:username', userController.getGithubRepos);
+router.patch('/github/disconnect/:id', authMiddleware, userController.disconnectGithub);
+router.post('/github/link', authMiddleware, userController.linkGithubAccount);
+
 router.get('/auth', authMiddleware, userController.check);
 router.post('/upload_project', authMiddleware, userController.uploadProject);
 router.post('/upload_finished_project', authMiddleware, userController.uploadFinishedProject);
 router.get('/accept_project', userController.sendProjectViewer);
+router.get('/project_files', userController.getProjectFiles);
+router.get('/project_file_content', userController.getProjectFileContent);
 router.get('/tutors', userController.getAllTutors);
 router.get('/group_manage', userController.getUsersByGroupStatus);
 router.get('/search/groups', userController.searchUsersByName);

@@ -13,3 +13,4 @@ export const GROUPS_ROUTE = '/groups';
 export const GROUP_ROUTE = '/groups';
 export const ADMIN_ROUTE = '/admin';
 export const GROUP_MANAGEMENT_ROUTE = '/admin/group';
+export const GITHUB_CALLBACK_ROUTE = '/auth/github/callback';

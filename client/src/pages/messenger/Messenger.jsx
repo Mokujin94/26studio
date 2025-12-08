@@ -1,69 +1,97 @@
-
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import MessengerSideBar from '../../components/messengerSideBar/MessengerSideBar'
-import MessengerContent from '../../components/messengerContent/MessengerContent'
-import { observer } from 'mobx-react-lite';
-import { Context } from '../..';
-import { fetchAllChats, fetchMessages, fetchPersonalChat } from '../../http/messengerAPI';
-import { useLocation } from 'react-router-dom';
-import { useDebounce } from '../../hooks/useDebounce';
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
+import MessengerSideBar from "../../components/messengerSideBar/MessengerSideBar";
+import MessengerContent from "../../components/messengerContent/MessengerContent";
+import { observer } from "mobx-react-lite";
+import { Context } from "../..";
+import {
+	fetchAllChats,
+	fetchMessages,
+	fetchPersonalChat,
+} from "../../http/messengerAPI";
+import { useLocation } from "react-router-dom";
+import { useDebounce } from "../../hooks/useDebounce";
+import notificationAudio from "../../resource/audio/notification.mp3";
 
 const Messenger = observer(() => {
 	const { user } = useContext(Context);
 
 	const location = useLocation();
-	const hash = Number(location.hash.replace("#", ""))
+	const hash = Number(location.hash.replace("#", ""));
 
 	const [chats, setChats] = useState([]);
 	const [chatData, setChatData] = useState({});
-	const [otherUserData, setOtherUserData] = useState({})
-	const [messages, setMessages] = useState([])
-	const [lastMessage, setLastMessage] = useState({})
-	const [isScrollBottom, setIsScrollBottom] = useState(true)
-	const [messagesOffset, setMessagesOffset] = useState(2)
-	const [isFetchingMessages, setIsFetchingMessages] = useState(false)
+	const [otherUserData, setOtherUserData] = useState({});
+	const [messages, setMessages] = useState([]);
+	const [lastMessage, setLastMessage] = useState({});
+	const [isScrollBottom, setIsScrollBottom] = useState(true);
+	const [messagesOffset, setMessagesOffset] = useState(2);
+	const [isFetchingMessages, setIsFetchingMessages] = useState(false);
 	const [totalCountMessages, setTotalCountMessages] = useState(0);
 	const [isLoadingMessages, setIsLoadingMessages] = useState(true);
-	const windowChatRef = useRef(null)
+	const windowChatRef = useRef(null);
 
 	const isDifferentDay = (date1, date2) => {
-		return date1.getDate() === date2.getDate() &&
+		return (
+			date1.getDate() === date2.getDate() &&
 			date1.getMonth() === date2.getMonth() &&
 			date1.getFullYear() === date2.getFullYear() &&
-			date1.getHours() === date2.getHours();
+			date1.getHours() === date2.getHours()
+		);
 	};
 
 	useEffect(() => {
-		fetchAllChats(user.user.id).then(data => {
-			setChats(data.chats)
+		fetchAllChats(user.user.id).then((data) => {
+			setChats(data.chats);
 			console.log(data.chats);
-		})
+		});
 		return () => {
 			// user.socket.off("incReadMessege")
 			// user.socket.off("lastMessage")
 			// user.socket.off("getNotReadMessage")
-		}
-	}, [])
+		};
+	}, []);
 
 	useEffect(() => {
 		if (user.socket === null) return;
-                user.socket.on("getMessages", (message) => {
-                        console.log(message);
-                        if (message.files) {
-                                message.files = message.files.map(f => process.env.REACT_APP_API_URL + f);
-                        }
-                        const promise = new Promise(async (resolve, reject) => {
-				const isChat = chats.filter(item => message.chatId === item.id)
+		user.socket.on("getMessages", (message) => {
+			console.log(message);
+
+			// Воспроизводим звук если сообщение от другого пользователя и вкладка неактивна
+			if (message.userId !== user.user.id && document.hidden) {
+				const audio = new Audio(notificationAudio);
+				audio.volume = 0.5;
+				audio.play().catch((err) => {
+					console.log("Не удалось воспроизвести звук:", err);
+				});
+			}
+
+			if (message.files && message.files.length) {
+				message.files = message.files.map((f) => {
+					// Если файл уже содержит полный URL, не добавляем базовый URL
+					if (f.startsWith("http://") || f.startsWith("https://")) {
+						return f;
+					}
+					return process.env.REACT_APP_API_URL + "/" + f;
+				});
+			}
+			const promise = new Promise(async (resolve, reject) => {
+				const isChat = chats.filter((item) => message.chatId === item.id);
 				setLastMessage(message);
 				if ((!chatData.id && message.userId == hash) || !isChat.length) {
-					await fetchPersonalChat(message.userId, user.user.id).then(data => {
-						setChatData(prevChatData => {
-							return { ...prevChatData, ...data }
-						})
-						setChats(prevChats => {
-							return [...prevChats, data]
-						})
-					})
+					await fetchPersonalChat(message.userId, user.user.id).then((data) => {
+						setChatData((prevChatData) => {
+							return { ...prevChatData, ...data };
+						});
+						setChats((prevChats) => {
+							return [...prevChats, data];
+						});
+					});
 				}
 				console.log(chats);
 
@@ -71,7 +99,13 @@ const Messenger = observer(() => {
 				setMessages((prevMessages) => {
 					const lastGroup = prevMessages[prevMessages.length - 1];
 
-					if (lastGroup && !isDifferentDay(new Date(lastGroup[lastGroup.length - 1].createdAt), new Date(message.createdAt))) {
+					if (
+						lastGroup &&
+						!isDifferentDay(
+							new Date(lastGroup[lastGroup.length - 1].createdAt),
+							new Date(message.createdAt)
+						)
+					) {
 						// Создаем новую группу, если сообщение написанно в другом часу или в другой день
 						resolve();
 						return [...prevMessages, [message]];
@@ -80,7 +114,10 @@ const Messenger = observer(() => {
 					if (lastGroup && lastGroup[0].userId === message.userId) {
 						// Добавляем в конец последней группы, если это от того же пользователя
 						resolve();
-						return [...prevMessages.slice(0, prevMessages.length - 1), [...lastGroup, message]];
+						return [
+							...prevMessages.slice(0, prevMessages.length - 1),
+							[...lastGroup, message],
+						];
 					} else {
 						// Создаем новую группу, если это другой пользователь
 						resolve();
@@ -89,18 +126,12 @@ const Messenger = observer(() => {
 				});
 				resolve();
 			});
-
 		});
 
-
-
-
 		user.socket.on("getReadMessage", (updatedMessage) => {
-
-
-			setMessages(prevMessages => {
-				const updatedMessages = prevMessages.map(group => {
-					return group.map(message => {
+			setMessages((prevMessages) => {
+				const updatedMessages = prevMessages.map((group) => {
+					return group.map((message) => {
 						if (message.id === updatedMessage.id) {
 							// Если это обновляемое сообщение, возвращаем новый объект с обновленными данными
 							// return updatedMessage
@@ -112,18 +143,15 @@ const Messenger = observer(() => {
 					});
 				});
 
-				return updatedMessages
+				return updatedMessages;
 			});
-
-
-		})
+		});
 
 		return () => {
-			user.socket.off("getMessages")
-			user.socket.off("getReadMessage")
-
-		}
-	}, [user.socket, chatData, chats])
+			user.socket.off("getMessages");
+			user.socket.off("getReadMessage");
+		};
+	}, [user.socket, chatData, chats]);
 
 	useEffect(() => {
 		if (!windowChatRef.current) return;
@@ -134,17 +162,21 @@ const Messenger = observer(() => {
 			const scrollOffset = windowChat.scrollHeight - windowChat.scrollTop;
 			const bottomOffset = 300; // Здесь вы указываете, сколько пикселей до низа блока вы хотите обнаружить
 			const totalElements = messages.reduce((acc, arr) => acc + arr.length, 0);
-			if (windowChat.scrollTop <= 500 && totalElements < totalCountMessages && !isLoadingMessages) {
-				console.log("true")
+			if (
+				windowChat.scrollTop <= 500 &&
+				totalElements < totalCountMessages &&
+				!isLoadingMessages
+			) {
+				console.log("true");
 				setIsFetchingMessages(true);
 			}
 
 			if (scrollOffset <= windowChat.clientHeight + bottomOffset) {
-				setIsScrollBottom(true)
+				setIsScrollBottom(true);
 			} else {
-				setIsScrollBottom(false)
+				setIsScrollBottom(false);
 			}
-		}
+		};
 
 		const ref = windowChatRef.current;
 
@@ -157,14 +189,16 @@ const Messenger = observer(() => {
 				ref.removeEventListener("scroll", checkScrollHandler);
 			}
 		};
-	}, [chatData, messages, totalCountMessages, isFetchingMessages, hash, windowChatRef.current])
-
-
-
+	}, [
+		chatData,
+		messages,
+		totalCountMessages,
+		isFetchingMessages,
+		hash,
+		windowChatRef.current,
+	]);
 
 	useEffect(() => {
-
-
 		if (isScrollBottom) {
 			setTimeout(() => {
 				if (windowChatRef.current)
@@ -172,42 +206,44 @@ const Messenger = observer(() => {
 						top: windowChatRef.current.scrollHeight,
 						behavior: "smooth",
 					});
-			}, 0)
-
+			}, 0);
 		}
-
-	}, [lastMessage])
+	}, [lastMessage]);
 
 	useEffect(() => {
 		if (chatData.id && isFetchingMessages) {
-			setIsLoadingMessages(true)
+			setIsLoadingMessages(true);
 			const currentScrollHeight = windowChatRef.current.scrollHeight;
 			const currentScrollTop = windowChatRef.current.scrollTop;
-                        fetchMessages(chatData.id, messagesOffset).then((data) => {
-                                console.log(data)
-                                const mapped = data.rows.map(group =>
-                                        group.map(msg => ({
-                                                ...msg,
-                                                files: msg.files ? msg.files.map(f => process.env.REACT_APP_API_URL + f) : msg.files,
-                                        }))
-                                );
-                                setMessages(prevMessages => {
-                                        return [...mapped, ...prevMessages]
-                                })
-                                windowChatRef.current.scrollTop = windowChatRef.current.scrollHeight - currentScrollHeight + currentScrollTop;
-                                setMessagesOffset(prevOffset => prevOffset + 1)
-
-			}).finally(() => {
-				setIsFetchingMessages(false)
-				setIsLoadingMessages(false)
-			})
+			fetchMessages(chatData.id, messagesOffset)
+				.then((data) => {
+					console.log(data);
+					const mapped = data.rows.map((group) =>
+						group.map((msg) => ({
+							...msg,
+							files: msg.files
+								? msg.files.map((f) => process.env.REACT_APP_API_URL + "/" + f)
+								: msg.files,
+						}))
+					);
+					setMessages((prevMessages) => {
+						return [...mapped, ...prevMessages];
+					});
+					windowChatRef.current.scrollTop =
+						windowChatRef.current.scrollHeight -
+						currentScrollHeight +
+						currentScrollTop;
+					setMessagesOffset((prevOffset) => prevOffset + 1);
+				})
+				.finally(() => {
+					setIsFetchingMessages(false);
+					setIsLoadingMessages(false);
+				});
 		}
-	}, [isFetchingMessages, chatData, messagesOffset])
-
-
+	}, [isFetchingMessages, chatData, messagesOffset]);
 
 	return (
-		<div className='messenger'>
+		<div className="messenger">
 			<div className="messenger__inner">
 				<MessengerSideBar
 					chats={chats}
@@ -237,8 +273,7 @@ const Messenger = observer(() => {
 				/>
 			</div>
 		</div>
-	)
-})
+	);
+});
 
-
-export default Messenger
+export default Messenger;

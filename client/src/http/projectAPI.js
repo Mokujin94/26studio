@@ -7,9 +7,15 @@ export const fetchProject = async (pathFromProject, baseURL) => {
 		},
 	};
 	const { data } = await $host.get("/api/user/accept_project", config);
-	let pathWithForwardSlashes = baseURL.replace(/\\/g, "/");
-	// const correctedPath = pathWithForwardSlashes.replace(/^https:\//, "https://");
-	const correctedPath = pathWithForwardSlashes.replace(/^http:\//, "http://");
+	
+	// Исправляем путь: заменяем обратные слеши и убираем некорректные префиксы
+	let correctedPath = baseURL.replace(/\\/g, "/");
+	// Убираем "./" в начале если есть
+	correctedPath = correctedPath.replace(/^\.\//, "");
+	// Исправляем "http:/" на "http://"
+	correctedPath = correctedPath.replace(/^http:\/(?!\/)/, "http://");
+	correctedPath = correctedPath.replace(/^https:\/(?!\/)/, "https://");
+	
 	// // Преобразуем относительные пути в абсолютные
 	const transformedContent = data.replace(
 		/(<head>)/,
@@ -110,5 +116,28 @@ export const searchProject = async (search, filter, page) => {
 		},
 	};
 	const { data } = await $host.get("api/project/search/", config);
+	return data;
+};
+
+// Получение списка файлов проекта
+export const fetchProjectFiles = async (projectPath) => {
+	const config = {
+		params: {
+			projectPath,
+		},
+	};
+	const { data } = await $host.get("api/user/project_files", config);
+	return data;
+};
+
+// Получение содержимого файла проекта
+export const fetchProjectFileContent = async (projectPath, filePath) => {
+	const config = {
+		params: {
+			projectPath,
+			filePath,
+		},
+	};
+	const { data } = await $host.get("api/user/project_file_content", config);
 	return data;
 };

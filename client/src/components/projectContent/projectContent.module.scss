@@ -1,5 +1,64 @@
 @import "../../resource/styles/variables";
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tabsContainer {
+  margin-bottom: 16px;
+}
+
+.tabs {
+  display: inline-flex;
+  background: $studio-dark-element;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: $studio-grey-text;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $studio-white-text;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &.active {
+    background: $studio-primary-element;
+    color: $studio-dark-text;
+
+    .tabIcon {
+      stroke: $studio-dark-text;
+    }
+  }
+}
+
+.tabIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.codeContainer {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 .block {
   position: relative;
   width: 100%;
@@ -50,5 +109,33 @@
       fill: $studio-primary-element;
       stroke: $studio-primary-element;
     }
+  }
+}
+
+@media (max-width: $sm) {
+  .tabs {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tab {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 13px;
+
+    span {
+      display: none;
+    }
+  }
+
+  .tabIcon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .codeContainer {
+    aspect-ratio: auto;
+    min-height: 500px;
   }
 }

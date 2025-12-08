@@ -11,6 +11,7 @@ export default class ProjectStore {
 		this._projectPreview = "";
 		this._projectPrivate = false;
 		this._projectPrivateComments = false;
+		this._isReactProject = false;
 
 		makeAutoObservable(this);
 	}
@@ -51,6 +52,10 @@ export default class ProjectStore {
 		this._projectPrivateComments = projectPrivateComments;
 	}
 
+	setIsReactProject(isReactProject) {
+		this._isReactProject = isReactProject;
+	}
+
 	get projects() {
 		return this._projects;
 	}
@@ -85,5 +90,9 @@ export default class ProjectStore {
 
 	get projectPrivateComments() {
 		return this._projectPrivateComments;
+	}
+
+	get isReactProject() {
+		return this._isReactProject;
 	}
 }

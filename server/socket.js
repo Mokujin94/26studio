@@ -35,21 +35,17 @@ function initSocket(httpServer) {
 
 		socket.on("sendMessage", ({ message, recipientId }) => {
 			const user1 = userSockets.find(user => user.userId === recipientId);
-			const user2 = userSockets.find(user => user.userId === message.user.id);
+			const user2 = userSockets.find(user => user.userId === message.user?.id);
 
-			if (!user1 || !user2) {
-				if (!user1) {
-					io.to(user2.socketId).emit("lastMessage", message)
-					return;
-				} else {
-					io.to(user1.socketId).emit("lastMessage", message)
-					io.to(user1.socketId).emit("incReadMessege", message)
-					return;
-				}
-			} else if (user1 && user2) {
-				io.to(user1.socketId).emit("lastMessage", message)
-				io.to(user1.socketId).emit("incReadMessege", message)
-				io.to(user2.socketId).emit("lastMessage", message)
+			// Отправляем получателю (user1)
+			if (user1) {
+				io.to(user1.socketId).emit("lastMessage", message);
+				io.to(user1.socketId).emit("incReadMessege", message);
+			}
+			
+			// Отправляем отправителю (user2)
+			if (user2) {
+				io.to(user2.socketId).emit("lastMessage", message);
 			}
 		})
 

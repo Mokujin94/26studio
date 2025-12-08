@@ -88,8 +88,13 @@ export const generateCode = async (email, code) => {
 	return data;
 };
 
-export const uploadProject = async (file) => {
-	const { data } = await $authHost.post("api/user/upload_project", file);
+export const uploadProject = async (file, sessionId) => {
+	const config = sessionId ? {
+		headers: {
+			'X-Session-Id': sessionId
+		}
+	} : {};
+	const { data } = await $authHost.post("api/user/upload_project", file, config);
 	return data;
 };
 
@@ -101,6 +106,36 @@ export const updateAvatar = async (avatar) => {
 
 export const updateUser = async (id, user) => {
 	const { data } = await $authHost.patch("api/user/update/" + id, user);
+	localStorage.setItem("token", data.token);
+	return jwt_decode(data.token);
+};
+
+// GitHub OAuth
+export const getGithubAuthUrl = async () => {
+	const { data } = await $host.get("api/user/auth/github");
+	return data.url;
+};
+
+export const githubCallback = async (code) => {
+	const { data } = await $host.post("api/user/auth/github/callback", { code });
+	localStorage.setItem("token", data.token);
+	return jwt_decode(data.token);
+};
+
+// GitHub Repos
+export const fetchGithubRepos = async (username) => {
+	const { data } = await $host.get(`api/user/github/repos/${username}`);
+	return data;
+};
+
+export const disconnectGithub = async (id) => {
+	const { data } = await $authHost.patch(`api/user/github/disconnect/${id}`);
+	localStorage.setItem("token", data.token);
+	return jwt_decode(data.token);
+};
+
+export const linkGithubAccount = async (code, userId) => {
+	const { data } = await $authHost.post("api/user/github/link", { code, userId });
 	localStorage.setItem("token", data.token);
 	return jwt_decode(data.token);
 };

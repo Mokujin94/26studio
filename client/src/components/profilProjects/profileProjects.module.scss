@@ -52,3 +52,51 @@
 		transform: rotate(-0.25deg);
 	}
 }
+
+.tabs {
+	grid-column: 1 / -1;
+	display: flex;
+	gap: 10px;
+	margin-bottom: 10px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid $studio-grey-border;
+
+	&__item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 16px;
+		background-color: $studio-darker-element;
+		border: 1px solid $studio-grey-border;
+		border-radius: 8px;
+		color: $studio-grey-text;
+		font-size: 14px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: $studio-transition-03;
+
+		svg {
+			width: 18px;
+			height: 18px;
+		}
+
+		&:hover {
+			background-color: $studio-dark-element;
+			color: $studio-white-text;
+			border-color: $studio-primary-border;
+		}
+
+		&_active {
+			background-color: $studio-dark-element;
+			color: $studio-primary-text;
+			border-color: $studio-primary-border;
+		}
+	}
+}
+
+.githubRepos {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 15px;
+}
